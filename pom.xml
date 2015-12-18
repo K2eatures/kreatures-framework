@@ -186,7 +186,6 @@
   	<module>knowhow</module>
   	
   	<module>secrecy</module>
-  	<module>deploy</module>
   	<module>conditional</module>
   	<module>defendingagent</module>
   	<module>plwithknowledge</module>
