@@ -1,14 +1,38 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>fw</artifactId>
-  <version>1.0.2</version>
-  <name>Angerona (Framework)</name>
+  <artifactId>core</artifactId>
+  <version>2.0.1</version>
+  <name>KReatures (Core)</name>
   <url>http://maven.apache.org</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>javacc-maven-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+          	<phase>generate-sources</phase>
+            <id>javacc</id>
+            <goals>
+              <goal>javacc</goal>
+            </goals>
+            <configuration>
+              <isStatic>false</isStatic>
+              <sourceDirectory>${basedir}/src/main/java/angerona/fw/parser</sourceDirectory>
+              <outputDirectory>${basedir}/src/main/java/</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
   
   <dependencies>
     <dependency>
@@ -62,9 +86,10 @@
 	 </dependency>
   </dependencies>
   <parent>
-  	<groupId>com.github.angerona</groupId>
-  	<artifactId>maven-build-all</artifactId>
-  	<version>1.0.1</version>
+  	<groupId>com.github.kreatures</groupId>
+  	<artifactId>build-all</artifactId>
+  	<version>2.0.0</version>
   	<relativePath>..</relativePath>
   </parent>
+
 </project>
