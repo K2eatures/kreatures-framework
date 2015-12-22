@@ -5,6 +5,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.kreatures.core.Agent;
+import com.github.kreatures.knowhow.KnowhowBase;
+import com.github.kreatures.knowhow.KnowhowStatement;
+import com.github.kreatures.knowhow.situation.DefendingSituation.AdditionalInformation;
+import com.github.kreatures.knowhow.situation.DefendingSituation.Behavior;
+import com.github.kreatures.knowhow.situation.DefendingSituation.Question;
+import com.github.kreatures.secrecy.HonestyType;
+
 import net.sf.tweety.logics.commons.syntax.Constant;
 import net.sf.tweety.logics.commons.syntax.NumberTerm;
 import net.sf.tweety.lp.asp.syntax.DLPAtom;
@@ -12,18 +23,6 @@ import net.sf.tweety.lp.asp.syntax.DLPLiteral;
 import net.sf.tweety.lp.asp.syntax.Program;
 import net.sf.tweety.lp.asp.util.AnswerSet;
 import net.sf.tweety.lp.asp.util.AnswerSetList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.kreatures.core.Agent;
-import com.github.kreatures.secrecy.HonestyType;
-import com.github.kreatures.core.error.NotImplementedException;
-import com.github.kreatures.knowhow.KnowhowBase;
-import com.github.kreatures.knowhow.KnowhowStatement;
-import com.github.kreatures.knowhow.situation.DefendingSituation.AdditionalInformation;
-import com.github.kreatures.knowhow.situation.DefendingSituation.Behavior;
-import com.github.kreatures.knowhow.situation.DefendingSituation.Question;
 
 public class DefendingSituationBuilder extends SituationBuilderAdapter {
 	/** logging facility */
@@ -111,7 +110,7 @@ public class DefendingSituationBuilder extends SituationBuilderAdapter {
 			DLPLiteral factToAdd = null;
 			HonestyType honesty = ai.getBehavior().getHonestyType();
 			if(honesty == HonestyType.HT_BULLSHITTING) {
-				throw new NotImplementedException("Bullshitting not implemented yet");
+				throw new UnsupportedOperationException("Bullshitting not implemented yet");
 			// TODO: Test and implement
 			//	factToAdd = new DLPAtom("answer_bs", ai.getBehavior().getQuestion().asTerm(), 
 			//			new Constant(ai.getAdditionalInformation().toString()));

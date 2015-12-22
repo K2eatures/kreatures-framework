@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.Agent;
-import com.github.kreatures.core.error.NotImplementedException;
 
 /**
  * This factory is responsible to generate the correct graph builders for the given situation.
@@ -24,7 +23,7 @@ public class SituationGraphBuilderFactory {
 		} else if(situation instanceof DefendingSituation) {
 			reval = new DefendingSituationBuilder((DefendingSituation)situation, agent);
 		} else {
-			throw new NotImplementedException("There is no SituationGraphBuilder registered at " +
+			throw new UnsupportedOperationException("There is no SituationGraphBuilder registered at " +
 					"the Factory with name '" + situation.getClass().getName() + "'");
 		}
 		;

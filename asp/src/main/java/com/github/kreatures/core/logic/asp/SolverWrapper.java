@@ -2,14 +2,13 @@ package com.github.kreatures.core.logic.asp;
 
 import java.io.File;
 
+import com.github.kreatures.core.KReatures;
+import com.github.kreatures.core.serialize.GlobalConfiguration;
+
 import net.sf.tweety.lp.asp.solver.Clingo;
 import net.sf.tweety.lp.asp.solver.DLV;
 import net.sf.tweety.lp.asp.solver.DLVComplex;
 import net.sf.tweety.lp.asp.solver.Solver;
-
-import com.github.kreatures.core.KReatures;
-import com.github.kreatures.core.error.NotImplementedException;
-import com.github.kreatures.core.serialize.GlobalConfiguration;
 
 /**
  * Wraps the solver type into an enum. It uses the KReatures configuration
@@ -39,7 +38,7 @@ public enum SolverWrapper implements ISolverWrapper {
 		} else if(ordinal() == 2) { // if dlv-complex:
 			paramName = ("path-dlv-complex");
 		} else {
-			throw new NotImplementedException("SolverWrapper has no implementation for ordinal: " + ordinal());
+			throw new UnsupportedOperationException("SolverWrapper has no implementation for ordinal: " + ordinal());
 		}
 		
 		if(config != null) {
@@ -80,7 +79,7 @@ public enum SolverWrapper implements ISolverWrapper {
 		else if(this == SolverWrapper.DLV_COMPLEX)
 			solver = new DLVComplex(path);
 		else
-			throw new NotImplementedException("Solver of this type not supported yet.");
+			throw new UnsupportedOperationException("Solver of this type not supported yet.");
 		return solver;
 	}
 }

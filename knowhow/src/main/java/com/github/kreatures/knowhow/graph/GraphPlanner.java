@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.Desire;
-import com.github.kreatures.core.error.NotImplementedException;
 
 /**
  * This class implements a sequential planning algorithm on
@@ -153,7 +152,7 @@ public class GraphPlanner extends GraphPlannerAdapter {
 
 	@Override
 	public void resumePlan(WorkingPlan plan, List<GraphIntention> complexIntentions, List<Integer> steps) {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 	}
 
 	public static interface BreakCondition {

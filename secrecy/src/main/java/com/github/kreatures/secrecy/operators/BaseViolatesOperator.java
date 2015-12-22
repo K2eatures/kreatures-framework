@@ -5,11 +5,10 @@ import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.Action;
 import com.github.kreatures.core.Agent;
-import com.github.kreatures.core.KReaturesAtom;
 import com.github.kreatures.core.Cache;
+import com.github.kreatures.core.KReaturesAtom;
 import com.github.kreatures.core.Perception;
 import com.github.kreatures.core.PlanElement;
-import com.github.kreatures.core.error.NotImplementedException;
 import com.github.kreatures.core.listener.ActionProcessor;
 import com.github.kreatures.core.logic.Beliefs;
 import com.github.kreatures.core.operators.Operator;
@@ -90,7 +89,7 @@ public abstract class BaseViolatesOperator
 			cache.setCacheValue(param, reval);
 			return reval;
 		}
-		throw new NotImplementedException("Violates is not implemeted for Action of type: " + atom.getClass().getSimpleName());
+		throw new UnsupportedOperationException("Violates is not implemeted for Action of type: " + atom.getClass().getSimpleName());
 	}
 	
 	protected abstract ViolatesResult onAction(Action action, EvaluateParameter param);

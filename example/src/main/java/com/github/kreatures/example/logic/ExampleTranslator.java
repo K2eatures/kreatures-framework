@@ -2,18 +2,17 @@ package com.github.kreatures.example.logic;
 
 import java.util.Set;
 
-import net.sf.tweety.logics.fol.syntax.FolFormula;
-import net.sf.tweety.logics.fol.syntax.Negation;
-import net.sf.tweety.lp.nlp.syntax.NLPProgram;
-
 import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.Perception;
 import com.github.kreatures.core.comm.Answer;
 import com.github.kreatures.core.comm.Inform;
 import com.github.kreatures.core.comm.Query;
-import com.github.kreatures.core.error.NotImplementedException;
 import com.github.kreatures.core.logic.AnswerValue;
 import com.github.kreatures.core.logic.BaseTranslator;
+
+import net.sf.tweety.logics.fol.syntax.FolFormula;
+import net.sf.tweety.logics.fol.syntax.Negation;
+import net.sf.tweety.lp.nlp.syntax.NLPProgram;
 
 /**
  * A simple default translator which translate from FOL to FOL... it also
@@ -50,7 +49,7 @@ public class ExampleTranslator extends BaseTranslator {
 		}
 		
 		// nothing but answer implemented yet.
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException("nothing but answer implemented yet");
 	}
 
 	@Override

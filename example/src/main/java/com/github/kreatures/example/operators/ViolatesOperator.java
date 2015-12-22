@@ -4,11 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.tweety.logics.commons.syntax.NumberTerm;
-import net.sf.tweety.logics.commons.syntax.Predicate;
-import net.sf.tweety.logics.fol.syntax.FOLAtom;
-import net.sf.tweety.logics.fol.syntax.FolFormula;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,14 +12,18 @@ import com.github.kreatures.core.Agent;
 import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.Perception;
 import com.github.kreatures.core.PlanElement;
+import com.github.kreatures.core.logic.Beliefs;
+import com.github.kreatures.core.operators.parameter.EvaluateParameter;
+import com.github.kreatures.core.util.Pair;
 import com.github.kreatures.secrecy.Secret;
 import com.github.kreatures.secrecy.components.SecrecyKnowledge;
 import com.github.kreatures.secrecy.operators.BaseViolatesOperator;
 import com.github.kreatures.secrecy.operators.ViolatesResult;
-import com.github.kreatures.core.error.NotImplementedException;
-import com.github.kreatures.core.logic.Beliefs;
-import com.github.kreatures.core.operators.parameter.EvaluateParameter;
-import com.github.kreatures.core.util.Pair;
+
+import net.sf.tweety.logics.commons.syntax.NumberTerm;
+import net.sf.tweety.logics.commons.syntax.Predicate;
+import net.sf.tweety.logics.fol.syntax.FOLAtom;
+import net.sf.tweety.logics.fol.syntax.FolFormula;
 
 /**
  * This class is capable of proofing if the applying of an answer
@@ -163,7 +162,7 @@ public class ViolatesOperator extends BaseViolatesOperator {
 			
 			return violates;
 		}
-		throw new NotImplementedException("No complex plans supported by violate operator yet.");
+		throw new UnsupportedOperationException("No complex plans supported by violate operator yet.");
 	}
 	
 	@Override
