@@ -1,5 +1,8 @@
 configuration.xml
 
 /target
-
 /USER_HOME_IS_UNDEFINED
+
+*.project
+*.classpath
+*.settings
