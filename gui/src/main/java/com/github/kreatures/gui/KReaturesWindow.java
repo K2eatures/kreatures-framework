@@ -1,7 +1,5 @@
 package com.github.kreatures.gui;
 
-import interactive.InteractiveAgentNextActionRequester;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -30,6 +28,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import com.github.kreatures.core.Action;
+import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.InteractiveAgent;
+import com.github.kreatures.core.KReatures;
+import com.github.kreatures.core.KReaturesEnvironment;
+import com.github.kreatures.core.internal.PluginInstantiator;
+import com.github.kreatures.core.internal.UIPluginInstatiator;
+import com.github.kreatures.core.internal.ViewComponentFactory;
+import com.github.kreatures.core.listener.FrameworkListener;
+import com.github.kreatures.core.listener.SimulationListener;
+import com.github.kreatures.gui.base.ViewComponent;
+import com.github.kreatures.gui.controller.SimulationTreeController;
+import com.github.kreatures.gui.project.ProjectTreeMVPComponent;
+import com.github.kreatures.gui.report.ReportTreeMVP;
+import com.github.kreatures.gui.simctrl.SimulationControlBarMVPComponent;
+import com.github.kreatures.gui.simctrl.SimulationControlMenu;
+import com.github.kreatures.gui.simctrl.SimulationControlPresenter;
+import com.github.kreatures.gui.view.ReportView;
+import com.github.kreatures.gui.view.ResourcenView;
+
 import bibliothek.extension.gui.dock.theme.SmoothTheme;
 import bibliothek.gui.DockController;
 import bibliothek.gui.DockStation;
@@ -42,32 +60,13 @@ import bibliothek.gui.dock.station.stack.tab.layouting.TabPlacement;
 import bibliothek.gui.dock.themes.NoStackTheme;
 import bibliothek.gui.dock.util.IconManager;
 import bibliothek.gui.dock.util.Priority;
-
-import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
-import com.github.kreatures.core.KReatures;
-import com.github.kreatures.core.KReaturesEnvironment;
-import com.github.kreatures.core.InteractiveAgent;
-import com.github.kreatures.gui.base.ViewComponent;
-import com.github.kreatures.gui.controller.SimulationTreeController;
-import com.github.kreatures.gui.project.ProjectTreeMVPComponent;
-import com.github.kreatures.gui.report.ReportTreeMVP;
-import com.github.kreatures.gui.simctrl.SimulationControlBar;
-import com.github.kreatures.gui.simctrl.SimulationControlBarMVPComponent;
-import com.github.kreatures.gui.simctrl.SimulationControlMenu;
-import com.github.kreatures.gui.simctrl.SimulationControlPresenter;
-import com.github.kreatures.gui.view.ReportView;
-import com.github.kreatures.gui.view.ResourcenView;
-import com.github.kreatures.core.internal.PluginInstantiator;
-import com.github.kreatures.core.internal.UIPluginInstatiator;
-import com.github.kreatures.core.internal.ViewComponentFactory;
-import com.github.kreatures.core.listener.FrameworkListener;
-import com.github.kreatures.core.listener.SimulationListener;
+import interactive.InteractiveAgentNextActionRequester;
 
 /**
  * The main window of the KReatures UI - Extension. It is a Singleton. 
  * @author Tim Janus
  */
+@SuppressWarnings("deprecation")
 public class KReaturesWindow extends WindowAdapter
 	implements  
 	SimulationListener,
@@ -92,10 +91,7 @@ public class KReaturesWindow extends WindowAdapter
 	private ReportView reportView;
 	
 	private List<Dockable> resMap = new LinkedList<>();
-	
-	/** a bar allowing the loading, running and initalization of simulations */
-	private SimulationControlBar simLoadBar;
-	
+		
 	/** logging facility */
 	private static Logger LOG = LoggerFactory.getLogger(KReaturesWindow.class);
 	

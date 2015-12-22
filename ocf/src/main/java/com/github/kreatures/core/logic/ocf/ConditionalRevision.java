@@ -3,19 +3,18 @@ package com.github.kreatures.core.logic.ocf;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sf.tweety.logics.cl.BruteForceCReasoner;
-import net.sf.tweety.logics.cl.RuleBasedCReasoner;
-import net.sf.tweety.logics.cl.kappa.KappaValue;
-import net.sf.tweety.logics.cl.semantics.RankingFunction;
-import net.sf.tweety.logics.cl.syntax.Conditional;
-import net.sf.tweety.logics.pl.syntax.Conjunction;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.logic.BaseChangeBeliefs;
 import com.github.kreatures.core.operators.parameter.ChangeBeliefbaseParameter;
+
+import net.sf.tweety.logics.cl.RuleBasedCReasoner;
+import net.sf.tweety.logics.cl.kappa.KappaValue;
+import net.sf.tweety.logics.cl.semantics.RankingFunction;
+import net.sf.tweety.logics.cl.syntax.Conditional;
+import net.sf.tweety.logics.pl.syntax.Conjunction;
 
 /**
  * Revision operator for ocf belief bases. Defined as

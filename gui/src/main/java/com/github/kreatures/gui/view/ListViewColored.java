@@ -21,13 +21,12 @@ import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.AgentComponent;
 import com.github.kreatures.core.KReatures;
-import com.github.kreatures.gui.base.EntityViewComponent;
-import com.github.kreatures.gui.nav.NavigationPanel;
-import com.github.kreatures.gui.nav.NavigationUser;
 import com.github.kreatures.core.internal.Entity;
 import com.github.kreatures.core.report.ReportEntry;
 import com.github.kreatures.core.report.ReportListener;
-import com.github.kreatures.core.util.Utility;
+import com.github.kreatures.gui.base.EntityViewComponent;
+import com.github.kreatures.gui.nav.NavigationPanel;
+import com.github.kreatures.gui.nav.NavigationUser;
 
 /**
  * Base class for UI-Views which show a colored list of their content. For

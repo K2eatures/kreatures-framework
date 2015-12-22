@@ -11,24 +11,20 @@ import javax.swing.RowFilter;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import com.github.kreatures.core.logic.ocf.ConditionalBeliefbase;
+import com.github.kreatures.core.parser.ParseException;
+import com.github.kreatures.core.util.ModelAdapter;
+
 import net.sf.tweety.logics.cl.RuleBasedCReasoner;
 import net.sf.tweety.logics.cl.kappa.KappaValue;
 import net.sf.tweety.logics.cl.semantics.RankingFunction;
 import net.sf.tweety.logics.cl.syntax.Conditional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.kreatures.core.logic.ocf.ConditionalBeliefbase;
-import com.github.kreatures.core.parser.ParseException;
-import com.github.kreatures.core.util.ModelAdapter;
-
 /**
 
  */
 public class OCFModelAdapter extends ModelAdapter implements OCFModel {
-	/** reference to the logging facility */
-	private static Logger log = LoggerFactory.getLogger(OCFModelAdapter.class);
+
 	private TableRowSorter<RankingFunctionTableModel> sorter;
 	
 	private ConditionalBeliefbase bbase;

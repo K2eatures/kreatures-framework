@@ -9,10 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.comp.Presentable;
-import com.github.kreatures.core.internal.Entity; // New import of Donfack.
 import com.github.kreatures.gui.base.EntityViewComponent;
 import com.github.kreatures.gui.base.ViewComponent;
-import com.github.kreatures.gui.view.ListViewColored;
 import com.github.kreatures.gui.view.NoView;
 import com.github.kreatures.gui.view.PresentableView;
 

@@ -16,6 +16,7 @@ import com.github.kreatures.core.comm.Revision;
 import com.github.kreatures.core.comm.SpeechAct;
 import com.github.kreatures.core.comm.Update;
 
+@SuppressWarnings("rawtypes")
 public class SpeechActStrategy implements Strategy{
 
 	public boolean write(Type arg0, Object arg1,

@@ -7,20 +7,17 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
-import net.sf.tweety.lp.asp.syntax.Program;
-import net.sf.tweety.lp.asp.syntax.Rule;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.kreatures.gui.base.EntityViewComponent;
 import com.github.kreatures.core.report.ReportEntry;
 import com.github.kreatures.core.report.ReportListener;
 import com.github.kreatures.core.util.Pair;
+import com.github.kreatures.gui.base.EntityViewComponent;
 import com.github.kreatures.knowhow.KnowhowBase;
 import com.github.kreatures.knowhow.KnowhowStatement;
 import com.github.kreatures.knowhow.asp.DLPBuilder;
 import com.github.kreatures.knowhow.parameter.SkillParameter;
+
+import net.sf.tweety.lp.asp.syntax.Program;
+import net.sf.tweety.lp.asp.syntax.Rule;
 
 /**
  * A UI-Component responsible to show the KnowhowBase of an agent.
@@ -29,9 +26,6 @@ import com.github.kreatures.knowhow.parameter.SkillParameter;
  */
 public class KnowhowBaseView extends EntityViewComponent 
 	implements ReportListener {
-
-	/** reference to the logback logger instance */
-	static private Logger LOG = LoggerFactory.getLogger(KnowhowBaseView.class);
 	
 	/** kick warning */
 	private static final long serialVersionUID = -6905217402039226493L;

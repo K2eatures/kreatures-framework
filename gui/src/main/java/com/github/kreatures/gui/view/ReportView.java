@@ -13,31 +13,24 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import bibliothek.gui.dock.DefaultDockable;
-import ch.qos.logback.classic.pattern.Util;
-
 import com.github.kreatures.core.KReatures;
+import com.github.kreatures.core.report.ReportWikiGenerator;
+import com.github.kreatures.core.util.Utility;
 import com.github.kreatures.gui.KReaturesWindow;
 import com.github.kreatures.gui.base.ViewComponent;
 import com.github.kreatures.gui.controller.ReportTreeController;
-import com.github.kreatures.gui.controller.TreeControllerAdapter;
-import com.github.kreatures.core.report.ReportWikiGenerator;
-import com.github.kreatures.core.util.Utility;
+
+import bibliothek.gui.dock.DefaultDockable;
 
 /**
  * shows the reports of the actual simulation in a list-view.
  * @author Tim Janus
  */
+@SuppressWarnings("deprecation")
 public class ReportView extends JPanel implements ViewComponent {
 
 	/** kick warning */
 	private static final long serialVersionUID = 1L;
-
-	/** reference to the logback logger instance */
-	private Logger LOG = LoggerFactory.getLogger(ReportView.class);
     
 	private JTree tree;
 

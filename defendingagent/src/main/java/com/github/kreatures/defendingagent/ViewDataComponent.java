@@ -5,15 +5,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import net.sf.tweety.logics.pl.PlBeliefSet;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.kreatures.core.BaseAgentComponent;
 import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.logic.ocf.ConditionalBeliefbase;
 import com.github.kreatures.plwithknowledge.logic.PLWithKnowledgeBeliefbase;
+
+import net.sf.tweety.logics.pl.PlBeliefSet;
 
 /**
  * Data component of an agent containing a set of views on other agents.
@@ -24,10 +21,6 @@ import com.github.kreatures.plwithknowledge.logic.PLWithKnowledgeBeliefbase;
  * @author Sebastian Homann, Pia Wierzoch
  */
 public class ViewDataComponent extends BaseAgentComponent {
-
-	/** reference to the logback instance used for logging */
-	private static Logger LOG = LoggerFactory
-			.getLogger(ViewDataComponent.class);
 
 	/** map from Agents to Views **/
 	private Map<String, GeneralView> views = new HashMap<String, GeneralView>();

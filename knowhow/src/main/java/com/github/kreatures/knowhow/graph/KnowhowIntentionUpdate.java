@@ -6,24 +6,20 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import net.sf.tweety.logics.commons.syntax.Predicate;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.kreatures.core.Action;
 import com.github.kreatures.core.Desire;
 import com.github.kreatures.core.Intention;
 import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.Subgoal;
-import com.github.kreatures.secrecy.operators.parameter.PlanParameter;
+import com.github.kreatures.core.logic.Desires;
+import com.github.kreatures.core.operators.OperatorCallWrapper;
 import com.github.kreatures.example.operators.GenerateOptionsOperator;
 import com.github.kreatures.example.operators.IntentionUpdateOperator;
 import com.github.kreatures.example.operators.SubgoalGenerationOperator;
-import com.github.kreatures.core.logic.Desires;
-import com.github.kreatures.core.operators.OperatorCallWrapper;
 import com.github.kreatures.knowhow.graph.parameter.DefaultPlanConverter;
-import com.github.kreatures.knowhow.situation.SituationBuilderAdapter;
+import com.github.kreatures.secrecy.operators.parameter.PlanParameter;
+
+import net.sf.tweety.logics.commons.syntax.Predicate;
 
 /**
  * An IntentionUpdate operator implementation that does the same as
@@ -33,11 +29,7 @@ import com.github.kreatures.knowhow.situation.SituationBuilderAdapter;
  * @author Tim Janus
  */
 public class KnowhowIntentionUpdate extends IntentionUpdateOperator {
-	
-	/** logging facility */
-	private static Logger LOG = LoggerFactory.getLogger(SituationBuilderAdapter.class);
-	
-	
+		
 	@Override
 	protected PlanElement processImpl(PlanParameter param) {
 		PlanElement reval = null;
