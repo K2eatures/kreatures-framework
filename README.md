@@ -101,7 +101,7 @@ so you won't be asked each time you want to push you changes.
 
 * Right-click on "kreatures-framework" and navigate to "Run as > Maven install". That makes sure, all plugins are compiled.
 
-* Open the project "app" and navigate to the "target/tools/asp-solver" and copy the ASP-Solver into. If needed, rename the executable to it to "dlv"
+* Open the project "app" and navigate to the "target/tools/asp-solver" and copy the ASP-Solver into. If needed, rename the executable to "dlv"
 
 * Right-click on "com.github.kreatures.app.GUIApplication" and navigate to "Run as/Run configurations" and Choose "Java application" in the list on the left. Click on the tab "Arguments" and change the working directory to "app/target", then click run.
 
