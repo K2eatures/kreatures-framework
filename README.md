@@ -37,7 +37,8 @@ The island exhibits changing **weather conditions** with various impacts:
 * **CLOUDS** weather is neutral and has no impact at all on the agent.
 * **SUN** the agent automatically recharges his battery with solar panels.
 * **STORM_OR_RAIN** the agent moves and works more slowly then usual, which the agent has to consider when planning his battery duration.
-* **THUNDERSTORM** has the same effect as storm or rain, but additional agent and site are endangered by lightning, if the site is not secured respectively the agent did not seek shelter.
+* **THUNDERSTORM** has the same effect as storm or rain, but additional agent and site are endangered by lightning,
+if the site is not secured respectively the agent did not seek shelter.
 
 Eventually the agent can perform the following **actions**, to interact with it's environment:
 
@@ -54,8 +55,10 @@ For further information have a look at the bachelor thesis "Implementierung eine
 
 There are some default implemented components allowing the simulation:
 
-The **IslandBehavior** (*com.github.kreatures.island.behavior.IslandBehavior*) respectively the **DynamicIslandBehavior** (*com.github.kreatures.island.behavior.DynamicIslandBehavior*),
-which represent the agent's environment with constant respectively changing weather. Moreover there are default implementations for all Operators of the of the BDI-architecture.
+The **IslandBehavior** (*com.github.kreatures.island.behavior.IslandBehavior*) respectively the
+**DynamicIslandBehavior** (*com.github.kreatures.island.behavior.DynamicIslandBehavior*),
+which represent the agent's environment with constant respectively changing weather.
+Moreover there are default implementations for all Operators of the of the BDI-architecture:
 
 * *com.github.kreatures.island.operators.IslandOptionsOperator*
 * *com.github.kreatures.island.operators.IslandFilterOperator*
@@ -68,15 +71,21 @@ Then manifest the new created classes within a new Plugin and configure the the 
 
 First of all we need to install and configure the following list of software:
 
-* **Java JDK 1.8** or higher - Should already be installed on most systems. If this is not the case you can download it from the [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/index.html) website
+* **Java JDK 1.8** or higher - Should already be installed on most systems.
+If this is not the case you can download it from the [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/index.html) website
 
-* **Git client** - To get access to KReaturesFW repository, you will need a git client. For Windows users we recommend using [Git for Windows](https://git-for-windows.github.io/) or [Tortoise Git](https://tortoisegit.org/). In case you are not familiar with git, have a look at [Git-scm](https://git-scm.com/documentation) or [Atlassian](https://www.atlassian.com/git/tutorials) for further information.
+* **Git client** - To get access to KReaturesFW repository, you will need a git client.
+For Windows users we recommend using [Git for Windows](https://git-for-windows.github.io/) or [Tortoise Git](https://tortoisegit.org/).
+In case you are not familiar with git, have a look at [Git-scm](https://git-scm.com/documentation) or [Atlassian](https://www.atlassian.com/git/tutorials) for further information.
 
-* **Eclipse Mars** or higher - You will need a Java IDE. We recommend to use Eclipse since most code was developed and tested this way. If it's not already installed on your computer, get it from the [Eclipse](https://eclipse.org/home/index.php) website.
+* **Eclipse Mars** or higher - You will need a Java IDE. We recommend to use Eclipse since most code was developed and tested this way.
+If it's not already installed on your computer, get it from the [Eclipse](https://eclipse.org/home/index.php) website.
 
-* **Maven 3.3** or higher - Maven is already integrated in current versions of Eclipse Bundles, so nothing to do! If you insist using an external tool, check out the [Apache Maven](https://maven.apache.org/download.cgi) webside and follow the instructions.
+* **Maven 3.3** or higher - Maven is already integrated in current versions of Eclipse Bundles, so nothing to do!
+If you insist using an external tool, check out the [Apache Maven](https://maven.apache.org/download.cgi) webside and follow the instructions.
 
-* **ASP-Solver** - to execute some scenarios, you will need an ASP-Solver. Download a suitable version for your operation system from [DLV](http://www.dlvsystem.com/dlv/).
+* **ASP-Solver** - to execute some scenarios, you will need an ASP-Solver.
+Download a suitable version for your operation system from [DLV](http://www.dlvsystem.com/dlv/).
 
 ## Fetch the KReatures Repository
 
@@ -103,7 +112,8 @@ so you won't be asked each time you want to push you changes.
 
 * Open the project "app" and navigate to the "target/tools/asp-solver" and copy the ASP-Solver into. If needed, rename the executable to "dlv"
 
-* Right-click on "com.github.kreatures.app.GUIApplication" and navigate to "Run as/Run configurations" and Choose "Java application" in the list on the left. Click on the tab "Arguments" and change the working directory to "app/target", then click run.
+* Right-click on "com.github.kreatures.app.GUIApplication" and navigate to "Run as/Run configurations" and Choose "Java application" in the list on the left.
+Click on the tab "Arguments" and change the working directory to "app/target", then click run.
 
 * The Simulation-app should open and you can choose a simulation, for example double-click on "island/Static island" and then press the button "init" to execute.
 
