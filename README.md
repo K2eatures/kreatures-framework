@@ -120,7 +120,7 @@ Click on the tab "Arguments" and change the working directory to "app/target", t
 
 * Click on "Run" to perform on tick or "Complete" to run the whole simulation.
 
-Trouble shooting:
+## Trouble shooting
 
 * Make sure that compiled versions of all needed Plugins are present in the "app/src/main/plugins"-folder.
 
