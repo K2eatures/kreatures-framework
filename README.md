@@ -53,7 +53,8 @@ Eventually the agent can perform the following **actions**, to interact with it'
 For further information have a look at the bachelor thesis "Implementierung einer Motivations Komponente für wissensbasierte Agenten". 
 
 There are some default implemented components allowing the simulation:
-The IslandBehavior (*com.github.kreatures.island.behavior.IslandBehavior*) respectively the DynamicIslandBehavior (*com.github.kreatures.island.behavior.DynamicIslandBehavior*),
+
+The **IslandBehavior** (*com.github.kreatures.island.behavior.IslandBehavior*) respectively the **DynamicIslandBehavior** (*com.github.kreatures.island.behavior.DynamicIslandBehavior*),
 which represent the agent's environment with constant respectively changing weather. Moreover there are default implementations for all Operators of the of the BDI-architecture.
 
 * *com.github.kreatures.island.operators.IslandOptionsOperator*
@@ -67,15 +68,15 @@ Then manifest the new created classes within a new Plugin and configure the the 
 
 First of all we need to install and configure the following list of software:
 
-* Java JDK 1.8 or higher - Should already be installed on most systems. If this is not the case you can download it from the [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/index.html) website
+* **Java JDK 1.8** or higher - Should already be installed on most systems. If this is not the case you can download it from the [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/index.html) website
 
-* Git client - To get access to KReaturesFW repository, you will need a git client. For Windows users we recommend using [Git for Windows](https://git-for-windows.github.io/) or [Tortoise Git](https://tortoisegit.org/). In case you are not familiar with git, have a look at [Git-scm](https://git-scm.com/documentation) or [Atlassian](https://www.atlassian.com/git/tutorials) for further information.
+* **Git client** - To get access to KReaturesFW repository, you will need a git client. For Windows users we recommend using [Git for Windows](https://git-for-windows.github.io/) or [Tortoise Git](https://tortoisegit.org/). In case you are not familiar with git, have a look at [Git-scm](https://git-scm.com/documentation) or [Atlassian](https://www.atlassian.com/git/tutorials) for further information.
 
-* Eclipse Mars or higher - You will need a Java IDE. We recommend to use Eclipse since most code was developed and tested this way. If it's not already installed on your computer, get it from the [Eclipse](https://eclipse.org/home/index.php) website.
+* **Eclipse Mars** or higher - You will need a Java IDE. We recommend to use Eclipse since most code was developed and tested this way. If it's not already installed on your computer, get it from the [Eclipse](https://eclipse.org/home/index.php) website.
 
-* Maven 3.3 or higher - Maven is already integrated in current versions of Eclipse Bundles, so nothing to do! If you insist using an external tool, check out the [Apache Maven](https://maven.apache.org/download.cgi) webside and follow the instructions.
+* **Maven 3.3** or higher - Maven is already integrated in current versions of Eclipse Bundles, so nothing to do! If you insist using an external tool, check out the [Apache Maven](https://maven.apache.org/download.cgi) webside and follow the instructions.
 
-* ASP-Solver - to execute some scenarios, you will need an ASP-Solver. Download a suitable version for your operation system from [DLV](http://www.dlvsystem.com/dlv/).
+* **ASP-Solver** - to execute some scenarios, you will need an ASP-Solver. Download a suitable version for your operation system from [DLV](http://www.dlvsystem.com/dlv/).
 
 ## Fetch the KReatures Repository
 
@@ -92,13 +93,13 @@ so you won't be asked each time you want to push you changes.
 
 * Open Eclipse and navigate to your workspace.
 
-* Open the import menu via "File -> Import" or right-click within the package explorer and click on "Import".
+* Open the import menu via "File > Import" or right-click within the package explorer and click on "Import".
 
-* Choose "Maven -> Existing Maven Projects" and then "Browse" where you native to the KReatures project within your workspace.
+* Choose "Maven > Existing Maven Projects" and then "Browse" where you native to the KReatures project within your workspace.
 
 * A list of projects should appear. Click on "Finish". Now after a while all KReatures projects should be imported in Eclipse.
 
-* Right-click on "kreatures-framework" and navigate to "Run as -> Maven install". That makes sure, all plugins are compiled.
+* Right-click on "kreatures-framework" and navigate to "Run as > Maven install". That makes sure, all plugins are compiled.
 
 * Open the project "app" and navigate to the "target/tools/asp-solver" and copy the ASP-Solver into. If needed, rename the executable to it to "dlv"
 
