@@ -19,7 +19,8 @@ Most Agents implemented in KReatures follow the BDI-architecture (Beliefs, Desir
 Moreover the BDI-architecture defines the related Operators: **UpdateBeliefs**, **GenerateOptions**, **UpdateIntentions** und **Execute**.
 
 To make new Components, Operators or EnvironmentBehaviors usable, you have to manifest them within a **Plugin**.
-To do so, create a new class that extends *com.github.kreatures.core.KReaturesPluginAdapter* and override the suitable methods, where you insert your own classes.
+To do so, create a new class that extends *com.github.kreatures.core.KReaturesPluginAdapter*
+add the anotation **@PluginImplementation** and override the suitable methods, where you insert your own classes.
 
 ## The Island scenario  
 
@@ -118,3 +119,12 @@ Click on the tab "Arguments" and change the working directory to "app/target", t
 * The Simulation-app should open and you can choose a simulation, for example double-click on "island/Static island" and then press the button "init" to execute.
 
 * Click on "Run" to perform on tick or "Complete" to run the whole simulation.
+
+Trouble shooting:
+
+* Make sure that compiled versions of all needed Plugins are present in the "app/src/main/plugins"-folder.
+
+* Make sure that all needed Plugins are included in the "app/target/config/configuration.xml".
+
+* In case, the "app/target/config"-folder including the "app/target/config/configuration.xml" does not exist,
+compile the app-project with "Run as > Maven install".
