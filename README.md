@@ -20,7 +20,7 @@ Moreover the BDI-architecture defines the related Operators: **UpdateBeliefs**, 
 
 To make new Components, Operators or EnvironmentBehaviors usable, you have to manifest them within a **Plugin**.
 To do so, create a new class that extends *com.github.kreatures.core.KReaturesPluginAdapter*,
-add the anotation **@PluginImplementation** to your class and override the suitable methods, where you insert your own classes.
+add the Java-annotation **@PluginImplementation** to your class and override the suitable methods, where you insert your own classes.
 
 ## The Island scenario  
 
