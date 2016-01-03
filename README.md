@@ -19,8 +19,8 @@ Most Agents implemented in KReatures follow the BDI-architecture (Beliefs, Desir
 Moreover the BDI-architecture defines the related Operators: **UpdateBeliefs**, **GenerateOptions**, **UpdateIntentions** und **Execute**.
 
 To make new Components, Operators or EnvironmentBehaviors usable, you have to manifest them within a **Plugin**.
-To do so, create a new class that extends *com.github.kreatures.core.KReaturesPluginAdapter*
-add the anotation **@PluginImplementation** and override the suitable methods, where you insert your own classes.
+To do so, create a new class that extends *com.github.kreatures.core.KReaturesPluginAdapter*,
+add the anotation **@PluginImplementation** to your class and override the suitable methods, where you insert your own classes.
 
 ## The Island scenario  
 
