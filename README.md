@@ -9,14 +9,14 @@ KReatures also features an environment plug-in for communicating agents and a fl
 
 ## Structure of KReatures
 
-The basic structure of KReatures contains an **Agent** (*com.github.kreatures.core.Agent*) and it's **Environment** (*com.github.kreatures.core.EnvironmentBehavior*),
+The basic structure of KReatures contains an **Agent** (*com.github.kreatures.core.Agent*) and its **Environment** (*com.github.kreatures.core.EnvironmentBehavior*),
 which delivers **Perceptions** (*com.github.kreatures.core.Perception*) to the Agent and is manipulated through **Actions** (*com.github.kreatures.core.Action*) by the Agent.
-An Agent holds a set of **Data-Components** (*com.github.kreatures.core.AgentComponent*), which contain and manage the Agent's data. Moreover an Agent is defined by it's agent-cycle,
+An Agent holds a set of **Data-Components** (*com.github.kreatures.core.AgentComponent*), which contain and manage the Agent's data. Moreover an Agent is defined by its agent-cycle,
 containing a list of **Operators** (*com.github.kreatures.core.operators.BaseOperator*), which have to be stateless themselves, but generate and manipulate data within the Agent's Data-Components.
 Most Agents implemented in KReatures follow the BDI-architecture (Beliefs, Desires, Intentions), where **Beliefs** (*com.github.kreatures.core.logic.Beliefs*) represent the Agent's subjective knowledge of the world,
 **Desires** (*com.github.kreatures.core.Desire* managed by the component *com.github.kreatures.core.logic.Desires*) are possible options an Agent has in the current situation and
 **Intentions** (*com.github.kreatures.core.Intention* managed by the component *com.github.kreatures.core.PlanComponent*) representing the goal, the agent actually has chosen to pursue, holding a sequence of actions to fullfill that goal.
-Moreover the BDI-architecture defines the related Operators: **UpdateBeliefs**, **GenerateOptions**, **UpdateIntentions** und **Execute**.
+Moreover the BDI-architecture defines the related Operators: **UpdateBeliefs**, **GenerateOptions**, **UpdateIntentions** and **Execute**.
 
 To make new Components, Operators or EnvironmentBehaviors usable, you have to manifest them within a **Plugin**.
 To do so, create a new class that extends *com.github.kreatures.core.KReaturesPluginAdapter*,
@@ -28,15 +28,15 @@ The Island scenario creates an environment with varying conditions, the agent ha
 The agent's task is to build a transmitting station on a tropical island.
 There are four **locations** the agent can reside at:
 
-* **AT_HQ** where the agent can recharge his battery and find shelter
+* **AT_HQ** where the agent can recharge its battery and find shelter
 * **AT_SITE** where the agent assembles the transmitting station
-* **IN_CAVE** nearby the site, where the agent can find shelter in urgent situation
+* **IN_CAVE** nearby the site, where the agent can find shelter in urgent situations
 * **ON_THE_WAY** between the hq and the site
 
 The island exhibits changing **weather conditions** with various impacts:
 
 * **CLOUDS** weather is neutral and has no impact at all on the agent.
-* **SUN** the agent automatically recharges his battery with solar panels.
+* **SUN** the agent automatically recharges its battery with solar panels.
 * **STORM_OR_RAIN** the agent moves and works more slowly then usual, which the agent has to consider when planning his battery duration.
 * **THUNDERSTORM** has the same effect as storm or rain, but additional agent and site are endangered by lightning,
 if the site is not secured respectively the agent did not seek shelter.
@@ -65,8 +65,8 @@ Moreover there are default implementations for all Operators of the of the BDI-a
 * *com.github.kreatures.island.operators.IslandFilterOperator*
 * *com.github.kreatures.island.operators.IslandPlanningOperator*
 
-To make your own scenario related to the island, the easiest way is to inherit from single classes and override methods as desired.
-Then manifest the new created classes within a new Plugin and configure the the changes with the *asml*-script.
+To create your own scenario related to the island, the easiest way is to inherit from single classes and override methods as desired.
+Then manifest the new created classes within a new Plugin and configure the the changes within the *asml*-script.
 
 ## Install Prerequisites for Development
 
@@ -103,7 +103,7 @@ so you won't be asked each time you want to push you changes.
 
 * Open Eclipse and navigate to your workspace.
 
-* Open the import menu via "File > Import" or right-click within the package explorer and click on "Import".
+* Open the import menu via "File > Import" or right-click within the package-explorer and click on "Import".
 
 * Choose "Maven > Existing Maven Projects" and then "Browse" where you native to the KReatures project within your workspace.
 
@@ -118,7 +118,7 @@ Click on the tab "Arguments" and change the working directory to "app/target", t
 
 * The Simulation-app should open and you can choose a simulation, for example double-click on "island/Static island" and then press the button "init" to execute.
 
-* Click on "Run" to perform on tick or "Complete" to run the whole simulation.
+* Click on "Run" to perform one tick or "Complete" to run the whole simulation.
 
 ## Trouble shooting
 
