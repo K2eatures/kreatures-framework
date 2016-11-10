@@ -1,5 +1,6 @@
 package com.github.kreatures.core.reflection;
 
+
 /**
  * Interface for a Condition. A Context can be injected using a setter method
  * and every Condition implementation provides a evaluate method which checks
@@ -7,7 +8,7 @@ package com.github.kreatures.core.reflection;
  * 
  * @author Tim Janus
  */
-public interface Condition {
+public interface Condition{
 	void setContext(Context context);
 	
 	boolean evaluate();

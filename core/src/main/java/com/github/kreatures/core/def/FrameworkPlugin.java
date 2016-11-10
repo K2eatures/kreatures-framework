@@ -44,6 +44,7 @@ public class FrameworkPlugin extends KReaturesPluginAdapter {
 	
 	@Override
 	public void onLoading() {
+		
 		addTransformMapping(FolFormula.class, FolFormulaTransform.class);
 		addTransformMapping(FOLAtom.class, FolAtomTransform.class);
 		addTransformMapping(FolFormulaVariable.class, FOLVariableTransform.class);

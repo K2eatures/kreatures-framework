@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import net.sf.tweety.logics.commons.syntax.Predicate;
 import net.sf.tweety.logics.fol.syntax.FOLAtom;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -23,11 +24,17 @@ import com.github.kreatures.core.serialize.SerializeHelper;
 public class AssignTest {
 	
 	private static Logger LOG = LoggerFactory.getLogger(AssignTest.class);
+	private FrameworkPlugin fp = new FrameworkPlugin();
 	
 	@Before
 	public void initSerializer() {
-		FrameworkPlugin fp = new FrameworkPlugin();
 		fp.onLoading();
+	}
+	
+	@After
+	public void iniDeserializer(){
+		fp.unUnloaded();
+		fp=null;
 	}
 	
 	@Test
@@ -38,7 +45,7 @@ public class AssignTest {
 
 	@Test
 	public void testDeserialize() {
-		String jarPath = "/com/github/kreatures.core/reflection/AssignTest.xml";
+		String jarPath = "/com/github/kreatures/core/reflection/AssignTest.xml";
 		InputStream stream = getClass().getResourceAsStream(jarPath);
 		if(stream == null) {
 			LOG.warn("Cannot find: '{}'", jarPath);

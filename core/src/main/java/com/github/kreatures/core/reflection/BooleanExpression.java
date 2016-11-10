@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class BooleanExpression implements Condition {
 
 	/** reference to the logging facility */
-	private static Logger LOG = LoggerFactory.getLogger(Value.class);
+	private static Logger LOG = LoggerFactory.getLogger(BooleanExpression.class);
 	
 	/**
 	 * Operators for boolean comparing of two values. There is a special

@@ -2,6 +2,8 @@ package com.github.kreatures.core.asml;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.convert.Convert;
+import org.simpleframework.xml.convert.Converter;
 
 import com.github.kreatures.core.error.InvokeException;
 import com.github.kreatures.core.reflection.Condition;
@@ -17,6 +19,7 @@ public class While extends CommandSequence {
 	
 	/** the condition which is proofed before every execution of the while loop body */
 	@Attribute(name="condition", required=true)
+	
 	protected Condition condition;
 	
 	/** the number of iterations the while loop has performed so far */

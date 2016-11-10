@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.asml.Conditional;
+import com.github.kreatures.core.def.FrameworkPlugin;
 import com.github.kreatures.core.serialize.SerializeHelper;
 
 /**
@@ -22,9 +23,12 @@ public class ConditionalTest {
 	private Conditional conditional;
 	
 	private static Logger LOG = LoggerFactory.getLogger(ConditionalTest.class);
-	
+	private FrameworkPlugin fp = new FrameworkPlugin();
 	@Before
 	public void setUp() {
+		
+		fp.onLoading();
+		
 		// load file containing the following code:
 		// if: left < right: result=1
 		// else if: left == right: result=2
@@ -32,6 +36,7 @@ public class ConditionalTest {
 		
 		String jarPath = "/com/github/kreatures/core/reflection/ConditionalTest.xml";
 		InputStream stream = getClass().getResourceAsStream(jarPath);
+		
 		if(stream == null) {
 			LOG.warn("Cannot find: '{}'", jarPath);
 			return;
@@ -42,6 +47,9 @@ public class ConditionalTest {
 	@After 
 	public void cleanUp() {
 		conditional = null;
+		fp.unUnloaded();
+		fp=null;
+		
 	}
 	
 	@Test

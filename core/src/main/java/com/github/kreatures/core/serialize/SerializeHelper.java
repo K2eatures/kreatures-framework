@@ -12,6 +12,7 @@ import org.simpleframework.xml.transform.Transform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.kreatures.core.def.FrameworkPlugin;
 import com.github.kreatures.core.serialize.transform.SpeechActStrategy;
 
 /**
@@ -30,7 +31,8 @@ public class SerializeHelper {
 	/** singleton instance of serialize helper */
 	private static SerializeHelper instance;
 	
-	public void addTransformMapping(Class<?> dataCls, Class<? extends Transform<?>> transformCls) {
+	public void addTransformMapping(Class<?> dataCls, Class<? extends Transform<?>> transformCls){
+
 		matcher.bind(dataCls, transformCls);
 		LOG.info("Registered Transform '{}' for '{}'.", transformCls.getSimpleName(), 
 				dataCls.getSimpleName());
@@ -80,6 +82,7 @@ public class SerializeHelper {
 	 * @throws Exception	If an error occurred during parsing the XML expressions
 	 */
 	public <T> T loadXml(Class<T> cls, Reader source) throws Exception {
+	
 		return serializer.read(cls, source);
 	}
 		
@@ -163,6 +166,8 @@ public class SerializeHelper {
 	
 	private SerializeHelper() {
 		matcher = new RegistryMatcher();
+		//FrameworkPlugin fp = new FrameworkPlugin();
+		//fp.onLoading();
 		serializer = new Persister(new SpeechActStrategy(), matcher);
 	}
 }
