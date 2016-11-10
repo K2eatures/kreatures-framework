@@ -8,7 +8,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableRowSorter;
 
-import net.sf.tweety.ParserException;
+import net.sf.tweety.commons.ParserException;
 
 import com.github.kreatures.gui.base.Presenter;
 import com.github.kreatures.core.parser.ParseException;

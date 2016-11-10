@@ -57,7 +57,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
+				<version>3.0.2</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -70,7 +70,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.3</version>
+				<version>2.10</version>
 				<executions>
 					<execution>
 						<phase>validate</phase>
@@ -90,7 +90,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.5</version>
+				<version>3.0.1</version>
 				<executions>
 
 					<execution>
@@ -186,7 +186,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2.1</version>
+				<version>1.5.0</version>
 				<executions>
 					<execution>
 						<id>Set permissions</id>
@@ -224,7 +224,7 @@
 			<plugin>
 				<groupId>com.google.code.maven-replacer-plugin</groupId>
 				<artifactId>replacer</artifactId>
-				<version>1.5.1</version>
+				<version>1.5.2</version>
 				<executions>
 					<execution>
 						<phase>prepare-package</phase>
@@ -235,8 +235,8 @@
 				</executions>
 				<configuration>
 					<ignoreMissingFile>false</ignoreMissingFile>
-					<file>src/main/config/configuration_template.xml</file>
-					<outputFile>target/config/configuration.xml</outputFile>
+					<file>${basedir}/src/main/config/configuration_template.xml</file>
+					<outputFile>${basedir}/target/config/configuration.xml</outputFile>
 					<regex>false</regex>
 					<token>$path_to_kreatures$</token>
 					<value>${basedir}/target</value>
@@ -246,7 +246,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.1</version>
+				<version>2.4.3</version>
 				<executions>
 					<execution>
 						<phase>package</phase>

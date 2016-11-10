@@ -6,7 +6,7 @@ import java.util.Set;
 
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 import net.sf.tweety.logics.pl.PlBeliefSet;
-//import net.sf.tweety.logics.pl.sat.Sat4jSolver;
+import net.sf.tweety.logics.pl.sat.Sat4jSolver;
 import net.sf.tweety.logics.pl.syntax.PropositionalFormula;
 import net.sf.tweety.logics.translators.folprop.FOLPropTranslator;
 
@@ -64,8 +64,11 @@ public class PLWithKnowledgeUpdate extends BaseChangeBeliefs {
 		FOLPropTranslator translator = new FOLPropTranslator();
 		//Sat4jSolver solver = new Sat4jSolver();
 		k.add(translator.toPropositional(formula));
-		PlBeliefSet bset = new PlBeliefSet(k);
-		return bset.isConsistent();
+		Sat4jSolver test=new Sat4jSolver();
+		
+	  //PlBeliefSet bset = new PlBeliefSet(k);
+		
+		return test.isConsistent(k);// bset.isConsistent();
 		
 		//return solver.isSatisfiable(k);
 	}

@@ -16,7 +16,8 @@ import com.github.kreatures.core.util.Pair;
 import net.sf.tweety.logics.commons.syntax.Predicate;
 import net.sf.tweety.logics.fol.syntax.FOLAtom;
 import net.sf.tweety.logics.fol.syntax.FolFormula;
-import net.sf.tweety.logics.pl.Sat4jEntailment;
+//import net.sf.tweety.logics.pl.Sat4jEntailment;
+import net.sf.tweety.logics.pl.sat.Sat4jSolver;
 import net.sf.tweety.logics.pl.semantics.NicePossibleWorld;
 import net.sf.tweety.logics.pl.syntax.Negation;
 import net.sf.tweety.logics.pl.syntax.Proposition;
@@ -128,7 +129,8 @@ public class Tester {
 	private static void calculateModels(PLWithKnowledgeBeliefbase beliefbase){
 		Set<PropositionalFormula> knowledge = new HashSet<PropositionalFormula>(beliefbase.getKnowledge());
 		
-		Sat4jEntailment test = new Sat4jEntailment();
+//		Sat4jEntailment test = new Sat4jEntailment();
+		Sat4jSolver test=new Sat4jSolver(); // the new tweety version replaces Sat4jEntailment by Sat4jSolver
 
 		@SuppressWarnings("unchecked")
 		Collection<Proposition> signature = (Collection<Proposition>) beliefbase.getSignature();

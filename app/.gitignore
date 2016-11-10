@@ -6,3 +6,4 @@ configuration.xml
 *.project
 *.classpath
 *.settings
+/target

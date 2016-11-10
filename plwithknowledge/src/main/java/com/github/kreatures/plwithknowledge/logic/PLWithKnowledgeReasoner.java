@@ -12,10 +12,12 @@ import com.github.kreatures.core.logic.KReaturesAnswer;
 import com.github.kreatures.core.operators.parameter.ReasonerParameter;
 import com.github.kreatures.core.util.Pair;
 
+//import net.sf.tweety.commons.Interpretation;
 import net.sf.tweety.logics.commons.syntax.Predicate;
 import net.sf.tweety.logics.fol.syntax.FOLAtom;
 import net.sf.tweety.logics.fol.syntax.FolFormula;
-import net.sf.tweety.logics.pl.Sat4jEntailment;
+import net.sf.tweety.logics.pl.sat.Sat4jSolver;
+//import net.sf.tweety.logics.pl.Sat4jEntailment;
 import net.sf.tweety.logics.pl.semantics.NicePossibleWorld;
 import net.sf.tweety.logics.pl.syntax.Negation;
 import net.sf.tweety.logics.pl.syntax.Proposition;
@@ -112,8 +114,9 @@ public class PLWithKnowledgeReasoner extends BaseReasoner{
 	private void calculateModels(PLWithKnowledgeBeliefbase beliefbase){
 		Set<PropositionalFormula> knowledge = new HashSet<PropositionalFormula>(beliefbase.getKnowledge());
 		
-		Sat4jEntailment test = new Sat4jEntailment();
-
+//		Sat4jEntailment test = new Sat4jEntailment();
+		Sat4jSolver test=new Sat4jSolver(); // the new tweety version replaces Sat4jEntailment by Sat4jSolver
+		
 		@SuppressWarnings("unchecked")
 		Collection<Proposition> signature = (Collection<Proposition>) beliefbase.getSignature();
 		Set<NicePossibleWorld> worlds = NicePossibleWorld.getAllPossibleWorlds(signature);

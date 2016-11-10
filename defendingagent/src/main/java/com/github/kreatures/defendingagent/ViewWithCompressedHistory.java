@@ -8,6 +8,7 @@ import java.util.Set;
 
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 import net.sf.tweety.logics.pl.PlBeliefSet;
+import net.sf.tweety.logics.pl.sat.Sat4jSolver;
 import net.sf.tweety.logics.pl.syntax.Negation;
 import net.sf.tweety.logics.pl.syntax.Proposition;
 import net.sf.tweety.logics.pl.syntax.PropositionalFormula;
@@ -113,13 +114,14 @@ public class ViewWithCompressedHistory extends ViewForBeliefbaseWithKnowledge{
 		//TODO implementiern
 		Iterator<Proposition> iterator = ((PropositionalSignature) this.view.getSignature()).iterator();
 		HashSet<PropositionalFormula> retval = new HashSet<PropositionalFormula>();
+		Sat4jSolver solverForCheck=new Sat4jSolver(); 
 		PropositionalFormula formula;
 		while (iterator.hasNext()) {
 			formula = iterator.next();
 			HashSet<PropositionalFormula> a = new HashSet<PropositionalFormula>();
 			a.addAll(new HashSet<PropositionalFormula>(this.view.getKnowledge()));
 			a.add(formula);
-			if((new PlBeliefSet(a)).isConsistent()){
+			if(solverForCheck.isConsistent(a)){
 				PLWithKnowledgeBeliefbase base = new PLWithKnowledgeBeliefbase();
 				base.setKnowledge(new HashSet<PropositionalFormula>(view.getKnowledge()));
 				LinkedList<PropositionalFormula> list = new LinkedList<PropositionalFormula>();

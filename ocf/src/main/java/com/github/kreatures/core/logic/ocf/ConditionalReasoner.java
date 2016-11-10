@@ -14,7 +14,7 @@ import com.github.kreatures.core.util.LogicTranslator;
 import com.github.kreatures.core.util.Pair;
 import com.github.kreatures.core.util.Utility;
 
-import net.sf.tweety.Formula;
+import net.sf.tweety.commons.Formula;
 import net.sf.tweety.logics.cl.ClBeliefSet;
 import net.sf.tweety.logics.cl.RuleBasedCReasoner;
 import net.sf.tweety.logics.cl.kappa.KappaValue;

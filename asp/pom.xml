@@ -28,25 +28,38 @@
 			<artifactId>gui</artifactId>
 			<version>2.0.1</version>
 		</dependency>
+		<!-- Tweety library -->
+		<!-- Maven dependency for the Commons library: -->
+		<dependency>
+			<groupId>net.sf.tweety</groupId>
+			<artifactId>commons</artifactId>
+			<version>1.7</version>
+		</dependency>
+		<!--Maven dependency for the Logic Commons library:: -->
+<dependency>
+   <groupId>net.sf.tweety.logics</groupId>
+   <artifactId>commons</artifactId>
+   <version>1.7</version>
+</dependency> 
 		<dependency>
 			<groupId>net.sf.tweety.logics</groupId>
 			<artifactId>translators</artifactId>
-			<version>1.0.358</version>
+			<version>1.7</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.tweety.lp.asp</groupId>
 			<artifactId>beliefdynamics</artifactId>
-			<version>1.0.358</version>
+			<version>1.7</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.tweety.lp</groupId>
 			<artifactId>asp</artifactId>
-			<version>1.0.358</version>
+			<version>1.7</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.tweety.arg</groupId>
 			<artifactId>lp</artifactId>
-			<version>1.0.358</version>
+			<version>1.7</version>
 		</dependency>
 	</dependencies>
 
