@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>gui</artifactId>
-	<version>2.0.2</version>
+	<version>2.0.1</version>
 	<packaging>jar</packaging>
 	<name>KReatures (GUI)</name>
 
@@ -15,11 +15,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.kreaturesfw</groupId>
-			<artifactId>core</artifactId>
-			<version>2.0.2</version>
-		</dependency>
-		<dependency>
 			<groupId>org.dockingframes</groupId>
 			<artifactId>docking-frames-common</artifactId>
 			<version>1.1.1</version>
@@ -29,11 +24,17 @@
 			<artifactId>docking-frames-core</artifactId>
 			<version>1.1.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.kreatures</groupId>
+			<artifactId>core</artifactId>
+			<version>2.0.1</version>
+		</dependency>
 	</dependencies>
+
 	<parent>
-		<groupId>com.github.kreaturesfw</groupId>
+		<groupId>com.github.kreatures</groupId>
 		<artifactId>build-all</artifactId>
-		<version>2.0.1</version>
+		<version>2.0.0</version>
 		<relativePath>..</relativePath>
 	</parent>
 </project>

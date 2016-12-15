@@ -1,0 +1,26 @@
+<simulation-configuration>
+   <name>unterricht</name>
+   <category>swarm</category>
+   <description></description>
+   <behavior>com.github.kreatures.swarm.basic.SwarmBehavior</behavior>
+   <agent-instance>
+      <name>Class</name>
+      <agent-config source="config/agents/unterricht_agent.xml"/>
+      <beliefbase-config source="config/beliefbases/asp_unterricht_beliefbase.xml"/>
+<desire>choice_station</desire>
+   </agent-instance>
+   <agent-instance>
+      <name>Course</name>
+      <agent-config source="config/agents/unterricht_agent.xml"/>
+      <beliefbase-config source="config/beliefbases/asp_unterricht_beliefbase.xml"/>
+<desire>choice_station</desire>
+<!--<script>
+        	<SpeechAct type="SwarmQuery">
+        		<sender>Course</sender>
+        		<receiver>Class</receiver>
+        		<question>choise_station</question>
+        	</SpeechAct>
+        </script>
+-->
+   </agent-instance>
+</simulation-configuration>

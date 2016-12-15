@@ -1,0 +1,31 @@
+<agent-configuration>
+	<name>Defending Censor Agent Implementation</name>
+	<cycle-script source="config/censor_agent_cycle.xml" />
+	
+	<operation-set operation-type="GenerateOptions">
+      <default-operator-cls>com.github.kreatures.defendingagent.operators.def.GenerateOptionsOperator</default-operator-cls>
+   	</operation-set>
+	
+	<operation-set operation-type="IntentionUpdate">
+      <default-operator-cls>com.github.kreatures.example.operators.IntentionUpdateOperator{allowUnsafe=true}</default-operator-cls>
+   	</operation-set>
+   	
+	<operation-set operation-type="SubgoalGeneration">
+      <default-operator-cls>com.github.kreatures.defendingagent.operators.def.SubgoalGenerationOperator</default-operator-cls>
+   	</operation-set>
+   	
+	<operation-set operation-type="UpdateBeliefs">
+      <default-operator-cls>com.github.kreatures.defendingagent.operators.def.UpdateBeliefsOperator</default-operator-cls>
+   	</operation-set>
+   	
+	<operation-set operation-type="Violates">
+      <default-operator-cls>com.github.kreatures.defendingagent.operators.def.ViolatesOperator</default-operator-cls>
+   	</operation-set>
+	
+	<component>com.github.kreatures.core.logic.Desires</component>
+	<component>com.github.kreatures.secrecy.components.SecrecyKnowledge</component>
+    <component>com.github.kreatures.core.PlanComponent</component>
+    <component>com.github.kreatures.defendingagent.ViewDataComponent</component>
+    <component>com.github.kreatures.defendingagent.CensorComponent</component>
+    <component>com.github.kreatures.defendingagent.HistoryComponent</component>
+</agent-configuration>

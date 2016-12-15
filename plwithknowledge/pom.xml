@@ -1,17 +1,17 @@
-<?xml version="1.0"?>
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>plwithknowledge</artifactId>
-	<version>2.0.2</version>
+	<version>2.0.1</version>
 	<packaging>jar</packaging>
 	<name>KReatures (PL With Knowledge)</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -20,30 +20,32 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.kreaturesfw</groupId>
+			<groupId>com.github.kreatures</groupId>
 			<artifactId>core</artifactId>
-			<version>2.0.2</version>
+			<version>2.0.1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.kreaturesfw</groupId>
+			<groupId>com.github.kreatures</groupId>
 			<artifactId>gui</artifactId>
-			<version>2.0.2</version>
+			<version>2.0.1</version>
 		</dependency>
+		<!-- Tweety library -->
 		<dependency>
 			<groupId>net.sf.tweety.logics</groupId>
 			<artifactId>pl</artifactId>
-			<version>1.0.358</version>
+			<version>1.7</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.tweety.logics</groupId>
 			<artifactId>translators</artifactId>
-			<version>1.0.358</version>
+			<version>1.7</version>
 		</dependency>
 	</dependencies>
+
 	<parent>
-		<groupId>com.github.kreaturesfw</groupId>
+		<groupId>com.github.kreatures</groupId>
 		<artifactId>build-all</artifactId>
-		<version>2.0.1</version>
+		<version>2.0.0</version>
 		<relativePath>..</relativePath>
 	</parent>
 </project>

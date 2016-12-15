@@ -1,0 +1,17 @@
+%maxInt=100.
+placeEdge(mathematics,literature,0,0).
+visitEdge(class,mathematics,0).
+visitEdge(class,literature,0).
+visitEdge(course,room,0).
+timeEdge(mathematics,room,0,2).
+timeEdge(literature,room,0,2).
+gent(class,5,100,1,100,100,1,100,100,100).
+agent(course,5,100,1,100,100,1,100,100,100).
+station(mathematics,2,1,100,100,1,100,100).
+station(literature,3,1,100,100,1,100,100).
+station(room,4,1,100,100,100,100,100).
+move(A,B,C):-agentName(A),pEdge(B,C),vEdge(A,C).
+agentName(A):-agent(A,_,_,_,_,_,_,_,_,_).
+stationName(S):-station(S,_,_,_,_,_,_,_).
+pEdge(S1,S2):-placeEdge(S1,S2,_,_).
+vEdge(A,S):-visitEdge(A,S,_).

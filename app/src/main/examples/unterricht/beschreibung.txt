@@ -1,0 +1,6 @@
+placeEdge(inStationName,outStationName,weight,isDirected). 1 when Directed and 0 otherwise.
+visitEdge(agentName,StationName,isfirst). 1 when first and 0 otherwise.
+timeEdge(Name,Name,weight,art). art=0 if (station,station); art=1 if (agent,station); art=2 if (station,agent); art=3 if (agent,agent);  
+
+agent(name,Count,Speed,Size,Cap,Cycle,Time,Nec,Freq,Prio).
+sation(name,Count,Space,Item,Time,Nec,Freq,Prio).
