@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:element name="logisticsGraph" type="logisticsGraphType" />
+	<xsd:complexType name="logisticsGraphType">
+		<xsd:sequence>
+			<xsd:element name="perspective" type="perspectiveType" />
+			<xsd:element name="visitEdge" type="visitEdgeType" />
+			<xsd:element name="placeEdge" type="placeEdgeType" />
+			<xsd:element name="timeEdge" type="timeEdgeType" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="perspectiveType">
+		<xsd:sequence>
+			<xsd:element name="perspective" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="agentType" type="agentTypeType" />
+						<xsd:element name="stationType" type="stationTypeType" />
+					</xsd:sequence>
+					<xsd:attribute name="id" type="xsd:int"
+						use="required" />
+					<xsd:attribute name="name" type="xsd:string" use="required" />
+					<xsd:attribute name="x" type="xsd:integer" />
+					<xsd:attribute name="y" type="xsd:integer" />
+					<xsd:attribute name="width" type="xsd:int" />
+					<xsd:attribute name="height" type="xsd:int" />
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="visitEdgeType">
+		<xsd:sequence>
+			<xsd:element name="visitEdge" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="id" type="xsd:int"
+						use="required" />
+					<xsd:attribute name="connectedIdRef1" type="xsd:int"
+						use="required" />
+					<xsd:attribute name="connectedIdRef2" type="xsd:int"
+						use="required" />
+					<xsd:attribute name="bold" type="BooleanType" default="no" />
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="placeEdgeType">
+		<xsd:sequence>
+			<xsd:element name="placeEdge" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="id" type="xsd:int"
+						use="required" />
+					<xsd:attribute name="connectedIdRef1" type="xsd:int"
+						use="required" />
+					<xsd:attribute name="connectedIdRef2" type="xsd:int"
+						use="required" />
+					<xsd:attribute name="value" type="xsd:int"
+						default="0" />
+					<xsd:attribute name="directed" type="BooleanType"
+						default="no" />
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="timeEdgeType">
+		<xsd:sequence>
+			<xsd:element name="timeEdge" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="id" type="xsd:int"
+						use="required" />
+					<xsd:attribute name="connectedIdRef1" type="xsd:int"
+						use="required" />
+					<xsd:attribute name="connectedIdRef2" type="xsd:int"
+						use="required" />
+					<xsd:attribute name="value" type="xsd:int"
+						default="0" />
+					<xsd:attribute name="directed" type="BooleanType"
+						default="no" />
+					<xsd:attribute name="andConnected1" type="BooleanType"
+						default="no" />
+					<xsd:attribute name="andConnected2" type="BooleanType"
+						default="no" />
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+
+	<xsd:complexType name="agentTypeType">
+		<xsd:sequence>
+			<xsd:element name="agentType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="priority" type="ValueType" />
+						<xsd:element name="frequency" type="ValueType" />
+						<xsd:element name="necessity" type="ValueType" />
+						<xsd:element name="time" type="ValueType" />
+						<xsd:element name="cycle" type="ValueType" />
+						<xsd:element name="capacity" type="ValueType" />
+						<xsd:element name="size" type="ValueType" />
+						<xsd:element name="speed" type="ValueType" />
+					</xsd:sequence>
+					<xsd:attribute name="id" type="xsd:int"
+						use="required" />
+					<xsd:attribute name="name" type="xsd:string" use="required" />
+					<xsd:attribute name="x" type="xsd:integer" />
+					<xsd:attribute name="y" type="xsd:integer" />
+					<xsd:attribute name="count" type="xsd:int"
+						default="1" />
+					<xsd:attribute name="colorRed" type="xsd:int" />
+					<xsd:attribute name="colorGreen" type="xsd:int" />
+					<xsd:attribute name="colorBlue" type="xsd:int" />
+					<xsd:attribute name="interface" type="BooleanType"
+						default="no" />
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+
+	<xsd:complexType name="stationTypeType">
+		<xsd:sequence>
+			<xsd:element name="stationType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="priority" type="ValueType" />
+						<xsd:element name="frequency" type="ValueType" />
+						<xsd:element name="necessity" type="ValueType" />
+						<xsd:element name="time" type="ValueType" />
+						<xsd:element name="cycle" type="ValueType" />
+						<xsd:element name="item" type="ValueType" />
+						<xsd:element name="space" type="ValueType" />
+					</xsd:sequence>
+					<xsd:attribute name="id" type="xsd:int"
+						use="required" />
+					<xsd:attribute name="name" type="xsd:string" use="required" />
+					<xsd:attribute name="x" type="xsd:integer" />
+					<xsd:attribute name="y" type="xsd:integer" />
+					<xsd:attribute name="count" type="xsd:int" default="1" />
+					<xsd:attribute name="colorRed" type="xsd:int" />
+					<xsd:attribute name="colorGreen" type="xsd:int" />
+					<xsd:attribute name="colorBlue" type="xsd:int" />
+					<xsd:attribute name="interface" type="BooleanType"
+						default="no" />
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+
+	<xsd:complexType name="ValueType">
+		<xsd:attribute name="value" type="xsd:int"
+			default="1" />
+	</xsd:complexType>
+
+	<xsd:simpleType name="BooleanType">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="no|yes" />
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>
