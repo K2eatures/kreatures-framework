@@ -10,9 +10,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.file.Paths;
+import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -30,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import scala.sys.SystemProperties;
 import bibliothek.extension.gui.dock.theme.SmoothTheme;
 import bibliothek.gui.DockController;
 import bibliothek.gui.DockStation;
@@ -169,6 +175,34 @@ public class KReaturesWindow extends WindowAdapter
 			}
 		});
 		
+		JMenu menuSwarm = new JMenu("AbstractSwarm");
+		JMenuItem miOpen = new JMenuItem("open...");
+		miOpen.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Properties property=System.getProperties();
+				//TODO The .exe must either give or search.
+				
+				try{
+					if(property.getProperty("os.name").equals("Windows")){
+						get().new RunAbstractSwarm().run("cmd.exe","classes/abstractSwarm/abstractSwarm.exe");
+						return ;
+					}
+					
+					if(property.getProperty("os.name").equals("Linux")){
+						get().new RunAbstractSwarm().run("wine","classes/abstractSwarm/abstractSwarm.exe");
+						return ;
+					}
+
+				}catch(IOException ex){
+					LOG.error(ex.getMessage());
+					
+				}
+			}
+		});
+		
+
+		
 		JMenuItem miReset = new JMenuItem("Reset to default");
 		miReset.addActionListener(new ActionListener() {
 			@Override
@@ -177,9 +211,11 @@ public class KReaturesWindow extends WindowAdapter
 			}
 		});
 		
+		menuSwarm.add(miOpen);
 		menuWindow.add(miCreate);
 		menuWindow.add(miReset);
 		menuBar.add(menuWindow);
+		menuBar.add(menuSwarm);
 		mainWindow.setJMenuBar(menuBar);
 	}
 
@@ -449,5 +485,30 @@ public class KReaturesWindow extends WindowAdapter
 	public void tickStarting(KReaturesEnvironment simulationEnvironment) {
 		// TODO Auto-generated method stub
 		
+	}
+	/**
+	 * This class is use to run the AbstractSwarm software, in order to given the user
+	 * the possibility to create a scenario.
+	 * @author donfack
+	 *
+	 */
+	class RunAbstractSwarm{
+		
+		public boolean run(String ...param) throws IOException{
+			Runtime runtime=Runtime.getRuntime();
+			String line;
+			
+			//LOG.info("File Name :"+Paths.get(".").toRealPath().toAbsolutePath());
+			Process run=runtime.exec(param);
+			BufferedReader out=new BufferedReader(new InputStreamReader(run.getInputStream()) );
+			while((line=out.readLine())!=null){
+				LOG.debug("Output :"+line);
+			}
+			BufferedReader err=new BufferedReader(new InputStreamReader(run.getErrorStream()) );
+			while((line=err.readLine())!=null){
+				LOG.error("Error :"+line);
+			}
+			return true;
+		}
 	}
 }

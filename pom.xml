@@ -12,9 +12,9 @@
   </properties>
   
   <scm>
-  	<url>https://github.com/Angerona/angerona-framework</url>
-  	<connection>scm:git:https://github.com/Angerona/angerona-framework.git</connection>
-	<developerConnection>scm:git:https://github.com/Angerona/angerona-framework.git</developerConnection>
+  	<url>https://github.com/KReaturesFW/kreatures-framework</url>
+  	<connection>scm:git:https://github.com/KReaturesFW/kreatures-framework.git</connection>
+	<developerConnection>scm:git:https://github.com/KReaturesFW/kreatures-framework.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
   
@@ -102,15 +102,43 @@
   <build>
   	<pluginManagement>
       <plugins>
-        <plugin>
+<!--        <plugin>
           <artifactId>maven-assembly-plugin</artifactId>
           <version>2.4</version>
           <configuration>
-            <descriptors>
-              <descriptor>src/assemble/kreatures-zip.xml</descriptor>
-            </descriptors>
           </configuration>
-        </plugin>
+        </plugin> -->
+	<!-- Maven Assembly Plugin for building the  selfcontains .jar -->
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-assembly-plugin</artifactId>
+		<version>2.4.1</version>
+		<!-- get all project dependencies -->
+		<configuration>
+	            <descriptors>
+	              <descriptor>src/assemble/kreatures-zip.xml</descriptor>
+	            </descriptors>
+			<descriptorRefs>
+				<descriptorRef>jar-with-dependencies</descriptorRef>
+			</descriptorRefs>
+			<!-- MainClass in manifest make a executable jar -->
+			<archive>
+				<manifest>
+					<mainClass>com.github.kreatures.app.GUIApplication</mainClass>
+				</manifest>
+			</archive>
+		</configuration>
+		<executions>
+			<execution>
+				<id>make-assembly</id>
+				<!-- Bind to the packaging phase -->
+				<phase>package</phase>
+				<goals>
+					<goal>single</goal>
+				</goals>
+			</execution>
+		</executions>
+	</plugin>
       </plugins>
     </pluginManagement>
     
@@ -169,17 +197,19 @@
   <modules>
   	<module>asp</module>
   	<module>core</module>
-  	<module>app</module>
+
   	<module>example</module>
   	<module>gui</module>
   	<module>knowhow</module>
   	<module>secrecy</module>
   	
   	<module>ocf</module>
-  	<module>defendingagent</module>
   	<module>plwithknowledge</module>
   	<module>simple</module>
   	<module>island</module>
 	<module>swarm</module>
+	<module>defendingagent</module>
+ 
+  	<module>app</module> 
   </modules>
 </project>
