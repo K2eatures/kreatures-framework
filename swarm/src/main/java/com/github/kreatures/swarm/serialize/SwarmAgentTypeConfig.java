@@ -7,7 +7,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Root(name="agentType")
-public class SwarmAgentTypeConfig {
+public class SwarmAgentTypeConfig{
 	@Attribute(name="id")
 	protected int idSwarmAgentType;
 	@Attribute(name="name")
@@ -46,35 +46,14 @@ public class SwarmAgentTypeConfig {
 	protected SwarmConfigTime timeSwarm;
 	@Element(name="cycle", required=false)
 	protected SwarmConfigCycle cycleSwarm;
-	
-	
+
 	public int getIdSwarmAgentType() {
 		return idSwarmAgentType;
 	}
 	public String getNameSwarmAgentType() {
 		return nameSwarmAgentType;
 	}
-	public int getxSwarmAgentType() {
-		return xSwarmAgentType;
-	}
-	public int getySwarmAgentType() {
-		return ySwarmAgentType;
-	}
-	public int getCountSwarmAgentType() {
-		return countSwarmAgentType;
-	}
-	public String getInterfaceSwarmAgentType() {
-		return interfaceSwarmAgentType;
-	}
-	public int getColorRedSwarmAgentType() {
-		return colorRedSwarmAgentType;
-	}
-	public int getColorGreenSwarmAgentype() {
-		return colorGreenSwarmAgentype;
-	}
-	public int getColorBlueSwarmAgentype() {
-		return colorBlueSwarmAgentype;
-	}
+
 	public SwarmAgentTypeConfigSize getSizeSwarmAgentType() {
 		return sizeSwarmAgentType;
 	}
@@ -100,4 +79,28 @@ public class SwarmAgentTypeConfig {
 		return speedSwarmAgentType;
 	}
 	
+	public int getCountSwarmAgentType() {
+		return countSwarmAgentType;
+	}
+	//TODO all following lines have to be deleted
+	
+	public int getxSwarmAgentType() {
+		return xSwarmAgentType;
+	}
+	public int getySwarmAgentType() {
+		return ySwarmAgentType;
+	}
+	
+	public String getInterfaceSwarmAgentType() {
+		return interfaceSwarmAgentType;
+	}
+	public int getColorRedSwarmAgentType() {
+		return colorRedSwarmAgentType;
+	}
+	public int getColorGreenSwarmAgentype() {
+		return colorGreenSwarmAgentype;
+	}
+	public int getColorBlueSwarmAgentype() {
+		return colorBlueSwarmAgentype;
+	}
 }

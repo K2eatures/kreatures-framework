@@ -10,7 +10,7 @@ import com.github.kreatures.core.BaseAgentComponent;
  * @author Donfack
  *This Class SwarmStationGeneric is a station's generic. All station's types have to extends this class. 
  */
-public abstract class SwarmStationGeneric  extends BaseAgentComponent implements SwarmStation {
+public abstract class SwarmStationGeneric  extends BaseAgentComponent {
 	/**
 	 * This is station's id.
 	 */

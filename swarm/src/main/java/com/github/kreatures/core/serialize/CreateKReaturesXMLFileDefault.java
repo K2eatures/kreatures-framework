@@ -1,15 +1,19 @@
 package com.github.kreatures.core.serialize;
 
 import java.io.File;
+
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import java.io.FilenameFilter;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.github.kreatures.core.serialize.BeliefbaseConfig;
 import com.github.kreatures.core.serialize.SimulationConfiguration;
 import com.github.kreatures.swarm.serialize.SwarmAgentTypeConfig;
@@ -51,6 +55,7 @@ public class CreateKReaturesXMLFileDefault implements CreateKReaturesXMLFile {
 	 * Folder where the Abstract_Swarm-Dateien are
 	 */
 	private static final String AbstractSwarmDirectory="config/swarm/abstract_swarm_file/";
+	//private static final String AbstractSwarmDirectory="../config"; //for test
 	/**
 	 * Folder where the default Kreatures files for Abstract_Swarm-Dateien are. 
 	 */
@@ -69,9 +74,10 @@ public class CreateKReaturesXMLFileDefault implements CreateKReaturesXMLFile {
 	private static final String KReaturesBeliefbasesDirectory="config/beliefbases/";
 	
 	public CreateKReaturesXMLFileDefault() throws Exception{
-
+		
 		//this.testLoadSwarmXMLDatei(filepath); // nur für Test gegedacht, muss nachher gelöscht werden.
 		loadSwarmXMLFile(); 
+		System.out.println("ok");
 		/*
 		 * We have to initialize the SwarmConfig's object to null, because there is no current simulation in this step.
 		 */

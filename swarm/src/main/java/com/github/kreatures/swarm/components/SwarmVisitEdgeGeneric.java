@@ -13,7 +13,7 @@ import com.github.kreatures.core.comp.Presentable;
  * A Scenario can have more edges' type. The SwarmVisitEdgeGeneric is the abstract class, 
  * which gives all common parameter between visitEdge.
  */
-public abstract class SwarmVisitEdgeGeneric extends BaseAgentComponent implements SwarmEdge, Presentable{
+public abstract class SwarmVisitEdgeGeneric extends BaseAgentComponent implements Presentable,SwarmEdge{
 	/**
 	 * That is the name of agent which have the permission to visit a station
 	 */

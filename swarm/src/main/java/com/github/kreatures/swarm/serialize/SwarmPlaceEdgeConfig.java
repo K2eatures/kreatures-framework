@@ -2,8 +2,9 @@ package com.github.kreatures.swarm.serialize;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
+
 @Root(name="placeEdge")
-public class SwarmPlaceEdgeConfig {
+public class SwarmPlaceEdgeConfig{
 	
 	@Attribute(name="id")
 	protected int idSwarmPlaceEdge;

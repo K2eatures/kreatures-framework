@@ -5,12 +5,9 @@ import java.util.List;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.ElementListUnion;
 import org.simpleframework.xml.Root;
 
-import com.github.kreatures.core.report.Report;
-
-import bibliothek.gui.dock.perspective.Perspective;
+import com.github.kreatures.swarm.components.SwarmConfig;
 
 
 @Root(name="logisticsGraph")
@@ -26,14 +23,7 @@ public class SwarmConfigRead implements SwarmConfig {
 	/** used behavior implementation */
 	@Element(name="behavior", required=false)
 	protected String behaviorCls;
-	
-/*	@ElementListUnion({
-        @ElementList(entry="perspective", type=SwarmPerspectiveConfig.class, inline=true),
-        @ElementList(entry="visitEdge", type=SwarmVisitEdgeConfig.class, inline=true),
-        @ElementList(entry="timeEdge", type=SwarmTimeEdgeConfig.class, inline=true),
-        @ElementList(entry="placeEdge", type=SwarmPlaceEdgeConfig.class, inline=true)
-     })
-     */
+
 	@ElementList(entry="perspective", type=SwarmPerspectiveConfig.class, inline=true)
 	protected List<SwarmPerspectiveConfig> listPerspective;
     @ElementList(entry="visitEdge", type=SwarmVisitEdgeConfig.class, inline=true)
@@ -74,7 +64,6 @@ public class SwarmConfigRead implements SwarmConfig {
 
 	@Override
 	public String getResourceType() {
-		// TODO Auto-generated method stub
 		return RESOURCE_TYPE;
 	}
 

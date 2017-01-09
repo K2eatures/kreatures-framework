@@ -2,8 +2,10 @@ package com.github.kreatures.swarm.serialize;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
+
+import com.github.kreatures.swarm.components.SwarmConfig;
 @Root(name="timeEdge")
-public class SwarmTimeEdgeConfig {
+public class SwarmTimeEdgeConfig{
 	@Attribute(name="id")
 	protected int idSwarmTimeEdge;
 	@Attribute(name="connectedIdRef1")
@@ -11,7 +13,7 @@ public class SwarmTimeEdgeConfig {
 	@Attribute(name="connectedIdRef2")
 	protected int secondConnectedIdRefSwarmTimeEdge;
 	@Attribute (name="value")
-	protected int valueSwarmVisitEdge;
+	protected int valueSwarmTimeEdge;
 	@Attribute(name="directed")
 	protected String directedSwarmTimeEdge;
 	@Attribute(name="andConnected1")
@@ -28,8 +30,8 @@ public class SwarmTimeEdgeConfig {
 	public int getSecondConnectedIdRefSwarmTimeEdge() {
 		return secondConnectedIdRefSwarmTimeEdge;
 	}
-	public int getValueSwarmVisitEdge() {
-		return valueSwarmVisitEdge;
+	public int getValueSwarmTimeEdge() {
+		return valueSwarmTimeEdge;
 	}
 	public String getDirectedSwarmTimeEdge() {
 		return directedSwarmTimeEdge;
