@@ -7,11 +7,8 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-import com.github.kreatures.swarm.components.SwarmComponents;
-
-
 @Root(name="logisticsGraph")
-public class SwarmConfigRead implements SwarmComponents {
+public class SwarmConfigRead implements SwarmConfig{
 	@Element(name="name", required=false)
 	protected String name = "";
 	@Element(name="category", required=false)
@@ -48,29 +45,6 @@ public class SwarmConfigRead implements SwarmComponents {
 
 	public List<SwarmPlaceEdgeConfig> getListPlaceEdge() {
 		return listPlaceEdge;
-	}
-
-	@Override
-	public String getName() {
-		
-		return name;
-	}
-
-	@Override
-	public String getDescription() {
-		
-		return description;
-	}
-
-	@Override
-	public String getResourceType() {
-		return RESOURCE_TYPE;
-	}
-
-	@Override
-	public String getCategory() {
-		
-		return category;
 	}
 	
 	/**

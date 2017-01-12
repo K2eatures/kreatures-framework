@@ -110,4 +110,8 @@ public class SwarmVisitEdgeType implements SwarmComponents {
 	public String toString() {
 		return String.format("VisitEdgeType(%s,%s,%s).",getAgentTypeName(), getStationTypeName(),bold);
 	}
+	public int getIdentity(){
+		//TODO
+		return hashCode();
+	}
 }

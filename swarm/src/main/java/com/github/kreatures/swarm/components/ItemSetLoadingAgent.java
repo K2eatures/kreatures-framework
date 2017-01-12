@@ -87,4 +87,9 @@ public class ItemSetLoadingAgent implements SwarmComponents {
 	public String toString(){
 		return String.format("ItemSetLoadingAgent(%s,%s,%d).", agentName,stationTypeName,numberOfItem);
 	}
+	
+	public int getIdentity(){
+		//TODO
+		return hashCode();
+	}
 }

@@ -21,6 +21,7 @@ public interface SwarmComponents extends Resource, Comparable<SwarmComponents> {
 		return this.getName().compareTo(other.getName());
 	}
 	
+	int getIdentity();
 	
  
 }

@@ -54,6 +54,7 @@ import com.github.kreatures.core.Agent;
 import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.KReaturesEnvironment;
 import com.github.kreatures.core.InteractiveAgent;
+import com.github.kreatures.core.KReaturesPaths;
 import com.github.kreatures.gui.base.ViewComponent;
 import com.github.kreatures.gui.controller.SimulationTreeController;
 import com.github.kreatures.gui.project.ProjectTreeMVPComponent;
@@ -133,7 +134,7 @@ public class KReaturesWindow extends WindowAdapter
 		mainWindow.setVisible(true);
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainWindow.setExtendedState(mainWindow.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-		mainWindow.setIconImage(readImage("/kreatures/gui/icons/font.png"));
+		mainWindow.setIconImage(readImage(Paths.get(KReaturesPaths.KREATURES_ICONS_DIR.toString()).resolve("font.png").toString()));
 		
 		// create the text area and the scroll pane for the error message dialog:
 		txtErrorMsg = new JTextArea();
@@ -185,12 +186,12 @@ public class KReaturesWindow extends WindowAdapter
 				
 				try{
 					if(property.getProperty("os.name").equals("Windows")){
-						get().new RunAbstractSwarm().run("cmd.exe","classes/abstractSwarm/abstractSwarm.exe");
+						get().new RunAbstractSwarm().run("cmd.exe",KReaturesPaths.SWARM_GUI_DIR.toString());
 						return ;
 					}
 					
 					if(property.getProperty("os.name").equals("Linux")){
-						get().new RunAbstractSwarm().run("wine","classes/abstractSwarm/abstractSwarm.exe");
+						get().new RunAbstractSwarm().run("wine",KReaturesPaths.SWARM_GUI_DIR.toString());
 						return ;
 					}
 
@@ -231,9 +232,9 @@ public class KReaturesWindow extends WindowAdapter
 		kreatures.bootstrap();
 		pi.registerPlugin(new DefaultUIPlugin());	
 		
-		kreatures.getProject().addDirectory(new File("config/agents"));
-		kreatures.getProject().addDirectory(new File("config/beliefbases"));
-		kreatures.getProject().addDirectory(new File("examples"));
+		kreatures.getProject().addDirectory(new File(KReaturesPaths.KREATURES_AGENTS_CONFIG_DIR.toString()));
+		kreatures.getProject().addDirectory(new File(KReaturesPaths.KREATURES_BELIEFS_CONFIG_DIR.toString()));
+		kreatures.getProject().addDirectory(new File(KReaturesPaths.KREATURES_EXAMPLES_DIR.toString()));
 	}
 	
 	/**
@@ -340,7 +341,7 @@ public class KReaturesWindow extends WindowAdapter
 		mainWindow.add(parentStation);
 		parentStation.setVisible(true);
 		
-		String iconFolder = "/com/github/kreatures/gui/icons/";
+		String iconFolder = KReaturesPaths.KREATURES_ICONS_DIR.toString()+"/";
 		registerIcon("ico_main", iconFolder + "font.png");
 		registerIcon("close", iconFolder + "cross.png");
 		registerIcon("report", iconFolder + "table.png");

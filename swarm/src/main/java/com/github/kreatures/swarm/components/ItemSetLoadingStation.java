@@ -86,5 +86,9 @@ public class ItemSetLoadingStation implements SwarmComponents {
 	public String toString(){
 		return String.format("ItemSetLoadingStation(%s,%s,%d).", stationOutTypeName,stationInName,numberOfItem);
 	}
-
+	
+	public int getIdentity(){
+		//TODO
+		return hashCode();
+	}
 }

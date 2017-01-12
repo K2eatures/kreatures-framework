@@ -126,5 +126,9 @@ public class TimeEdgeState implements SwarmComponents {
 	public String toString(){
 		return String.format("TimeEdgeState(%s,%s,%s,%s,%s,%d,%s,%s,%s).", name,typeName,visitorName,visitorTypeName,componentType,tick,isWaiting,isReady,isFinish);
 	}
+	public int getIdentity(){
+		//TODO
+		return hashCode();
+	}
 
 }

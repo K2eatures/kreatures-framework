@@ -329,4 +329,9 @@ public class SwarmTimeEdgeType implements SwarmComponents {
 
 		this.weight = swarmConfig.getValueSwarmTimeEdge();
 	}
+	
+	public int getIdentity(){
+		//TODO
+		return hashCode();
+	}
 }
