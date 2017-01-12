@@ -1,8 +1,9 @@
 package com.github.kreatures.swarm.components;
 
+import com.github.kreatures.swarm.exceptions.SwarmException;
 import com.github.kreatures.swarm.serialize.SwarmStationTypeConfig;
 
-public class SwarmStationType implements SwarmConfig {
+public class SwarmStationType implements SwarmComponents {
 
 	/**
 	 * The following attributes belong to AbstractSwarm
@@ -37,16 +38,19 @@ public class SwarmStationType implements SwarmConfig {
 	/**
 	 * default value is infinite.
 	 */
-	private int space;
+	protected int space;
 	/**
 	 * default value is zero.
 	 */
-	private int item;
+	protected int item;
 	/**
 	 * default value is unit.
 	 */
 	protected int count;
-
+	/**
+	 * This constructor is use to make a copy of the object.
+	 * @param other object to copy
+	 */
 	protected SwarmStationType(SwarmStationType other) {
 		this.frequency = other.getFrequency();
 		this.necessity = other.getNecessity();
@@ -58,6 +62,9 @@ public class SwarmStationType implements SwarmConfig {
 		this.id = other.getIdentity();
 	}
 
+	public String getStationTypeName(){
+		return name;
+	}
 	public int getIdentity() {
 		return this.id;
 	}
@@ -123,10 +130,9 @@ public class SwarmStationType implements SwarmConfig {
 	 * 
 	 * @param swarmAgentTypeConfig
 	 */
-	public SwarmStationType(SwarmStationTypeConfig swarmStationTypeConfig) {
+	public SwarmStationType(SwarmStationTypeConfig swarmStationTypeConfig) throws SwarmException{
 		if (swarmStationTypeConfig == null)
-			throw new NullPointerException(
-					"the given argument has to be no null.");
+			throw new SwarmException("Null pointer exception");
 
 		if (swarmStationTypeConfig.getFrequencySwarm() == null) {
 			frequency = MAX_INT;
@@ -171,6 +177,12 @@ public class SwarmStationType implements SwarmConfig {
 		}
 		count = swarmStationTypeConfig.getCountSwarmStationType();
 		name = swarmStationTypeConfig.getNameSwarmStationType();
+	}
+	/**
+	 * StationType(StationTypeName,freq,nec,time,prio,cylce,item,space,count)
+	 */
+	public String toString() {
+		return String.format("StationType(%s,%d,%d,%d,%d,%d,%d,%d,%d).",name,frequency,necessity,time,priority,cycle,item,space,count);
 	}
 
 }

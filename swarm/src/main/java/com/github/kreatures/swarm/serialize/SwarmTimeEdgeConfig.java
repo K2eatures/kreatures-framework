@@ -3,7 +3,7 @@ package com.github.kreatures.swarm.serialize;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
-import com.github.kreatures.swarm.components.SwarmConfig;
+import com.github.kreatures.swarm.components.SwarmComponents;
 @Root(name="timeEdge")
 public class SwarmTimeEdgeConfig{
 	@Attribute(name="id")

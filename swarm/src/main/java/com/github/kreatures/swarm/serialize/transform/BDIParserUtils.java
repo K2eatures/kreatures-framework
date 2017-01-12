@@ -1,8 +1,8 @@
-package com.github.kreatures.swarm.serialize.bdiparser;
+package com.github.kreatures.swarm.serialize.transform;
 
 import com.github.kreatures.core.util.Pair;
 import com.github.kreatures.swarm.components.SwarmAgentType;
-import com.github.kreatures.swarm.components.SwarmConfig;
+import com.github.kreatures.swarm.components.SwarmComponents;
 import com.github.kreatures.swarm.components.SwarmStationType;
 
 public final class BDIParserUtils implements BDIParser {
@@ -12,7 +12,7 @@ public final class BDIParserUtils implements BDIParser {
 	}
 
 	@Override
-	public Pair<Integer, String> getAgentTypePredicat(SwarmConfig swarmAgentType) {
+	public Pair<Integer, String> getAgentTypePredicat(SwarmComponents swarmAgentType) {
 		Pair<Integer, String> agentTypeCount = null;
 		String agentTypeFakt = "AgentType(";
 		if (swarmAgentType instanceof SwarmAgentType) {
@@ -36,7 +36,7 @@ public final class BDIParserUtils implements BDIParser {
 
 	@Override
 	public Pair<Integer, String> getStationTypePredicat(
-			SwarmConfig swarmStationType) {
+			SwarmComponents swarmStationType) {
 		Pair<Integer, String> stationTypeCount = null;
 		String stationTypeFakt = "StationType(";
 		if (swarmStationType instanceof SwarmStationType) {
@@ -59,19 +59,19 @@ public final class BDIParserUtils implements BDIParser {
 	}
 
 	@Override
-	public String getPlaceEdgeTypePredicat(SwarmConfig swarmPlaceEdge) {
+	public String getPlaceEdgeTypePredicat(SwarmComponents swarmPlaceEdge) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getVisitEdgeTypePredicat(SwarmConfig swarmVisitEdge) {
+	public String getVisitEdgeTypePredicat(SwarmComponents swarmVisitEdge) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getTimeEdgeTypePredicat(SwarmConfig swarmTimeEdge) {
+	public String getTimeEdgeTypePredicat(SwarmComponents swarmTimeEdge) {
 		// TODO Auto-generated method stub
 		return null;
 	}

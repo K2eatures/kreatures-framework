@@ -93,6 +93,8 @@ public class CreateKReaturesXMLFileDefault implements CreateKReaturesXMLFile {
 
 	private void loadSwarmXMLFile() throws Exception{
 		//search all abstract_Swarm_config_files and creates the coresponding simulation file.
+		//Paths.get(AbstractSwarmDirectory).get
+		
 		for( File file : searchSwarmConfigFile(AbstractSwarmDirectory)){
 			fileNameLoaded=getFilename(file.getName());
 			swarmConfig = persister.read(SwarmConfigRead.class, file);	 

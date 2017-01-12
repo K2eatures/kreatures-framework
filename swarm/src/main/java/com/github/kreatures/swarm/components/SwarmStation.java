@@ -3,6 +3,9 @@ package com.github.kreatures.swarm.components;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.kreatures.swarm.exceptions.SwarmException;
+import com.github.kreatures.swarm.exceptions.SwarmExceptionType;
+
 /**
  * 
  * @author donfack
@@ -19,22 +22,40 @@ public class SwarmStation extends SwarmStationType{
 	private static int _UNIQUE=0;
 	
 	private String stationName;
+	/**
+	 * This constructor is use to make a copy of the object.
+	 * @param other object to copy
+	 */
 	protected SwarmStation(SwarmStation other) {
+		super(other);
+		this.stationName=other.stationName;
+		
+	}
+	
+	protected SwarmStation(SwarmStationType other) throws SwarmException {
 		super(other);
 		
 		if(_UNIQUE<count){
 			SwarmStation._UNIQUE++;
 			stationName=name+SwarmStation._UNIQUE;
 		}else{
-			LOG.error("This station-type %s can't have more than %d station(s).",name,count);
+			throw new SwarmException(String.format("All elements of components type '%s' have be created: %d Agent(s).",super.getName(),
+					count),SwarmExceptionType.BREAKS);
 		}
 	}
-	
-	public String getStationName(){
+	@Override
+	public String getName(){
 		return stationName;
 	}
+	
+	@Override
 	public SwarmStation clone(){
 		return new SwarmStation(this);
 	}
-
+	/**
+	 * Station(StationName,StattionType,freq,nec,space).
+	 */
+	public String toString() {
+		return String.format("Station(%s,%s,%d,%d,%d).",getName(), getStationTypeName(),frequency,necessity,space);
+	}
 }

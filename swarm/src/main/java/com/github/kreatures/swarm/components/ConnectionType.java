@@ -5,7 +5,22 @@ package com.github.kreatures.swarm.components;
  *
  */
 public enum ConnectionType {
-	TRUE,
-	FLASE,
-	BOTH
+	NO,
+	YES,
+	BOTH;
+	
+	@Override
+	public String toString(){
+		if(name()=="NO"){
+			return "false";
+		}
+		if(name()=="YES"){
+			return "true";
+		}
+		
+		if(name()=="BOTH")
+			return "both";
+		
+		return null;
+	}
 }

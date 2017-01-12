@@ -3,6 +3,9 @@ package com.github.kreatures.swarm.components;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.kreatures.swarm.exceptions.SwarmException;
+import com.github.kreatures.swarm.exceptions.SwarmExceptionType;
+
 /**
  *TODO
  * @author donfack
@@ -19,8 +22,17 @@ public class SwarmVisitEdge extends SwarmVisitEdgeType {
 
 	private String agentName;
 	private String stationName;
+	/**
+	 * This constructor is use to make a copy of the object.
+	 * @param other object to copy
+	 */
+	public SwarmVisitEdge(SwarmVisitEdge other) {
+		super(other);
+		this.agentName=other.agentName;
+		this.stationName=other.stationName;
+	}
 	
-	public SwarmVisitEdge(SwarmVisitEdgeType other) {
+	public SwarmVisitEdge(SwarmVisitEdgeType other) throws SwarmException{
 		super(other);
 		
 		if (_UNIQUE_AGENT < numberAgent) {
@@ -30,12 +42,17 @@ public class SwarmVisitEdge extends SwarmVisitEdgeType {
 		} else if (_UNIQUE_STATION <= numberStation) {
 			SwarmVisitEdge._UNIQUE_STATION++;
 		} else {
-
-			LOG.error("This place-edge with than %d incomming station(s) and %d outgoing station(s).",
-					numberAgent,numberStation);
+			throw new SwarmException(String.format("All elements of components type '%s' have be created: %d first component(s) and %d second component(s).",super.getName(),
+					numberAgent,numberStation),SwarmExceptionType.BREAKS);
 		}
 	}
-
+	
+	
+	@Override
+	public String getName(){
+		return String.format("%s:%s", agentName,stationName);
+	}
+	
 	public String getAgentName() {
 		return agentName;
 	}
@@ -44,8 +61,15 @@ public class SwarmVisitEdge extends SwarmVisitEdgeType {
 		return stationName;
 	}
 	
+	@Override
 	public SwarmVisitEdge clone(){
 		return new SwarmVisitEdge(this);
 	}
-
+	
+	/**
+	 * VisitEdge(agentName,AgentTypeName,StationName,StationTypeName,bold).
+	 */
+	public String toString() {
+		return String.format("VisitEdge(%s,%s,%s,%s,%s).",agentName, getAgentTypeName(), stationName,getStationTypeName(),bold);
+	}
 }

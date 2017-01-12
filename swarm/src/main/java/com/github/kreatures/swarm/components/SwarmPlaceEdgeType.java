@@ -3,13 +3,15 @@ package com.github.kreatures.swarm.components;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.kreatures.swarm.exceptions.SwarmException;
+import com.github.kreatures.swarm.exceptions.SwarmExceptionType;
 import com.github.kreatures.swarm.serialize.SwarmPlaceEdgeConfig;
 /**
  * 
  * @author donfack
  *
  */
-public class SwarmPlaceEdgeType implements SwarmConfig {
+public class SwarmPlaceEdgeType implements SwarmComponents {
 	private static final Logger LOG = LoggerFactory.getLogger(SwarmPlaceEdgeType.class);
 	
 	protected int id;
@@ -25,7 +27,10 @@ public class SwarmPlaceEdgeType implements SwarmConfig {
 	
 	protected boolean directed;
 	
-	
+	/**
+	 * This constructor is use to make a copy of the object.
+	 * @param other object to copy
+	 */
 	protected SwarmPlaceEdgeType(SwarmPlaceEdgeType other) {
 		this.numberFirstStation=other.getNumberFirstStation();
 		this.numberSecondStation=other.getNumberSecondStation();
@@ -63,12 +68,13 @@ public class SwarmPlaceEdgeType implements SwarmConfig {
 	@Override
 	public String getName() {
 		
-		return "PlaceEdge:"+firstStationTypeName+" and "+secondStationTypeName;
+		return String.format("PlaceEdge:%s:%s", firstStationTypeName,secondStationTypeName);
+				
 	}
 	@Override
 	public String getDescription() {
 		
-		return "Place edge of station ="+firstStationTypeName+"and station id="+secondStationTypeName;
+		return String.format("Place edge of station =%s and station =%s",firstStationTypeName,secondStationTypeName);
 	}
 	@Override
 	public String getResourceType() {
@@ -80,27 +86,24 @@ public class SwarmPlaceEdgeType implements SwarmConfig {
 		return "AbstractSwarm: place edge";
 	}
 	
-	public SwarmPlaceEdgeType(SwarmPlaceEdgeConfig swarmConfig,SwarmStationType firstStation,SwarmStationType secondStation){
+	public SwarmPlaceEdgeType(SwarmPlaceEdgeConfig swarmConfig,SwarmStationType firstStation,SwarmStationType secondStation)throws SwarmException{
 		
 		if(swarmConfig==null || firstStation==null || secondStation==null ){
-			LOG.error("the given argument has to be no null.");
-			throw new NullPointerException("the given argument has to be no null.");
+			throw new SwarmException("Null pointer exception");
 		}
 		
 		if(firstStation.id==swarmConfig.getFirstConnectedIdRefSwarmPlaceEdge()){
 			firstStationTypeName=firstStation.getName();
 			numberFirstStation=firstStation.getCount();
 		}else{
-			LOG.error("the given first station isn't correct.");
-			throw new IllegalArgumentException("the given first station isn't correct.");
+			throw new SwarmException("the given second component isn't correct.",SwarmExceptionType.IllEGALARGUMENT);
 		}
 		
 		if(secondStation.id==swarmConfig.getSecondConnectedIdRefSwarmPlaceEdge()){
 			secondStationTypeName=secondStation.getName();
 			numberSecondStation=secondStation.getCount();
 		}else{
-			LOG.error("the given second station isn't correct.");
-			throw new IllegalArgumentException("the given second station isn't correct.");
+			throw new SwarmException("the given second component isn't correct.",SwarmExceptionType.IllEGALARGUMENT);
 		}
 		
 		this.id=swarmConfig.getIdSwarmPlaceEdge();
@@ -112,5 +115,12 @@ public class SwarmPlaceEdgeType implements SwarmConfig {
 		}else{
 			this.directed=false;
 		}
+	}
+	
+	/**
+	 * PlacedEdgeType(StationTypeNameIn,StationTypeNameOut,Weight,directed).
+	 */
+	public String toString() {
+		return String.format("PlacedEdgeType(%s,%s,%d,%s).",firstStationTypeName, secondStationTypeName,weight,directed);
 	}
 }

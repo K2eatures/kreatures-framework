@@ -7,11 +7,11 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-import com.github.kreatures.swarm.components.SwarmConfig;
+import com.github.kreatures.swarm.components.SwarmComponents;
 
 
 @Root(name="logisticsGraph")
-public class SwarmConfigRead implements SwarmConfig {
+public class SwarmConfigRead implements SwarmComponents {
 	@Element(name="name", required=false)
 	protected String name = "";
 	@Element(name="category", required=false)

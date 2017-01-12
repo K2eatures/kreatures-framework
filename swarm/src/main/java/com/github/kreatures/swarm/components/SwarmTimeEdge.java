@@ -6,9 +6,15 @@ import org.slf4j.LoggerFactory;
 import com.github.kreatures.swarm.exceptions.SwarmException;
 import com.github.kreatures.swarm.exceptions.SwarmExceptionType;
 
-public class SwarmPlaceEdge extends SwarmPlaceEdgeType {
+/**
+ * %TimeEdge(Name1,TypeName1,Name2,TypeName2,TimeType,IsDirected,ConnectionType,weight) 
+ * @author donfack
+ *
+ */
+public class SwarmTimeEdge extends SwarmTimeEdgeType{
+
 	private static final Logger LOG = LoggerFactory
-			.getLogger(SwarmPlaceEdge.class);
+			.getLogger(SwarmTimeEdge.class);
 	/**
 	 * this attribute is used in order to always have a unique map key <first station name, second station name> for a given
 	 * place-edge type.
@@ -18,31 +24,32 @@ public class SwarmPlaceEdge extends SwarmPlaceEdgeType {
 
 	private String firstName;
 	private String secondName;
-
+	
 	/**
 	 * This constructor is use to make a copy of the object.
 	 * @param other object to copy
 	 */
-	public SwarmPlaceEdge(SwarmPlaceEdge other){
+	protected SwarmTimeEdge(SwarmTimeEdge other){
 		super(other);
-
 		this.firstName=other.firstName;
-		this.secondName=other.secondName;
+		this.secondName=other.secondName;		
 	}
 	
-	public SwarmPlaceEdge(SwarmPlaceEdgeType other) throws SwarmException {
+	protected SwarmTimeEdge(SwarmTimeEdgeType other) throws SwarmException{
 		super(other);
-
-		if (_UNIQUE_FIRST < numberFirstStation) {
-			SwarmPlaceEdge._UNIQUE_FIRST++;
-			firstName = firstStationTypeName + SwarmPlaceEdge._UNIQUE_FIRST;
-			secondName = secondStationTypeName + SwarmPlaceEdge._UNIQUE_SECOND;
-		} else if (_UNIQUE_SECOND <= numberSecondStation) {
-			SwarmPlaceEdge._UNIQUE_SECOND++;
+		
+		if (_UNIQUE_FIRST < numberFirstComponent) {
+			SwarmTimeEdge._UNIQUE_FIRST++;
+			firstName = firstComponentTypeName + SwarmTimeEdge._UNIQUE_FIRST;
+			secondName = secondComponentTypeName + SwarmTimeEdge._UNIQUE_SECOND;
+		} else if (_UNIQUE_SECOND <= numberSecondComponent) {
+			SwarmTimeEdge._UNIQUE_SECOND++;
 		} else {
+
 			throw new SwarmException(String.format("All elements of components type '%s' have be created: %d first component(s) and %d second component(s).",super.getName(),
-					numberFirstStation,numberSecondStation),SwarmExceptionType.BREAKS);
+					numberFirstComponent,numberSecondComponent),SwarmExceptionType.BREAKS);
 		}
+		
 	}
 
 	@Override
@@ -53,18 +60,18 @@ public class SwarmPlaceEdge extends SwarmPlaceEdgeType {
 	public String getFirstName() {
 		return firstName;
 	}
-
+	
 	public String getSecondName() {
 		return secondName;
 	}
 	
-	public SwarmPlaceEdge clone(){
-		return new SwarmPlaceEdge(this);
+	@Override
+	public SwarmTimeEdge clone(){
+		return new SwarmTimeEdge(this);
 	}
-	/**
-	 * PlacedEdge(StationNameIn,StationTypeNameIn,StationNameOut,StationTypeNameOut,Weight,directed).
-	 */
+	
 	public String toString() {
-		return String.format("PlacedEdge(%s,%s,%s,%s,%d,%s).",firstName,firstStationTypeName,secondName,secondStationTypeName,weight,directed);
+		return String.format("TimeEdge(%s,%s,%s,%s,%s,%s,%s,%d).",firstName, firstComponentTypeName, secondName,secondComponentTypeName,
+				kindOfConnection.toString(), directed, logicalConnection.toString(), weight);
 	}
 }

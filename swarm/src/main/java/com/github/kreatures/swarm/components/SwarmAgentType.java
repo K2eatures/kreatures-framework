@@ -3,86 +3,95 @@ package com.github.kreatures.swarm.components;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.kreatures.swarm.exceptions.SwarmException;
 import com.github.kreatures.swarm.serialize.SwarmAgentTypeConfig;
 
+public class SwarmAgentType implements SwarmComponents {
 
-public class SwarmAgentType implements SwarmConfig{
-	
 	private static final Logger LOG = LoggerFactory.getLogger(SwarmAgentType.class);
-	
+
 	/**
 	 * The following attributes belong to AbstractSwarm
 	 */
 	protected int id;
-	
+
 	/**
-	 * This is the Agent-type name and has to be unique. 
+	 * This is the Agent-type name and has to be unique.
 	 */
 	protected String name;
 	/**
-	 * default value is infinite. 
+	 * default value is infinite.
 	 */
 	protected int frequency;
 	/**
-	 * default value is infinite. 
+	 * default value is infinite.
 	 */
 	protected int necessity;
 	/**
-	 * default value is one unit. 
+	 * default value is one unit.
 	 */
 	protected int time;
 	/**
-	 * default value is one unit. 
+	 * default value is one unit.
 	 */
 	protected int priority;
-	
+
 	/**
-	 * default value is zero. 
+	 * default value is zero.
 	 */
 	protected int cycle;
 	/**
-	 * default value is infinite. 
+	 * default value is infinite.
 	 */
 	protected int capacity;
 	/**
-	 * default value is zero. 
+	 * default value is zero.
 	 */
 	protected int size;
 	/**
-	 * default value is unit. 
+	 * default value is unit.
 	 */
 	protected int speed;
 	/**
-	 * default value is unit. 
+	 * default value is unit.
 	 */
 	protected int count;
 
+	/**
+	 * This constructor is use to make a copy of the object.
+	 * @param other object to copy
+	 */
 	protected SwarmAgentType(SwarmAgentType other) {
-		this.frequency=other.getFrequency();
-		this.necessity=other.getNecessity();
-		this.time=other.getTime();
-		this.priority=other.getPriority();
-		this.cycle=other.getCycle();
-		this.capacity=other.getCapacity();
-		this.size=other.getSize();
-		this.speed=other.getSpeed();
-		this.id=other.getIdentity();
+		this.frequency = other.getFrequency();
+		this.necessity = other.getNecessity();
+		this.time = other.getTime();
+		this.priority = other.getPriority();
+		this.cycle = other.getCycle();
+		this.capacity = other.getCapacity();
+		this.size = other.getSize();
+		this.speed = other.getSpeed();
+		this.id = other.getIdentity();
 	}
-	
+
+	public String getAgentTypeName() {
+		return name;
+	}
+
 	public int getIdentity() {
 		return this.id;
 	}
-	
+
 	public int getFrequency() {
-		
+
 		return frequency;
 	}
-	
+
 	public int getNecessity() {
 		return necessity;
 	}
+
 	public int getTime() {
-				return time;
+		return time;
 	}
 
 	public int getPriority() {
@@ -97,93 +106,104 @@ public class SwarmAgentType implements SwarmConfig{
 		return capacity;
 	}
 
-	public int getSize() {	
+	public int getSize() {
 		return size;
 	}
 
 	public int getSpeed() {
 		return speed;
 	}
-	
+
 	public int getCount() {
 		return count;
 	}
-	
+
 	@Override
 	public String getName() {
-		
+
 		return name;
 	}
+
 	@Override
 	public String getDescription() {
-		
-		return "Agent type "+name;
+
+		return "Agent type " + name;
 	}
+
 	@Override
 	public String getResourceType() {
-		
+
 		return RESOURCE_TYPE;
 	}
+
 	@Override
 	public String getCategory() {
 		return "AbstractSwarm: Agent Type";
 	}
+
 	/**
 	 * create a agentType object with all importance informations
-	 * @param swarmAgentTypeConfig 
+	 * 
+	 * @param swarmAgentTypeConfig
 	 */
-	public SwarmAgentType(SwarmAgentTypeConfig swarmAgentTypeConfig){
-			if(swarmAgentTypeConfig==null){
-				LOG.error("the given argument has to be no null.");
-				throw new NullPointerException("the given argument has to be no null.");
-			}
-			
-			if(swarmAgentTypeConfig.getFrequencySwarm()==null){
-					frequency= MAX_INT;
-			}else{
-				frequency=swarmAgentTypeConfig.getFrequencySwarm().getValue();
-			}
-			
-			if(swarmAgentTypeConfig.getNecessitySwarm()==null){
-				necessity= MAX_INT;
-		}else{
-			necessity=swarmAgentTypeConfig.getNecessitySwarm().getValue();
-		}
-			if(swarmAgentTypeConfig.getTimeSwarm()==null){
-				time= UNIT;
-		}else{
-			time=swarmAgentTypeConfig.getTimeSwarm().getValue();
-		}
-			
-			if(swarmAgentTypeConfig.getPrioritySwarm()==null){
-				priority= UNIT;
-		}else{
-			priority=swarmAgentTypeConfig.getPrioritySwarm().getValue();
-		}
-			
-			if(swarmAgentTypeConfig.getCycleSwarm()==null){
-				cycle= ZERO_VALUE;
-		}else{
-			cycle=swarmAgentTypeConfig.getCycleSwarm().getValue();
+	public SwarmAgentType(SwarmAgentTypeConfig swarmAgentTypeConfig) throws SwarmException {
+		if (swarmAgentTypeConfig == null)
+			throw new SwarmException("the given argument has to be no null.");
+
+		if (swarmAgentTypeConfig.getFrequencySwarm() == null) {
+			frequency = MAX_INT;
+		} else {
+			frequency = swarmAgentTypeConfig.getFrequencySwarm().getValue();
 		}
 
-			if(swarmAgentTypeConfig.getCapacitySwarmAgentType()==null){
-				capacity= MAX_INT;
-		}else{
-			capacity=swarmAgentTypeConfig.getCapacitySwarmAgentType().getValue();
+		if (swarmAgentTypeConfig.getNecessitySwarm() == null) {
+			necessity = MAX_INT;
+		} else {
+			necessity = swarmAgentTypeConfig.getNecessitySwarm().getValue();
+		}
+		if (swarmAgentTypeConfig.getTimeSwarm() == null) {
+			time = UNIT;
+		} else {
+			time = swarmAgentTypeConfig.getTimeSwarm().getValue();
 		}
 
-			if(swarmAgentTypeConfig.getSizeSwarmAgentType()==null){
-				size= ZERO_VALUE;
-		}else{
-			size=swarmAgentTypeConfig.getSizeSwarmAgentType().getValue();
+		if (swarmAgentTypeConfig.getPrioritySwarm() == null) {
+			priority = UNIT;
+		} else {
+			priority = swarmAgentTypeConfig.getPrioritySwarm().getValue();
 		}
-			if(swarmAgentTypeConfig.getSpeedSwarmAgentType()==null){
-				speed= UNIT;
-		}else{
-			speed=swarmAgentTypeConfig.getSpeedSwarmAgentType().getValue();
+
+		if (swarmAgentTypeConfig.getCycleSwarm() == null) {
+			cycle = ZERO_VALUE;
+		} else {
+			cycle = swarmAgentTypeConfig.getCycleSwarm().getValue();
 		}
-			count=swarmAgentTypeConfig.getCountSwarmAgentType();
-			name=swarmAgentTypeConfig.getNameSwarmAgentType();
+
+		if (swarmAgentTypeConfig.getCapacitySwarmAgentType() == null) {
+			capacity = MAX_INT;
+		} else {
+			capacity = swarmAgentTypeConfig.getCapacitySwarmAgentType().getValue();
+		}
+
+		if (swarmAgentTypeConfig.getSizeSwarmAgentType() == null) {
+			size = ZERO_VALUE;
+		} else {
+			size = swarmAgentTypeConfig.getSizeSwarmAgentType().getValue();
+		}
+		if (swarmAgentTypeConfig.getSpeedSwarmAgentType() == null) {
+			speed = UNIT;
+		} else {
+			speed = swarmAgentTypeConfig.getSpeedSwarmAgentType().getValue();
+		}
+		count = swarmAgentTypeConfig.getCountSwarmAgentType();
+		name = swarmAgentTypeConfig.getNameSwarmAgentType();
+	}
+
+	/**
+	 * AgentType(AgentTypeName,freq,nec,time,prio,cycle,cap,size,speed).
+	 */
+	public String toString() {
+		return String.format("AgentType(%s,%d,%d,%d,%d,%d,%d,%d,%d).", name, frequency, necessity, time, priority,
+				cycle, capacity, size, speed);
 	}
 }
