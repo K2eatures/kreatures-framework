@@ -101,7 +101,14 @@ public class NecAgentStation implements SwarmComponents {
 	public String toString(){
 		return String.format("NecAgentStation(%s,%s,%d). ", agentName,stationName,countNec);
 	}
-	
+	/**
+	 * This gives the understanding of toString result.
+	 * @return Description of the toString output.
+	 */
+	public static String getDescriptions() {
+
+		return "%NecAgentStation(AgentName,StationName,Nec).";
+	}
 	public int getIdentity(){
 		//TODO
 		return hashCode();

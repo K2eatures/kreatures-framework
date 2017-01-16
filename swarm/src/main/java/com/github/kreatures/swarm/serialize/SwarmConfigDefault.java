@@ -40,7 +40,7 @@ public class SwarmConfigDefault extends SwarmConfigBridge {
 			SwarmConfig scenario=null;
 			try {
 				persister.write(file, System.out);
-				scenario=persister.read(SwarmConfigRead.class, file);
+				scenario= persister.read(SwarmConfigRead.class, file);
 				
 			} catch (Exception e) {
 				LOG.error("The Abstract_Swarm's file doesn't exist. Check the giving directory.");
@@ -58,7 +58,7 @@ public class SwarmConfigDefault extends SwarmConfigBridge {
 	 */
 	public static void main(String[] args) throws Exception{
 		SwarmConfigBridge swarm=new SwarmConfigDefault();
-		System.out.format("%s%n",Paths.get(KReaturesPaths.SWARM_XML_DIR.toString()).resolve("PerspektivenLg.xml").toAbsolutePath());
+		System.out.format("%s%n",Paths.get(KReaturesPaths.SWARM_XML_DIR.toString()).resolve("Perspectives.lg.xml").toAbsolutePath());
 		SwarmConfig swarmDefault= swarm.createSwarmConfig(Paths.get(KReaturesPaths.SWARM_XML_DIR.toString()).resolve("PerspektivenLg.xml"));
 		System.out.format("%nPerception Name: %s%n",swarmDefault.getListPerspective().get(0).nameSwarmPerspective);
 	}

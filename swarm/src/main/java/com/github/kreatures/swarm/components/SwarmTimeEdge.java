@@ -42,10 +42,14 @@ public class SwarmTimeEdge extends SwarmTimeEdgeType{
 			SwarmTimeEdge._UNIQUE_FIRST++;
 			firstName = firstComponentTypeName + SwarmTimeEdge._UNIQUE_FIRST;
 			secondName = secondComponentTypeName + SwarmTimeEdge._UNIQUE_SECOND;
-		} else if (_UNIQUE_SECOND <= numberSecondComponent) {
+		} else if (_UNIQUE_SECOND < numberSecondComponent) {
 			SwarmTimeEdge._UNIQUE_SECOND++;
+			SwarmTimeEdge._UNIQUE_FIRST=1;
+			firstName = firstComponentTypeName + SwarmTimeEdge._UNIQUE_FIRST;
+			secondName = secondComponentTypeName + SwarmTimeEdge._UNIQUE_SECOND;
 		} else {
-
+			_UNIQUE_FIRST=0;
+			_UNIQUE_SECOND=1;
 			throw new SwarmException(String.format("All elements of components type '%s' have be created: %d first component(s) and %d second component(s).",super.getName(),
 					numberFirstComponent,numberSecondComponent),SwarmExceptionType.BREAKS);
 		}
@@ -69,9 +73,19 @@ public class SwarmTimeEdge extends SwarmTimeEdgeType{
 	public SwarmTimeEdge clone(){
 		return new SwarmTimeEdge(this);
 	}
-	
+	/**
+	 * %TimeEdge(Name1,TypeName1,Name2,TypeName2,TimeType,IsDirected,ConnectionType,weight).
+	 */
 	public String toString() {
 		return String.format("TimeEdge(%s,%s,%s,%s,%s,%s,%s,%d).",firstName, firstComponentTypeName, secondName,secondComponentTypeName,
 				kindOfConnection.toString(), directed, logicalConnection.toString(), weight);
+	}
+	/**
+	 * This gives the understanding of toString result.
+	 * @return Description of the toString output.
+	 */
+	public static String getDescriptions() {
+
+		return "%TimeEdge(Name1,TypeName1,Name2,TypeName2,TimeType,IsDirected,ConnectionType,weight).";
 	}
 }

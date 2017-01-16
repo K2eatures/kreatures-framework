@@ -1,4 +1,4 @@
-package com.github.kreatures.swarm.serialize.transform;
+package com.github.kreatures.core.serialize;
 
 
 

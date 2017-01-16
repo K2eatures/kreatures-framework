@@ -71,6 +71,8 @@ public class SwarmAgentType implements SwarmComponents {
 		this.size = other.getSize();
 		this.speed = other.getSpeed();
 		this.id = other.getIdentity();
+		this.count=other.getCount();
+		this.name=other.getName();
 	}
 
 	public String getAgentTypeName() {
@@ -123,13 +125,21 @@ public class SwarmAgentType implements SwarmComponents {
 
 		return name;
 	}
-
 	@Override
 	public String getDescription() {
 
-		return "Agent type " + name;
+		return String.format("AgentType %s", name);
 	}
 
+	/**
+	 * This gives the understanding of toString result.
+	 * @return Description of the toString output.
+	 */
+	public static String getDescriptions() {
+
+		return "%AgentType(AgentTypeName,freq,nec,time,prio,cycle,cap,size,speed).";
+	}
+	
 	@Override
 	public String getResourceType() {
 
@@ -197,6 +207,7 @@ public class SwarmAgentType implements SwarmComponents {
 		}
 		count = swarmAgentTypeConfig.getCountSwarmAgentType();
 		name = swarmAgentTypeConfig.getNameSwarmAgentType();
+		id=swarmAgentTypeConfig.getIdSwarmAgentType();
 	}
 
 	/**

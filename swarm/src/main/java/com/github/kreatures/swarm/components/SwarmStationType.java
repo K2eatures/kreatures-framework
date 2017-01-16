@@ -60,6 +60,8 @@ public class SwarmStationType implements SwarmComponents {
 		this.space = other.getSpace();
 		this.item = other.getItem();
 		this.id = other.getIdentity();
+		this.count=other.getCount();
+		this.name=other.getName();
 	}
 
 	public String getStationTypeName(){
@@ -177,6 +179,7 @@ public class SwarmStationType implements SwarmComponents {
 		}
 		count = swarmStationTypeConfig.getCountSwarmStationType();
 		name = swarmStationTypeConfig.getNameSwarmStationType();
+		id=swarmStationTypeConfig.getIdSwarmStationType();
 	}
 	/**
 	 * StationType(StationTypeName,freq,nec,time,prio,cylce,item,space,count)
@@ -184,5 +187,12 @@ public class SwarmStationType implements SwarmComponents {
 	public String toString() {
 		return String.format("StationType(%s,%d,%d,%d,%d,%d,%d,%d,%d).",name,frequency,necessity,time,priority,cycle,item,space,count);
 	}
+	/**
+	 * This gives the understanding of toString result.
+	 * @return Description of the toString output.
+	 */
+	public static String getDescriptions() {
 
+		return "%StationType(StationTypeName,freq,nec,time,prio,cylce,item,space,count)";
+	}
 }

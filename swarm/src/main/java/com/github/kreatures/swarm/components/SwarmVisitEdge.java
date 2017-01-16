@@ -39,9 +39,14 @@ public class SwarmVisitEdge extends SwarmVisitEdgeType {
 			SwarmVisitEdge._UNIQUE_AGENT++;
 			agentName = agentTypeName + SwarmVisitEdge._UNIQUE_AGENT;
 			stationName = stationTypeName + SwarmVisitEdge._UNIQUE_STATION;
-		} else if (_UNIQUE_STATION <= numberStation) {
+		} else if (_UNIQUE_STATION < numberStation) {
 			SwarmVisitEdge._UNIQUE_STATION++;
+			SwarmVisitEdge._UNIQUE_AGENT=1;
+			agentName = agentTypeName + SwarmVisitEdge._UNIQUE_AGENT;
+			stationName = stationTypeName + SwarmVisitEdge._UNIQUE_STATION;
 		} else {
+			_UNIQUE_AGENT=0;
+			_UNIQUE_STATION=1;
 			throw new SwarmException(String.format("All elements of components type '%s' have be created: %d first component(s) and %d second component(s).",super.getName(),
 					numberAgent,numberStation),SwarmExceptionType.BREAKS);
 		}
@@ -71,5 +76,13 @@ public class SwarmVisitEdge extends SwarmVisitEdgeType {
 	 */
 	public String toString() {
 		return String.format("VisitEdge(%s,%s,%s,%s,%s).",agentName, getAgentTypeName(), stationName,getStationTypeName(),bold);
+	}
+	/**
+	 * This gives the understanding of toString result.
+	 * @return Description of the toString output.
+	 */
+	public static String getDescriptions() {
+
+		return "%VisitEdge(agentName,AgentTypeName,StationName,StationTypeName,bold).";
 	}
 }

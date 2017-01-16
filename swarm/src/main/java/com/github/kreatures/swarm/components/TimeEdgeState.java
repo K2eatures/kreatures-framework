@@ -72,6 +72,7 @@ public class TimeEdgeState implements SwarmComponents {
 				this.componentType=ComponentType.STATION;
 			}
 		}else{
+			_UNIQUE=0;
 			throw new SwarmException(String.format("All elements of components type '%s' have be created.",getName()),SwarmExceptionType.BREAKS);
 		}
 		this.visitorName="nothing";
@@ -98,7 +99,16 @@ public class TimeEdgeState implements SwarmComponents {
 	public String getDescription() {
 		return String.format("Define the time state of component %s",name);
 	}
-
+	
+	public boolean equals(TimeEdgeState other){
+		if(other==null)
+			return false;
+		if(other.getName()==null||this.getName()==null)
+			return false;
+		if(this.getName().equals(other.getName()))
+			return true;
+		return false;
+	}
 	/** 
 	 * @see com.github.kreatures.core.serialize.Resource#getResourceType()
 	 */
@@ -125,6 +135,14 @@ public class TimeEdgeState implements SwarmComponents {
 	 */
 	public String toString(){
 		return String.format("TimeEdgeState(%s,%s,%s,%s,%s,%d,%s,%s,%s).", name,typeName,visitorName,visitorTypeName,componentType,tick,isWaiting,isReady,isFinish);
+	}
+	/**
+	 * This gives the understanding of toString result.
+	 * @return Description of the toString output.
+	 */
+	public static String getDescriptions() {
+
+		return "%TimeEdgeStatus(NameWithTimeEdge,TypeNameWithTimeEdge,NameVisited,TypeNameVisited,Type,CountTick,IsWaiting,IsReady,IsFinish).";
 	}
 	public int getIdentity(){
 		//TODO

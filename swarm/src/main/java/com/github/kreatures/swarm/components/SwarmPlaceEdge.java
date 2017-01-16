@@ -37,9 +37,14 @@ public class SwarmPlaceEdge extends SwarmPlaceEdgeType {
 			SwarmPlaceEdge._UNIQUE_FIRST++;
 			firstName = firstStationTypeName + SwarmPlaceEdge._UNIQUE_FIRST;
 			secondName = secondStationTypeName + SwarmPlaceEdge._UNIQUE_SECOND;
-		} else if (_UNIQUE_SECOND <= numberSecondStation) {
+		} else if (_UNIQUE_SECOND < numberSecondStation) {
 			SwarmPlaceEdge._UNIQUE_SECOND++;
+			SwarmPlaceEdge._UNIQUE_FIRST=1;
+			firstName = firstStationTypeName + SwarmPlaceEdge._UNIQUE_FIRST;
+			secondName = secondStationTypeName + SwarmPlaceEdge._UNIQUE_SECOND;
 		} else {
+			_UNIQUE_FIRST=0;
+			_UNIQUE_SECOND=1;
 			throw new SwarmException(String.format("All elements of components type '%s' have be created: %d first component(s) and %d second component(s).",super.getName(),
 					numberFirstStation,numberSecondStation),SwarmExceptionType.BREAKS);
 		}
@@ -66,5 +71,13 @@ public class SwarmPlaceEdge extends SwarmPlaceEdgeType {
 	 */
 	public String toString() {
 		return String.format("PlacedEdge(%s,%s,%s,%s,%d,%s).",firstName,firstStationTypeName,secondName,secondStationTypeName,weight,directed);
+	}
+	/**
+	 * This gives the understanding of toString result.
+	 * @return Description of the toString output.
+	 */
+	public static String getDescriptions() {
+
+		return "%PlacedEdge(StationNameIn,StationTypeNameIn,StationNameOut,StationTypeNameOut,Weight,directed).";
 	}
 }

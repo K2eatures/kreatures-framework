@@ -9,6 +9,7 @@ import com.github.kreatures.core.serialize.CreateKReaturesXMLFileDefault;
 import com.github.kreatures.gui.KReaturesGUIDataStorage;
 import com.github.kreatures.gui.KReaturesWindow;
 import com.github.kreatures.core.serialize.SimulationConfiguration;
+import com.github.kreatures.core.serialize.SwarmLoaderDefault;
 import com.github.kreatures.core.util.Utility;
 public class GUIApplication {
 	/** logging facility */
@@ -21,13 +22,14 @@ public class GUIApplication {
 		 * Here we have to create all abstract swarm config file 
 		 * in order that there can be laoded after into KReatures.
 		 */
-		try {
-			new CreateKReaturesXMLFileDefault();
-			LOG.info("Abstract_Swarm configuration-file are successfull created.");
-		} catch (Exception e) {
-			LOG.error("There are some error when Abstract_Swarm configuration-file would be created.");
-			e.printStackTrace();
-		}
+		SwarmLoaderDefault.getInstance().init();
+//		try {
+//			new CreateKReaturesXMLFileDefault();
+//			LOG.info("Abstract_Swarm configuration-file are successfull created.");
+//		} catch (Exception e) {
+//			LOG.error("There are some error when Abstract_Swarm configuration-file would be created.");
+//			e.printStackTrace();
+//		}
 		
 		KReaturesWindow.get().init();
 		

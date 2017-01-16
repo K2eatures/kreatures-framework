@@ -74,7 +74,7 @@ public class KReatures {
 	/** reference to the configuration of KReatures */
 	private GlobalConfiguration config = null;
 
-	private String configFilePath = "config/configuration.xml";
+	private String configFilePath = String.format("%s/%s", KReaturesPaths.KREATURES_CONFIG_DIR.toString(),KReaturesConst._KReaturesConfigFile);
 	
 	private KReaturesProject currentProject = new KReaturesProject();
 	

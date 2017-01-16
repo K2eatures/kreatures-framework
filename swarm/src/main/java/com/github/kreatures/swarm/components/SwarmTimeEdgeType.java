@@ -38,7 +38,9 @@ public class SwarmTimeEdgeType implements SwarmComponents {
 	protected SwarmTimeEdgeType(SwarmTimeEdgeType other) {
 		this.kindOfConnection = other.kindOfConnection;
 		this.firstComponentTypeName = other.firstComponentTypeName;
+		this.numberFirstComponent=other.numberFirstComponent;
 		this.secondComponentTypeName = other.secondComponentTypeName;
+		this.numberSecondComponent=other.numberSecondComponent;
 		this.logicalConnection = other.logicalConnection;
 		this.directed = other.directed;
 		this.weight = other.weight;

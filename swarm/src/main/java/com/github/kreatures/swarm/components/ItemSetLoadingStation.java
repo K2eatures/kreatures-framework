@@ -34,11 +34,12 @@ public class ItemSetLoadingStation implements SwarmComponents {
 		}
 	
 		_UNIQUE++;
-		if(_UNIQUE<placeEdgeType.numberSecondStation){
+		if(_UNIQUE<=placeEdgeType.numberSecondStation){
 			this.stationOutTypeName=placeEdgeType.getFirstStationTypeName();
 			this.stationInName=String.format("%s%d", placeEdgeType.getSecondStationTypeName(),_UNIQUE);
 			this.numberOfItem=0;
 		}else{
+			_UNIQUE=0;
 			throw new SwarmException(String.format("All elements of components type '%s' have be created: %d Station(s).",getName(),placeEdgeType.numberSecondStation),SwarmExceptionType.BREAKS);
 		}
 			
@@ -85,6 +86,15 @@ public class ItemSetLoadingStation implements SwarmComponents {
 	 */
 	public String toString(){
 		return String.format("ItemSetLoadingStation(%s,%s,%d).", stationOutTypeName,stationInName,numberOfItem);
+	}
+	
+	/**
+	 * This gives the understanding of toString result.
+	 * @return Description of the toString output.
+	 */
+	public static String getDescriptions() {
+
+		return "%ItemSetLoadingStation(StationTypeNameIn,StationNameOut,ItemNumber).";
 	}
 	
 	public int getIdentity(){

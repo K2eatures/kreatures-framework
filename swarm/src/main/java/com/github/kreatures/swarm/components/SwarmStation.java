@@ -39,7 +39,8 @@ public class SwarmStation extends SwarmStationType{
 			SwarmStation._UNIQUE++;
 			stationName=name+SwarmStation._UNIQUE;
 		}else{
-			throw new SwarmException(String.format("All elements of components type '%s' have be created: %d Agent(s).",super.getName(),
+			_UNIQUE=0;
+			throw new SwarmException(String.format("All elements of components type '%s' have be created: %d Stations(s).",super.getName(),
 					count),SwarmExceptionType.BREAKS);
 		}
 	}
@@ -57,5 +58,13 @@ public class SwarmStation extends SwarmStationType{
 	 */
 	public String toString() {
 		return String.format("Station(%s,%s,%d,%d,%d).",getName(), getStationTypeName(),frequency,necessity,space);
+	}
+	/**
+	 * This gives the understanding of toString result.
+	 * @return Description of the toString output.
+	 */
+	public static String getDescriptions() {
+
+		return "%Station(StationName,StattionType,freq,nec,space).";
 	}
 }

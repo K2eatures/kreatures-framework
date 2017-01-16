@@ -3,36 +3,36 @@
  */
 package com.github.kreatures.swarm.components;
 
-import java.util.Set;
+import java.util.Collection;
 /**
  * @author donfack
  *
  */
 public interface XmlToBeliefBase {
 
-	int getTimeUnit();
+	String getTimeUnit();
 	String getName();
 	String getDescription();
 	
-	Set<SwarmAgentType> getAllAgentType();
-	Set<SwarmAgent> getAllAgents();
+	Collection<SwarmAgentType> getAllAgentType();
+	Collection<SwarmAgent> getAllAgents();
 	
-	Set<SwarmStationType> getAllStationType();
-	Set<SwarmStation> getAllStations ();
+	Collection<SwarmStationType> getAllStationType();
+	Collection<SwarmStation> getAllStations ();
 	
-	Set<SwarmPlaceEdgeType> getAllPlaceEdgeType();
-	Set<SwarmPlaceEdge> getAllPlaceEdge();
+	//Set<SwarmPlaceEdgeType> getAllPlaceEdgeType();
+	Collection<SwarmPlaceEdge> getAllPlaceEdge();
 	
-	Set<SwarmVisitEdgeType> getAllVisitEdgeType();
-	Set<SwarmVisitEdge> getAllVisitEdge();
+	//Set<SwarmVisitEdgeType> getAllVisitEdgeType();
+	Collection<SwarmVisitEdge> getAllVisitEdge();
 	
-	Set<SwarmTimeEdgeType> getAllTimeEdgeType();
-	Set<SwarmTimeEdge> getAllTimeEdge();
+	//Set<SwarmTimeEdgeType> getAllTimeEdgeType();
+	Collection<SwarmTimeEdge> getAllTimeEdge();
 	
-	Set<NecAgentStation> getAllNecAgentStation();
+	Collection<NecAgentStation> getAllNecAgentStation();
 	
-	Set<ItemSetLoadingAgent> getAllItemSetLoadingAgent();
-	Set<ItemSetLoadingStation> getAllItemSetLoadingStation();
+	Collection<ItemSetLoadingAgent> getAllItemSetLoadingAgent();
+	Collection<ItemSetLoadingStation> getAllItemSetLoadingStation();
 	
-	Set<TimeEdgeState> getAllTimeEdgeState();
+	Collection<TimeEdgeState> getAllTimeEdgeState();
 }

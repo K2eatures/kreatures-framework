@@ -35,16 +35,25 @@ public class ItemSetLoadingAgent implements SwarmComponents {
 		}
 	
 		_UNIQUE++;
-		if(_UNIQUE<visitEdgeType.numberAgent){
+		if(_UNIQUE<=visitEdgeType.numberAgent){
 			this.agentName=String.format("%s%d", visitEdgeType.getAgentTypeName(),_UNIQUE);
 			this.stationTypeName=visitEdgeType.getStationTypeName();
 			this.numberOfItem=0;
 		}else{
+			_UNIQUE=0;
 			throw new SwarmException(String.format("All elements of components type '%s' have be created: %d Agent(s).",getName(),visitEdgeType.numberAgent),SwarmExceptionType.BREAKS);
 		}
 			
 	}
 	
+	/**
+	 * This gives the understanding of toString result.
+	 * @return Description of the toString output.
+	 */
+	public static String getDescriptions() {
+
+		return "%ItemSetLoadingAgent(AgentName,StationTypeName,ItemNumber).";
+	}
 	/**
 	 * @see com.github.kreatures.core.serialize.Resource#getName()
 	 */

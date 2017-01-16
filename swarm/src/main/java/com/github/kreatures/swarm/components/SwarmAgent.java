@@ -37,6 +37,7 @@ public class SwarmAgent extends SwarmAgentType{
 			SwarmAgent._UNIQUE++;
 			agentName=name+SwarmAgent._UNIQUE;
 		}else{
+			_UNIQUE=0;
 			throw new SwarmException(String.format("All elements of components type '%s' have be created: %d Agent(s).",super.getName(),
 					count),SwarmExceptionType.BREAKS);
 		}
@@ -45,6 +46,14 @@ public class SwarmAgent extends SwarmAgentType{
 	@Override
 	public String getName(){
 		return agentName;
+	}
+	/**
+	 * This gives the understanding of toString result.
+	 * @return Description of the toString output.
+	 */
+	public static String getDescriptions() {
+
+		return "%Agent(AgentName,AgentType,freq,nec,cap).";
 	}
 	
 	@Override

@@ -5,10 +5,9 @@ package com.github.kreatures.swarm.components;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
 
 import com.github.kreatures.swarm.exceptions.SwarmException;
 import com.github.kreatures.swarm.exceptions.SwarmExceptionType;
@@ -27,31 +26,59 @@ import com.github.kreatures.swarm.serialize.SwarmVisitEdgeConfig;
 public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	
 	
-	String  timeUnit;
-	String name;
-	String description;
+	private String  timeUnit;
+	private String name;
+	private String description;
 	
-	Set<SwarmAgentType> agentsTypeSet;
-	Set<SwarmAgent> agentSet;
+	private Collection<SwarmAgentType> agentsTypeSet;
+	private Collection<SwarmAgent> agentSet;
 	
-	Set<SwarmStationType> stationTypeSet;
-	Set<SwarmStation> stationSet;
+	private Collection<SwarmStationType> stationTypeSet;
+	private Collection<SwarmStation> stationSet;
 	
-	Set<SwarmPlaceEdgeType> placeEdgeTypeSet;
-	Set<SwarmPlaceEdge> placeEdgeSet;
+	private Collection<SwarmPlaceEdgeType> placeEdgeTypeSet;
+	private Collection<SwarmPlaceEdge> placeEdgeSet;
 	
-	Set<SwarmVisitEdgeType> visitEdgeTypeSet;
-	Set<SwarmVisitEdge> visitEdgeSet;
+	private Collection<SwarmVisitEdgeType> visitEdgeTypeSet;
+	private Collection<SwarmVisitEdge> visitEdgeSet;
 	
-	Set<SwarmTimeEdgeType> timeEdgeTypeSet;
-	Set<SwarmTimeEdge> timeEdgeSet;
+	private Collection<SwarmTimeEdgeType> timeEdgeTypeSet;
+	private Collection<SwarmTimeEdge> timeEdgeSet;
 	
-	Set<NecAgentStation> necAgentStationSet;
+	private Collection<NecAgentStation> necAgentStationSet;
 	
-	Set<ItemSetLoadingAgent> itemSetLoadingAgentSet;
-	Set<ItemSetLoadingStation> itemSetLoadingStationSet;
+	private Collection<ItemSetLoadingAgent> itemSetLoadingAgentSet;
+	private Collection<ItemSetLoadingStation> itemSetLoadingStationSet;
 	
-	Set<TimeEdgeState> timeEdgeStateSet;
+	private Collection<TimeEdgeState> timeEdgeStateSet;
+	
+	{
+		timeUnit="";
+		name="";
+		description="";
+		
+		agentsTypeSet=new HashSet<>();
+		agentSet=new HashSet<>();
+		
+		stationTypeSet=new HashSet<>();
+		stationSet=new HashSet<>();
+		
+		placeEdgeTypeSet=new HashSet<>();
+		placeEdgeSet=new HashSet<>();
+		
+		visitEdgeTypeSet=new HashSet<>();
+		visitEdgeSet=new HashSet<>();
+		
+		timeEdgeTypeSet=new HashSet<>();
+		timeEdgeSet=new HashSet<>();
+		
+		necAgentStationSet=new HashSet<>();
+		
+		itemSetLoadingAgentSet=new HashSet<>();
+		itemSetLoadingStationSet=new HashSet<>();
+		
+		timeEdgeStateSet=new HashSet<>();
+	}
 	
 	
 	public BeliefParseOfSwarm(Path path) throws SwarmException {
@@ -80,6 +107,10 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 		if(!catchException.isEmpty())
 			throw catchException.get(0);
 		
+		setName(path);
+		setDescription(path);
+		setTimeUnit(SwarmComponents.UNIT);
+		
 		setPlaceEdgeType(scenario.getListPlaceEdge(), getAllStationType());
 		setVisitEdgeType(scenario.getListVisitEdge(), getAllAgentType(), getAllStationType());
 		setTimeEdgeType(scenario.getListTimeEdge(), getAllAgentType(),getAllStationType());
@@ -94,6 +125,12 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 		setItemSetLoadingAgent(getAllVisitEdgeType());
 		setItemSetLoadingStation(getAllPlaceEdgeType());
 		setTimeEdgeState(getAllTimeEdge());
+		/*
+		 * All these were help's variable. 
+		 */
+		placeEdgeTypeSet=null;
+		timeEdgeTypeSet=null;
+		visitEdgeTypeSet=null;
 	}
 	
 	/*
@@ -101,10 +138,14 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	 * com.github.kreatures.swarm.serialize.transform.XmlToBeliefBase#getTimeUnit
 	 * ()
 	 */
+	
+	public void setTimeUnit(int timeUnit) {
+		this.timeUnit=String.format("ZeitEinheit(%d).", timeUnit);
+	}
+	
 	@Override
-	public int getTimeUnit() {
-		
-		return SwarmComponents.UNIT;
+	public String getTimeUnit() {
+		return timeUnit;
 	}
 
 	/*
@@ -116,7 +157,7 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	@Override
 	public String getName() {
 		
-		return null;
+		return name;
 	}
 
 	/*
@@ -132,6 +173,16 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 		return null;
 	}
 
+	protected String setName(Path path){
+		name=String.format("%sLG",path.getFileName().toString().split("[.]")[0]);
+		return  name;
+	}
+	
+	protected String setDescription(Path path){
+		description=path.getFileName().toString();
+		return  description;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -145,7 +196,7 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 			throw new SwarmException("Null pointer exception");
 		if (list.isEmpty())
 			throw new SwarmException("There aren't elements into the list");
-		agentsTypeSet = new HashSet<>();
+		
 		for (SwarmAgentTypeConfig obj : list) {
 			agentsTypeSet.add(new SwarmAgentType(obj));
 		}
@@ -159,14 +210,12 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	 * (java.util.Set)
 	 */
 	
-	protected void setAgents(Set<SwarmAgentType> set) throws SwarmException{
+	protected void setAgents(Collection<SwarmAgentType> set) throws SwarmException{
 		if (set == null)
 			throw new SwarmException("Null pointer exception");
 		
 		if (set.isEmpty())
 			throw new SwarmException("There aren't elements into the set");
-		
-		agentSet=new HashSet<>();
 		
 		for(SwarmAgentType obj:set){
 			try{
@@ -198,8 +247,6 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 		if (list.isEmpty())
 			throw new SwarmException("There aren't elements into the list");
 		
-		stationTypeSet = new HashSet<>();
-		
 		for (SwarmStationTypeConfig obj : list) {
 			stationTypeSet.add(new SwarmStationType(obj));
 		}
@@ -213,14 +260,12 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	 * (java.util.Set)
 	 */
 	
-	protected void setStations(Set<SwarmStationType> set) throws SwarmException{
+	protected void setStations(Collection<SwarmStationType> set) throws SwarmException{
 		if (set == null)
 			throw new SwarmException("Null pointer exception");
 		
 		if (set.isEmpty())
 			throw new SwarmException("There aren't elements into the set");
-		
-		stationSet=new HashSet<>();
 		
 		for(SwarmStationType obj:set){
 			try{
@@ -243,19 +288,16 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	 */
 	
 	protected void setPlaceEdgeType(
-			List<SwarmPlaceEdgeConfig> list, Set<SwarmStationType> set) throws SwarmException{
+			List<SwarmPlaceEdgeConfig> list, Collection<SwarmStationType> set) throws SwarmException{
 		
 		if (list == null)
-			throw new SwarmException("Null pointer exception");
-//		if (list.isEmpty())
-//			throw new SwarmException("There aren't elements into the list");
+			return;
 		
-		placeEdgeTypeSet = new HashSet<>();
 		List<SwarmStationType> args=new ArrayList<>(2);
 		for (SwarmPlaceEdgeConfig obj : list) {
 			
-			set.stream().filter(p->p.getIdentity()==obj.getFirstConnectedIdRefSwarmPlaceEdge()).map(q->args.add(q));
-			set.stream().filter(p->p.getIdentity()==obj.getSecondConnectedIdRefSwarmPlaceEdge()).map(q->args.add(q));
+			args.add(new SwarmComponentDefaultFilter().filter(set, obj.getFirstConnectedIdRefSwarmPlaceEdge()));
+			args.add(new SwarmComponentDefaultFilter().filter(set, obj.getSecondConnectedIdRefSwarmPlaceEdge()));
 			
 			placeEdgeTypeSet.add(new SwarmPlaceEdgeType(obj,args.get(0),args.get(1)));
 			args.clear();
@@ -270,14 +312,12 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	 * (java.util.Set)
 	 */
 	
-	protected void setPlaceEdge(Set<SwarmPlaceEdgeType> set) throws SwarmException{
+	protected void setPlaceEdge(Collection<SwarmPlaceEdgeType> set) throws SwarmException{
 		if (set == null)
 			throw new SwarmException("Null pointer exception");
 		
 		if (set.isEmpty())
-			throw new SwarmException("There aren't elements into the set");
-		
-		placeEdgeSet=new HashSet<>();
+			return;
 		
 		for(SwarmPlaceEdgeType obj:set){
 			try{
@@ -300,21 +340,24 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	 */
 	
 	protected void setVisitEdgeType(
-			List<SwarmVisitEdgeConfig> list,Set<SwarmAgentType> agSet,Set<SwarmStationType> stSet)throws SwarmException {
+			List<SwarmVisitEdgeConfig> list,Collection<SwarmAgentType> agSet,Collection<SwarmStationType> stSet)throws SwarmException {
 		
 		if (list == null)
 			throw new SwarmException("Null pointer exception");
 		if (list.isEmpty())
 			throw new SwarmException("There aren't elements into the list");
 		
-		placeEdgeTypeSet = new HashSet<>();
 		List<SwarmComponents> args=new ArrayList<>(2);
 		for (SwarmVisitEdgeConfig obj : list) {
-			args.clear();
-			agSet.stream().filter(p->p.getIdentity()==obj.getFirstConnectedIdRefSwarmVisitEdge()).map(q->args.add(q));
-			stSet.stream().filter(p->p.getIdentity()==obj.getSecondConnectedIdRefSwarmVisitEdge()).map(q->args.add(q));
+			
+			args.add(new SwarmComponentDefaultFilter().filter(agSet, obj.getFirstConnectedIdRefSwarmVisitEdge()));
+			args.add(new SwarmComponentDefaultFilter().filter(stSet, obj.getSecondConnectedIdRefSwarmVisitEdge()));
+			if(args.get(0)==null||args.get(1)==null)
+				continue;
 			
 			visitEdgeTypeSet.add(new SwarmVisitEdgeType(obj,(SwarmAgentType)args.get(0),(SwarmStationType)args.get(1)));
+			
+			args.clear();
 		}
 		
 	}
@@ -327,14 +370,14 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	 * (java.util.Set)
 	 */
 	
-	protected void setVisitEdge(Set<SwarmVisitEdgeType> set) throws SwarmException{
+	protected void setVisitEdge(Collection<SwarmVisitEdgeType> set) throws SwarmException{
 		if (set == null)
 			throw new SwarmException("Null pointer exception");
 		
 		if (set.isEmpty())
 			throw new SwarmException("There aren't elements into the set");
 		
-		visitEdgeSet=new HashSet<>();
+		
 		
 		for(SwarmVisitEdgeType obj:set){
 			try{
@@ -358,18 +401,32 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	 * getTimeEdgeType(java.util.List)
 	 */
 	
-	protected void setTimeEdgeType(List<SwarmTimeEdgeConfig> list,Set<SwarmAgentType> agSet,Set<SwarmStationType> stSet ) throws SwarmException{
+	protected void setTimeEdgeType(List<SwarmTimeEdgeConfig> list,Collection<SwarmAgentType> agSet,Collection<SwarmStationType> stSet ) throws SwarmException{
 		if (list == null)
-			throw new SwarmException("Null pointer exception");
-//		if (list.isEmpty())
-//			throw new SwarmException("There aren't elements into the list");
+			return;
 		
-		timeEdgeTypeSet = new HashSet<>();
+		
 		List<SwarmComponents> args=new ArrayList<>(2);
+		SwarmAgentType agT=null;
+		SwarmStationType stT=null;
 		for (SwarmTimeEdgeConfig obj : list) {
-			args.clear();
-			agSet.stream().filter(p->p.getIdentity()==obj.getFirstConnectedIdRefSwarmTimeEdge()).map(q->args.add(q));
-			stSet.stream().filter(p->p.getIdentity()==obj.getSecondConnectedIdRefSwarmTimeEdge()).map(q->args.add(q));
+			
+			agT=new SwarmComponentDefaultFilter().filter(agSet, obj.getFirstConnectedIdRefSwarmTimeEdge());
+			if(agT==null){
+				stT=new SwarmComponentDefaultFilter().filter(stSet, obj.getFirstConnectedIdRefSwarmTimeEdge());
+				args.add(stT);
+			}else{
+				args.add(agT);
+			}
+			
+			agT=new SwarmComponentDefaultFilter().filter(agSet, obj.getSecondConnectedIdRefSwarmTimeEdge());
+			
+			if(agT==null){
+				stT=new SwarmComponentDefaultFilter().filter(stSet, obj.getSecondConnectedIdRefSwarmTimeEdge());
+				args.add(stT);
+			}else{
+				args.add(agT);
+			}
 			
 			if(args.get(0) instanceof SwarmAgentType && args.get(1) instanceof SwarmStationType){
 				timeEdgeTypeSet.add(new SwarmTimeEdgeType(obj,(SwarmAgentType)args.get(0),(SwarmStationType)args.get(1)));	
@@ -377,9 +434,11 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 				timeEdgeTypeSet.add(new SwarmTimeEdgeType(obj,(SwarmAgentType)args.get(0),(SwarmAgentType)args.get(1)));	
 			}else if(args.get(0) instanceof SwarmStationType && args.get(1) instanceof SwarmStationType){
 				timeEdgeTypeSet.add(new SwarmTimeEdgeType(obj,(SwarmStationType)args.get(0),(SwarmStationType)args.get(1)));	
-			}else{
+			}else if(args.get(0) instanceof SwarmStationType && args.get(1) instanceof SwarmAgentType){
 				timeEdgeTypeSet.add(new SwarmTimeEdgeType(obj,(SwarmStationType)args.get(0),(SwarmAgentType)args.get(1)));	
 			}
+			
+			args.clear();
 		}
 		
 	}
@@ -392,14 +451,14 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	 * (java.util.Set)
 	 */
 	
-	protected void setTimeEdge(Set<SwarmTimeEdgeType> set) throws SwarmException{
+	protected void setTimeEdge(Collection<SwarmTimeEdgeType> set) throws SwarmException{
 		if (set == null)
 			throw new SwarmException("Null pointer exception");
 		
-		if (set.isEmpty())
-			throw new SwarmException("There aren't elements into the set");
+//		if (set.isEmpty())
+//			throw new SwarmException("There aren't elements into the set");
 		
-		timeEdgeSet=new HashSet<>();
+		
 		
 		for(SwarmTimeEdgeType obj:set){
 			try{
@@ -423,14 +482,14 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	 * getNecAgentStation(java.util.Set)
 	 */
 	
-	protected void setNecAgentStation(Set<SwarmVisitEdge> set) throws SwarmException{
+	protected void setNecAgentStation(Collection<SwarmVisitEdge> set) throws SwarmException{
 		if (set == null)
 			throw new SwarmException("Null pointer exception");
 		
 		if (set.isEmpty())
 			throw new SwarmException("There aren't elements into the set");
 		
-		necAgentStationSet=new HashSet<>();
+		
 		
 		for(SwarmVisitEdge obj:set){
 			necAgentStationSet.add(new NecAgentStation(obj));
@@ -447,7 +506,7 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	 */
 	
 	protected void setItemSetLoadingAgent(
-			Set<SwarmVisitEdgeType> set)throws SwarmException {
+			Collection<SwarmVisitEdgeType> set)throws SwarmException {
 		
 		if (set == null)
 			throw new SwarmException("Null pointer exception");
@@ -455,15 +514,14 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 		if (set.isEmpty())
 			throw new SwarmException("There aren't elements into the set");
 		
-		itemSetLoadingAgentSet=new HashSet<>();
-		
+			
 		for(SwarmVisitEdgeType obj:set){
 			try{
 				for(;;){
 					itemSetLoadingAgentSet.add(new ItemSetLoadingAgent(obj));
 				}
 			}catch(SwarmException ex){
-				if(ex.getExceptionType()!=SwarmExceptionType.BREAKS)
+				if(ex.getExceptionType()!=SwarmExceptionType.BREAKS&&ex.getExceptionType()!=SwarmExceptionType.INFORM)
 					throw ex;
 					
 			}
@@ -480,17 +538,14 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	 */
 	
 	protected void setItemSetLoadingStation(
-			Set<SwarmPlaceEdgeType> set)throws SwarmException {
+			Collection<SwarmPlaceEdgeType> set)throws SwarmException {
 		if (set == null)
 			throw new SwarmException("Null pointer exception");
 		
 		if (set.isEmpty())
-			throw new SwarmException("There aren't elements into the set");
+			return;
 		
 		List<SwarmException> catchException=new ArrayList<>(1);
-		
-		itemSetLoadingStationSet=new HashSet<>();
-		
 		
 		set.stream().filter(p->p.isDirected()).forEach(obj->{
 			try{
@@ -498,7 +553,7 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 					itemSetLoadingStationSet.add(new ItemSetLoadingStation(obj));
 				}
 			}catch(SwarmException ex){
-				if(ex.getExceptionType()!=SwarmExceptionType.BREAKS){
+				if(ex.getExceptionType()!=SwarmExceptionType.BREAKS&&ex.getExceptionType()!=SwarmExceptionType.INFORM){
 					catchException.add(ex);
 					return;
 				}
@@ -519,22 +574,27 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	 * getTimeEdgeState(java.util.Set)
 	 */
 	
-	protected void setTimeEdgeState(Set<SwarmTimeEdge> set) throws SwarmException{
+	protected void setTimeEdgeState(Collection<SwarmTimeEdge> set) throws SwarmException{
 		if (set == null)
 			throw new SwarmException("Null pointer exception");
 		
 		if (set.isEmpty())
-			throw new SwarmException("There aren't elements into the set");
-		
-		timeEdgeStateSet=new HashSet<>();
-		
+			return;
+		TimeEdgeState tmp=null;
 		for(SwarmTimeEdge obj:set){
 			try{
+				checkDuplication: 
 				for(;;){
-					timeEdgeStateSet.add(new TimeEdgeState(obj));
+					tmp=new TimeEdgeState(obj);
+						for(TimeEdgeState elt:timeEdgeStateSet){
+							if(tmp.equals(elt)){
+								continue checkDuplication;
+							}
+						}
+						timeEdgeStateSet.add(tmp);
 				}
 			}catch(SwarmException ex){
-				if(ex.getExceptionType()!=SwarmExceptionType.BREAKS)
+				if(ex.getExceptionType()!=SwarmExceptionType.BREAKS&&ex.getExceptionType()!=SwarmExceptionType.INFORM)
 					throw ex;
 					
 			}
@@ -546,7 +606,7 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 
 
 	@Override
-	public Set<SwarmAgentType> getAllAgentType() {
+	public Collection<SwarmAgentType> getAllAgentType() {
 		
 		return agentsTypeSet;
 	}
@@ -554,7 +614,7 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 
 
 	@Override
-	public Set<SwarmAgent> getAllAgents() {
+	public Collection<SwarmAgent> getAllAgents() {
 		
 		return agentSet;
 	}
@@ -562,7 +622,7 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 
 
 	@Override
-	public Set<SwarmStationType> getAllStationType() {
+	public Collection<SwarmStationType> getAllStationType() {
 		
 		return stationTypeSet;
 	}
@@ -570,15 +630,15 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 
 
 	@Override
-	public Set<SwarmStation> getAllStations() {
+	public Collection<SwarmStation> getAllStations() {
 		
 		return stationSet;
 	}
 
 
 
-	@Override
-	public Set<SwarmPlaceEdgeType> getAllPlaceEdgeType() {
+	
+	protected Collection<SwarmPlaceEdgeType> getAllPlaceEdgeType() {
 		
 		return placeEdgeTypeSet;
 	}
@@ -586,15 +646,15 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 
 
 	@Override
-	public Set<SwarmPlaceEdge> getAllPlaceEdge() {
+	public Collection<SwarmPlaceEdge> getAllPlaceEdge() {
 		
 		return placeEdgeSet;
 	}
 
 
 
-	@Override
-	public Set<SwarmVisitEdgeType> getAllVisitEdgeType() {
+	
+	protected Collection<SwarmVisitEdgeType> getAllVisitEdgeType() {
 		
 		return visitEdgeTypeSet;
 	}
@@ -602,15 +662,15 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 
 
 	@Override
-	public Set<SwarmVisitEdge> getAllVisitEdge() {
+	public Collection<SwarmVisitEdge> getAllVisitEdge() {
 		
 		return visitEdgeSet;
 	}
 
 
 
-	@Override
-	public Set<SwarmTimeEdgeType> getAllTimeEdgeType() {
+	
+	protected Collection<SwarmTimeEdgeType> getAllTimeEdgeType() {
 
 		return timeEdgeTypeSet;
 	}
@@ -618,7 +678,7 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 
 
 	@Override
-	public Set<SwarmTimeEdge> getAllTimeEdge() {
+	public Collection<SwarmTimeEdge> getAllTimeEdge() {
 
 		return timeEdgeSet;
 	}
@@ -626,7 +686,7 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 
 
 	@Override
-	public Set<NecAgentStation> getAllNecAgentStation() {
+	public Collection<NecAgentStation> getAllNecAgentStation() {
 		
 		return necAgentStationSet;
 	}
@@ -634,7 +694,7 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 
 
 	@Override
-	public Set<ItemSetLoadingAgent> getAllItemSetLoadingAgent() {
+	public Collection<ItemSetLoadingAgent> getAllItemSetLoadingAgent() {
 
 		return itemSetLoadingAgentSet;
 	}
@@ -642,7 +702,7 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 
 
 	@Override
-	public Set<ItemSetLoadingStation> getAllItemSetLoadingStation() {
+	public Collection<ItemSetLoadingStation> getAllItemSetLoadingStation() {
 		
 		return itemSetLoadingStationSet;
 	}
@@ -650,7 +710,7 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 
 
 	@Override
-	public Set<TimeEdgeState> getAllTimeEdgeState() {
+	public Collection<TimeEdgeState> getAllTimeEdgeState() {
 		
 		return timeEdgeStateSet;
 	}

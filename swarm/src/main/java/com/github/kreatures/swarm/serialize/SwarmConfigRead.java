@@ -25,9 +25,9 @@ public class SwarmConfigRead implements SwarmConfig{
 	protected List<SwarmPerspectiveConfig> listPerspective;
     @ElementList(entry="visitEdge", type=SwarmVisitEdgeConfig.class, inline=true)
     protected List<SwarmVisitEdgeConfig> listVisitEdge;
-    @ElementList(entry="timeEdge", type=SwarmTimeEdgeConfig.class, inline=true)
+    @ElementList(entry="timeEdge", type=SwarmTimeEdgeConfig.class, inline=true,required=false)
     protected List<SwarmTimeEdgeConfig> listTimeEdge;
-    @ElementList(entry="placeEdge", type=SwarmPlaceEdgeConfig.class, inline=true)
+    @ElementList(entry="placeEdge", type=SwarmPlaceEdgeConfig.class, inline=true,required=false)
      protected List<SwarmPlaceEdgeConfig> listPlaceEdge;
 
 
