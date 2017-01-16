@@ -211,13 +211,6 @@ public final class BDIParserUtils implements BDIParser {
 		target = Paths.get(KREATURES_BELIEFS_CONFIG_DIR.toString())
 				.resolve(String.format("%s%s", obj.getName(), _KREaturesBeliefsConfigFile));
 
-//		BeliefbaseConfigReal beliefConfigReal=persister.read(BeliefbaseConfigReal.class, source.toFile());
-//		beliefConfigReal.name=obj.getName();
-//		beliefConfigReal.description=obj.getDescription();
-//		beliefConfigReal.cylceScript=cycleScript;
-//		persister.write(AgentConfigReal.class, target.toFile());
-				
-		
 		Files.copy(source, target, StandardCopyOption.COPY_ATTRIBUTES,REPLACE_EXISTING);
 
 		/*
@@ -240,7 +233,8 @@ public final class BDIParserUtils implements BDIParser {
 		agentConfigReal.description=obj.getDescription();
 		agentConfigReal.cylceScript=cycleScript;
 		persister.write(agentConfigReal, target.toFile());
-	
+		agentConfigReal.cylceScript=null;
+		cycleScript=null;
 //		Files.copy(source, target, StandardCopyOption.COPY_ATTRIBUTES,REPLACE_EXISTING);
 
 	}

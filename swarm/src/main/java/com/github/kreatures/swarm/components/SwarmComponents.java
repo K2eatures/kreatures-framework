@@ -14,7 +14,7 @@ import com.github.kreatures.core.serialize.Resource;
 public interface SwarmComponents extends Resource, Comparable<SwarmComponents> {
 
 	public static final String RESOURCE_TYPE = "AbstractSwarm-Configuration";
-	int MAX_INT=100;
+	int MAX_INT=10;
 	int UNIT=1;
 	int ZERO_VALUE=0;
 	

@@ -178,7 +178,7 @@ public class SwarmStationType implements SwarmComponents {
 			item = swarmStationTypeConfig.getItemSwarmStationType().getValue();
 		}
 		count = swarmStationTypeConfig.getCountSwarmStationType();
-		name = swarmStationTypeConfig.getNameSwarmStationType();
+		name = swarmStationTypeConfig.getNameSwarmStationType().toLowerCase();
 		id=swarmStationTypeConfig.getIdSwarmStationType();
 	}
 	/**

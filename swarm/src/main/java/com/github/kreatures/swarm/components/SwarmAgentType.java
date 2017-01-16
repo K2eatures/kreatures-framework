@@ -206,7 +206,7 @@ public class SwarmAgentType implements SwarmComponents {
 			speed = swarmAgentTypeConfig.getSpeedSwarmAgentType().getValue();
 		}
 		count = swarmAgentTypeConfig.getCountSwarmAgentType();
-		name = swarmAgentTypeConfig.getNameSwarmAgentType();
+		name = swarmAgentTypeConfig.getNameSwarmAgentType().toLowerCase();
 		id=swarmAgentTypeConfig.getIdSwarmAgentType();
 	}
 

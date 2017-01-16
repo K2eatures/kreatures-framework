@@ -352,8 +352,18 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 			
 			args.add(new SwarmComponentDefaultFilter().filter(agSet, obj.getFirstConnectedIdRefSwarmVisitEdge()));
 			args.add(new SwarmComponentDefaultFilter().filter(stSet, obj.getSecondConnectedIdRefSwarmVisitEdge()));
-			if(args.get(0)==null||args.get(1)==null)
+			if(args.get(0)==null&&args.get(1)==null){
+				args.clear();
+				args.add(new SwarmComponentDefaultFilter().filter(agSet, obj.getSecondConnectedIdRefSwarmVisitEdge()));
+				args.add(new SwarmComponentDefaultFilter().filter(stSet, obj.getFirstConnectedIdRefSwarmVisitEdge()));
+			}
+			if(args.get(0)==null||args.get(1)==null){
+				args.clear();
 				continue;
+				
+			}
+				
+				
 			
 			visitEdgeTypeSet.add(new SwarmVisitEdgeType(obj,(SwarmAgentType)args.get(0),(SwarmStationType)args.get(1)));
 			

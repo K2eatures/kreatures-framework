@@ -73,14 +73,14 @@ public class SwarmVisitEdgeType implements SwarmComponents {
 			throw new SwarmException("Null pointer exception");
 		}
 		
-		if(agentType.id==swarmConfig.getFirstConnectedIdRefSwarmVisitEdge()){
+		if(agentType.id==swarmConfig.getFirstConnectedIdRefSwarmVisitEdge()||agentType.id==swarmConfig.getSecondConnectedIdRefSwarmVisitEdge()){
 			agentTypeName=agentType.getName();
 			numberAgent=agentType.getCount();
 		}else{
 			throw new SwarmException("the given second component isn't correct.",SwarmExceptionType.IllEGALARGUMENT);
 		}
 		
-		if(stationType.id==swarmConfig.getSecondConnectedIdRefSwarmVisitEdge()){
+		if(stationType.id==swarmConfig.getFirstConnectedIdRefSwarmVisitEdge()||stationType.id==swarmConfig.getSecondConnectedIdRefSwarmVisitEdge()){
 			stationTypeName=stationType.getName();
 			numberStation=stationType.getCount();
 			if(stationType.getItem()>0){

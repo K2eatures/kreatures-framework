@@ -22,6 +22,4 @@ public class ReasonerParameter extends BeliefbasePluginParameter {
 	public FolFormula getQuery() {
 		return query;
 	}
-	
-	
 }
