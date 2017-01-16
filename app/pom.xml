@@ -114,6 +114,23 @@
 					</execution>
 
 					<execution>
+						<id>Copy SwarmParoject-Files</id>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<phase>process-resources</phase>
+						<configuration>
+							<outputDirectory>${basedir}/target/abstractSwarm/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/abstractSwarm</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+
+					<execution>
 						<id>Copy Example-Files</id>
 						<goals>
 							<goal>copy-resources</goal>
