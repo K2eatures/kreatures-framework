@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.KReaturesPaths;
-import com.github.kreatures.core.serialize.CreateKReaturesXMLFileDefault;
 import com.github.kreatures.gui.KReaturesGUIDataStorage;
 import com.github.kreatures.gui.KReaturesWindow;
 import com.github.kreatures.core.serialize.SimulationConfiguration;
@@ -17,20 +16,7 @@ public class GUIApplication {
 	private static Logger LOG = LoggerFactory.getLogger(KReaturesWindow.class);
 	
 	public static void main(String[] args) throws Exception {	
-		
-		/**
-		 * @author donfack
-		 * Here we have to create all abstract swarm config file 
-		 * in order that there can be laoded after into KReatures.
-		 */
-		//All needed paths will be created.
-		KReaturesPaths.iniFolder();
-		//All Swarm Scenarien will be creatured.
-		SwarmLoaderDefault.getInstance().init();
-		
-		SwarmLoaderDefault.freeInstance();
 
-		
 		KReaturesWindow.get().init();
 		
 		// load simulation per commandline.

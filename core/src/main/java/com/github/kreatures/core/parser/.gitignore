@@ -1,0 +1,13 @@
+/ASMLParser.java
+/ASMLParserConstants.java
+/ASMLParserTokenManager.java
+/BeliefbaseSetParser.java
+/BeliefbaseSetParserConstants.java
+/BeliefbaseSetParserTokenManager.java
+/ParseException.java
+/SimpleCharStream.java
+/Token.java
+/TokenMgrError.java
+/UtilityParser.java
+/UtilityParserConstants.java
+/UtilityParserTokenManager.java

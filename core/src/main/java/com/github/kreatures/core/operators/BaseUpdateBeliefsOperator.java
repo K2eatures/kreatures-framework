@@ -19,7 +19,7 @@ public abstract class BaseUpdateBeliefsOperator extends
 	
 	@Override
 	public Pair<String, Class<?>> getOperationType() {
-		return new Pair<String, Class<?>>(OPERATION_NAME,
+		return new Pair<>(OPERATION_NAME,
 				BaseUpdateBeliefsOperator.class);
 	}
 	

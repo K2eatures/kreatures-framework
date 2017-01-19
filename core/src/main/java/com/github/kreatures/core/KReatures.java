@@ -74,6 +74,7 @@ public class KReatures {
 	/** reference to the configuration of KReatures */
 	private GlobalConfiguration config = null;
 
+	/** reference the path where executable file of AbstractSwarm*/ 
 	private String configFilePath = String.format("%s/%s", KReaturesPaths.KREATURES_CONFIG_DIR.toString(),KReaturesConst._KReaturesConfigFile);
 	
 	private KReaturesProject currentProject = new KReaturesProject();
@@ -93,7 +94,7 @@ public class KReatures {
 	}
 	
 	/** @return the path to the config file */
-	public String getConfigFilePath() {
+	protected String getConfigFilePath() {
 		return configFilePath;
 	}
 	

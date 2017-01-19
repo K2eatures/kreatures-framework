@@ -114,7 +114,8 @@
 					</execution>
 
 					<execution>
-						<id>Copy SwarmParoject-Files</id>
+
+						<id>Copy AbstractSwarmProject-Files</id>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
@@ -131,6 +132,7 @@
 					</execution>
 
 					<execution>
+
 						<id>Copy Example-Files</id>
 						<goals>
 							<goal>copy-resources</goal>

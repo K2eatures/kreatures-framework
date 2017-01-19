@@ -4,6 +4,7 @@ import com.github.kreatures.core.Action;
 import com.github.kreatures.core.Agent;
 import com.github.kreatures.core.KReaturesEnvironment;
 
+
 /**
  * Default implementation of the SimulationListener which can act as super
  * class for simulation listeners which does not want to implement all the
@@ -14,7 +15,9 @@ import com.github.kreatures.core.KReaturesEnvironment;
 public class SimulationAdapter implements SimulationListener {
 
 	@Override
-	public void simulationStarted(KReaturesEnvironment simulationEnvironment) {}
+	public void simulationStarted(KReaturesEnvironment simulationEnvironment) {
+		
+	}
 
 	@Override
 	public void simulationDestroyed(KReaturesEnvironment simulationEnvironment) {}

@@ -1,6 +1,7 @@
 <agent-configuration>
-   <name>unterricht Swarm</name>
+   <name>AbstractSwarm</name>
    <cycle-script source="config/swarm/kreatures_default/_cycle.xml"/>
+
    <operation-set operation-type="GenerateOptions">
       <default-operator-cls>com.github.kreatures.swarm.operators.SwarmGenerateOptionsOperator</default-operator-cls>
    </operation-set>

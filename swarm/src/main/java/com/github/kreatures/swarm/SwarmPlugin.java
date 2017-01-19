@@ -1,16 +1,26 @@
 package com.github.kreatures.swarm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.simpleframework.xml.transform.Transform;
+
+import com.github.kreatures.core.KReatures;
+import com.github.kreatures.core.KReaturesPaths;
 import com.github.kreatures.core.KReaturesPluginAdapter;
 import com.github.kreatures.core.AgentComponent;
 import com.github.kreatures.core.EnvironmentBehavior;
 import com.github.kreatures.core.operators.BaseOperator;
+import com.github.kreatures.core.serialize.SerializeHelper;
+import com.github.kreatures.core.serialize.SwarmLoaderDefault;
+import com.github.kreatures.core.listener.SwarmSimulationListener;
 import com.github.kreatures.core.logic.BaseTranslator;
 import com.github.kreatures.swarm.basic.SwarmBehavior;
 import com.github.kreatures.swarm.beliefbase.SwarmTranslator;
-import com.github.kreatures.swarm.beliefbase.SwarmUpdateBeliefsOperator;
+import com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator;
 import com.github.kreatures.swarm.components.StatusAgentComponents;
 import com.github.kreatures.swarm.components.SwarmMappingGeneric;
 import com.github.kreatures.swarm.operators.SwarmExecuteOperator;
@@ -29,6 +39,34 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 @PluginImplementation
 public class SwarmPlugin extends KReaturesPluginAdapter {
+	private Map<Class<?>, Class<? extends Transform<?>>> matcherMap = new HashMap<>();
+	/*
+	 * Here we have to create all abstract swarm config file 
+	 * in order that there can be laoded after into KReatures.
+	 */
+	
+	
+	@Override
+	public void onLoading() {
+		
+		//All needed paths will be created.
+		KReaturesPaths.iniFolder();
+		//All Swarm Scenarien will be creatured.
+		SwarmLoaderDefault.getInstance().init();
+		
+		SwarmLoaderDefault.freeInstance();
+		
+		KReatures.getInstance().addSimulationListener(new SwarmSimulationListener());
+	}
+	
+	@Override
+	public void unUnloaded() {
+		SerializeHelper sh = SerializeHelper.get();
+		for(Entry<Class<?>, Class<? extends Transform<?>>> entry : matcherMap.entrySet()) {
+			sh.removeTransformMapping(entry.getKey());
+		}
+		matcherMap.clear();
+	}
 	
 	@Override
 	public List<Class<? extends EnvironmentBehavior>> getEnvironmentBehaviors() {
@@ -59,7 +97,7 @@ public class SwarmPlugin extends KReaturesPluginAdapter {
 		operators.add(SwarmIntentionUpdateOperator.class);
 		operators.add(SwarmSubgoalGenerationOperator.class);
 		operators.add(SwarmExecuteOperator.class);
-		operators.add(SwarmUpdateBeliefsOperator.class);
+		operators.add(SwarmBeliefsUpdateOperator.class);
 		return operators;
 	}
 }

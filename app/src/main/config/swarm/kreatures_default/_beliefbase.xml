@@ -1,5 +1,5 @@
 <beliefbase-configuration>
-   <name>Answer-Set Belief base</name>
+   <name>Abstract: ASP-DLV</name>
    <reasoners>
       <default-operator-cls>com.github.kreatures.core.logic.asp.AspSkepticalReasoner</default-operator-cls>
       <operator-cls>com.github.kreatures.core.logic.asp.AspCredulousReasoner</operator-cls>

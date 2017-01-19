@@ -1,31 +1,26 @@
 <agent-configuration>
-	<name>Knowhow Agent Implementation (safe)</name>
-	<cycle-script source="config/secrecy_cycle.xml" />
-	
-	<operation-set operation-type="GenerateOptions">
-      <default-operator-cls>com.github.kreatures.example.operators.GenerateOptionsOperator</default-operator-cls>
-   	</operation-set>
-	
-	<operation-set operation-type="IntentionUpdate">
-      <default-operator-cls>com.github.kreatures.example.operators.IntentionUpdateOperator{allowUnsafe=true}</default-operator-cls>
-   	</operation-set>
-   	
-	<operation-set operation-type="SubgoalGeneration">
-      <default-operator-cls>com.github.kreatures.knowhow.asp.KnowhowASP{allowUnsafe=false}</default-operator-cls>
-   	</operation-set>
-   	
-	<operation-set operation-type="UpdateBeliefs">
-      <default-operator-cls>com.github.kreatures.example.operators.CautiousUpdateBeliefs</default-operator-cls>
-   	</operation-set>
-   	
-	<operation-set operation-type="Violates">
-      <default-operator-cls>com.github.kreatures.example.operators.ViolatesOperator</default-operator-cls>
-   	</operation-set>
-	
-	<component>com.github.kreatures.core.logic.Desires</component>
-	<component>com.github.kreatures.knowhow.KnowhowBase</component>
-	<component>com.github.kreatures.core.PlanComponent</component>
-	<component>com.github.kreatures.secrecy.components.SecrecyKnowledge</component>
-	<component>com.github.kreatures.core.ActionHistory</component>
+   <name>... Swarm</name>
+   <cycle-script source="config/swarm/kreatures_default/_cycle.xml"/>
+   <operation-set operation-type="GeneratesOptions">
+      <default-operator-cls>com.github.kreatures.swarm.operators.SwarmGenerateOptionsOperator</default-operator-cls>
+   </operation-set>
+   <operation-set operation-type="IntentionsUpdate">
+      <default-operator-cls>com.github.kreatures.swarm.operators.SwarmIntentionUpdateOperator</default-operator-cls>
+   </operation-set>
+   <operation-set operation-type="SubgoalsGeneration">
+      <default-operator-cls>com.github.kreatures.swarm.operators.SwarmSubgoalGenerationOperator</default-operator-cls>
+   </operation-set>
+   <operation-set operation-type="ExecuteAction">
+      <default-operator-cls>com.github.kreatures.swarm.operators.SwarmExecuteOperator</default-operator-cls>
+   </operation-set>
+   <operation-set operation-type="BeliefsUpdate">
+      <default-operator-cls>com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator</default-operator-cls>
+   </operation-set>
+   <component>com.github.kreatures.core.logic.Desires</component>
+   <component>com.github.kreatures.core.PlanComponent</component>
+   <component>com.github.kreatures.swarm.components.SwarmMappingGeneric</component>
+   <component>com.github.kreatures.swarm.components.StatusAgentComponents</component>
+   <description></description>
+   <category></category>
 </agent-configuration>
 

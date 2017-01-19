@@ -26,6 +26,10 @@ public class KReaturesPluginAdapter implements KReaturesPlugin {
 
 	private Map<Class<?>, Class<? extends Transform<?>>> matcherMap = new HashMap<>();
 	
+	protected Map<Class<?>, Class<? extends Transform<?>>> getMatcherMap(){
+		return matcherMap;
+	}
+	
 	protected void addTransformMapping(Class<?> dataCls, Class<? extends Transform<?>> transformCls) {
 		SerializeHelper.get().addTransformMapping(dataCls, transformCls);
 		matcherMap.put(dataCls, transformCls);
