@@ -5,6 +5,7 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.kreatures.core.KReaturesPaths;
 import com.github.kreatures.core.serialize.CreateKReaturesXMLFileDefault;
 import com.github.kreatures.gui.KReaturesGUIDataStorage;
 import com.github.kreatures.gui.KReaturesWindow;
@@ -22,14 +23,13 @@ public class GUIApplication {
 		 * Here we have to create all abstract swarm config file 
 		 * in order that there can be laoded after into KReatures.
 		 */
+		//All needed paths will be created.
+		KReaturesPaths.iniFolder();
+		//All Swarm Scenarien will be creatured.
 		SwarmLoaderDefault.getInstance().init();
-//		try {
-//			new CreateKReaturesXMLFileDefault();
-//			LOG.info("Abstract_Swarm configuration-file are successfull created.");
-//		} catch (Exception e) {
-//			LOG.error("There are some error when Abstract_Swarm configuration-file would be created.");
-//			e.printStackTrace();
-//		}
+		
+		SwarmLoaderDefault.freeInstance();
+
 		
 		KReaturesWindow.get().init();
 		

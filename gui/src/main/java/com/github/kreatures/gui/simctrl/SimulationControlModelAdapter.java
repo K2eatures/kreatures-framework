@@ -8,7 +8,7 @@ import com.github.kreatures.core.serialize.SimulationConfiguration;
 import com.github.kreatures.core.util.ModelAdapter;
 
 /**
- * Implements the SimulatonControlModel
+ * Implements the SimulationControlModel
  * @author Tim Janus
  */
 public class SimulationControlModelAdapter extends ModelAdapter implements SimulationControlModel {

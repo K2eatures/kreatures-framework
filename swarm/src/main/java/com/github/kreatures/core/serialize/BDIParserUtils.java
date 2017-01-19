@@ -300,6 +300,7 @@ public final class BDIParserUtils implements BDIParser {
 	 * @param args
 	 */
 	public static void main(String... args) {
+			
 		try {
 			 
 

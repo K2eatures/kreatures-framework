@@ -13,6 +13,7 @@ import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.Subgoal;
 import com.github.kreatures.core.logic.Beliefs;
 import com.github.kreatures.core.logic.asp.AspBeliefbase;
+import com.github.kreatures.core.logic.asp.SolverWrapper;
 import com.github.kreatures.core.operators.BaseUpdateBeliefsOperator;
 import com.github.kreatures.core.operators.parameter.EvaluateParameter;
 import com.github.kreatures.swarm.comm.SwarmInform;
@@ -36,7 +37,8 @@ public class SwarmUpdateBeliefsOperator extends BaseUpdateBeliefsOperator {
 		//Beliefs oldBeliefs = (Beliefs) objParameter.getBeliefs().clone();
 		BaseBeliefbase bb=null;
 		String out="";
-		
+		//Collection<AnswerSet> infernce=DLV.
+		LOG.info(SolverWrapper.DLV.getSolverPath());
 		boolean receiver=false;
 		if(objParameter.getAtom() instanceof Action){
 			Action action=(Action)objParameter.getAtom();

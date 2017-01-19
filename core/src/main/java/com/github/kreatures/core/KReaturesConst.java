@@ -22,6 +22,7 @@ public final class KReaturesConst {
 	
 	public static final String _KReaturesSwarmXmlPatternFile=".*.lg.xml";
 	
+	public static final String _KReaturesSwarmGuiLoaderFile="AbstractSwarm.exe";
 	
 	public static enum AgStrategie{
 		AGENT_RANDOM_STRATEGIE_FILE,

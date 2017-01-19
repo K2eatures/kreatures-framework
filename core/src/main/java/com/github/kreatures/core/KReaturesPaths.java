@@ -1,5 +1,8 @@
 package com.github.kreatures.core;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /**
  * This behaves all fixed paths
  * 
@@ -8,7 +11,8 @@ package com.github.kreatures.core;
  */
 public enum KReaturesPaths {
 
-	KREATURES_ICONS_DIR, KREATURES_EXAMPLES_DIR, KREATURES_CONFIG_DIR, KREATURES_AGENTS_CONFIG_DIR, KREATURES_BELIEFS_CONFIG_DIR,
+	KREATURES_ICONS_DIR, KREATURES_EXAMPLES_DIR, KREATURES_CONFIG_DIR, 
+	KREATURES_AGENTS_CONFIG_DIR, KREATURES_BELIEFS_CONFIG_DIR,
 	/**
 	 * path where all configurations files of swarm are. For example
 	 * strategie.asp
@@ -28,6 +32,19 @@ public enum KReaturesPaths {
 	 */
 	SWARM_XML_DIR;
 
+	public  static void iniFolder(){
+		//Files.is
+		try{
+			Files.createDirectories(Paths.get(KREATURES_EXAMPLES_DIR.toString()));
+			Files.createDirectories(Paths.get(KREATURES_AGENTS_CONFIG_DIR.toString()));
+			Files.createDirectories(Paths.get(KREATURES_BELIEFS_CONFIG_DIR.toString()));
+			Files.createDirectories(Paths.get(KREATURES_SWARM_DEFAULT_CONFIG_DIR.toString()));
+			Files.createDirectories(Paths.get(KREATURES_SWARM_XML_DIR.toString()));
+		}catch(Exception e){
+			
+		}
+	}
+	
 	@Override
 	public String toString() {
 
@@ -50,7 +67,7 @@ public enum KReaturesPaths {
 			return "config/swarm";
 
 		if (name().equals("SWARM_GUI_DIR"))
-			return "abstractSwarm/";
+			return "abstractSwarm";
 
 		if (name().equals("KREATURES_SWARM_DEFAULT_CONFIG_DIR"))
 			return "config/swarm/kreatures_default";

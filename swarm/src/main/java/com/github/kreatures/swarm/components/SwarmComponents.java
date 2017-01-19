@@ -1,6 +1,7 @@
 package com.github.kreatures.swarm.components;
 
 import com.github.kreatures.core.serialize.Resource;
+import com.github.kreatures.swarm.SwarmConst;
 
 
 /**
@@ -14,9 +15,9 @@ import com.github.kreatures.core.serialize.Resource;
 public interface SwarmComponents extends Resource, Comparable<SwarmComponents> {
 
 	public static final String RESOURCE_TYPE = "AbstractSwarm-Configuration";
-	int MAX_INT=10;
-	int UNIT=1;
-	int ZERO_VALUE=0;
+	public int MAX_INT=SwarmConst.MAX_INT.getValue();
+	int UNIT=SwarmConst.UNIT.getValue();
+	int ZERO_VALUE=SwarmConst.ZERO_VALUE.getValue();
 	
 	default public int compareTo(SwarmComponents other){
 		return this.getName().compareTo(other.getName());

@@ -33,6 +33,10 @@ public class SwarmLoaderDefault implements SwarmLoader {
 	public static SwarmLoader getInstance() {
 		return instance;
 	}
+	
+	public static void freeInstance() {
+		instance=null;
+	}
 
 	/**
 	 * 

@@ -55,6 +55,7 @@ import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.KReaturesEnvironment;
 import com.github.kreatures.core.InteractiveAgent;
 import com.github.kreatures.core.KReaturesPaths;
+import static com.github.kreatures.core.KReaturesConst._KReaturesSwarmGuiLoaderFile;
 import com.github.kreatures.gui.base.ViewComponent;
 import com.github.kreatures.gui.controller.SimulationTreeController;
 import com.github.kreatures.gui.project.ProjectTreeMVPComponent;
@@ -131,7 +132,6 @@ public class KReaturesWindow extends WindowAdapter
 		mainWindow.addWindowListener(this);
 		mainWindow.setTitle("KReatures");
 		mainWindow.setBounds(100, 100, 400, 300);
-		mainWindow.setVisible(true);
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainWindow.setExtendedState(mainWindow.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		mainWindow.setIconImage(readImage(Paths.get(KReaturesPaths.KREATURES_ICONS_DIR.toString()).resolve("font.png").toString()));
@@ -146,6 +146,7 @@ public class KReaturesWindow extends WindowAdapter
 		
 		// create the menu.
 		createMenu();
+		mainWindow.setVisible(true);
 	}
 
 	private void createMenu() {
@@ -185,13 +186,19 @@ public class KReaturesWindow extends WindowAdapter
 				//TODO The .exe must either give or search.
 				
 				try{
+					String exeSwarm=Paths.get(KReaturesPaths.SWARM_GUI_DIR.toString()).resolve(_KReaturesSwarmGuiLoaderFile).toString();
 					if(property.getProperty("os.name").equals("Windows")){
-						get().new RunAbstractSwarm().run("cmd.exe",KReaturesPaths.SWARM_GUI_DIR.toString());
+						get().new RunAbstractSwarm().run("cmd.exe",exeSwarm);
 						return ;
 					}
 					
 					if(property.getProperty("os.name").equals("Linux")){
-						get().new RunAbstractSwarm().run("wine",KReaturesPaths.SWARM_GUI_DIR.toString());
+						get().new RunAbstractSwarm().run("wine",exeSwarm);
+						return ;
+					}
+					
+					if(property.getProperty("os.name").equals("Mac")){
+						get().new RunAbstractSwarm().run("wine",exeSwarm);
 						return ;
 					}
 
