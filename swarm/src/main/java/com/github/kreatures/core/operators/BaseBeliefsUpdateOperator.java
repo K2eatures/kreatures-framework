@@ -1,12 +1,12 @@
 package com.github.kreatures.core.operators;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.NewAgent;
 import com.github.kreatures.core.logic.Beliefs;
 import com.github.kreatures.core.operators.parameters.PerceptionParameter;
 import com.github.kreatures.core.util.Pair;
 
 public abstract class BaseBeliefsUpdateOperator extends
-		BeliefsUpdateOperator<Agent, PerceptionParameter, Beliefs> {
+		BeliefsUpdateOperator<NewAgent, PerceptionParameter, Beliefs> {
 
 	@Override
 	public Pair<String, Class<?>> getOperationType() {

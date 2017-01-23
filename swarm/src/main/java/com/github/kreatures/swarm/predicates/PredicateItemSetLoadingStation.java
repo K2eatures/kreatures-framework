@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * @author donfack
  *
  */
-public class PredicateItemSetLoadingStation implements SwarmPredicate {
+public class PredicateItemSetLoadingStation extends SwarmPredicate {
 
 	private String stationOutTypeName;
 	private String stationInName;
@@ -61,6 +61,7 @@ public class PredicateItemSetLoadingStation implements SwarmPredicate {
 		return instance.createInstance(fact);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public PredicateItemSetLoadingStation createInstance(String fact) {
 		PredicateItemSetLoadingStation predicate=null;
@@ -75,6 +76,27 @@ public class PredicateItemSetLoadingStation implements SwarmPredicate {
 		}
 		
 		return predicate;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof PredicateItemSetLoadingStation))
+			return false;
+		PredicateItemSetLoadingStation obj = (PredicateItemSetLoadingStation) other;
+
+		if (obj.getStationInName() == null || this.getStationInName() == null) {
+			return false;
+		}
+		if (obj.getStationOutTypeName() == null || this.getStationOutTypeName() == null) {
+			return false;
+		}
+
+		if (obj.getStationInName().equals(this.getStationInName())
+				&& obj.getStationOutTypeName().equals(this.getStationOutTypeName())) {
+			return true;
+		}
+
+		return false;
 	}
 
 }

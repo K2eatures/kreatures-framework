@@ -1,20 +1,22 @@
-<asml-script name="secrecyCycle">
-    <operation type="BeliefsUpdate">
-        <param name="information" value="$perception" />
-        <param name="beliefs" value="$beliefs" />
-    </operation>
-     
+<asml-script name="AbstractSwarm">
+	<operation type="BeliefsUpdate">
+		<param name="information" value="$perception" />
+		<param name="beliefs" value="$beliefs" />
+		<output>belief</output>
+	</operation>
 	<operation type="GeneratesOptions">
-	    <param name="perception" value="$perception" />
+	    <param name="belief" value="$belief" />
+	    <output>desires</output>	
 	</operation>
-	
 	<operation type="IntentionsUpdate">
-		<param name="plan" value="$plan" />
+		<param name="desires" value="$desires" />
+		<output>plan</output>	
 	</operation>
-		  
 	<operation type="SubgoalsGeneration">
 		<param name="plan" value="$plan" />
+		<output>action</output>	
 	</operation>
-	
-	<operation type="ExecuteAction"></operation>	
+	<operation type="ExecuteAction">
+		<param name="action"  value="$action"/>
+	</operation>
 </asml-script>

@@ -18,7 +18,7 @@ import net.sf.tweety.logics.fol.syntax.FolFormula;
  * @author donfack
  *
  */
-public class SwarmAspReasoner extends BaseReasoner {
+public class SwarmAspReasoner extends AspReasoner {
 
 	/**
 	 * @throws InstantiationException
@@ -27,23 +27,23 @@ public class SwarmAspReasoner extends BaseReasoner {
 		super();
 	}
 
-	@Override
-	protected Set<FolFormula> inferImpl(ReasonerParameter params) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected Pair<Set<FolFormula>, KReaturesAnswer> queryImpl(ReasonerParameter params) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Class<? extends BaseBeliefbase> getSupportedBeliefbase() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	protected Set<FolFormula> inferImpl(ReasonerParameter params) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	protected Pair<Set<FolFormula>, KReaturesAnswer> queryImpl(ReasonerParameter params) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public Class<? extends BaseBeliefbase> getSupportedBeliefbase() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 	
 	
 

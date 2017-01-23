@@ -3,8 +3,6 @@ package com.github.kreatures.swarm.predicates;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -12,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * @author donfack
  *
  */
-public class PredicatePlaceEdge implements SwarmPredicate {
+public class PredicatePlaceEdge extends SwarmPredicate {
 	
 
 	private String firstName;
@@ -124,6 +122,7 @@ public class PredicatePlaceEdge implements SwarmPredicate {
 		return instance.createInstance(fact);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public PredicatePlaceEdge createInstance(String fact) {
 		PredicatePlaceEdge predicate=null;
@@ -140,5 +139,26 @@ public class PredicatePlaceEdge implements SwarmPredicate {
 		}
 		
 		return predicate;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof PredicatePlaceEdge))
+			return false;
+		PredicatePlaceEdge obj = (PredicatePlaceEdge) other;
+
+		if (obj.getFirstName() == null || this.getFirstName() == null) {
+			return false;
+		}
+		if (obj.getSecondName() == null || this.getSecondName() == null) {
+			return false;
+		}
+
+		if (obj.getFirstName().equals(this.getFirstName())
+				&& obj.getSecondName().equals(this.getSecondName())) {
+			return true;
+		}
+
+		return false;
 	}
 }

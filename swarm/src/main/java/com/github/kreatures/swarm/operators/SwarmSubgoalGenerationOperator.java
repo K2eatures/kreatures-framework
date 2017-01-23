@@ -3,6 +3,7 @@ package com.github.kreatures.swarm.operators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.operators.BaseSubgoalGenerationOperator;
 import com.github.kreatures.core.operators.parameters.PlanParameter;
 
@@ -14,7 +15,7 @@ public class SwarmSubgoalGenerationOperator extends
 			.getLogger(SwarmSubgoalGenerationOperator.class);
 
 	@Override
-	protected Boolean processImpl(PlanParameter preprocessedParameters) {
+	protected PlanElement processImpl(PlanParameter preprocessedParameters) {
 		// TODO Auto-generated method stub
 		if(preprocessedParameters!=null){
 			LOG.info("SwarmSubgoalGenerationOperator  ->"+preprocessedParameters.toString());

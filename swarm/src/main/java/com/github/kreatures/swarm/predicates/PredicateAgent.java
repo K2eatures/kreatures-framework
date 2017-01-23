@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  *
  */
 
-public class PredicateAgent implements SwarmPredicate {
+public class PredicateAgent extends SwarmPredicate {
 	/**
 	 * This is the Agent name and has to be unique.
 	 */
@@ -88,7 +88,8 @@ public class PredicateAgent implements SwarmPredicate {
 		return "Agent";
 	}
 
-	//@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
+	@Override
 	public PredicateAgent createInstance(String fact) {
 		PredicateAgent agent=null;
 		Pattern pattern=Pattern.compile("Agent[(](\\w+),(\\w+),(\\d+),(\\d+),(\\d+)[)].");
@@ -104,6 +105,18 @@ public class PredicateAgent implements SwarmPredicate {
 		}
 		
 		return agent;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(other==null || !(other instanceof PredicateAgent ))return false;
+		PredicateAgent obj=(PredicateAgent)other;
+		
+		if(obj.getName()!=null && this.getName()!=null) {
+			return obj.getName().equals(this.getName());
+		}
+		
+		return false;
 	}
 
 }

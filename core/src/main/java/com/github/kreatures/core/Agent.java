@@ -150,7 +150,10 @@ public class Agent implements ContextProvider, Entity, OperatorStack,
 	public boolean hasCapability(String capabilityName) {
 		return capabilities.contains(capabilityName);
 	}
-
+	/**
+	 * add the new perception to the agent perception.
+	 * @param percept a new perception of the agent.
+	 */
 	public void perceive(Perception percept) {
 		perceptions.add(percept);
 	}

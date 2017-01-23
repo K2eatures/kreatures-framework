@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * @author donfack
  *
  */
-public class PredicateNecAgentStation implements SwarmPredicate {
+public class PredicateNecAgentStation extends SwarmPredicate {
 	
 	private String agentName;
 	private String stationName;
@@ -76,6 +76,7 @@ public class PredicateNecAgentStation implements SwarmPredicate {
 		return instance.createInstance(fact);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public PredicateNecAgentStation createInstance(String fact) {
 		PredicateNecAgentStation predicate=null;
@@ -90,6 +91,27 @@ public class PredicateNecAgentStation implements SwarmPredicate {
 		}
 		
 		return predicate;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof PredicateNecAgentStation))
+			return false;
+		PredicateNecAgentStation obj = (PredicateNecAgentStation) other;
+
+		if (obj.getAgentName() == null || this.getAgentName() == null) {
+			return false;
+		}
+		if (obj.getStationName() == null || this.getStationName() == null) {
+			return false;
+		}
+
+		if (obj.getAgentName().equals(this.getAgentName())
+				&& obj.getStationName().equals(this.getStationName())) {
+			return true;
+		}
+
+		return false;
 	}
 	
 }

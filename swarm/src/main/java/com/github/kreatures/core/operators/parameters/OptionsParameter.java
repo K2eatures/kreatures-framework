@@ -3,36 +3,70 @@ package com.github.kreatures.core.operators.parameters;
 import javax.management.AttributeNotFoundException;
 
 import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.error.ConversionException;
 import com.github.kreatures.core.operators.parameter.GenericOperatorParameter;
 import com.github.kreatures.core.operators.parameter.OperatorPluginParameter;
+import com.github.kreatures.swarm.Utility;
 
 public class OptionsParameter extends OperatorPluginParameter {
+	
+	private BaseBeliefbase baseBeliefbase;
 
-	public OptionsParameter() {
-		// TODO Auto-generated constructor stub
-	}
+	/** Default Ctor: Used for dynamic instantiation */
+	public OptionsParameter() {	}
 
 	public OptionsParameter(Agent caller) {
 		super(caller);
-		// TODO Auto-generated constructor stub
+		this.baseBeliefbase=caller.getBeliefs().getWorldKnowledge();
 	}
+	
+	public OptionsParameter(Agent caller, BaseBeliefbase baseBeliefbase) {
+		super(caller);
+		this.baseBeliefbase=baseBeliefbase;
+	}
+	
 	@Override
 	public void fromGenericParameter(GenericOperatorParameter param) 
 			throws ConversionException, AttributeNotFoundException {
 		super.fromGenericParameter(param);
 		
-		// TODO Auto-generated constructor stub
+		Object obj = param.getParameter("belief");
+		if(obj != null) {
+			if(! (obj instanceof BaseBeliefbase)) {
+				throw conversionException("belief", BaseBeliefbase.class);
+			}
+			this.baseBeliefbase= (BaseBeliefbase)obj;
+		}
 	}
 	@Override
-	public boolean equals(Object other) {
-		// TODO Auto-generated constructor stub
-		return false;
+	public boolean equals(Object otherObject) {
+		if(otherObject==null || !(otherObject instanceof OptionsParameter))	
+			return false;
+		
+		OptionsParameter other=(OptionsParameter)otherObject;
+		
+		if(other.baseBeliefbase!=null) {
+			if(!other.baseBeliefbase.equals(this.baseBeliefbase))
+				return false;
+		}else if(this.baseBeliefbase!=null) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 	@Override
 	public int hashCode() {
-		// TODO Auto-generated constructor stub
-		return 0;
+		
+		return Utility.computeHashCode(super.hashCode(),this.baseBeliefbase);
+	}
+
+	public BaseBeliefbase getBaseBeliefbase() {
+		return baseBeliefbase;
+	}
+	@Override
+	public String toString() {
+		return (baseBeliefbase==null?"no updated Beliefbase.":"updated Beliefbase");
 	}
 }

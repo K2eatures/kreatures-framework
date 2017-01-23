@@ -7,11 +7,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.kreatures.core.Perception;
 
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_SWARM_XML_DIR;
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_EXAMPLES_DIR;
@@ -118,7 +122,19 @@ public class SwarmLoaderDefault implements SwarmLoader {
 	 */
 	public static void main(String[] args) {
 
-		new SwarmLoaderDefault().init();
+		//new SwarmLoaderDefault().init();
+		Collection<String> t=new ArrayList<>(); 
+		t.add("oui");
+		t.add("non");
+		t.add("oui");
+		t.add("qui");
+		t.add("oui");
+		System.out.println(t);
+		while(t.remove("oui")) {
+			
+		}
+		
+		System.out.println(t);
 
 	}
 

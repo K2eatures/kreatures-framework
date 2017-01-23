@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  * @author donfack
  *
  */
-public class PredicateTimeEdge implements SwarmPredicate{
+public class PredicateTimeEdge extends SwarmPredicate{
 
 	private String firstName;
 	private String firstTypeName;
@@ -111,6 +111,7 @@ public class PredicateTimeEdge implements SwarmPredicate{
 		return instance.createInstance(fact);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public PredicateTimeEdge createInstance(String fact) {
 		PredicateTimeEdge predicate=null;
@@ -129,6 +130,27 @@ public class PredicateTimeEdge implements SwarmPredicate{
 		}
 		
 		return predicate;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof PredicateTimeEdge))
+			return false;
+		PredicateTimeEdge obj = (PredicateTimeEdge) other;
+
+		if (obj.getFirstName() == null || this.getFirstName() == null) {
+			return false;
+		}
+		if (obj.getSecondName() == null || this.getSecondName() == null) {
+			return false;
+		}
+
+		if (obj.getFirstName().equals(this.getFirstName())
+				&& obj.getSecondName().equals(this.getSecondName())) {
+			return true;
+		}
+
+		return false;
 	}
 	
 }

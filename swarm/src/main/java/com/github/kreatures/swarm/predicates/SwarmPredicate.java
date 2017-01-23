@@ -1,25 +1,27 @@
-package com.github.kreatures.swarm.predicates;
+package com.github.kreatures.
+swarm.predicates;
+
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.KReaturesAtom;
 
 
 
 /**
- * This is an Interface of serialized XML-file which will be created by a swarm-scenario.   
+ *   
  * 
  * 
  * @author donfack
  *
  */
 
-public interface SwarmPredicate extends KReaturesAtom{
+public class SwarmPredicate implements KReaturesAtom{
+//	private static final Logger LOG = LoggerFactory.getLogger(SwarmPredicate.class);
 
-	String getPredicatType();
+	public SwarmPredicate() {}
 	
-	<T extends SwarmPredicate>  T createInstance(String fact) ;
-		 
+	public String getPredicatType() {return null;}
 	
-	@Override
-	String toString();
- 
+	public <T extends SwarmPredicate>  T createInstance(String fact) {return null;} 
 }

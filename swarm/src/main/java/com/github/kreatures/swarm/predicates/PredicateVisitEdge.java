@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * @author donfack
  *
  */
-public class PredicateVisitEdge implements SwarmPredicate {
+public class PredicateVisitEdge extends SwarmPredicate {
 
 	private String agentName;
 	private String agentTypeName;
@@ -82,6 +82,7 @@ public class PredicateVisitEdge implements SwarmPredicate {
 		return instance.createInstance(fact);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public PredicateVisitEdge createInstance(String fact) {
 		PredicateVisitEdge predicate=null;
@@ -99,5 +100,26 @@ public class PredicateVisitEdge implements SwarmPredicate {
 		}
 		
 		return predicate;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof PredicateVisitEdge))
+			return false;
+		PredicateVisitEdge obj = (PredicateVisitEdge) other;
+
+		if (obj.getAgentName() == null || this.getAgentName() == null) {
+			return false;
+		}
+		if (obj.getStationName() == null || this.getStationName() == null) {
+			return false;
+		}
+
+		if (obj.getAgentName().equals(this.getAgentName())
+				&& obj.getStationName().equals(this.getStationName())) {
+			return true;
+		}
+
+		return false;
 	}
 }

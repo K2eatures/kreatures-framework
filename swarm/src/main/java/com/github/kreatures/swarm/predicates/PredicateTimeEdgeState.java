@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * @author donfack
  *
  */
-public class PredicateTimeEdgeState implements SwarmPredicate {
+public class PredicateTimeEdgeState extends SwarmPredicate {
 	private String name;
 	private String typeName;
 	private String visitorName;
@@ -108,6 +108,7 @@ public class PredicateTimeEdgeState implements SwarmPredicate {
 		return instance.createInstance(fact);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public PredicateTimeEdgeState createInstance(String fact) {
 		PredicateTimeEdgeState predicate=null;
@@ -146,5 +147,17 @@ public class PredicateTimeEdgeState implements SwarmPredicate {
 	@Override
 	public String getPredicatType() {
 		return "TimeEdgeStatus";
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(other==null || !(other instanceof PredicateTimeEdgeState ))return false;
+		PredicateTimeEdgeState obj=(PredicateTimeEdgeState)other;
+		
+		if(obj.getName()!=null && this.getName()!=null) {
+			return obj.getName().equals(this.getName());
+		}
+		
+		return false;
 	}
 }

@@ -3,12 +3,6 @@ package com.github.kreatures.swarm.predicates;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.kreatures.swarm.exceptions.SwarmException;
-import com.github.kreatures.swarm.exceptions.SwarmExceptionType;
-
 /**
  * 
  * @author donfack
@@ -17,7 +11,7 @@ import com.github.kreatures.swarm.exceptions.SwarmExceptionType;
  */
 
 
-public class PredicateStation implements SwarmPredicate{
+public class PredicateStation extends SwarmPredicate{
 	// Station(StationName,StationType,freq,nec,space).
 	private String name;
 	private String typeName;
@@ -110,6 +104,7 @@ public class PredicateStation implements SwarmPredicate{
 		return instance.createInstance(fact);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public PredicateStation createInstance(String fact) {
 		PredicateStation predicate=null;
@@ -125,5 +120,17 @@ public class PredicateStation implements SwarmPredicate{
 		}
 		
 		return predicate;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof PredicateStation))
+			return false;
+		PredicateStation obj = (PredicateStation) other;
+
+		if (obj.getName() != null && this.getName() != null) {
+			return obj.getName().equals(this.getName());
+		}
+		return false;
 	}
 }

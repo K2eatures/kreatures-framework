@@ -1,37 +1,53 @@
 package com.github.kreatures.swarm.basic;
 
-import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
-import com.github.kreatures.swarm.components.SwarmActionRef;
+import com.github.kreatures.core.Intention;
+import com.github.kreatures.core.PlanElement;
+import com.github.kreatures.swarm.Utility;
+
+import net.sf.tweety.logics.commons.syntax.interfaces.SimpleLogicalFormula;
+
 
 /**
  * 
  * @author donfack
  *
  */
-public class SwarmAction extends Action {
-	/**
-	 * actionRef is the reference of the action. This tells us what a agent want to do next.
-	 */
-	private SwarmActionRef actionRef;
-	
-	public SwarmAction(Agent sender,SwarmActionRef actionRef ) {
-		super(sender.getName());
-		this.setAgent(sender);
-		this.actionRef=actionRef;
+/*must extends PlanElement*/
+public class SwarmAction extends PlanElement {
+		
+	public SwarmAction(Intention intention) {
+		super(intention, null, null, 0);
 	}
 	
-	/**
-	 * 
-	 * @return 
-	 */
-	public SwarmActionRef getActionRef(){
-		return this.actionRef;
+	
+	public SwarmAction(Intention intention, Object executionData) {
+		super(intention, executionData, null, 0);
+	}
+	
+	
+	public SwarmAction(Intention intention, Object executionData, Object userData) {
+		super(intention, executionData, userData, 0);
+	}
+	
+	
+	
+	public SwarmAction(Intention intention, Object executionData, Object userData, double cost) {
+		super(intention,executionData,userData,cost);
+	}
+	
+	
+	public SwarmAction(PlanElement other) {
+		super(other);
 	}
 	
 	@Override
 	public String toString() {
-		return actionRef + " by " + this.getSenderId() + "" ;
+		return getIntention().toString();
+	}  
+	
+	@Override
+	public int hashCode() {
+		return Utility.computeHashCode(super.hashCode());
 	}
 }
 

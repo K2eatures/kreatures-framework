@@ -8,6 +8,7 @@ grammar {
 	cmd = {
 		external "assign.rnc" |
 		external "invoke-operation.rnc" |
+		external "execute.rnc" |
 		external "conditional.rnc" |
 		external "while.rnc"
 	}

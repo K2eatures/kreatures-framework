@@ -1,4 +1,4 @@
-<asml-script name="abstractSwarm">
+<asml-script name="AbstractSwarm">
     <operation type="BeliefsUpdate">
         <param name="information" value="$perception" />
         <param name="beliefs" value="$beliefs" />
