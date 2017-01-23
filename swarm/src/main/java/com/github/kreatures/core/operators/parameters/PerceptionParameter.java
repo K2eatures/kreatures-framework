@@ -4,6 +4,8 @@ import java.util.Collection;
 
 import javax.management.AttributeNotFoundException;
 
+import net.sf.tweety.logics.fol.syntax.FolFormula;
+
 import com.github.kreatures.core.Agent;
 import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.KReaturesAtom;

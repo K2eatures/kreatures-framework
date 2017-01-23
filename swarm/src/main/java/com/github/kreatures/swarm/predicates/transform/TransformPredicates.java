@@ -18,11 +18,12 @@ public class TransformPredicates {
 		return objT.createInstance(predicate.toString());
 	}
 	
-	//@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public static <E extends DLPAtom,T extends SwarmPredicate> E getPredicate(T swarmPredicate) throws Exception {
 		
 		DLPAtomTransform atomTransform=new DLPAtomTransform();
-		 E obj=(E)atomTransform.read(swarmPredicate.toString());
+		 
+		E obj=(E)atomTransform.read(swarmPredicate.toString());
 		 atomTransform=null;
 		 return obj;
 	}

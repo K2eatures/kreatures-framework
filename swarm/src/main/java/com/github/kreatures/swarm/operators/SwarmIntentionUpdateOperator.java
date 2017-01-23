@@ -23,4 +23,8 @@ public class SwarmIntentionUpdateOperator extends BaseIntentionUpdateOperator {
 		}
 		return null;
 	}
+	@Override
+	protected void prepare(FilterParameter params) {
+		
+	}
 }

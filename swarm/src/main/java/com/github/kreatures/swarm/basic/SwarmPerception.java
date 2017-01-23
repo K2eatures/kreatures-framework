@@ -5,15 +5,15 @@ import com.github.kreatures.swarm.predicates.SwarmPredicate;
 
 public class SwarmPerception implements Perception {
 
-	private SwarmPredicate perception;
+	private SwarmPredicate predicate;
 	
 	public SwarmPerception(SwarmPredicate perception ) {
-		this.perception=perception;
+		this.predicate=perception;
 	}
 
 	@SuppressWarnings("unchecked")
 	public <T extends SwarmPredicate> T getFact() {
-		return (T)perception;
+		return (T)predicate;
 	}
 	
 	@Override
@@ -23,6 +23,6 @@ public class SwarmPerception implements Perception {
 	
 	@Override
 	public String toString() {
-		return perception.toString();
+		return predicate.toString();
 	}
 }

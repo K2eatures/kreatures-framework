@@ -24,5 +24,9 @@ public class SwarmSubgoalGenerationOperator extends
 		}
 		return null;
 	}
+	@Override
+	protected void prepare(PlanParameter params) {
+		
+	}
 
 }

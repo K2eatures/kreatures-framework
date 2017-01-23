@@ -25,6 +25,15 @@ public class SwarmBehavior extends DefaultBehavior{
 	@Override
 	protected void localDelegate(KReaturesEnvironment env, Perception percept, String agentName) {
 		if(SpeechAct.ALL.equals(agentName)) {
+			env.getAgents().forEach(agent->{
+			
+				NewAgent ag=(NewAgent)agent;
+				Collection<Perception> perceptions=ag.getPerceptions();
+				/* This remove all the elements which are equal the given object */
+				while(perceptions.remove(percept)) {}
+				
+				perceptions.add(percept);
+			});
 			
 		}else {
 			NewAgent ag=(NewAgent)env.getAgentByName(agentName);
@@ -35,10 +44,6 @@ public class SwarmBehavior extends DefaultBehavior{
 			perceptions.add(percept);
 			
 		}
-	}
-	
-	protected void addPerception(Agent agent, Perception percept) {
-		
 	}
 }
 

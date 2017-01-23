@@ -20,4 +20,8 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		}
 		return null;
 	}
+	@Override
+	protected void prepare(ExecuteParameter params) {
+		
+	}
 }
