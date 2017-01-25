@@ -7,7 +7,7 @@ import net.sf.tweety.logics.fol.syntax.FolFormula;
 
 import org.simpleframework.xml.Element;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.logic.AnswerValue;
 import com.github.kreatures.core.util.Utility;
 
@@ -46,7 +46,7 @@ public class Justify extends SpeechAct {
 	 * @param receiver	The name of the receiver
 	 * @param sentence	The sentence
 	 */
-	public Justify(Agent sender, String receiver, FolFormula sentence) {
+	public Justify(AgentAbstract sender, String receiver, FolFormula sentence) {
 		this(sender, receiver, sentence, AnswerValue.AV_TRUE);
 	}
 	
@@ -57,7 +57,7 @@ public class Justify extends SpeechAct {
 	 * @param sentence
 	 * @param av
 	 */
-	public Justify(Agent sender, String receiver, FolFormula sentence, AnswerValue av) {
+	public Justify(AgentAbstract sender, String receiver, FolFormula sentence, AnswerValue av) {
 		super(sender, receiver);
 		if(av == AnswerValue.AV_REJECT || av == AnswerValue.AV_COMPLEX)
 			throw new IllegalArgumentException("The Justify speech act only allows the " +

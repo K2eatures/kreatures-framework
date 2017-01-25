@@ -7,7 +7,7 @@ import net.sf.tweety.logics.fol.syntax.FolFormula;
 
 import org.simpleframework.xml.Element;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 
 /**
  * Implementation of the Speech-Act: Update.
@@ -37,7 +37,7 @@ public class Update extends SpeechAct{
 	 * @param receiverId	unique name  of the receiver of the query.
 	 * @param question		formula of the update.
 	 */
-	public Update(Agent sender, String receiverId, FolFormula proposition) {
+	public Update(AgentAbstract sender, String receiverId, FolFormula proposition) {
 		super(sender, receiverId);
 		this.proposition = proposition;
 	}

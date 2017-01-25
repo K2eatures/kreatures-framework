@@ -1,6 +1,6 @@
 package com.github.kreatures.core.report;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.internal.Entity;
 
 /**
@@ -13,7 +13,7 @@ public abstract class BaseReportOutputGenerator<TOutput> implements ReportListen
 
 	protected int tick = -1;
 	
-	protected Agent actAgent = null;
+	protected AgentAbstract actAgent = null;
 	
 	@Override
 	public void reportReceived(ReportEntry entry) {
@@ -39,7 +39,7 @@ public abstract class BaseReportOutputGenerator<TOutput> implements ReportListen
 	
 	protected abstract void handleTickChange(int tick);
 	
-	protected abstract void handleAgentChange(Agent agent);
+	protected abstract void handleAgentChange(AgentAbstract agent);
 	
 	public abstract TOutput getOutput();
 }

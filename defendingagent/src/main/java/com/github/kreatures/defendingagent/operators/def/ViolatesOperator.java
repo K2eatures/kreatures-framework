@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.Perception;
 import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.secrecy.operators.BaseViolatesOperator;
@@ -38,11 +38,11 @@ public class ViolatesOperator extends BaseViolatesOperator {
 	}
 	
 	@Override
-	public void performAction(Action action, Agent agent, Beliefs beliefs) {
+	public void performAction(Action action, AgentAbstract agent, Beliefs beliefs) {
 	}
 
 	@Override
-	protected ViolatesResult onCheck(Agent agent, Beliefs beliefs) {
+	protected ViolatesResult onCheck(AgentAbstract agent, Beliefs beliefs) {
 		return new ViolatesResult();
 	}
 }

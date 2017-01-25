@@ -2,7 +2,7 @@ package com.github.kreatures.core.operators.parameters;
 
 import javax.management.AttributeNotFoundException;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.error.ConversionException;
 import com.github.kreatures.core.operators.parameter.GenericOperatorParameter;
@@ -16,12 +16,12 @@ public class OptionsParameter extends OperatorPluginParameter {
 	/** Default Ctor: Used for dynamic instantiation */
 	public OptionsParameter() {	}
 
-	public OptionsParameter(Agent caller) {
+	public OptionsParameter(AgentAbstract caller) {
 		super(caller);
 		this.baseBeliefbase=caller.getBeliefs().getWorldKnowledge();
 	}
 	
-	public OptionsParameter(Agent caller, BaseBeliefbase baseBeliefbase) {
+	public OptionsParameter(AgentAbstract caller, BaseBeliefbase baseBeliefbase) {
 		super(caller);
 		this.baseBeliefbase=baseBeliefbase;
 	}
@@ -31,10 +31,10 @@ public class OptionsParameter extends OperatorPluginParameter {
 			throws ConversionException, AttributeNotFoundException {
 		super.fromGenericParameter(param);
 		
-		Object obj = param.getParameter("belief");
+		Object obj = param.getParameter("basebeliefbase");
 		if(obj != null) {
 			if(! (obj instanceof BaseBeliefbase)) {
-				throw conversionException("belief", BaseBeliefbase.class);
+				throw conversionException("basebeliefbase", BaseBeliefbase.class);
 			}
 			this.baseBeliefbase= (BaseBeliefbase)obj;
 		}

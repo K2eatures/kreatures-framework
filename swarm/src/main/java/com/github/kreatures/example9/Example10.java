@@ -2,7 +2,12 @@ package com.github.kreatures.example9;
 
 import java.nio.file.Paths;
 
+import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.KReaturesEnvironment;
+import com.github.kreatures.core.NewAgent;
 import com.github.kreatures.core.serialize.CreateKReaturesXMLFileDefault;
+import com.github.kreatures.swarm.predicates.PredicateAgent;
+import com.github.kreatures.swarm.predicates.SwarmPredicate;
 
 public class Example10 {
 
@@ -50,8 +55,13 @@ public class Example10 {
 	public static void main(String... list) {
 		
 		try {
-			new CreateKReaturesXMLFileDefault();
+//			Agent ag=new Agent("ok", new KReaturesEnvironment());
+//			NewAgent nag=(NewAgent) ag;
+			SwarmPredicate predicate=new SwarmPredicate();
+			PredicateAgent pagent=(PredicateAgent)predicate;
+			System.out.println(pagent.toString());
 		} catch (Exception e) {
+			
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

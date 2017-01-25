@@ -9,7 +9,7 @@ import net.sf.tweety.logics.fol.syntax.FolFormula;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.logic.AnswerValue;
 import com.github.kreatures.core.util.Utility;
@@ -58,7 +58,7 @@ public class Justification extends SpeechAct {
 		this.justifications.addAll(justification);		
 	}
 	
-	public Justification(Agent sender, String receiver, FolFormula proposition, 
+	public Justification(AgentAbstract sender, String receiver, FolFormula proposition, 
 			AnswerValue answerValue, FolFormula justification) {
 		super(sender,receiver);
 		this.proposition = proposition;
@@ -73,7 +73,7 @@ public class Justification extends SpeechAct {
 				source.getAnswerValue(), justifications);
 	}
 	
-	public Justification(Agent sender, String receiver, FolFormula proposition, 
+	public Justification(AgentAbstract sender, String receiver, FolFormula proposition, 
 			AnswerValue answerValue, Set<FolFormula> justifications) {
 		super(sender, receiver);
 		this.proposition = proposition;

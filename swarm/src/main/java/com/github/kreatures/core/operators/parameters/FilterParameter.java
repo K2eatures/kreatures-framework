@@ -2,7 +2,7 @@ package com.github.kreatures.core.operators.parameters;
 
 import javax.management.AttributeNotFoundException;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.error.ConversionException;
 import com.github.kreatures.core.operators.parameter.GenericOperatorParameter;
 import com.github.kreatures.core.operators.parameter.OperatorPluginParameter;
@@ -16,12 +16,12 @@ public class FilterParameter extends OperatorPluginParameter {
 	/** Default Ctor: Used for dynamic instantiation */
 	public FilterParameter() {}
 
-	public FilterParameter(Agent caller) {
+	public FilterParameter(AgentAbstract caller) {
 		super(caller);
 		desires=null;
 	}
 	
-	public FilterParameter(Agent caller,SwarmDesires desires) {
+	public FilterParameter(AgentAbstract caller,SwarmDesires desires) {
 		super(caller);
 		this.desires=desires;
 	}

@@ -7,7 +7,7 @@ import net.sf.tweety.logics.fol.syntax.FolFormula;
 
 import org.simpleframework.xml.Element;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.reflection.FolFormulaVariable;
 import com.github.kreatures.core.util.Utility;
 
@@ -40,7 +40,7 @@ public class Query extends SpeechAct {
 	 * @param receiverId	unique name  of the receiver of the query.
 	 * @param question		formula representing the query question.
 	 */
-	public Query(Agent sender, String receiverId, FolFormula question) {
+	public Query(AgentAbstract sender, String receiverId, FolFormula question) {
 		super(sender, receiverId);
 		this.question = new FolFormulaVariable(question);
 	}

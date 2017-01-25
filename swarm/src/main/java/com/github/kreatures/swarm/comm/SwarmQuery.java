@@ -1,7 +1,7 @@
 package com.github.kreatures.swarm.comm;
 
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.comm.Query;
 import com.github.kreatures.core.reflection.FolFormulaVariable;
 
@@ -24,9 +24,9 @@ public class SwarmQuery extends Query {
 	}
 	
 	/**
-	 * @see com.github.kreatures.core.comm.Query#Query(Agent, String, FolFormula)
+	 * @see com.github.kreatures.core.comm.Query#Query(AgentAbstract, String, FolFormula)
 	 */
-	public SwarmQuery(Agent sender, String receiverId, FolFormula question) {
+	public SwarmQuery(AgentAbstract sender, String receiverId, FolFormula question) {
 		super(sender, receiverId,question);
 		
 	}

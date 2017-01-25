@@ -4,6 +4,7 @@ import net.sf.tweety.logics.fol.syntax.FolFormula;
 
 import com.github.kreatures.core.Action;
 import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 
 /**
  * 
@@ -15,9 +16,9 @@ public interface PenaltyFunction extends Cloneable {
 	/**
 	 * Initializes the penalty function for the given agent, after this call
 	 * iterations returns zero.
-	 * @param agent	The agent thats' actions are tested with the penalty function
+	 * @param agentAbstract	The agent thats' actions are tested with the penalty function
 	 */
-	void init(Agent agent);
+	void init(AgentAbstract agent);
 
 	/** @return The count of iterations the penalty function is used for */
 	int iterations();

@@ -16,7 +16,7 @@ import com.github.kreatures.core.listener.SubgoalListener;
 public abstract class Intention implements SubgoalListener {
 
 	/** reference to the agent who is owner of this Intention */
-	protected Agent agent;
+	protected AgentAbstract agent;
 
 	/** the parent intention of this instance */
 	protected Intention parent;
@@ -34,7 +34,7 @@ public abstract class Intention implements SubgoalListener {
 	 * Ctor: Creates a new instance of an intention for the given agent.
 	 * @param agent	reference to the agent owning the intention
 	 */
-	public Intention(Agent agent) {
+	public Intention(AgentAbstract agent) {
 		this.agent = agent;
 		this.objectId = intentionIdGen.getNextId();
 	}
@@ -46,11 +46,11 @@ public abstract class Intention implements SubgoalListener {
 	}
 
 	/** @return reference to the agent owning this Intention */
-	public Agent getAgent() {
+	public AgentAbstract getAgent() {
 		return agent;
 	}
 
-	protected void setAgent(Agent agent) {
+	protected void setAgent(AgentAbstract agent) {
 		this.agent = agent;
 	}
 	

@@ -7,7 +7,7 @@ import net.sf.tweety.logics.fol.syntax.FolFormula;
 import org.simpleframework.xml.Element;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.Perception;
 
 /**
@@ -54,7 +54,7 @@ public abstract class SpeechAct
 	 * @param sender	reference to the sending agent.
 	 * @param receiver	unique name of the receiver agent.
 	 */
-	public SpeechAct(Agent sender, String receiver) {
+	public SpeechAct(AgentAbstract sender, String receiver) {
 		super(sender);
 		this.receiver = receiver;
 	}

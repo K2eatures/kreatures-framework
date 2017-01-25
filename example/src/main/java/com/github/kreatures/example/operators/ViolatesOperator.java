@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.Perception;
 import com.github.kreatures.core.PlanElement;
@@ -60,7 +60,7 @@ public class ViolatesOperator extends BaseViolatesOperator {
 		ViolatesResult reval = new ViolatesResult();
 		addMetaInformation(newBeliefs, param);
 		
-		Agent ag = param.getAgent();
+		AgentAbstract ag = param.getAgent();
 		ag.updateBeliefs(action, newBeliefs);
 
 		for(String viewName : param.getAgent().getEnvironment().getAgentNames()) {
@@ -80,7 +80,7 @@ public class ViolatesOperator extends BaseViolatesOperator {
 		if(conf == null)
 			return new ViolatesResult();
 		
-		Agent ag = param.getAgent();
+		AgentAbstract ag = param.getAgent();
 		Beliefs beliefs = param.getBeliefs();
 		Beliefs newBeliefs = beliefs.clone();
 		
@@ -167,7 +167,7 @@ public class ViolatesOperator extends BaseViolatesOperator {
 	}
 	
 	@Override
-	public void performAction(Action action, Agent agent, Beliefs beliefs) {
+	public void performAction(Action action, AgentAbstract agent, Beliefs beliefs) {
 		if(agent == null) {
 			return;
 		}
@@ -176,7 +176,7 @@ public class ViolatesOperator extends BaseViolatesOperator {
 	}
 
 	@Override
-	protected ViolatesResult onCheck(Agent agent, Beliefs beliefs) {
+	protected ViolatesResult onCheck(AgentAbstract agent, Beliefs beliefs) {
 		// only apply violates if secrecy knowledge is saved in agent.
 		SecrecyKnowledge conf = agent.getComponent(SecrecyKnowledge.class);
 		if(conf == null)

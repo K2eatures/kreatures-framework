@@ -2,7 +2,7 @@ package com.github.kreatures.core.operators.parameters;
 
 import javax.management.AttributeNotFoundException;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.error.ConversionException;
 import com.github.kreatures.core.operators.parameter.GenericOperatorParameter;
 import com.github.kreatures.core.operators.parameter.OperatorPluginParameter;
@@ -16,12 +16,12 @@ public class ExecuteParameter extends OperatorPluginParameter {
 	/** Default Ctor: Used for dynamic instantiation */
 	public ExecuteParameter() {}
 	
-	public ExecuteParameter(Agent caller) {
+	public ExecuteParameter(AgentAbstract caller) {
 		super(caller);
 		action=null;
 	}
 	
-	public ExecuteParameter(Agent caller, SwarmAction action) {
+	public ExecuteParameter(AgentAbstract caller, SwarmAction action) {
 		super(caller);
 		this.action=action;
 	}

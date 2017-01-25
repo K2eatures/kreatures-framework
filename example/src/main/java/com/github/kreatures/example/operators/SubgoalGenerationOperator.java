@@ -20,7 +20,7 @@ import net.sf.tweety.logics.fol.syntax.Negation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.Desire;
 import com.github.kreatures.core.Intention;
@@ -50,7 +50,7 @@ public class SubgoalGenerationOperator extends BaseSubgoalGenerationOperator {
 	@Override
 	protected Boolean processImpl(PlanParameter pp) {
 		LOG.info("Run Default-Subgoal-Generation");
-		Agent ag = pp.getActualPlan().getAgent();
+		AgentAbstract ag = pp.getActualPlan().getAgent();
 
 		boolean reval = processPersuadeOtherAgentsDesires(pp, ag);
 
@@ -85,7 +85,7 @@ public class SubgoalGenerationOperator extends BaseSubgoalGenerationOperator {
 		return reval;
 	}
 
-	public boolean processScripting(Desire d, PlanParameter pp, Agent ag){
+	public boolean processScripting(Desire d, PlanParameter pp, AgentAbstract ag){
 		ScriptingComponent script = ag.getComponent(ScriptingComponent.class);
 		Desires desires = ag.getComponent(Desires.class);
 		desires.remove(d);
@@ -115,7 +115,7 @@ public class SubgoalGenerationOperator extends BaseSubgoalGenerationOperator {
 	 * @return			true if a new subgoal was created and added to the master-plan, false otherwise.
 	 */
 	protected boolean processPersuadeOtherAgentsDesires (
-			PlanParameter pp, Agent ag) {
+			PlanParameter pp, AgentAbstract ag) {
 		boolean reval = false;
 		Desires desComp = ag.getComponent(Desires.class);
 		if(desComp == null)
@@ -232,7 +232,7 @@ public class SubgoalGenerationOperator extends BaseSubgoalGenerationOperator {
 	 * @param ag	The agent
 	 * @return		true if a new subgoal was created and added to the master-plan, false otherwise.
 	 */
-	protected Boolean answerQuery(Desire des, PlanParameter pp, Agent ag) {
+	protected Boolean answerQuery(Desire des, PlanParameter pp, AgentAbstract ag) {
 		
 		Query q = (Query) des.getPerception();
 		
@@ -278,7 +278,7 @@ public class SubgoalGenerationOperator extends BaseSubgoalGenerationOperator {
 		return true;
 	}
 
-	protected Subgoal generateDefaultAnswerPlan(PlanParameter pp, Agent ag,
+	protected Subgoal generateDefaultAnswerPlan(PlanParameter pp, AgentAbstract ag,
 			Desire des, Query q, KReaturesAnswer aa) {
 		Subgoal answer = new Subgoal(ag, des);
 		Answer honest = null;
@@ -339,7 +339,7 @@ public class SubgoalGenerationOperator extends BaseSubgoalGenerationOperator {
 		return answer;
 	}
 	
-	private void createSubgoals(List<FolFormula> answers, Subgoal sg, Query q, Boolean ud, Agent ag) {
+	private void createSubgoals(List<FolFormula> answers, Subgoal sg, Query q, Boolean ud, AgentAbstract ag) {
 		for(int i=0;i<answers.size();i++) {
 			Answer a = new Answer(ag, q.getSenderId(), q.getQuestion(), answers.get(i));
 			sg.newStack(a);
@@ -365,7 +365,7 @@ public class SubgoalGenerationOperator extends BaseSubgoalGenerationOperator {
 	 * @param ag	The agent.
 	 * @return		true if a new subgoal was created and added to the master-plan, false otherwise.
 	 */
-	protected Boolean informProcessing(Desire des, PlanParameter pp, Agent ag) {
+	protected Boolean informProcessing(Desire des, PlanParameter pp, AgentAbstract ag) {
 		return false;
 	}
 }

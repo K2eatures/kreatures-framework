@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.Action;
 import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.KReaturesAtom;
 import com.github.kreatures.core.Cache;
 import com.github.kreatures.core.Perception;
@@ -117,7 +118,7 @@ public abstract class BaseViolatesOperator
 	 * @param beliefs
 	 * @return
 	 */
-	protected abstract ViolatesResult onCheck(Agent agent, Beliefs beliefs);
+	protected abstract ViolatesResult onCheck(AgentAbstract agent, Beliefs beliefs);
 	
 	/**
 	 * Is called if the given agent wants to perform the given action in its mental state.
@@ -127,5 +128,6 @@ public abstract class BaseViolatesOperator
 	 * @param agent		The agent performing the action.
 	 * @param beliefs	The beliefs used as basis for performing the action.
 	 */
-	public abstract void performAction(Action action, Agent agent, Beliefs beliefs);
+	@Override
+	public abstract void performAction(Action action, AgentAbstract agent, Beliefs beliefs);
 }

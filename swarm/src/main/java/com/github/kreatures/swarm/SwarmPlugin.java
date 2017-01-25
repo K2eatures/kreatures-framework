@@ -23,7 +23,7 @@ import com.github.kreatures.core.listener.SwarmSimulationListener;
 import com.github.kreatures.core.logic.BaseChangeBeliefs;
 import com.github.kreatures.core.logic.BaseReasoner;
 import com.github.kreatures.core.logic.BaseTranslator;
-import com.github.kreatures.core.logic.SwarmAspBeliefbase;
+import com.github.kreatures.core.logic.FolBeliefbase;
 import com.github.kreatures.swarm.basic.SwarmBehavior;
 import com.github.kreatures.swarm.beliefbase.SwarmTranslator;
 import com.github.kreatures.swarm.beliefbase.SwarmAspChangeBeliefs;
@@ -105,7 +105,7 @@ public class SwarmPlugin extends KReaturesPluginAdapter {
 	@Override
 	public List<Class<? extends BaseBeliefbase>> getBeliefbaseImpl() {
 		List<Class<? extends BaseBeliefbase>> reval = new LinkedList<Class<? extends BaseBeliefbase>>();
-		reval.add(SwarmAspBeliefbase.class);
+		reval.add(FolBeliefbase.class);
 		return reval;
 	}
 	@Override

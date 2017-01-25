@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.Desire;
 import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.Subgoal;
@@ -134,7 +134,7 @@ public class KnowhowASP extends SubgoalGenerationOperator {
 	 *  method.
 	 */
 	@Override
-	protected Boolean informProcessing(Desire des, PlanParameter pp, Agent ag) {
+	protected Boolean informProcessing(Desire des, PlanParameter pp, AgentAbstract ag) {
 		if(! (des.getPerception() instanceof Inform))
 			return false;
 		
@@ -172,7 +172,7 @@ public class KnowhowASP extends SubgoalGenerationOperator {
 	 * @todo Answer with Unknown if no valid answer is found.
 	 */
 	@Override 
-	protected Boolean answerQuery(Desire des, PlanParameter param, Agent ag) {
+	protected Boolean answerQuery(Desire des, PlanParameter param, AgentAbstract ag) {
 		if(!(des.getPerception() instanceof Query))
 			return false;
 		
@@ -238,7 +238,7 @@ public class KnowhowASP extends SubgoalGenerationOperator {
 	 * @param des			The associated desire.
 	 */
 	private void prepareKnowhow(String intention, PlanParameter param, Desire des) {
-		Agent ag = param.getAgent();
+		AgentAbstract ag = param.getAgent();
 		
 		LOG.info("Running Knowhow with intention: '{}' for desire: '{}'.", 
 				intention, des.toString());
@@ -314,7 +314,7 @@ public class KnowhowASP extends SubgoalGenerationOperator {
 		Pair<String, HashMap<Integer, Term<?>>> action = lastUsedStrategy.getAction();
 		
 		// test if the skill exists
-		Agent ag = param.getAgent();
+		AgentAbstract ag = param.getAgent();
 		String skillName = action.first.substring(2);
 		if(!ag.hasCapability(skillName)) {
 			LOG.warn("Knowhow found Skill '{}' but the Agent '{}' does not support the Skill.", skillName, ag.getName());
@@ -385,7 +385,7 @@ public class KnowhowASP extends SubgoalGenerationOperator {
 		}
 		
 		String var = getVarWithPrefix(0, paramMap);
-		Agent receiver = processVariable(var, pp);
+		AgentAbstract receiver = processVariable(var, pp);
 		
 		var = getVarWithPrefix(1, paramMap);
 		FolFormula atom = processVariable(var, pp);
@@ -407,7 +407,7 @@ public class KnowhowASP extends SubgoalGenerationOperator {
 		}
 		
 		String var = getVarWithPrefix(0, paramMap);
-		Agent receiver = processVariable(var, pp);
+		AgentAbstract receiver = processVariable(var, pp);
 		
 		var = getVarWithPrefix(1, paramMap);
 		FolFormula atom = processVariable(var, pp);
@@ -424,7 +424,7 @@ public class KnowhowASP extends SubgoalGenerationOperator {
 	 */
 	protected Query createQuery(Map<Integer, Term<?>> paramMap, PlanParameter pp) {
 		String var = getVarWithPrefix(0, paramMap);
-		Agent receiver = processVariable(var, pp);
+		AgentAbstract receiver = processVariable(var, pp);
 		
 		var = getVarWithPrefix(1, paramMap);
 		FolFormula atom = processVariable(var, pp);
@@ -506,7 +506,7 @@ public class KnowhowASP extends SubgoalGenerationOperator {
 				// TODO: Test if that works:
 				//if(t.getName().charAt(1) == '_') {
 				if(t.toString().charAt(1) == '_') {
-					Agent newName = processVariable(t.toString(), pp);
+					AgentAbstract newName = processVariable(t.toString(), pp);
 					terms.add(new Constant(newName.getName()));
 				} else {
 					terms.add(t);
@@ -538,11 +538,11 @@ public class KnowhowASP extends SubgoalGenerationOperator {
 	 * @return			Reference to the Agent with the given name or null if
 	 * 					no such Agent exists.
 	 */
-	private Agent getAgent(String name, PlanParameter pp) {
+	private AgentAbstract getAgent(String name, PlanParameter pp) {
 		if(name.equals("SELF"))
 			return pp.getAgent();
 		
-		Agent reval = pp.getAgent().getEnvironment().getAgentByName(name);
+		AgentAbstract reval = pp.getAgent().getEnvironment().getAgentByName(name);
 		if(reval == null) {
 			LOG.warn("Knowhow tries to find Agent with name '{}' but its not part of the Enviornment", name);
 		}

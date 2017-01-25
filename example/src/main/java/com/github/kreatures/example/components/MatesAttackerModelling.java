@@ -19,7 +19,7 @@ import net.sf.tweety.lp.asp.syntax.DLPNot;
 import net.sf.tweety.lp.asp.syntax.Program;
 import net.sf.tweety.lp.asp.syntax.Rule;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.AgentComponent;
 import com.github.kreatures.core.BaseAgentComponent;
 import com.github.kreatures.core.BaseBeliefbase;
@@ -85,7 +85,7 @@ public class MatesAttackerModelling extends BaseAgentComponent {
 	private void onInit() {
 		// Prepare a set of all mi_agent(*) facts:
 		Set<DLPAtom> agentFacts = new HashSet<>();
-		for(Agent ag : getAgent().getEnvironment().getAgents()) {
+		for(AgentAbstract ag : getAgent().getEnvironment().getAgents()) {
 			DLPAtom agentFact = new DLPAtom("mi_agent", new Constant("a_" + ag.getName()));
 			agentFacts.add(agentFact);
 		}

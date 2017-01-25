@@ -6,10 +6,11 @@ package com.github.kreatures.core;
 import java.util.Collection;
 
 /**
- * @author donfack
+ * 
+ * @author Cedric Perez Donfack
  *
  */
-public class NewAgent extends Agent {
+public class NewAgent extends AgentAbstract {
 
 	/**
 	 * @param name

@@ -3,7 +3,7 @@ package com.github.kreatures.knowhow.situation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.error.NotImplementedException;
 
 /**
@@ -14,7 +14,7 @@ import com.github.kreatures.core.error.NotImplementedException;
 public class SituationGraphBuilderFactory {
 	private static Logger LOG = LoggerFactory.getLogger(SituationGraphBuilderFactory.class);
 	
-	public static SituationGraphBuilder createGraphBuilder(Situation situation, Agent agent) {
+	public static SituationGraphBuilder createGraphBuilder(Situation situation, AgentAbstract agent) {
 		LOG.debug("Entering createGraphBuilder({}, {})", 
 				situation.toString(), agent.getName());
 		SituationGraphBuilder reval = null;

@@ -6,7 +6,7 @@ import java.util.Set;
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.logic.Beliefs;
 
 public class DefaultPenalty implements PenaltyFunction {
@@ -29,7 +29,7 @@ public class DefaultPenalty implements PenaltyFunction {
 	}
 	
 	@Override
-	public void init(Agent agent) {
+	public void init(AgentAbstract agent) {
 		iterations = 0;
 		beliefs = new Beliefs(agent.getBeliefs());
 		inferedKnowledge = beliefs.getWorldKnowledge().infere();

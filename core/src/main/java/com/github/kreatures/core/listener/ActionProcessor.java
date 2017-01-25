@@ -1,7 +1,7 @@
 package com.github.kreatures.core.listener;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.logic.Beliefs;
 
 /**
@@ -12,5 +12,5 @@ import com.github.kreatures.core.logic.Beliefs;
  * @author Tim Janus
  */
 public interface ActionProcessor {
-	void performAction(Action action, Agent agent, Beliefs beliefs);
+	void performAction(Action action, AgentAbstract agent, Beliefs beliefs);
 }

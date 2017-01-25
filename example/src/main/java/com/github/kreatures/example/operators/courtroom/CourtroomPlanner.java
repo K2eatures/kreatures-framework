@@ -22,7 +22,7 @@ import net.sf.tweety.logics.fol.syntax.Negation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.Desire;
 import com.github.kreatures.core.PlanComponent;
 import com.github.kreatures.core.Subgoal;
@@ -53,7 +53,7 @@ public class CourtroomPlanner extends SubgoalGenerationOperator {
 	@Override
 	protected Boolean processImpl(PlanParameter pp) {
 		LOG.info("Run Mary-Subgoal-Generation");
-		Agent ag = pp.getActualPlan().getAgent();
+		AgentAbstract ag = pp.getActualPlan().getAgent();
 		
 		boolean reval = interrogateOtherAgent(pp, ag);
 
@@ -91,7 +91,7 @@ public class CourtroomPlanner extends SubgoalGenerationOperator {
 		return reval;
 	}
 	
-	public boolean interrogateOtherAgent(PlanParameter pp, Agent ag) {
+	public boolean interrogateOtherAgent(PlanParameter pp, AgentAbstract ag) {
 
 		boolean reval = false;
 		Desires compDes = ag.getComponent(Desires.class);
@@ -206,7 +206,7 @@ public class CourtroomPlanner extends SubgoalGenerationOperator {
 	}
 	
 	@Override
-	protected Boolean answerQuery(Desire des, PlanParameter pp, Agent ag) 
+	protected Boolean answerQuery(Desire des, PlanParameter pp, AgentAbstract ag) 
 	{
 		if(!ag.hasCapability("QueryAnswer")) {
 			LOG.warn("Agent '{}' does not have the capability to perform: 'QueryAnswer'", ag.getName());
@@ -251,7 +251,7 @@ public class CourtroomPlanner extends SubgoalGenerationOperator {
 		return super.answerQuery(des, pp, ag);
 	}
 	
-	private void createSubgoals(List<FolFormula> answers, Subgoal sg, Query q, Boolean ud, Agent ag) {
+	private void createSubgoals(List<FolFormula> answers, Subgoal sg, Query q, Boolean ud, AgentAbstract ag) {
 		for(int i=0;i<answers.size();i++) {
 			Answer a = new Answer(ag, q.getSenderId(), q.getQuestion(), answers.get(i));
 			sg.newStack(a);

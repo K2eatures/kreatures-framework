@@ -3,7 +3,7 @@ package com.github.kreatures.core.asml;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.error.InvokeException;
 import com.github.kreatures.core.reflection.Context;
@@ -29,7 +29,7 @@ public class Execute extends ASMLCommand {
 	@Override
 	protected void executeInternal() throws InvokeException {
 		// Test scope:
-		Agent ag = null;
+		AgentAbstract ag = null;
 		try {
 			ag = getParameter("self");
 		} catch(InvokeException e) {

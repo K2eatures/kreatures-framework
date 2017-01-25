@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.Perception;
 import com.github.kreatures.core.comm.Answer;
 import com.github.kreatures.core.comm.Inform;
@@ -58,7 +58,7 @@ public class ActionAdapter extends Action {
 	/** the currently used beliefs */
 	private Beliefs curBeliefs;
 	
-	public ActionAdapter(Agent sender, String actionName, List<Parameter> parameters, Perception context) {
+	public ActionAdapter(AgentAbstract sender, String actionName, List<Parameter> parameters, Perception context) {
 		super(sender);
 		this.actionName = actionName;
 		this.parameters = parameters;

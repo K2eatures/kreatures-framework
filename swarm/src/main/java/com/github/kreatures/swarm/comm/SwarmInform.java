@@ -5,7 +5,7 @@ import java.util.Set;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.comm.Inform;
 
 import net.sf.tweety.logics.fol.syntax.FolFormula;
@@ -31,17 +31,17 @@ public class SwarmInform extends Inform {
 	}
 
 	/**
-	 * @see com.github.kreatures.core.comm.Inform#Inform(Agent, String, FolFormula)
+	 * @see com.github.kreatures.core.comm.Inform#Inform(AgentAbstract, String, FolFormula)
 	 */
-	public SwarmInform(Agent sender, String receiver, FolFormula sentence) {
+	public SwarmInform(AgentAbstract sender, String receiver, FolFormula sentence) {
 		
 		super(sender, receiver, sentence);
 	}
 	
 	/**
-	 * @see com.github.kreatures.core.comm.Inform#Inform(Agent, String, Set)
+	 * @see com.github.kreatures.core.comm.Inform#Inform(AgentAbstract, String, Set)
 	 */
-	public SwarmInform(Agent sender, String receiver, Set<FolFormula> sentences) {
+	public SwarmInform(AgentAbstract sender, String receiver, Set<FolFormula> sentences) {
 		super(sender, receiver,sentences);
 	}
 

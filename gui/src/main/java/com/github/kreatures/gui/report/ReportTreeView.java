@@ -11,7 +11,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.KReaturesEnvironment;
 import com.github.kreatures.gui.KReaturesWindow;
@@ -87,7 +87,7 @@ public class ReportTreeView
 	public void reportReceived(final ReportEntry entry) {
 		
 		// Add a new agent-node if necessary:
-		final Agent entryAgent = entry.getScope().getAgent();
+		final AgentAbstract entryAgent = entry.getScope().getAgent();
 		if(	entryAgent != null && 
 			!curAgentName.equals(entryAgent.getName())) {
 			curAgentName = entryAgent.getName();
@@ -139,7 +139,7 @@ public class ReportTreeView
 	}
 	
 	@Override
-	public void actionPerformed(final Agent agent, final Action act) {
+	public void actionPerformed(final AgentAbstract agent, final Action act) {
 		// update the agent-node by setting the action, which is used for string-representation
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -183,10 +183,10 @@ public class ReportTreeView
 		private Action action;
 		
 		/** The agent that represents the user-object, whcih is wrapped by this instance */
-		private Agent agent;
+		private AgentAbstract agent;
 		
 		/** Default-Ctor: Stores agent instance */
-		public AgentUserObjectWrapper(Agent userObject) {
+		public AgentUserObjectWrapper(AgentAbstract userObject) {
 			super(userObject);
 			this.agent = userObject;
 		}
@@ -268,13 +268,13 @@ public class ReportTreeView
 	
 	@Override
 	public void agentAdded(KReaturesEnvironment simulationEnvironment,
-			Agent added) {
+			AgentAbstract added) {
 		// does nothing
 	}
 
 	@Override
 	public void agentRemoved(KReaturesEnvironment simulationEnvironment,
-			Agent removed) {
+			AgentAbstract removed) {
 		// does nothing
 	}
 

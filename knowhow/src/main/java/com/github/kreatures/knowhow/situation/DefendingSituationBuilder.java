@@ -16,7 +16,7 @@ import net.sf.tweety.lp.asp.util.AnswerSetList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.secrecy.HonestyType;
 import com.github.kreatures.core.error.NotImplementedException;
 import com.github.kreatures.knowhow.KnowhowBase;
@@ -33,7 +33,7 @@ public class DefendingSituationBuilder extends SituationBuilderAdapter {
 	
 	private Program programDefending;
 	
-	public DefendingSituationBuilder(DefendingSituation situation, Agent agent) {
+	public DefendingSituationBuilder(DefendingSituation situation, AgentAbstract agent) {
 		super(situation, agent);
 		this.situation = situation;
 		programDefending = loadProgramFromJar("/com/github/kreatures/knowhow/situation/defending.dlp");

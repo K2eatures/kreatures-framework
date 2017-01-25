@@ -4,7 +4,7 @@ import net.sf.tweety.logics.commons.syntax.Predicate;
 import net.sf.tweety.logics.fol.syntax.FOLAtom;
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.Desire;
 import com.github.kreatures.core.Subgoal;
 import com.github.kreatures.secrecy.operators.parameter.PlanParameter;
@@ -26,7 +26,7 @@ import com.github.kreatures.core.logic.AnswerValue;
  */
 public class StrikeCommitteePlanner extends SubgoalGenerationOperator {
 	@Override
-	protected Boolean informProcessing(Desire des, PlanParameter pp, Agent ag) {
+	protected Boolean informProcessing(Desire des, PlanParameter pp, AgentAbstract ag) {
 		if(!(des.getPerception() instanceof Inform))
 			return false;
 		

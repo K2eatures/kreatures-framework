@@ -6,7 +6,7 @@ import java.util.Set;
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.secrecy.operators.ViolatesResult;
 import com.github.kreatures.example.operators.ViolatesOperator;
 import com.github.kreatures.core.logic.Beliefs;
@@ -25,7 +25,7 @@ import com.github.kreatures.core.operators.parameter.EvaluateParameter;
  */
 public class RestrictiveSecretsPenalty implements PenaltyFunction {
 
-	private Agent agent;
+	private AgentAbstract agent;
 	
 	private Beliefs beliefs;
 	
@@ -45,7 +45,7 @@ public class RestrictiveSecretsPenalty implements PenaltyFunction {
 	}
 	
 	@Override
-	public void init(Agent agent) {
+	public void init(AgentAbstract agent) {
 		this.agent = agent;
 		this.beliefs = agent.getBeliefs().clone();
 		inferedKnowledge = this.beliefs.getWorldKnowledge().infere();

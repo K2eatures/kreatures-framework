@@ -2,7 +2,7 @@ package com.github.kreatures.example.operators.mates;
 
 import net.sf.tweety.logics.commons.syntax.Predicate;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.Desire;
 import com.github.kreatures.core.Skip;
 import com.github.kreatures.core.Subgoal;
@@ -23,7 +23,7 @@ import com.github.kreatures.core.logic.KReaturesAnswer;
  */
 public class MatesPlanner extends StrikeCommitteePlanner {
 	@Override
-	protected Boolean answerQuery(Desire des, PlanParameter pp, Agent ag) {
+	protected Boolean answerQuery(Desire des, PlanParameter pp, AgentAbstract ag) {
 		if(des.getPerception() instanceof Query) {
 			Query q = (Query)des.getPerception();
 			Predicate qPred = q.getQuestion().getPredicates().iterator().next();

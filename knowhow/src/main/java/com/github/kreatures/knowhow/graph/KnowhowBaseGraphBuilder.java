@@ -11,7 +11,7 @@ import org.jgrapht.graph.DefaultEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.knowhow.KnowhowBase;
 import com.github.kreatures.knowhow.KnowhowStatement;
 import com.github.kreatures.knowhow.situation.SituationGraphBuilder;
@@ -32,7 +32,7 @@ public class KnowhowBaseGraphBuilder {
 	/** reference to the logback logger instance */
 	static private Logger LOG = LoggerFactory.getLogger(KnowhowBaseGraphBuilder.class);
 	
-	private Agent agent;
+	private AgentAbstract agent;
 	
 	private KnowhowBase knowhow;
 	
@@ -44,7 +44,7 @@ public class KnowhowBaseGraphBuilder {
 		this(base, base.getAgent());
 	}
 	
-	public KnowhowBaseGraphBuilder(KnowhowBase base, Agent agent)  {
+	public KnowhowBaseGraphBuilder(KnowhowBase base, AgentAbstract agent)  {
 		if(base == null || agent == null)
 			throw new IllegalArgumentException();
 		this.knowhow = base;

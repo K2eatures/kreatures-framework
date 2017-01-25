@@ -2,7 +2,7 @@ package com.github.kreatures.core;
 
 
 
-public class InteractiveAgent extends Agent{
+public class InteractiveAgent extends AgentAbstract{
 
 	/** reference to the logback logger instance */
 	//private static Logger LOG = LoggerFactory.getLogger(InteractiveAgent.class);

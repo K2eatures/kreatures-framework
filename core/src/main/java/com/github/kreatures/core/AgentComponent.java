@@ -58,7 +58,7 @@ public interface AgentComponent extends Entity, AgentListener {
 	 * @return 	the agent which is the owner of this agent-component or null if
 	 * 			the component is not added to an agent yet.
 	 */
-	Agent getAgent();
+	AgentAbstract getAgent();
 	
 	/**
 	 * Changes the id for the parent.

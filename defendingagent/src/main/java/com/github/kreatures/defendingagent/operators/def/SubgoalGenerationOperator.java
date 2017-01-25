@@ -15,7 +15,7 @@ import net.sf.tweety.logics.fol.syntax.FolSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.Desire;
 import com.github.kreatures.core.Intention;
@@ -70,7 +70,7 @@ public class SubgoalGenerationOperator extends BaseSubgoalGenerationOperator {
 	@Override
 	protected Boolean processImpl(PlanParameter pp) {
 		LOG.info("Run Default-Subgoal-Generation");
-		Agent ag = pp.getActualPlan().getAgent();
+		AgentAbstract ag = pp.getActualPlan().getAgent();
 		Desires des = ag.getComponent(Desires.class);
 		
 		boolean reval = processPersuadeOtherAgentsDesires(pp, ag);
@@ -110,7 +110,7 @@ public class SubgoalGenerationOperator extends BaseSubgoalGenerationOperator {
 	 * @param pp
 	 * @param ag
 	 */
-	public boolean processQuery(Desire desire, PlanParameter pp, Agent ag) {
+	public boolean processQuery(Desire desire, PlanParameter pp, AgentAbstract ag) {
 		pp.report("Generate new subgoal to process query request");
 		
 		CensorComponent cexec = ag.getComponent(CensorComponent.class);
@@ -283,7 +283,7 @@ public class SubgoalGenerationOperator extends BaseSubgoalGenerationOperator {
 	 * @param pp
 	 * @param ag
 	 */
-	public boolean processRevision(Desire desire, PlanParameter pp, Agent ag) {
+	public boolean processRevision(Desire desire, PlanParameter pp, AgentAbstract ag) {
 		pp.report("Generate new subgoal to process revision request");
 		CensorComponent cexec = ag.getComponent(CensorComponent.class);
 		
@@ -358,7 +358,7 @@ public class SubgoalGenerationOperator extends BaseSubgoalGenerationOperator {
 	 * @param pp
 	 * @param ag
 	 */
-	public boolean processUpdate(Desire desire, PlanParameter pp, Agent ag) {	
+	public boolean processUpdate(Desire desire, PlanParameter pp, AgentAbstract ag) {	
 		pp.report("Generate new subgoal to process update request");
 		
 		CensorComponent cexec = ag.getComponent(CensorComponent.class);
@@ -489,7 +489,7 @@ public class SubgoalGenerationOperator extends BaseSubgoalGenerationOperator {
 		return true;
 	}
 	
-	public boolean processScripting(Desire d, PlanParameter pp, Agent ag){
+	public boolean processScripting(Desire d, PlanParameter pp, AgentAbstract ag){
 		ScriptingComponent script = ag.getComponent(ScriptingComponent.class);
 		Desires desires = ag.getComponent(Desires.class);
 		desires.remove(d);
@@ -519,7 +519,7 @@ public class SubgoalGenerationOperator extends BaseSubgoalGenerationOperator {
 	 * @return			true if a new subgoal was created and added to the master-plan, false otherwise.
 	 */
 	protected boolean processPersuadeOtherAgentsDesires(
-			PlanParameter pp, Agent ag) {
+			PlanParameter pp, AgentAbstract ag) {
 		boolean reval = false;
 		Desires desComp = ag.getComponent(Desires.class);
 		if(desComp == null)
@@ -579,7 +579,7 @@ public class SubgoalGenerationOperator extends BaseSubgoalGenerationOperator {
 		return reval;
 	}
 	
-	private void sendRejectAnswer(Agent ag, Desire desire, CensorComponent cexec, SpeechAct action, Secret s, String answerValue){
+	private void sendRejectAnswer(AgentAbstract ag, Desire desire, CensorComponent cexec, SpeechAct action, Secret s, String answerValue){
 		Answer answer = null;
 		String act = null;
 		if(action instanceof Update){

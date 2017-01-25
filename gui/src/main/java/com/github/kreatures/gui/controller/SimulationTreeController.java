@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import bibliothek.gui.Dockable;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.AgentComponent;
 import com.github.kreatures.core.KReaturesEnvironment;
 import com.github.kreatures.core.BaseBeliefbase;
@@ -58,7 +58,7 @@ public class SimulationTreeController extends TreeControllerAdapter implements S
 	 * Handles the selection of a tree-node which encapsulates an Agent.
 	 * @param agent	The agent saved in the clicked tree node.
 	 */
-	private void handlerAgent(Agent agent) {
+	private void handlerAgent(AgentAbstract agent) {
 		LOG.trace("Handle Agent '{}'", agent.getName());
 		/*AgentView ac = new AgentView();
 		ac.setObservationObject(agent);
@@ -106,16 +106,16 @@ public class SimulationTreeController extends TreeControllerAdapter implements S
 
 	@Override
 	public void agentAdded(KReaturesEnvironment simulationEnvironment,
-			Agent added) {
+			AgentAbstract added) {
 	}
 	
-	private void agentAddedInt(DefaultMutableTreeNode parent, Agent added) {
+	private void agentAddedInt(DefaultMutableTreeNode parent, AgentAbstract added) {
 		
 		// create user object wrapper for agent node:
 		UserObjectWrapper agent = new DefaultUserObjectWrapper(added) {
 			@Override
 			public void onActivated() {
-				handlerAgent((Agent)this.getUserObject());
+				handlerAgent((AgentAbstract)this.getUserObject());
 			}
 		};
 		DefaultMutableTreeNode agNode = new DefaultMutableTreeNode(agent);
@@ -171,7 +171,7 @@ public class SimulationTreeController extends TreeControllerAdapter implements S
 
 	@Override
 	public void agentRemoved(KReaturesEnvironment simulationEnvironment,
-			Agent removed) {		
+			AgentAbstract removed) {		
 	}
 
 	@Override
@@ -201,7 +201,7 @@ public class SimulationTreeController extends TreeControllerAdapter implements S
 	}
 
 	@Override
-	public void actionPerformed(Agent agent, Action act) {
+	public void actionPerformed(AgentAbstract agent, Action act) {
 		// does nothing
 	}
 

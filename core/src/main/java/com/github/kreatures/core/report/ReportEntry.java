@@ -3,7 +3,7 @@ package com.github.kreatures.core.report;
 import java.util.Date;
 import java.util.Stack;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.AgentComponent;
 import com.github.kreatures.core.KReaturesEnvironment;
 import com.github.kreatures.core.internal.Entity;
@@ -162,12 +162,12 @@ public class ReportEntry implements Cloneable {
 	public static class Scope {
 		private OperatorStack visitor;
 		
-		private Agent agent;
+		private AgentAbstract agent;
 		
 		public Scope(OperatorStack visitor) {
 			this.visitor = visitor;
-			if(visitor instanceof Agent) {
-				agent = (Agent)visitor;
+			if(visitor instanceof AgentAbstract) {
+				agent = (AgentAbstract)visitor;
 			} else if(visitor instanceof AgentComponent) {
 				agent = ((AgentComponent)visitor).getAgent();
 			}
@@ -177,7 +177,7 @@ public class ReportEntry implements Cloneable {
 			return visitor;
 		}
 		
-		public Agent getAgent() {
+		public AgentAbstract getAgent() {
 			return agent;
 		}
 	}

@@ -1,7 +1,7 @@
 package com.github.kreatures.core.listener;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.KReaturesEnvironment;
 
 /**
@@ -11,6 +11,8 @@ import com.github.kreatures.core.KReaturesEnvironment;
  * @author Tim Janus
  */
 public interface SimulationListener {	
+	/** is called before creating of agent. */
+	default boolean simulationInit(KReaturesEnvironment simulationEnvironment) {return false;}
 	/** is called when a new simulation starts, before any initialization */
 	void simulationStarted(KReaturesEnvironment simulationEnvironment);
 	
@@ -18,10 +20,10 @@ public interface SimulationListener {
 	void simulationDestroyed(KReaturesEnvironment simulationEnvironment);
 	
 	/** is called when the given agent is added to the simulation-environment */
-	void agentAdded(KReaturesEnvironment simulationEnvironment, Agent added);
+	void agentAdded(KReaturesEnvironment simulationEnvironment, AgentAbstract added);
 	
 	/** is called when the given agent is removed from the simulation-environment. */
-	void agentRemoved(KReaturesEnvironment simulationEnvironment, Agent removed);
+	void agentRemoved(KReaturesEnvironment simulationEnvironment, AgentAbstract removed);
 	
 	/** is called when a new tick is starting, before the first agent does anything */
 	void tickStarting(KReaturesEnvironment simulationEnvironment);
@@ -30,6 +32,6 @@ public interface SimulationListener {
 	void tickDone(KReaturesEnvironment simulationEnvironment);
 
 	/** is called after an agent has performed an action. */
-	void actionPerformed(Agent agent, Action act);
+	void actionPerformed(AgentAbstract agent, Action act);
 	
 }

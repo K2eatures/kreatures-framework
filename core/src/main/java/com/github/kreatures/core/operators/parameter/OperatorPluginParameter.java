@@ -2,7 +2,7 @@ package com.github.kreatures.core.operators.parameter;
 
 import javax.management.AttributeNotFoundException;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.error.ConversionException;
 import com.github.kreatures.core.operators.OperatorStack;
 import com.github.kreatures.core.report.Reporter;
@@ -16,12 +16,12 @@ import com.github.kreatures.core.report.Reporter;
 public class OperatorPluginParameter extends OperatorParameterAdapter {
 
 	/** the agent who calls the operator */
-	private Agent caller;
+	private AgentAbstract caller;
 	
 	/** Default Ctor: Used for dynamic instantiation */
 	public OperatorPluginParameter() {}
 	
-	public OperatorPluginParameter(Agent caller) {
+	public OperatorPluginParameter(AgentAbstract caller) {
 		if(caller == null) {
 			throw new IllegalArgumentException("Caller most not be null.");
 		}
@@ -34,7 +34,7 @@ public class OperatorPluginParameter extends OperatorParameterAdapter {
 	}	
 	
 	/** @return the agent who class the operator */
-	public Agent getAgent() {
+	public AgentAbstract getAgent() {
 		return caller;
 	}
 
@@ -43,10 +43,10 @@ public class OperatorPluginParameter extends OperatorParameterAdapter {
 			throws ConversionException, AttributeNotFoundException {
 		super.fromGenericParameter(param);
 		
-		if(! (param.getCaller() instanceof Agent) ) {
-			throw conversionException("caller", Agent.class);
+		if(! (param.getCaller() instanceof AgentAbstract) ) {
+			throw conversionException("caller", AgentAbstract.class);
 		}
-		this.caller = (Agent)param.getCaller();
+		this.caller = (AgentAbstract)param.getCaller();
 	}
 	
 	@Override

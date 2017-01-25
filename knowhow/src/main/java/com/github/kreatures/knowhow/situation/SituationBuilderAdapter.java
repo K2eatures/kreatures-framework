@@ -18,7 +18,7 @@ import org.jgrapht.graph.DefaultEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.logic.asp.SolverWrapper;
 import com.github.kreatures.knowhow.KnowhowBase;
 import com.github.kreatures.knowhow.KnowhowStatement;
@@ -36,11 +36,11 @@ public abstract class SituationBuilderAdapter implements SituationGraphBuilder {
 	
 	protected Graph<GraphNode, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
 	
-	protected Agent agent;
+	protected AgentAbstract agent;
 	
 	protected Situation situation;
 	
-	public SituationBuilderAdapter(Situation situation, Agent agent) {
+	public SituationBuilderAdapter(Situation situation, AgentAbstract agent) {
 		this.agent = agent;
 		this.situation = situation;
 	}

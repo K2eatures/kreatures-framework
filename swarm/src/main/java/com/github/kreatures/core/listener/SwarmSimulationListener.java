@@ -4,42 +4,56 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
+import com.github.kreatures.core.CreateAgent;
+import com.github.kreatures.core.CreateAgentAdapter;
 import com.github.kreatures.core.KReaturesEnvironment;
+import com.github.kreatures.swarm.basic.SwarmBehavior;
 
 public class SwarmSimulationListener implements  SimulationListener{
 
 	/** reference to the logback logger instance */
 	private Logger LOG = LoggerFactory.getLogger(SwarmSimulationListener.class);
+	
+	public SwarmSimulationListener() {}
 	@Override
-	public void agentAdded(KReaturesEnvironment simulationEnvironment, Agent added){
+	public boolean simulationInit(KReaturesEnvironment env) {
+		if(env.getBehavior() instanceof SwarmBehavior) {
+			env.setAgentFactory(new CreateAgent());
+			return true;
+		}
+		return false;
+	}
+	@Override
+	public void agentAdded(KReaturesEnvironment simulationEnvironment, AgentAbstract added){
 		// TODO Auto-generated method stub
 		LOG.info("SwarmSimulationListener : agentAdded");
 	}
 
 	@Override
-	public void agentRemoved(KReaturesEnvironment simulationEnvironment,Agent removed){
+	public void agentRemoved(KReaturesEnvironment simulationEnvironment,AgentAbstract removed){
 		// TODO Auto-generated method stub
 		LOG.info("SwarmSimulationListener : agentRemoved");
 	}
 	
 	@Override
-	public void actionPerformed(Agent agent, Action act){
+	public void actionPerformed(AgentAbstract agent, Action act){
 		// TODO Auto-generated method stub
 		LOG.info("SwarmSimulationListener : actionPerformed");
 	}
 
 	@Override
 	public void simulationStarted(KReaturesEnvironment simulationEnvironment) {
-		// TODO Auto-generated method stub
-		//simulationEnvironment.
 		LOG.info("SwarmSimulationListener : simulationStarted");
 	}
 
 	@Override
-	public void simulationDestroyed(KReaturesEnvironment simulationEnvironment) {
+	public void simulationDestroyed(KReaturesEnvironment env) {
 		// TODO Auto-generated method stub
 		LOG.info("SwarmSimulationListener : simulationDestroyed");
+		if(env.getAgentFactory() instanceof CreateAgent) {
+			env.setAgentFactory(new CreateAgentAdapter());
+		}
 	}
 
 	@Override
@@ -53,5 +67,6 @@ public class SwarmSimulationListener implements  SimulationListener{
 		// TODO Auto-generated method stub
 		LOG.info("SwarmSimulationListener : tickDone");
 	}
+	
 
 }

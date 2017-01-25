@@ -5,7 +5,7 @@ import java.util.Set;
 
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.logic.KReaturesAnswer;
 import com.github.kreatures.core.logic.AnswerValue;
 import com.github.kreatures.core.reflection.Context;
@@ -40,22 +40,22 @@ public class Answer extends SpeechAct {
 	 * @param regarding		formula representing the question
 	 * @param answer		the value of the answer.
 	 */
-	public Answer(Agent sendingAgent, String receiverId, 
+	public Answer(AgentAbstract sendingAgent, String receiverId, 
 			FolFormula regarding, KReaturesAnswer answer) {
 		super(sendingAgent, receiverId);
 		this.regarding = regarding;
 		this.answer = answer;
 	}
 	
-	public Answer(Agent sendingAgent, String receiverId, FolFormula regarding, AnswerValue av) {
+	public Answer(AgentAbstract sendingAgent, String receiverId, FolFormula regarding, AnswerValue av) {
 		this(sendingAgent, receiverId, regarding, new KReaturesAnswer(regarding, av));
 	}
 	
-	public Answer(Agent sendingAgent, String receiverId, FolFormula regarding, FolFormula answer) {
+	public Answer(AgentAbstract sendingAgent, String receiverId, FolFormula regarding, FolFormula answer) {
 		this(sendingAgent, receiverId, regarding, new KReaturesAnswer(regarding, answer));
 	}
 	
-	public Answer(Agent sendingAgent, String receiverId, FolFormula regarding, Set<FolFormula> answers) {
+	public Answer(AgentAbstract sendingAgent, String receiverId, FolFormula regarding, Set<FolFormula> answers) {
 		this(sendingAgent, receiverId, regarding, new KReaturesAnswer(regarding, answers));
 	}
 

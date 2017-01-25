@@ -5,7 +5,7 @@ import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.internal.Entity;
 
 public class ReportWikiGenerator extends BaseReportOutputGenerator<String> {
@@ -63,7 +63,7 @@ public class ReportWikiGenerator extends BaseReportOutputGenerator<String> {
 	}
 	
 	@Override
-	protected void handleAgentChange(Agent agent) {
+	protected void handleAgentChange(AgentAbstract agent) {
 		simulationForwared = true;
 	}
 	

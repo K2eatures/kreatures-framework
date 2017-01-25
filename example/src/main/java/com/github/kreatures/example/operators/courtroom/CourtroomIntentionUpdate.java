@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.ActionHistory;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.Intention;
 import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.Subgoal;
@@ -86,7 +86,7 @@ public class CourtroomIntentionUpdate extends BaseIntentionUpdateOperator {
 	@Override
 	protected PlanElement processImpl(PlanParameter param) {
 		LOG.info("Run Mary-Intention-Update");
-		Agent ag = param.getActualPlan().getAgent();
+		AgentAbstract ag = param.getActualPlan().getAgent();
 		List<PlanElement> atomicIntentions = new LinkedList<PlanElement>();
 		// Loop needs to be changed so that only options from the same plan are
 		// considered

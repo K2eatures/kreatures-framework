@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.KReaturesEnvironment;
 import com.github.kreatures.core.Perception;
 import com.github.kreatures.island.components.Area;
@@ -142,12 +142,12 @@ public class IslandBehavior extends SimpleBehavior {
 	}
 
 	@Override
-	protected boolean cycleCondition(KReaturesEnvironment env, Agent agent) {
+	protected boolean cycleCondition(KReaturesEnvironment env, AgentAbstract agent) {
 		return !terminationCriterion(env, agent);
 	}
 
 	@Override
-	protected Perception createPerception(KReaturesEnvironment env, Agent agent) {
+	protected Perception createPerception(KReaturesEnvironment env, AgentAbstract agent) {
 		Area area = agent.getComponent(Area.class);
 		Battery battery = agent.getComponent(Battery.class);
 
@@ -169,7 +169,7 @@ public class IslandBehavior extends SimpleBehavior {
 	}
 
 	@Override
-	protected void postCycle(KReaturesEnvironment env, Agent agent) {
+	protected void postCycle(KReaturesEnvironment env, AgentAbstract agent) {
 		Area area = agent.getComponent(Area.class);
 		Battery battery = agent.getComponent(Battery.class);
 
@@ -214,7 +214,7 @@ public class IslandBehavior extends SimpleBehavior {
 	}
 
 	@Override
-	protected boolean terminationCriterion(KReaturesEnvironment env, Agent agent) {
+	protected boolean terminationCriterion(KReaturesEnvironment env, AgentAbstract agent) {
 		Area area = agent.getComponent(Area.class);
 		Battery battery = agent.getComponent(Battery.class);
 

@@ -2,7 +2,7 @@ package com.github.kreatures.core.operators.parameters;
 
 import javax.management.AttributeNotFoundException;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.PlanComponent;
 import com.github.kreatures.core.error.ConversionException;
 import com.github.kreatures.core.operators.parameter.GenericOperatorParameter;
@@ -17,12 +17,12 @@ public class SubGoalParameter extends OperatorPluginParameter {
 	public SubGoalParameter() {}
 
 	
-	public SubGoalParameter(Agent caller) {
+	public SubGoalParameter(AgentAbstract caller) {
 		super(caller);
 		this.plan=null;
 	}
 
-	public SubGoalParameter(Agent caller,PlanComponent plan ) {
+	public SubGoalParameter(AgentAbstract caller,PlanComponent plan ) {
 		super(caller);
 		this.plan=plan;
 	}

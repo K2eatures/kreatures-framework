@@ -50,7 +50,7 @@ import bibliothek.gui.dock.util.IconManager;
 import bibliothek.gui.dock.util.Priority;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.KReaturesEnvironment;
 import com.github.kreatures.core.InteractiveAgent;
@@ -445,7 +445,7 @@ public class KReaturesWindow extends WindowAdapter
 		resMap.add(dd);
 		
 		//check if the scenario has an interactive agent and open the interactive View if needed
-		for(Agent a : simulationEnvironment.getAgents()){
+		for(AgentAbstract a : simulationEnvironment.getAgents()){
 			if (a instanceof InteractiveAgent){
 				((InteractiveAgent) a).setNextActionRequester(new InteractiveAgentNextActionRequester(simulationEnvironment));
 			}
@@ -469,12 +469,12 @@ public class KReaturesWindow extends WindowAdapter
 
 	@Override
 	public void agentAdded(final KReaturesEnvironment simulationEnvironment,
-			Agent added) {
+			AgentAbstract added) {
 	}
 
 	@Override
 	public void agentRemoved(KReaturesEnvironment simulationEnvironment,
-			Agent removed) {
+			AgentAbstract removed) {
 	}
 
 	@Override
@@ -482,7 +482,7 @@ public class KReaturesWindow extends WindowAdapter
 	}
 
 	@Override
-	public void actionPerformed(Agent agent, Action act) {
+	public void actionPerformed(AgentAbstract agent, Action act) {
 	}
 	
 	public JFrame getMainWindow(){

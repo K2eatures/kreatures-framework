@@ -9,5 +9,5 @@
    <translators>
       <default-operator-cls operation-type="Translator">com.github.kreatures.swarm.beliefbase.SwarmTranslator</default-operator-cls>
    </translators>
-   <beliefbase-class>com.github.kreatures.core.logic.SwarmAspBeliefbase</beliefbase-class>
+   <beliefbase-class>com.github.kreatures.core.logic.FolBeliefbase</beliefbase-class>
 </beliefbase-configuration>

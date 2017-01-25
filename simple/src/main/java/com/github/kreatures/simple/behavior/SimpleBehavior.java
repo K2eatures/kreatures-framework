@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.KReaturesEnvironment;
 import com.github.kreatures.core.Perception;
@@ -63,7 +63,7 @@ public abstract class SimpleBehavior extends DefaultBehavior {
 		boolean doContinue = false;
 		Perception perception;
 
-		for (Agent agent : env.getAgents()) {
+		for (AgentAbstract agent : env.getAgents()) {
 			if (cycleCondition(env, agent)) {
 				try {
 					perception = createPerception(env, agent);
@@ -95,11 +95,11 @@ public abstract class SimpleBehavior extends DefaultBehavior {
 	 * @param agent
 	 * @return weather the agent's cycle is called
 	 */
-	protected abstract boolean cycleCondition(KReaturesEnvironment env, Agent agent);
+	protected abstract boolean cycleCondition(KReaturesEnvironment env, AgentAbstract agent);
 
-	protected abstract Perception createPerception(KReaturesEnvironment env, Agent agent);
+	protected abstract Perception createPerception(KReaturesEnvironment env, AgentAbstract agent);
 
-	protected abstract void postCycle(KReaturesEnvironment env, Agent agent);
+	protected abstract void postCycle(KReaturesEnvironment env, AgentAbstract agent);
 
 	/**
 	 * 
@@ -107,6 +107,6 @@ public abstract class SimpleBehavior extends DefaultBehavior {
 	 * @param agent
 	 * @return weather the agent's cycle should be called again
 	 */
-	protected abstract boolean terminationCriterion(KReaturesEnvironment env, Agent agent);
+	protected abstract boolean terminationCriterion(KReaturesEnvironment env, AgentAbstract agent);
 
 }

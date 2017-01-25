@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.KReaturesEnvironment;
 import com.github.kreatures.core.EnvironmentBehavior;
@@ -62,11 +62,11 @@ public class DefaultBehavior implements EnvironmentBehavior  {
 	 */
 	protected void localDelegate(KReaturesEnvironment env, Perception percept, String agentName) {
 		if(SpeechAct.ALL.equals(agentName)) {
-			for(Agent agent : env.getAgents()) {
+			for(AgentAbstract agent : env.getAgents()) {
 				agent.perceive(percept);
 			}
 		} else {
-			Agent ag = env.getAgentByName(agentName);
+			AgentAbstract ag = env.getAgentByName(agentName);
 			if(ag != null) {
 				ag.perceive(percept);
 			} else {
@@ -95,15 +95,15 @@ public class DefaultBehavior implements EnvironmentBehavior  {
 		++tick;
 		KReatures.getInstance().onTickStarting(env);
 		
-		List<Agent> orderedAlphabetically = new ArrayList<>(env.getAgents());
-		Collections.sort(orderedAlphabetically, new Comparator<Agent>() {
+		List<AgentAbstract> orderedAlphabetically = new ArrayList<>(env.getAgents());
+		Collections.sort(orderedAlphabetically, new Comparator<AgentAbstract>() {
 			@Override
-			public int compare(Agent o1, Agent o2) {
+			public int compare(AgentAbstract o1, AgentAbstract o2) {
 				return o1.getName().compareTo(o2.getName());
 			}
 		});
 		
-		for(Agent agent : orderedAlphabetically) {
+		for(AgentAbstract agent : orderedAlphabetically) {
 			// cycle internally sends the selected action
 			// to the environment using sendAction() method.
 			agent.cycle();

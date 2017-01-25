@@ -2,7 +2,7 @@ package com.github.kreatures.swarm.beliefbase;
 
 import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.logic.BaseChangeBeliefs;
-import com.github.kreatures.core.logic.SwarmAspBeliefbase;
+import com.github.kreatures.core.logic.FolBeliefbase;
 import com.github.kreatures.core.operators.parameter.ChangeBeliefbaseParameter;
 
 public class SwarmAspChangeBeliefs extends BaseChangeBeliefs {
@@ -20,7 +20,7 @@ public class SwarmAspChangeBeliefs extends BaseChangeBeliefs {
 	@Override
 	public Class<? extends BaseBeliefbase> getSupportedBeliefbase() {
 		// TODO Auto-generated method stub
-		return SwarmAspBeliefbase.class;
+		return FolBeliefbase.class;
 	}
 
 }

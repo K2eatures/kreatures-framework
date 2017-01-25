@@ -8,7 +8,7 @@ import net.sf.tweety.logics.fol.syntax.FOLAtom;
 
 import org.simpleframework.xml.core.PersistenceException;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.comm.Query;
 
 /**
@@ -26,7 +26,7 @@ public class FileFormatExample {
 		conf.agents.add(agent);
 		SerializeHelper sh = SerializeHelper.get();
 		
-		Agent sender = new Agent("Boss", null);
+		AgentAbstract sender = new AgentAbstract("Boss", null);
 		conf.perceptions.add(new Query(sender, "Employee", new FOLAtom(new Predicate("attend_scm"))));
 		
 		try {

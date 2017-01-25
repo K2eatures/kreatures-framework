@@ -3,7 +3,7 @@ package com.github.kreatures.example.operators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.Intention;
 import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.Subgoal;
@@ -47,7 +47,7 @@ public class IntentionUpdateOperator extends BaseIntentionUpdateOperator {
 
 	protected boolean check(PlanParameter param, PlanElement pe) {
 		Intention intention = pe.getIntention();
-		Agent ag = param.getAgent();
+		AgentAbstract ag = param.getAgent();
 		if(pe.getIntention().isAtomic()) {
 			
 			if(intention.isAtomic()) {

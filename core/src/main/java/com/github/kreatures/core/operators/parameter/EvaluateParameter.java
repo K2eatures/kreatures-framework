@@ -2,7 +2,7 @@ package com.github.kreatures.core.operators.parameter;
 
 import javax.management.AttributeNotFoundException;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.KReaturesAtom;
 import com.github.kreatures.core.error.ConversionException;
 import com.github.kreatures.core.logic.Beliefs;
@@ -33,7 +33,7 @@ public class EvaluateParameter extends OperatorPluginParameter {
 	 * @param intent	The intention of the agent which needs a check. This might be
 	 * 					an action or a complete plan.
 	 */
-	public EvaluateParameter(Agent agent, KReaturesAtom intent) {
+	public EvaluateParameter(AgentAbstract agent, KReaturesAtom intent) {
 		this(agent, (Beliefs)agent.getBeliefs(), intent);
 	}
 	
@@ -43,7 +43,7 @@ public class EvaluateParameter extends OperatorPluginParameter {
 	 * @param beliefs
 	 * @param intent
 	 */
-	public EvaluateParameter(Agent agent, Beliefs beliefs, KReaturesAtom intent) {
+	public EvaluateParameter(AgentAbstract agent, Beliefs beliefs, KReaturesAtom intent) {
 		super(agent);
 		this.information = intent;
 		this.beliefs = (Beliefs)beliefs;

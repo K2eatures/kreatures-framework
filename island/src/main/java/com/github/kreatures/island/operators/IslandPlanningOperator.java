@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Stack;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.Desire;
 import com.github.kreatures.core.PlanComponent;
 import com.github.kreatures.core.PlanElement;
@@ -78,24 +78,24 @@ public class IslandPlanningOperator extends PlanningOperator {
 		return false;
 	}
 
-	public static List<Action> calcMinSequence(Desire desire, Agent agent, Area area) {
+	public static List<Action> calcMinSequence(Desire desire, AgentAbstract agentAbstract, Area area) {
 		if (isEqual(desire, FINISH_WORK)) {
-			return min(finishWorkFromHQ(new LinkedList<Action>(), area.getLocation(), agent, area, 0, area.isSecured()),
-					finishWorkFromCave(new LinkedList<Action>(), area.getLocation(), agent, area, 0, area.isSecured()));
+			return min(finishWorkFromHQ(new LinkedList<Action>(), area.getLocation(), agentAbstract, area, 0, area.isSecured()),
+					finishWorkFromCave(new LinkedList<Action>(), area.getLocation(), agentAbstract, area, 0, area.isSecured()));
 		} else if (isEqual(desire, FILL_BATTERY)) {
-			return fillBattery(new LinkedList<Action>(), area.getLocation(), agent, area, 0);
+			return fillBattery(new LinkedList<Action>(), area.getLocation(), agentAbstract, area, 0);
 		} else if (isEqual(desire, FIND_SHELTER)) {
-			return min(findShelterFromHQ(new LinkedList<Action>(), area.getLocation(), agent, area, 0),
-					findShelterFromCave(new LinkedList<Action>(), area.getLocation(), agent, area, 0));
+			return min(findShelterFromHQ(new LinkedList<Action>(), area.getLocation(), agentAbstract, area, 0),
+					findShelterFromCave(new LinkedList<Action>(), area.getLocation(), agentAbstract, area, 0));
 		} else if (isEqual(desire, SECURE_SITE)) {
-			return min(secureSiteFromHQ(new LinkedList<Action>(), area.getLocation(), agent, area, 0, area.isSecured()),
-					secureSiteFromCave(new LinkedList<Action>(), area.getLocation(), agent, area, 0, area.isSecured()));
+			return min(secureSiteFromHQ(new LinkedList<Action>(), area.getLocation(), agentAbstract, area, 0, area.isSecured()),
+					secureSiteFromCave(new LinkedList<Action>(), area.getLocation(), agentAbstract, area, 0, area.isSecured()));
 		}
 
 		return null;
 	}
 
-	protected static List<Action> finishWorkFromHQ(List<Action> seq, Location current, Agent agent, Area area, int tick, boolean secured) {
+	protected static List<Action> finishWorkFromHQ(List<Action> seq, Location current, AgentAbstract agent, Area area, int tick, boolean secured) {
 		switch (current) {
 		case AT_HQ:
 			seq.add(new IslandAction(agent, MOVE_TO_SITE));
@@ -122,7 +122,7 @@ public class IslandPlanningOperator extends PlanningOperator {
 		}
 	}
 
-	protected static List<Action> finishWorkFromCave(List<Action> seq, Location current, Agent agent, Area area, int tick, boolean secured) {
+	protected static List<Action> finishWorkFromCave(List<Action> seq, Location current, AgentAbstract agent, Area area, int tick, boolean secured) {
 		switch (current) {
 		case IN_CAVE:
 			seq.add(new IslandAction(agent, LEAVE_CAVE));
@@ -140,7 +140,7 @@ public class IslandPlanningOperator extends PlanningOperator {
 		}
 	}
 
-	protected static List<Action> fillBattery(List<Action> seq, Location current, Agent agent, Area area, int tick) {
+	protected static List<Action> fillBattery(List<Action> seq, Location current, AgentAbstract agent, Area area, int tick) {
 		switch (current) {
 		case IN_CAVE:
 			seq.add(new IslandAction(agent, LEAVE_CAVE));
@@ -165,22 +165,22 @@ public class IslandPlanningOperator extends PlanningOperator {
 		}
 	}
 
-	protected static List<Action> findShelterFromHQ(List<Action> seq, Location current, Agent agent, Area area, int tick) {
+	protected static List<Action> findShelterFromHQ(List<Action> seq, Location current, AgentAbstract agentAbstract, Area area, int tick) {
 		switch (current) {
 		case AT_HQ:
-			seq.add(new IslandAction(agent, MOVE_TO_SITE));
-			return findShelterFromHQ(seq, isSlow(area, tick) ? ON_THE_WAY_1 : ON_THE_WAY_2, agent, area, tick + 1);
+			seq.add(new IslandAction(agentAbstract, MOVE_TO_SITE));
+			return findShelterFromHQ(seq, isSlow(area, tick) ? ON_THE_WAY_1 : ON_THE_WAY_2, agentAbstract, area, tick + 1);
 		case ON_THE_WAY_1:
-			seq.add(new IslandAction(agent, MOVE_TO_SITE));
-			return findShelterFromHQ(seq, isSlow(area, tick) ? ON_THE_WAY_2 : ON_THE_WAY_3, agent, area, tick + 1);
+			seq.add(new IslandAction(agentAbstract, MOVE_TO_SITE));
+			return findShelterFromHQ(seq, isSlow(area, tick) ? ON_THE_WAY_2 : ON_THE_WAY_3, agentAbstract, area, tick + 1);
 		case ON_THE_WAY_2:
-			seq.add(new IslandAction(agent, MOVE_TO_SITE));
-			return findShelterFromHQ(seq, isSlow(area, tick) ? ON_THE_WAY_3 : AT_SITE, agent, area, tick + 1);
+			seq.add(new IslandAction(agentAbstract, MOVE_TO_SITE));
+			return findShelterFromHQ(seq, isSlow(area, tick) ? ON_THE_WAY_3 : AT_SITE, agentAbstract, area, tick + 1);
 		case ON_THE_WAY_3:
-			seq.add(new IslandAction(agent, MOVE_TO_SITE));
-			return findShelterFromHQ(seq, AT_SITE, agent, area, tick + 1);
+			seq.add(new IslandAction(agentAbstract, MOVE_TO_SITE));
+			return findShelterFromHQ(seq, AT_SITE, agentAbstract, area, tick + 1);
 		case AT_SITE:
-			seq.add(new IslandAction(agent, ENTER_CAVE));
+			seq.add(new IslandAction(agentAbstract, ENTER_CAVE));
 		case IN_CAVE:
 			return seq;
 		default:
@@ -188,7 +188,7 @@ public class IslandPlanningOperator extends PlanningOperator {
 		}
 	}
 
-	protected static List<Action> findShelterFromCave(List<Action> seq, Location current, Agent agent, Area area, int tick) {
+	protected static List<Action> findShelterFromCave(List<Action> seq, Location current, AgentAbstract agent, Area area, int tick) {
 		switch (current) {
 		case IN_CAVE:
 			seq.add(new IslandAction(agent, LEAVE_CAVE));
@@ -211,7 +211,7 @@ public class IslandPlanningOperator extends PlanningOperator {
 		}
 	}
 
-	protected static List<Action> secureSiteFromHQ(List<Action> seq, Location current, Agent agent, Area area, int tick, boolean secured) {
+	protected static List<Action> secureSiteFromHQ(List<Action> seq, Location current, AgentAbstract agent, Area area, int tick, boolean secured) {
 		if (secured) {
 			return seq;
 		}
@@ -237,7 +237,7 @@ public class IslandPlanningOperator extends PlanningOperator {
 		}
 	}
 
-	protected static List<Action> secureSiteFromCave(List<Action> seq, Location current, Agent agent, Area area, int tick, boolean secured) {
+	protected static List<Action> secureSiteFromCave(List<Action> seq, Location current, AgentAbstract agent, Area area, int tick, boolean secured) {
 		if (secured) {
 			return seq;
 		}

@@ -7,7 +7,7 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.KReaturesEnvironment;
 import com.github.kreatures.core.NewAgent;
 import com.github.kreatures.core.Perception;

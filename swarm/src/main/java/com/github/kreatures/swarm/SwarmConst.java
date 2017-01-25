@@ -7,7 +7,7 @@ public enum SwarmConst {
 	public int getValue(){
 		
 		if(name()=="MAX_INT"){
-			return 10;
+			return 1000;
 		}
 		
 		if(name()=="UNIT"){

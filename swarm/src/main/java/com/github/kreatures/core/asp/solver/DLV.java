@@ -23,9 +23,28 @@ public class DLV extends  net.sf.tweety.lp.asp.solver.DLV {
 
 	}
 	/**
-	 * //TODO comments
+	 * This methode calls the run method appropriated to the given solver.
+	 * @param p the asp program to be infer
+	 * @param nModels the maximal number of models 
+	 * @param otherOptions the other options which will be used to specifier the inference.
+	 * @return the AnswerSetList of the inference
+	 * @throws SolverException exception is thrown when there are any problem with the solver
 	 */
+	public AnswerSetList computeModels(Program p, int nModels,String... otherOptions) throws SolverException{
+		
+		return runDLV(p,nModels,otherOptions);
+		
+	}
 	
+	/**
+	 * This method is the run method of solver DLV.
+	 * @param p the asp program to be infer
+	 * @param nModels the maximal number of models 
+	 * @param otherOptions the other options which will be used to specifier the inference.
+	 * @return the AnswerSetList of the inference
+	 * @throws SolverException exception is thrown when there are any problem with the solver
+	 */
+
 	public AnswerSetList runDLV(Program p, int nModels, String... otherOptions) throws SolverException {
 		String params="";
 		

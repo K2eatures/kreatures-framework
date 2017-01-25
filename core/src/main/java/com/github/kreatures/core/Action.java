@@ -24,7 +24,7 @@ public class Action
 	
 	/** Ctor used for deserialization */
 	public Action(	@Element(name="sender") String senderId ) {
-		super((Agent) null);
+		super((AgentAbstract) null);
 		this.sender = senderId;
 	}
 	
@@ -33,7 +33,7 @@ public class Action
 	 * @param sender	unique name of the sender of the action
 	 * @param receiver	unique name of the receiver of the action, static member ALL means everyone receives this action
 	 */
-	public Action(Agent sender) {
+	public Action(AgentAbstract sender) {
 		super(sender);
 		this.sender = sender.getName();
 	}

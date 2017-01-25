@@ -1,7 +1,9 @@
 package com.github.kreatures.core.listener;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
+import com.github.kreatures.core.CreateAgentAdapter;
+import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.KReaturesEnvironment;
 
 
@@ -14,6 +16,7 @@ import com.github.kreatures.core.KReaturesEnvironment;
  */
 public class SimulationAdapter implements SimulationListener {
 
+	public SimulationAdapter() {}
 	@Override
 	public void simulationStarted(KReaturesEnvironment simulationEnvironment) {
 		
@@ -24,11 +27,11 @@ public class SimulationAdapter implements SimulationListener {
 
 	@Override
 	public void agentAdded(KReaturesEnvironment simulationEnvironment,
-			Agent added) {}
-
+			AgentAbstract added) {}
+	
 	@Override
 	public void agentRemoved(KReaturesEnvironment simulationEnvironment,
-			Agent removed) {}
+			AgentAbstract removed) {}
 	
 	@Override
 	public void tickStarting(KReaturesEnvironment simulationEnvironment) {}
@@ -37,5 +40,6 @@ public class SimulationAdapter implements SimulationListener {
 	public void tickDone(KReaturesEnvironment simulationEnvironment) {}
 
 	@Override
-	public void actionPerformed(Agent agent, Action act) {}
+	public void actionPerformed(AgentAbstract agent, Action act) {}
+
 }

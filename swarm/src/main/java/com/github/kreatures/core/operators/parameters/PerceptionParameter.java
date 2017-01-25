@@ -4,9 +4,7 @@ import java.util.Collection;
 
 import javax.management.AttributeNotFoundException;
 
-import net.sf.tweety.logics.fol.syntax.FolFormula;
-
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.KReaturesAtom;
 import com.github.kreatures.core.NewAgent;
@@ -27,23 +25,23 @@ public class PerceptionParameter extends OperatorPluginParameter {
 	/** Default Ctor: Used for dynamic instantiation */
 	public PerceptionParameter() {}
 	
-	public PerceptionParameter(Agent caller) {
+	public PerceptionParameter(AgentAbstract caller) {
 		super(caller);
 	}
-	public PerceptionParameter(Agent caller,KReaturesAtom intention) {
+	public PerceptionParameter(AgentAbstract caller,KReaturesAtom intention) {
 		super(caller);
 		this.information=intention;
 		this.baseBeliefbase=caller.getBeliefs().getWorldKnowledge();
 		this.perceptions=((NewAgent)caller).getPerceptions();
 	}
-	public PerceptionParameter(Agent caller,BaseBeliefbase beliefs,KReaturesAtom intention) {
+	public PerceptionParameter(AgentAbstract caller,BaseBeliefbase beliefs,KReaturesAtom intention) {
 		super(caller);
 		this.baseBeliefbase=beliefs;
 		this.information=intention;
 		this.perceptions=((NewAgent)caller).getPerceptions();
 	}
 	
-	public PerceptionParameter(Agent caller,BaseBeliefbase beliefs,KReaturesAtom intention, Collection<Perception> perceptions) {
+	public PerceptionParameter(AgentAbstract caller,BaseBeliefbase beliefs,KReaturesAtom intention, Collection<Perception> perceptions) {
 		super(caller);
 		this.baseBeliefbase=beliefs;
 		this.information=intention;
@@ -64,12 +62,19 @@ public class PerceptionParameter extends OperatorPluginParameter {
 		}
 		
 		
-		obj=param.getParameter("beliefs");
+		obj=param.getParameter("basebeliefbase");
 		if(obj != null ) {
 			if(! (obj instanceof BaseBeliefbase)) {
-				throw conversionException("beliefs", BaseBeliefbase.class);
+				throw conversionException("basebeliefbase", BaseBeliefbase.class);
 			}
 			this.baseBeliefbase=(BaseBeliefbase)obj;
+		}else {
+			if(getAgent().getBeliefs()!=null) {
+				this.baseBeliefbase=getAgent().getBeliefs().getWorldKnowledge();
+			}else {
+				this.baseBeliefbase=null;
+			}
+					
 		}
 		
 		

@@ -9,7 +9,7 @@ import net.sf.tweety.logics.fol.syntax.FolFormula;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.util.Utility;
 
 /**
@@ -42,7 +42,7 @@ public class Inform extends SpeechAct
 	 * @param receiver	The name of the receiver
 	 * @param sentence	The piece of information as FOL formula.
 	 */
-	public Inform(Agent sender, String receiver, FolFormula sentence) {
+	public Inform(AgentAbstract sender, String receiver, FolFormula sentence) {
 		super(sender, receiver);
 		this.sentences.add(sentence);
 	}	
@@ -54,7 +54,7 @@ public class Inform extends SpeechAct
 	 * @param sentences	The set containg multiple pieces of information as FOL
 	 * 					formulas.
 	 */
-	public Inform(Agent sender, String receiver, Set<FolFormula> sentences) {
+	public Inform(AgentAbstract sender, String receiver, Set<FolFormula> sentences) {
 		super(sender, receiver);
 		this.sentences.addAll(sentences);
 	}

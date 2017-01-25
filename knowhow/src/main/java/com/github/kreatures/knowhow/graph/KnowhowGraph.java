@@ -115,7 +115,7 @@ public class KnowhowGraph extends BaseAgentComponent implements PropertyChangeLi
 		DepthFirstIterator<GraphNode, DefaultEdge> it = new DepthFirstIterator<>(graph);
 		while(it.hasNext()) {
 			boolean leaf = true;
-			GraphNode cur = it.next();
+			GraphNode cur = (GraphNode) it.next();
 			for(DefaultEdge edge : graph.edgesOf(cur)) {
 				if(graph.getEdgeSource(edge).equals(cur)) {
 					leaf = false;

@@ -2,7 +2,7 @@ package com.github.kreatures.core;
 
 public class Skip extends Action {
 
-	public Skip(Agent sender) {
+	public Skip(AgentAbstract sender) {
 		super(sender);
 	}
 

@@ -48,8 +48,12 @@ public class KReaturesEnvironment  {
 	
 	/** the root folder of the actual loaded simulation in this environment */
 	private String simDirectory;
+	/**
+	 * This is use to create the appropriated agent type. Per default, Agent class will be created.
+	 */
+	private AgentFactory agentF;
 	
-	private ObservableMap<String, Agent> agentMap = new ObservableMap<>("agentMap");
+	private ObservableMap<String, AgentAbstract> agentMap = new ObservableMap<>("agentMap");
 	
 	/**
 	 * @return a map of ID --> Entity, the map is not modifiable.
@@ -96,7 +100,7 @@ public class KReaturesEnvironment  {
 	 * @return	true if everything was fine, false if the same agent process was already registered.
 	 * @throws AgentIdException Is thrown if the name of the agent process is not unique (two processes have the same name).
 	 */
-	public boolean addAgent(Agent agent) throws AgentIdException {
+	public boolean addAgent(AgentAbstract agent) throws AgentIdException {
 		if(agentMap.containsKey(agent.getName())) {
 			if(agentMap.get(agent.getName()) == agent)
 				return false;
@@ -109,7 +113,7 @@ public class KReaturesEnvironment  {
 		return true;
 	}
 	
-	public Collection<Agent> getAgents() {
+	public Collection<AgentAbstract> getAgents() {
 		return Collections.unmodifiableCollection(agentMap.values());
 	}
 	
@@ -118,7 +122,7 @@ public class KReaturesEnvironment  {
 	 * @param name		unique name of the agent.
 	 * @return			Reference to the agent called 'name', if no agent with the given name exists null is returned.
 	 */
-	public Agent getAgentByName(String name) {
+	public AgentAbstract getAgentByName(String name) {
 		return agentMap.get(name);
 	}
 	
@@ -127,6 +131,13 @@ public class KReaturesEnvironment  {
 	 */
 	public boolean run() {
 		return behavior.run(this);
+	}
+	
+	/**
+	 * runs the simulation using the behavior given at construction.
+	 */
+	public EnvironmentBehavior getBehavior() {
+		return behavior;
 	}
 	
 	/**
@@ -159,6 +170,7 @@ public class KReaturesEnvironment  {
 	public synchronized boolean initSimulation(SimulationConfiguration config) {
 		if(ready)
 			return false;
+	
 		
 		LOG.info("Starting simulation: " + config.getName());
 		this.name = config.getName();
@@ -174,10 +186,15 @@ public class KReaturesEnvironment  {
 
 		// inform listener of start of simulation creation:
 		KReatures.getInstance().onCreateSimulation(this);
+
+		
 		
 		if(!createBehavior(config))
 			return false;
 		
+		setAgentFactory(new CreateAgentAdapter());
+		
+		KReatures.getInstance().onSimulationInit(this);
 		if(!registerAgents(config))
 			return false;
 		
@@ -188,7 +205,7 @@ public class KReaturesEnvironment  {
 		
 		// report the initialized data of the agent to the report system.
 		for(AgentInstance ai : config.getAgents()) {
-			Agent agent = getAgentByName(ai.getName());
+			AgentAbstract agent = getAgentByName(ai.getName());
 			agent.reportCreation();
 			
 			// and initialize the desires:
@@ -237,7 +254,7 @@ public class KReaturesEnvironment  {
 		for(AgentInstance ai : config.getAgents()) {
 			try {
 				// First instantiate the agent components:
-				Agent agent = getAgentByName(ai.getName());		
+				AgentAbstract agent = getAgentByName(ai.getName());		
 				LOG.info("Start the creation of Agent '{}'.", ai.getName());
 				agent.create(ai, config);
 				
@@ -275,10 +292,11 @@ public class KReaturesEnvironment  {
 	private boolean registerAgents(SimulationConfiguration config) {
 		try {
 			for(AgentInstance ai : config.getAgents()) {
+				
 				if(ai.getType() != null && ai.getType().equals("InteractiveAgent")){
 					addAgent(new InteractiveAgent(ai.getName(), this));
 				}else{
-					addAgent(new Agent(ai.getName(), this));
+					addAgent(this.agentF.createAgent(this, ai.getName()));
 				}
 			}
 		} catch (AgentIdException e) {
@@ -352,5 +370,11 @@ public class KReaturesEnvironment  {
 
 	public int getSimulationTick() {
 		return behavior.getTick();
+	}
+	public void setAgentFactory(AgentFactory agentFactory) {
+		this.agentF=agentFactory;
+	}
+	public AgentFactory getAgentFactory() {
+		return this.agentF;
 	}
 }

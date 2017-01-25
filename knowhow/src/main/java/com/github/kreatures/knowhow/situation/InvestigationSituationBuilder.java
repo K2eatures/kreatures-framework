@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.knowhow.KnowhowBase;
 import com.github.kreatures.knowhow.KnowhowStatement;
 
@@ -37,7 +38,7 @@ public class InvestigationSituationBuilder extends SituationBuilderAdapter {
 	/** @todo move in resource management */
 	private Program investigate;
 	
-	public InvestigationSituationBuilder(InvestigationSituation situation, Agent agent) {
+	public InvestigationSituationBuilder(InvestigationSituation situation, AgentAbstract agent) {
 		super(situation, agent);
 		LOG.debug("Entering InvestigationBuilder({})", situation);
 		this.situation = situation;

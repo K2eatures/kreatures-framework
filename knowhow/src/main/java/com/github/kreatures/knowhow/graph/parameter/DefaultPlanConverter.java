@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.Intention;
 import com.github.kreatures.core.Perception;
 import com.github.kreatures.knowhow.graph.ActionAdapter;
@@ -29,12 +29,12 @@ public class DefaultPlanConverter implements PlanConverter {
 	/** reference to the logback instance used for logging */
 	private static Logger LOG = LoggerFactory.getLogger(DefaultPlanConverter.class);
 	
-	private Agent agent;
+	private AgentAbstract agent;
 	
 	public DefaultPlanConverter() {}
 	
 	@Override 
-	public void init(Agent agent) {
+	public void init(AgentAbstract agent) {
 		this.agent = agent;
 	}
 	

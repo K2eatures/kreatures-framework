@@ -2,7 +2,7 @@ package com.github.kreatures.secrecy.operators.parameter;
 
 import javax.management.AttributeNotFoundException;
 
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.Perception;
 import com.github.kreatures.core.error.ConversionException;
 import com.github.kreatures.core.operators.parameter.GenericOperatorParameter;
@@ -24,7 +24,7 @@ public class GenerateOptionsParameter extends OperatorPluginParameter {
 	 * @param agent			The agent containing the desires and beliefs.
 	 * @param perception	the last received perception
 	 */
-	public GenerateOptionsParameter(Agent agent, Perception perception) {
+	public GenerateOptionsParameter(AgentAbstract agent, Perception perception) {
 		super(agent);
 		this.perception = perception;
 	}

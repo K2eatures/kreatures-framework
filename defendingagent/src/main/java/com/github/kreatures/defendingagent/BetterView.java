@@ -53,7 +53,7 @@ public class BetterView implements GeneralView{
 			assertions.add(translator.toPropositional(formula));
 		}
 		this.view = new Tupel<Set<PropositionalFormula>, Set<PropositionalFormula>>(view.getKnowledge(), assertions);
-		ag = view.getAgent();
+		ag = (Agent) view.getAgent();
 	}
 	
 	public BetterView(Set<PropositionalFormula> k, Set<PropositionalFormula> a, Agent ag){

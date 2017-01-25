@@ -262,11 +262,28 @@ public class KReatures {
 		reports.put(ev, actualReport);
 	}
 	
-	protected void onAgentAdded(KReaturesEnvironment env, Agent added) {
+	protected void onAgentAdded(KReaturesEnvironment env, AgentAbstract added) {
 		for(SimulationListener l : simulationListeners) {
 			l.agentAdded(env, added);
 		}
 	}
+	
+	protected void onSimulationInit(KReaturesEnvironment env) {
+		for(SimulationListener l : simulationListeners) {
+			if(l.simulationInit(env))
+				break;
+		}
+	}
+//	/**
+//	 * Th
+//	 * @param env is the current simulation environment
+//	 * @param addedAgentName the name of the agent. 
+//	 */
+//	protected void onAgentAdded(KReaturesEnvironment env, String addedAgentName) {
+//		for(SimulationListener l : simulationListeners) {
+//			l.agentAdded(env, added);
+//		}
+//	}
 	
 	/**
 	 * Informs the simulation listeners about the finished initialization
@@ -359,7 +376,7 @@ public class KReatures {
 	}
 	
 
-	public void onActionPerformed(Agent agent, Action act) {
+	public void onActionPerformed(AgentAbstract agent, Action act) {
 		for(SimulationListener listener : simulationListeners) {
 			listener.actionPerformed(agent, act);
 		}

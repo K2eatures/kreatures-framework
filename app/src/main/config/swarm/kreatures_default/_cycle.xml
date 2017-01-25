@@ -1,11 +1,11 @@
 <asml-script name="AbstractSwarm">
 	<operation type="BeliefsUpdate">
 		<param name="information" value="$perception" />
-		<param name="beliefs" value="$beliefs" />
-		<output>belief</output>
+		<param name="basebeliefbase" value="$basebeliefbase" />
+		<output>basebeliefbase</output>
 	</operation>
 	<operation type="GeneratesOptions">
-	    <param name="belief" value="$belief" />
+	    <param name="basebeliefbase" value="$basebeliefbase" />
 	    <output>desires</output>	
 	</operation>
 	<operation type="IntentionsUpdate">

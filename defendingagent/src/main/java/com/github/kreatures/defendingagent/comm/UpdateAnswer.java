@@ -5,6 +5,7 @@ import java.util.Set;
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 
 import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.comm.Answer;
 import com.github.kreatures.core.logic.KReaturesAnswer;
 import com.github.kreatures.core.logic.AnswerValue;
@@ -19,14 +20,14 @@ public class UpdateAnswer extends Answer{
 
 	/**
 	 * Ctor: Generates the Answer speech act by the following parameters.
-	 * @param sendingAgent	reference to the sender of the answer
+	 * @param ag	reference to the sender of the answer
 	 * @param receiverId	unique name of the receiver of the answer
 	 * @param regarding		formula representing the question
-	 * @param answer		the value of the answer.
+	 * @param answerValue		the value of the answer.
 	 */
-	public UpdateAnswer(Agent sendingAgent, String receiverId, 
-			FolFormula regarding, KReaturesAnswer answer) {
-		super(sendingAgent, receiverId, regarding, answer);
+	public UpdateAnswer(AgentAbstract ag, String receiverId, 
+			FolFormula regarding, AnswerValue answerValue) {
+		super(ag, receiverId, regarding, answerValue);
 	}
 	
 	public UpdateAnswer(Agent sendingAgent, String receiverId, FolFormula regarding, AnswerValue av) {

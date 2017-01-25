@@ -107,10 +107,10 @@ implements 	AgentComponent,
 	}
 
 	@Override
-	public Agent getAgent() {
+	public AgentAbstract getAgent() {
 		Entity reval = IdGenerator.getEntityWithId(parentId);
 		if(reval != null) {
-			return (Agent)reval;
+			return (AgentAbstract)reval;
 		}
 		return null;
 	}

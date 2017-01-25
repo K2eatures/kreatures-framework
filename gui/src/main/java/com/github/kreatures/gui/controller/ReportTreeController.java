@@ -11,7 +11,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.Agent;
+import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.KReaturesEnvironment;
 import com.github.kreatures.gui.KReaturesWindow;
@@ -81,7 +81,7 @@ public class ReportTreeController extends TreeControllerAdapter implements Repor
 		// add handling methods for simulation specific events:
 		simulationHandler = new SimulationAdapter() {
 			@Override
-	    	public void actionPerformed(Agent agent, Action act) {
+	    	public void actionPerformed(AgentAbstract agent, Action act) {
 				AgentUserObjectWrapper uo = (AgentUserObjectWrapper)actAgentNode.getUserObject();
 	    		uo.action = act;
 	    		model.reload(actAgentNode);
@@ -188,11 +188,11 @@ public class ReportTreeController extends TreeControllerAdapter implements Repor
 		}
 	}
 
-	private boolean updateAgentNode(Agent ag) {
+	private boolean updateAgentNode(AgentAbstract ag) {
 		for(int i=0; i<actTickNode.getChildCount(); ++i) {
 			DefaultMutableTreeNode child = (DefaultMutableTreeNode)actTickNode.getChildAt(i);
 			UserObjectWrapper wrapper = (UserObjectWrapper)child.getUserObject();
-			if(!(wrapper.getUserObject() instanceof Agent))
+			if(!(wrapper.getUserObject() instanceof AgentAbstract))
 				continue;
 			if(wrapper.getUserObject().equals(ag)) {
 				actAgentNode = child;
@@ -213,9 +213,9 @@ public class ReportTreeController extends TreeControllerAdapter implements Repor
 	protected class AgentUserObjectWrapper extends DefaultUserObjectWrapper {
 		public Action action;
 		
-		private Agent agent;
+		private AgentAbstract agent;
 		
-		public AgentUserObjectWrapper(Agent userObject) {
+		public AgentUserObjectWrapper(AgentAbstract userObject) {
 			super(userObject);
 			this.agent = userObject;
 		}

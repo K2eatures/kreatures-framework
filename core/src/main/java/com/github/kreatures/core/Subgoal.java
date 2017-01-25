@@ -25,11 +25,11 @@ public class Subgoal extends Intention implements Cloneable {
 	/** a collection of stacks with sub-intentions defining the subgoals of this intention */
 	protected List<Stack<PlanElement>> stacks = new LinkedList<>();
 	
-	public Subgoal(Agent agent) {
+	public Subgoal(AgentAbstract agent) {
 		this(agent, null);
 	}
 	
-	public Subgoal(Agent agent, Desire desire) {
+	public Subgoal(AgentAbstract agent, Desire desire) {
 		super(agent);
 		this.fulfillsDesire = desire;
 	}
