@@ -2,7 +2,6 @@ package com.github.kreatures.core.serialize;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -28,10 +27,9 @@ import static com.github.kreatures.core.KReaturesPaths.KREATURES_AGENTS_CONFIG_D
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_BELIEFS_CONFIG_DIR;
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_CONFIG_DIR;
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_EXAMPLES_DIR;
-import static com.github.kreatures.core.KReaturesPaths.KREATURES_SWARM_CONFIG_DIR;
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_SWARM_DEFAULT_CONFIG_DIR;
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_SWARM_XML_DIR;
-
+import static com.github.kreatures.core.KReaturesPaths.KREATURES_SCENARIO_MODELS;
 
 import com.github.kreatures.core.KReaturesConst.AgStrategie;
 import com.github.kreatures.core.serialize.AgentConfigImport;
@@ -51,14 +49,13 @@ import com.github.kreatures.swarm.components.SwarmVisitEdge;
 import com.github.kreatures.swarm.components.TimeEdgeState;
 import com.github.kreatures.swarm.components.XmlToBeliefBase;
 import com.github.kreatures.swarm.exceptions.SwarmException;
-import com.github.kreatures.swarm.serialize.SwarmConfigBridge;
-import com.github.kreatures.swarm.serialize.SwarmConfigDefault;
-import com.github.kreatures.swarm.serialize.SwarmConfigRead;
 
 /**
+ * This Class is used to parse the information from the {@link BeliefParseOfSwarm}'s object to a file. This file contents a scenario-model and initial knowledge of all agents.
+ * Each agent has to load its initial knowledge into its belief-base.
+ *  
+ * @author Cedric Perez Donfack
  * 
- * @author donfack
- *
  */
 public final class BDIParserUtils implements BDIParser {
 
@@ -69,14 +66,22 @@ public final class BDIParserUtils implements BDIParser {
 	private Path xmlPath;
 	// private Path kreaturesAgentConfig;
 
+	/**
+	 * This method creates all needed files which are in relationship with a scenario. For example a scenario-model, all agent's belief,  
+	 * @param path
+	 * @param strategie
+	 * @throws Exception
+	 */
 	public BDIParserUtils(Path path,AgStrategie strategie) throws Exception {
 		obj = new BeliefParseOfSwarm(path);
 		xmlPath = path;
-		Path tmpAspPath=createAgentBeliefs();
+		Path tmpAspPathWorldBelief=createAgentBeliefs();
+		createScenarioModel();
 		createKReaturesConfigFile(strategie);
 		createExamplesDir(strategie);
-		createAgentAsp(tmpAspPath);
-		Files.deleteIfExists(tmpAspPath);
+		createAgentAsp(tmpAspPathWorldBelief);
+		Files.deleteIfExists(tmpAspPathWorldBelief);
+		
 	}
 
 	/**
@@ -88,28 +93,23 @@ public final class BDIParserUtils implements BDIParser {
 	public XmlToBeliefBase getBeliefParseOfSwarmInstance() {
 		return obj;
 	}
-
+	/**
+	 * create and Write a initial belief of all agents into a temporal file.   
+	 * @return the temporal file path
+	 * @throws Exception when the temporal file will not successfully created.
+	 */
 	protected Path createAgentBeliefs() throws Exception {
 		obj = getBeliefParseOfSwarmInstance();
 		
-		Path strategiePath=Paths.get(KREATURES_SWARM_CONFIG_DIR.toString()).resolve(_KREaturesSwarmStrategieFile);
-		Path tmpPath=Files.createTempFile("swarm",".asp");
-		System.out.println(tmpPath.toAbsolutePath());
-		try (BufferedWriter buffer = Files.newBufferedWriter(tmpPath)) {
+		//Path strategiePath=Paths.get(KREATURES_SWARM_CONFIG_DIR.toString()).resolve(_KREaturesSwarmStrategieFile);
+		Path tmpPathWorldBelief=Files.createTempFile("swarm",".asp");
+		System.out.println(tmpPathWorldBelief.toAbsolutePath());
+		try (BufferedWriter buffer = Files.newBufferedWriter(tmpPathWorldBelief)) {
 
 			buffer.write(String.format("%s%n", obj.getTimeUnit()));
 
-			buffer.write(String.format("%s%n", SwarmAgentType.getDescriptions()));
-			for (SwarmAgentType elt : obj.getAllAgentType()) {
-				buffer.write(String.format("%s%n", elt.toString()));
-			}
 			buffer.write(String.format("%s%n", SwarmAgent.getDescriptions()));
 			for (SwarmAgent elt : obj.getAllAgents()) {
-				buffer.write(String.format("%s%n", elt.toString()));
-			}
-
-			buffer.write(String.format("%s%n", SwarmStationType.getDescriptions()));
-			for (SwarmStationType elt : obj.getAllStationType()) {
 				buffer.write(String.format("%s%n", elt.toString()));
 			}
 
@@ -117,18 +117,12 @@ public final class BDIParserUtils implements BDIParser {
 			for (SwarmStation elt : obj.getAllStations()) {
 				buffer.write(String.format("%s%n", elt.toString()));
 			}
-			buffer.write(String.format("%s%n", SwarmPlaceEdge.getDescriptions()));
-			for (SwarmPlaceEdge elt : obj.getAllPlaceEdge()) {
-				buffer.write(String.format("%s%n", elt.toString()));
-			}
+
 			buffer.write(String.format("%s%n", SwarmVisitEdge.getDescriptions()));
 			for (SwarmVisitEdge elt : obj.getAllVisitEdge()) {
 				buffer.write(String.format("%s%n", elt.toString()));
 			}
-			buffer.write(String.format("%s%n", SwarmTimeEdge.getDescriptions()));
-			for (SwarmTimeEdge elt : obj.getAllTimeEdge()) {
-				buffer.write(String.format("%s%n", elt.toString()));
-			}
+			
 			buffer.write(String.format("%s%n", NecAgentStation.getDescriptions()));
 			for (NecAgentStation elt : obj.getAllNecAgentStation()) {
 				buffer.write(String.format("%s%n", elt.toString()));
@@ -146,27 +140,84 @@ public final class BDIParserUtils implements BDIParser {
 				buffer.write(String.format("%s%n", elt.toString()));
 			}
 
-			try (BufferedReader strategieBuffer = Files.newBufferedReader(strategiePath)) {
-				String line = strategieBuffer.readLine();
-				;
-				while (line != null) {
-					buffer.write(String.format("%s%n", line));
-					line = strategieBuffer.readLine();
-				}
-			} catch (IOException ioe) {
-				throw ioe;
-			}
+//			try (BufferedReader strategieBuffer = Files.newBufferedReader(strategiePath)) {
+//				String line = strategieBuffer.readLine();
+//				;
+//				while (line != null) {
+//					buffer.write(String.format("%s%n", line));
+//					line = strategieBuffer.readLine();
+//				}
+//			} catch (IOException ioe) {
+//				throw ioe;
+//			}
 
 			buffer.flush();
 
 		} catch (IOException ex) {
 			throw ex;
-		}
-		
-		return tmpPath;
+		}		
+		return tmpPathWorldBelief;
 
 	}
+	/**
+	 * create and Write a scenario-model into a scenario-model file.   
+	 * @return the temporal file path
+	 * @throws Exception when the temporal file will not successfully created.
+	 */
+	protected void createScenarioModel() throws Exception {
+		obj = getBeliefParseOfSwarmInstance();
+		
+		// Check, if the scenario-model directory already exists.
+		Path directoryPathScenarioModell=Paths.get(KREATURES_SCENARIO_MODELS.toString()).resolve(obj.getName());
+		if(!Files.exists(directoryPathScenarioModell)) {
+			Files.createDirectory(directoryPathScenarioModell);
+		}
+		// Check, if the scenario-model file already exists. 
+		Path pathScenarioModell=directoryPathScenarioModell.resolve(obj.getName()+".asp");
+		if(!Files.exists(pathScenarioModell)) {
+			Files.createFile(pathScenarioModell);
+		}
+		
+		System.out.println(pathScenarioModell.toAbsolutePath());
+		try (BufferedWriter buffer = Files.newBufferedWriter(pathScenarioModell)) {
 
+			buffer.write(String.format("%s%n", obj.getTimeUnit()));
+
+			buffer.write(String.format("%s%n", SwarmAgentType.getDescriptions()));
+			for (SwarmAgentType elt : obj.getAllAgentType()) {
+				buffer.write(String.format("%s%n", elt.toString()));
+			}
+			
+			buffer.write(String.format("%s%n", SwarmStationType.getDescriptions()));
+			for (SwarmStationType elt : obj.getAllStationType()) {
+				buffer.write(String.format("%s%n", elt.toString()));
+			}
+
+			buffer.write(String.format("%s%n", SwarmPlaceEdge.getDescriptions()));
+			for (SwarmPlaceEdge elt : obj.getAllPlaceEdge()) {
+				buffer.write(String.format("%s%n", elt.toString()));
+			}
+			
+			buffer.write(String.format("%s%n", SwarmTimeEdge.getDescriptions()));
+			for (SwarmTimeEdge elt : obj.getAllTimeEdge()) {
+				buffer.write(String.format("%s%n", elt.toString()));
+			}
+			buffer.flush();
+
+		} catch (IOException ex) {
+			throw ex;
+		}finally {
+			directoryPathScenarioModell=null;
+			pathScenarioModell=null;
+		}
+	}
+	
+	/**
+	 * For each agent, this method creates a file with its initial belief.   
+	 * @param aspPath the path to the created file.
+	 * @return true when all files will be successfully created, and false otherwise.
+	 * @throws Exception when unless one file doesn't exist.
+	 */	
 	protected boolean createAgentAsp(Path aspPath) throws Exception{
 		if(aspPath==null)
 			return false;
@@ -180,7 +231,11 @@ public final class BDIParserUtils implements BDIParser {
 		return true;
 	}
 	
-	
+	/**
+	 * 
+	 * @param strategieType
+	 * @throws Exception
+	 */
 	protected void createKReaturesConfigFile(AgStrategie strategieType) throws Exception {
 		if (obj == null)
 			throw new SwarmException("Null pointer exception");

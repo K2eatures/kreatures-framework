@@ -41,7 +41,7 @@ public class KReaturesEnvironment  {
 	private boolean ready = false;
 	
 	/** a map of entity ids to the entity references */
-	private Map<Long, Entity> entities = new HashMap<Long, Entity>();
+	private Map<Long, Entity> entities = new HashMap<>();
 	
 	/** the behavior of the environment, allows different communication protocols and external simulations */
 	private EnvironmentBehavior behavior;
@@ -122,8 +122,8 @@ public class KReaturesEnvironment  {
 	 * @param name		unique name of the agent.
 	 * @return			Reference to the agent called 'name', if no agent with the given name exists null is returned.
 	 */
-	public AgentAbstract getAgentByName(String name) {
-		return agentMap.get(name);
+	public AgentAbstract getAgentByName(String agentName) {
+		return agentMap.get(agentName);
 	}
 	
 	/**

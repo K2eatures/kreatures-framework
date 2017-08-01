@@ -150,6 +150,24 @@
 					</execution>
 
 					<execution>
+
+						<id>Copy Environment-Features</id>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<phase>process-resources</phase>
+						<configuration>
+							<outputDirectory>${basedir}/target/envfeatures/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/envfeatures</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+
+					<execution>
 						<id>Copy Plugin-Files</id>
 						<goals>
 							<goal>copy-resources</goal>

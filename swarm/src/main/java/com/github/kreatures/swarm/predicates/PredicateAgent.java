@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 /**
  * Agent(AgentName,AgentType,freq,nec,cap).
  * 
- * @author donfack
+ * @author Cedric Perez Donfack
  *
  */
 

@@ -19,8 +19,8 @@
    </operation-set>
    <component>com.github.kreatures.core.logic.Desires</component>
    <component>com.github.kreatures.core.PlanComponent</component>
-   <component>com.github.kreatures.swarm.components.SwarmMappingGeneric</component>
-   <component>com.github.kreatures.swarm.components.StatusAgentComponents</component>
+<!--   <component>com.github.kreatures.swarm.components.SwarmMappingGeneric</component>
+   <component>com.github.kreatures.swarm.components.StatusAgentComponents</component> -->
    <description></description>
    <category></category>
 </agent-configuration>

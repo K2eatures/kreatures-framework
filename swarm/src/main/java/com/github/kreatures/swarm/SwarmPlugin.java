@@ -12,7 +12,7 @@ import org.simpleframework.xml.transform.Transform;
 import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.KReaturesPaths;
 import com.github.kreatures.core.KReaturesPluginAdapter;
-import com.github.kreatures.core.AgentComponent;
+//import com.github.kreatures.core.AgentComponent;
 import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.EnvironmentBehavior;
 import com.github.kreatures.core.operators.BaseOperator;
@@ -29,8 +29,8 @@ import com.github.kreatures.swarm.beliefbase.SwarmTranslator;
 import com.github.kreatures.swarm.beliefbase.SwarmAspChangeBeliefs;
 import com.github.kreatures.swarm.beliefbase.SwarmAspReasoner;
 import com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator;
-import com.github.kreatures.swarm.components.StatusAgentComponents;
-import com.github.kreatures.swarm.components.SwarmMappingGeneric;
+//import com.github.kreatures.swarm.components.StatusAgentComponents;
+//import com.github.kreatures.swarm.components.SwarmMappingGeneric;
 import com.github.kreatures.swarm.operators.SwarmExecuteOperator;
 import com.github.kreatures.swarm.operators.SwarmIntentionUpdateOperator;
 import com.github.kreatures.swarm.operators.SwarmGenerateOptionsOperator;
@@ -80,21 +80,21 @@ public class SwarmPlugin extends KReaturesPluginAdapter {
 	
 	@Override
 	public List<Class<? extends EnvironmentBehavior>> getEnvironmentBehaviors() {
-		List<Class<? extends EnvironmentBehavior>> swarmBehaviors = new ArrayList<Class<? extends EnvironmentBehavior>>();
+		List<Class<? extends EnvironmentBehavior>> swarmBehaviors = new ArrayList<>();
 		swarmBehaviors.add(SwarmBehavior.class);
 		return swarmBehaviors;
 	}
 
 	@Override
 	public List<Class<? extends BaseTranslator>> getTranslatorImpl() {
-		List<Class<? extends BaseTranslator>> translators = new ArrayList<Class<? extends BaseTranslator>>();
+		List<Class<? extends BaseTranslator>> translators = new ArrayList<>();
 		translators.add(SwarmTranslator.class);
 		return translators;
 	}
 	
 	@Override
 	public List<Class<? extends BaseOperator>> getOperators() {
-		List<Class<? extends BaseOperator>> operators = new ArrayList<Class<? extends BaseOperator>>();
+		List<Class<? extends BaseOperator>> operators = new ArrayList<>();
 		operators.add(SwarmGenerateOptionsOperator.class);
 		operators.add(SwarmIntentionUpdateOperator.class);
 		operators.add(SwarmSubgoalGenerationOperator.class);
@@ -104,27 +104,28 @@ public class SwarmPlugin extends KReaturesPluginAdapter {
 	}
 	@Override
 	public List<Class<? extends BaseBeliefbase>> getBeliefbaseImpl() {
-		List<Class<? extends BaseBeliefbase>> reval = new LinkedList<Class<? extends BaseBeliefbase>>();
+		List<Class<? extends BaseBeliefbase>> reval = new LinkedList<>();
 		reval.add(FolBeliefbase.class);
 		return reval;
 	}
 	@Override
 	public List<Class<? extends BaseChangeBeliefs>> getChangeImpl() {
-		List<Class<? extends BaseChangeBeliefs>> reval = new LinkedList<Class<? extends BaseChangeBeliefs>>();
+		List<Class<? extends BaseChangeBeliefs>> reval = new LinkedList<>();
 		reval.add(SwarmAspChangeBeliefs.class);
 		return reval;
 	}
+	
 	@Override
 	public List<Class<? extends BaseReasoner>> getReasonerImpl() {
-		List<Class<? extends BaseReasoner>> reval = new LinkedList<Class<? extends BaseReasoner>>();
+		List<Class<? extends BaseReasoner>> reval = new LinkedList<>();
 		reval.add(SwarmAspReasoner.class);
 		return reval;
 	}
-	@Override
-	public List<Class<? extends AgentComponent>> getAgentComponentImpl() {
-		List<Class<? extends AgentComponent>> reval = new ArrayList<>();
-		reval.add(SwarmMappingGeneric.class);
-		reval.add(StatusAgentComponents.class);
-		return reval;
-	}
+//	@Override
+//	public List<Class<? extends AgentComponent>> getAgentComponentImpl() {
+//		List<Class<? extends AgentComponent>> reval = new ArrayList<>();
+//		reval.add(SwarmMappingGeneric.class);
+//		reval.add(StatusAgentComponents.class);
+//		return reval;
+//	}
 }

@@ -109,8 +109,8 @@ public class AspBeliefbase extends BaseBeliefbase {
 
 	@Override
 	public List<String> getAtomsAsStringList() {
-		List<String> facts = new LinkedList<String>();
-		List<String> rules = new LinkedList<String>();
+		List<String> facts = new LinkedList<>();
+		List<String> rules = new LinkedList<>();
 		
 		for(Rule r : program) {
 			if(r.isFact())

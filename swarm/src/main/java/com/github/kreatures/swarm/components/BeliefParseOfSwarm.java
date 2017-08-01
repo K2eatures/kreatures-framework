@@ -20,7 +20,9 @@ import com.github.kreatures.swarm.serialize.SwarmTimeEdgeConfig;
 import com.github.kreatures.swarm.serialize.SwarmVisitEdgeConfig;
 
 /**
- * @author donfack
+ * This Class takes all informations about a scenariomodel and puts it more collections objects.
+ * hereby each komponents corresponds to a collection's object. 
+ * @author Cedric Perez Donfack
  *
  */
 public class BeliefParseOfSwarm implements XmlToBeliefBase {
@@ -83,14 +85,12 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 	
 	public BeliefParseOfSwarm(Path path) throws SwarmException {
 		SwarmConfig scenario=new SwarmConfigDefault().createSwarmConfig(path);
-		
-		
-		
+
 		if (scenario == null)
-			throw new SwarmException("Null pointer exception");
+			throw new SwarmException("USER DEFINED: Null pointer exception");
 		
 		if (scenario.getListPerspective().isEmpty())
-			throw new SwarmException("There aren't elements into the list");
+			throw new SwarmException("USER DEFINED: There aren't elements into the list");
 		
 		List<SwarmException> catchException=new ArrayList<>(1);
 		

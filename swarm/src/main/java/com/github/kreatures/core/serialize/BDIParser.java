@@ -1,14 +1,9 @@
 package com.github.kreatures.core.serialize;
 
-
-
-import com.github.kreatures.core.util.Pair;
-import com.github.kreatures.swarm.components.SwarmComponents;
-
 /**
  * The BDIParser provide methods for generating the agents knowledge given a AbstractSwarm scenario.
  *  
- * @author donfack
+ * @author Cedric Perez Donfack
  *
  */
 

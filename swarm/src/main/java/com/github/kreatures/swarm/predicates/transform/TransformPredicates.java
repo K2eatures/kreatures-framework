@@ -1,11 +1,9 @@
 package com.github.kreatures.swarm.predicates.transform;
 
 import com.github.kreatures.core.serialize.transform.FolFormulaTransform;
-import com.github.kreatures.serialize.asp.DLPAtomTransform;
 import com.github.kreatures.swarm.predicates.SwarmPredicate;
 
 import net.sf.tweety.logics.fol.syntax.FolFormula;
-import net.sf.tweety.lp.asp.syntax.DLPAtom;
 
 public class TransformPredicates {
 
