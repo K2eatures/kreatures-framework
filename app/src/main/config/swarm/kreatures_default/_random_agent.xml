@@ -1,25 +1,28 @@
 <agent-configuration>
-   <name>AbstractSwarm</name>
+   <name>Agent from AbstractSwarm</name>
    <cycle-script source="config/swarm/kreatures_default/_cycle.xml"/>
-   <operation-set operation-type="GeneratesOptions">
+   <description></description>
+   <category></category>
+   <operation-set operation-type="GeneratesOptionsKR">
       <default-operator-cls>com.github.kreatures.swarm.operators.SwarmGenerateOptionsOperator</default-operator-cls>
    </operation-set>
-   <operation-set operation-type="IntentionsUpdate">
+   <operation-set operation-type="EvaluationOptionsKR">
+      <default-operator-cls>com.github.kreatures.swarm.operators.SwarmEvaluationOptionsOperator</default-operator-cls>
+   </operation-set>
+   <operation-set operation-type="IntentionsUpdateKR">
       <default-operator-cls>com.github.kreatures.swarm.operators.SwarmIntentionUpdateOperator</default-operator-cls>
    </operation-set>
-   <operation-set operation-type="SubgoalsGeneration">
+   <operation-set operation-type="SubgoalsGenerationKR">
       <default-operator-cls>com.github.kreatures.swarm.operators.SwarmSubgoalGenerationOperator</default-operator-cls>
    </operation-set>
-   <operation-set operation-type="ExecuteAction">
+   <operation-set operation-type="ExecuteActionKR">
       <default-operator-cls>com.github.kreatures.swarm.operators.SwarmExecuteOperator</default-operator-cls>
    </operation-set>
-   <operation-set operation-type="BeliefsUpdate">
+    <operation-set operation-type="BeliefsUpdateKR">
       <default-operator-cls>com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator</default-operator-cls>
    </operation-set>
    <component>com.github.kreatures.core.logic.Desires</component>
    <component>com.github.kreatures.core.PlanComponent</component>
 <!--   <component>com.github.kreatures.swarm.components.SwarmMappingGeneric</component>
    <component>com.github.kreatures.swarm.components.StatusAgentComponents</component> -->
-   <description></description>
-   <category></category>
 </agent-configuration>

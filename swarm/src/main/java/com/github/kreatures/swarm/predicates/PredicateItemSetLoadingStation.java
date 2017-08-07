@@ -6,7 +6,12 @@ package com.github.kreatures.swarm.predicates;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.kreatures.core.Perception;
+
+import net.sf.tweety.logics.fol.syntax.FolFormula;
+
 /**
+ * %ItemSetLoadingStation(StationTypeNameOut,StationNameIn,ItemNumber)
  * @author donfack
  *
  */
@@ -16,8 +21,32 @@ public class PredicateItemSetLoadingStation extends SwarmPredicate {
 	private String stationInName;
 	private int itemNumber;
 
-	private static PredicateItemSetLoadingStation instance=new PredicateItemSetLoadingStation();
-	private PredicateItemSetLoadingStation() {
+	public PredicateItemSetLoadingStation(FolFormula desire) {
+		super(desire);
+		createInstance(desire);
+	}
+
+	public PredicateItemSetLoadingStation(FolFormula desire, Perception reason) {
+		super(desire, reason);
+		createInstance(desire);
+	}
+
+	public PredicateItemSetLoadingStation(PredicateItemSetLoadingStation other) {
+		super(other);
+		this.stationOutTypeName=other.stationOutTypeName;
+		this.stationInName=other.stationInName;
+		this.itemNumber=other.itemNumber;
+	}	
+	
+	@Override
+	public PredicateItemSetLoadingStation clone() {
+		return new PredicateItemSetLoadingStation(this);
+	}
+	
+	@Override
+	public int hashCode() {
+		return (super.hashCode() +
+				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
 	}
 
 	public String getStationOutTypeName() {
@@ -51,31 +80,18 @@ public class PredicateItemSetLoadingStation extends SwarmPredicate {
 	public String toString() {
 		return String.format("ItemSetLoadingStation(%s,%s,%d).", stationOutTypeName, stationInName, itemNumber);
 	}
-
-	@Override
-	public String getPredicatType() {
-		return "ItemSetLoadingStation";
-	}
-
-	public static PredicateItemSetLoadingStation getInstance(String fact){
-		return instance.createInstance(fact);
-	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public PredicateItemSetLoadingStation createInstance(String fact) {
-		PredicateItemSetLoadingStation predicate=null;
+	public void createInstance(FolFormula atom) {
+//		PredicateItemSetLoadingStation predicate=null;
 		Pattern pattern=Pattern.compile("ItemSetLoadingStation[(](\\w+),(\\w+),(\\d+)[)].");
-		Matcher matcher=pattern.matcher(fact);
+		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
-			predicate=new PredicateItemSetLoadingStation();
-			predicate.stationInName=matcher.group(1);
-			predicate.stationOutTypeName=matcher.group(2);
-			predicate.itemNumber=Integer.parseInt(matcher.group(3));
-		
+//			predicate=new PredicateItemSetLoadingStation();
+			this.stationInName=matcher.group(1);
+			this.stationOutTypeName=matcher.group(2);
+			this.itemNumber=Integer.parseInt(matcher.group(3));
 		}
-		
-		return predicate;
 	}
 	
 	@Override

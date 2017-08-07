@@ -6,6 +6,10 @@ package com.github.kreatures.swarm.predicates;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.kreatures.core.Perception;
+
+import net.sf.tweety.logics.fol.syntax.FolFormula;
+
 /**
  * %TimeEdgeState(NameWithTimeEdge,TypeNameWithTimeEdge,NameVisited,TypeNameVisited,Type,
  * CountTick,IsWaiting,IsReady,IsFinish). 
@@ -23,13 +27,39 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 	private boolean isReady;
 	private boolean isFinish;
 	
-	private static PredicateTimeEdgeState instance=new PredicateTimeEdgeState();
+	public PredicateTimeEdgeState(FolFormula desire) {
+		super(desire);
+		createInstance(desire);
+	}
+
+	public PredicateTimeEdgeState(FolFormula desire, Perception reason) {
+		super(desire, reason);
+		createInstance(desire);
+	}
+
+	public PredicateTimeEdgeState(PredicateTimeEdgeState other) {
+		super(other);
+		this.name=other.name;
+		this.typeName=other.typeName;
+		this.visitorName=other.visitorName;
+		this.visitorTypeName=other.visitorTypeName;
+		this.compType=other.compType;
+		this.tick=other.tick;
+		this.isWaiting=other.isWaiting;
+		this.isReady=other.isReady;
+		this.isFinish=other.isFinish;
+		
+	}	
 	
-	/**
-	 * 
-	 */
-	private PredicateTimeEdgeState() {	
-			
+	@Override
+	public PredicateTimeEdgeState clone() {
+		return new PredicateTimeEdgeState(this);
+	}
+	
+	@Override
+	public int hashCode() {
+		return (super.hashCode() +
+				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
 	}
 	
 	public String getName() {
@@ -103,32 +133,25 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 	public void setFinish(boolean isFinish) {
 		this.isFinish = isFinish;
 	}
-
-	public static PredicateTimeEdgeState getInstance(String fact){
-		return instance.createInstance(fact);
-	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public PredicateTimeEdgeState createInstance(String fact) {
-		PredicateTimeEdgeState predicate=null;
+	public void createInstance(FolFormula atom) {
+		//PredicateTimeEdgeState predicate=null;
 		Pattern pattern=Pattern.compile("TimeEdgeState[(](\\w+),(\\w+),(\\w+),(\\w+),([01]),(\\d+),({true|false}),({true|false}),({true|false})[)].");
-		Matcher matcher=pattern.matcher(fact);
+		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
-			predicate=new PredicateTimeEdgeState();
-			predicate.name=matcher.group(1);
-			predicate.typeName=matcher.group(2);
-			predicate.visitorName=matcher.group(3);
-			predicate.visitorTypeName=matcher.group(4);
-			predicate.compType=Integer.parseInt(matcher.group(5));
-			predicate.tick=Integer.parseInt(matcher.group(6));
-			predicate.isWaiting=Boolean.parseBoolean(matcher.group(7));
-			predicate.isReady=Boolean.parseBoolean(matcher.group(8));
-			predicate.isFinish=Boolean.parseBoolean(matcher.group(9));
+			//predicate=new PredicateTimeEdgeState(atom);
+			this.name=matcher.group(1);
+			this.typeName=matcher.group(2);
+			this.visitorName=matcher.group(3);
+			this.visitorTypeName=matcher.group(4);
+			this.compType=Integer.parseInt(matcher.group(5));
+			this.tick=Integer.parseInt(matcher.group(6));
+			this.isWaiting=Boolean.parseBoolean(matcher.group(7));
+			this.isReady=Boolean.parseBoolean(matcher.group(8));
+			this.isFinish=Boolean.parseBoolean(matcher.group(9));
 			
 		}
-		
-		return predicate;
 	}
 	
 		/**
@@ -146,7 +169,7 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 
 	@Override
 	public String getPredicatType() {
-		return "TimeEdgeStatus";
+		return getFormulName();
 	}
 	
 	@Override

@@ -1,5 +1,5 @@
 <beliefbase-configuration>
-   <name>Abstract: ASP-DLV</name>
+   <name>AbstractSwarm: ASP-DLV</name>
    <reasoners>
       <default-operator-cls operation-type="BeliefOperator">com.github.kreatures.swarm.beliefbase.SwarmAspReasoner</default-operator-cls>
    </reasoners>

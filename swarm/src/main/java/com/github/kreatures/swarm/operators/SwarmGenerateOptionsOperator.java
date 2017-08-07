@@ -1,5 +1,6 @@
 package com.github.kreatures.swarm.operators;
 
+
 import java.util.Set;
 
 /**
@@ -8,18 +9,15 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.kreatures.core.NewAgent;
 import com.github.kreatures.core.asp.solver.SolverOptions;
-import com.github.kreatures.core.logic.FolBeliefbase;
 import com.github.kreatures.core.operators.BaseGenerateOptionsOperator;
-import com.github.kreatures.core.operators.parameters.BaseReasonerParameter;
 import com.github.kreatures.core.operators.parameters.OptionsParameter;
-
-import net.sf.tweety.logics.fol.syntax.FolFormula;
-
+import com.github.kreatures.swarm.basic.SwarmDesires;
 
 /**
  * 
- * @author donfack
+ * @author Cedric Perez Donfack
  *
  */
 
@@ -31,15 +29,25 @@ public class SwarmGenerateOptionsOperator extends BaseGenerateOptionsOperator {
 	@Override
 	protected Integer processImpl(OptionsParameter params) {
 		
-		FolBeliefbase folBB=(FolBeliefbase)params.getBaseBeliefbase();
+		NewAgent agent=(NewAgent)params.getAgent();
+		boolean obj=(Boolean)agent.getContext().get("evaluated");
+		int numberDesires=0;
+		if(!obj) {
+			/* The Desires are stations */
+			String filter=String.format("%s%s", SolverOptions.FILTER,SolverOptions.STATION);
+			agent.getContext().set("filter",filter);
+			return numberDesires;
+		}
 		
-		 String query=String.format("%s%s", SolverOptions.FILTER,SolverOptions.TIME_EDGE_WAITING);
-		 BaseReasonerParameter brParams=new BaseReasonerParameter(folBB,SolverOptions.NOFACTS,query);
-		 Set<FolFormula> result=folBB.infere(brParams);
+		Object objSwarmPredicate=agent.getContext().get("desires");
+		if(objSwarmPredicate!=null) {
+			numberDesires=((SwarmDesires)objSwarmPredicate).size();
+		}
 		
-		 LOG.info("SwarmBeliefsUpdateOperator ->"+result.toString());
 		
-		return 0;
+		 
+		
+		return numberDesires;
 	}
 	@Override
 	protected void prepare(OptionsParameter params) {

@@ -3,6 +3,10 @@ package com.github.kreatures.swarm.predicates;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.kreatures.core.Perception;
+
+import net.sf.tweety.logics.fol.syntax.FolFormula;
+
 /**
  *TODO
  *VisitEdge(agentName,AgentTypeName,StationName,StationTypeName,bold).
@@ -16,13 +20,38 @@ public class PredicateVisitEdge extends SwarmPredicate {
 	private String stationName;
 	private String stationTypeName;
 	private boolean bold;
-	private static PredicateVisitEdge instance=new PredicateVisitEdge();
-	/**
-	 * This constructor is use to make a copy of the object.
-	 * @param other object to copy
-	 */
-	private PredicateVisitEdge() {
+	/** Default Ctor: Initialize plan and atom with null */
+	protected PredicateVisitEdge() {
 	
+	}
+		
+	public PredicateVisitEdge(FolFormula desire) {
+		super(desire);
+		createInstance(desire);
+	}
+
+	public PredicateVisitEdge(FolFormula desire, Perception reason) {
+		super(desire, reason);
+		createInstance(desire);
+	}
+
+	public PredicateVisitEdge(PredicateVisitEdge other) {
+		super(other);
+		this.agentName=other.agentName;
+		this.agentTypeName=other.agentTypeName;
+		this.stationName=other.stationName;
+		this.stationTypeName=other.stationTypeName;
+	}	
+	
+	@Override
+	public PredicateVisitEdge clone() {
+		return new PredicateVisitEdge(this);
+	}
+	
+	@Override
+	public int hashCode() {
+		return (super.hashCode() +
+				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
 	}
 	
 	public String getAgentName() {
@@ -75,31 +104,22 @@ public class PredicateVisitEdge extends SwarmPredicate {
 
 	@Override
 	public String getPredicatType() {
-		return "VisitEdge";
+		return getFormulName();
 	}
 
-	public static PredicateVisitEdge getInstance(String fact){
-		return instance.createInstance(fact);
-	}
-	
-	@SuppressWarnings("unchecked")
 	@Override
-	public PredicateVisitEdge createInstance(String fact) {
-		PredicateVisitEdge predicate=null;
+	public void createInstance(FolFormula atom) {
+		//PredicateVisitEdge predicate=null;
 		Pattern pattern=Pattern.compile("VisitEdge[(](\\w+),(\\w+),(\\w+),(\\w+),({true|false})[)].");
-		Matcher matcher=pattern.matcher(fact);
+		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
-			predicate=new PredicateVisitEdge();
-			predicate.agentName=matcher.group(1);
-			predicate.agentTypeName=matcher.group(2);
-			predicate.stationName=matcher.group(3);
-			predicate.stationTypeName=matcher.group(4);
-			predicate.bold=Boolean.parseBoolean(matcher.group(5));
-			
-			
+			//predicate=new PredicateVisitEdge(atom);
+			this.agentName=matcher.group(1);
+			this.agentTypeName=matcher.group(2);
+			this.stationName=matcher.group(3);
+			this.stationTypeName=matcher.group(4);
+			this.bold=Boolean.parseBoolean(matcher.group(5));
 		}
-		
-		return predicate;
 	}
 	
 	@Override

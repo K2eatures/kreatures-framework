@@ -3,10 +3,15 @@ package com.github.kreatures.swarm.predicates;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.kreatures.core.Perception;
+
+import net.sf.tweety.logics.fol.syntax.FolFormula;
+
 /**
- * 
- * @author donfack
  * SwarmStation is the basis class and allows to create new generic station.
+ * Station(StationName,StattionType,freq,nec,space).
+ * @author donfack
+ * 
  *
  */
 
@@ -18,11 +23,33 @@ public class PredicateStation extends SwarmPredicate{
 	private int frequency;
 	private int necessity;
 	private int space;
-	private static PredicateStation instance=new PredicateStation();
-	private PredicateStation(){
-		
-	}
+
+	/** Default Ctor: Initialize plan and atom with null */
+	protected PredicateStation() {}
 	
+	public PredicateStation(FolFormula desire) {
+		super(desire);
+		createInstance(desire);
+	}
+
+	public PredicateStation(FolFormula desire, Perception reason) {
+		super(desire, reason);
+		createInstance(desire);
+	}
+
+	public PredicateStation(PredicateStation other) {
+		super(other);
+		this.name=other.name;
+		this.typeName=other.typeName;
+		this.frequency=other.frequency;
+		this.necessity=other.necessity;
+		this.space=other.space;
+	}	
+
+	@Override
+	public PredicateStation clone() {
+		return new PredicateStation(this);
+	}
 	
 	
 	public String getName() {
@@ -93,33 +120,31 @@ public class PredicateStation extends SwarmPredicate{
 		return String.format("Station(%s,%s,%d,%d,%d).",name, typeName,frequency,necessity,space);
 	}
 
-
+	@Override
+	public int hashCode() {
+		return (super.hashCode() +
+				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
+	}
 
 	@Override
 	public String getPredicatType() {
 		
-		return "Station";
-	}
-	public static PredicateStation getInstance(String fact){
-		return instance.createInstance(fact);
+		return getFormulName();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public PredicateStation createInstance(String fact) {
-		PredicateStation predicate=null;
-		Pattern pattern=Pattern.compile("Station[(](\\w+),(\\w+),(\\d+),(\\d+),(\\d+)[)].");
-		Matcher matcher=pattern.matcher(fact);
+	protected void createInstance(FolFormula atom) {
+		//PredicateStation predicate=null;
+		Pattern pattern=Pattern.compile("Station[(](\\w+),(\\w+),(\\d+),(\\d+),(\\d+)[)]");
+		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
-			predicate=new PredicateStation();
-			predicate.name=matcher.group(1);
-			predicate.typeName=matcher.group(2);
-			predicate.frequency=Integer.parseInt(matcher.group(3));
-			predicate.necessity=Integer.parseInt(matcher.group(4));
-			predicate.space=Integer.parseInt(matcher.group(5));
+			//predicate=new PredicateStation();
+			this.name=matcher.group(1);
+			this.typeName=matcher.group(2);
+			this.frequency=Integer.parseInt(matcher.group(3));
+			this.necessity=Integer.parseInt(matcher.group(4));
+			this.space=Integer.parseInt(matcher.group(5));
 		}
-		
-		return predicate;
 	}
 	
 	@Override

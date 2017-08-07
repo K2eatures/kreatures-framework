@@ -3,6 +3,10 @@ package com.github.kreatures.swarm.predicates;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.kreatures.core.Perception;
+
+import net.sf.tweety.logics.fol.syntax.FolFormula;
+
 /**
  * Agent(AgentName,AgentType,freq,nec,cap).
  * 
@@ -19,15 +23,35 @@ public class PredicateAgent extends SwarmPredicate {
 	private int frequency;
 	private int necessity;
 	private int capacity;
-	private static PredicateAgent instance =new PredicateAgent();
-	/**
-	 * This constructor is use to make a copy of the object.
-	 * 
-	 * @param other
-	 *            object to copy
-	 */
-	private PredicateAgent() {
+	
+	public PredicateAgent(FolFormula desire) {
+		super(desire);
+		createInstance(desire);
+	}
 
+	public PredicateAgent(FolFormula desire, Perception reason) {
+		super(desire, reason);
+		createInstance(desire);
+	}
+
+	public PredicateAgent(PredicateAgent other) {
+		super(other);
+		this.name=other.name;
+		this.typeName=other.typeName;
+		this.frequency=other.frequency;
+		this.necessity=other.necessity;
+		this.capacity=other.capacity;	
+	}	
+	
+	@Override
+	public PredicateAgent clone() {
+		return new PredicateAgent(this);
+	}
+	
+	@Override
+	public int hashCode() {
+		return (super.hashCode() +
+				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
 	}
 	
 	public String getName() {
@@ -70,10 +94,6 @@ public class PredicateAgent extends SwarmPredicate {
 		this.capacity = capacity;
 	}
 
-	public static PredicateAgent getInstance(String fact){
-		return instance.createInstance(fact);
-	}
-
 	/**
 	 * Agent(AgentName,AgentType,freq,nec,cap).
 	 */
@@ -83,28 +103,18 @@ public class PredicateAgent extends SwarmPredicate {
 	}
 
 	@Override
-	public String getPredicatType() {
-
-		return "Agent";
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public PredicateAgent createInstance(String fact) {
-		PredicateAgent agent=null;
+	public void createInstance(FolFormula atom) {
+//		PredicateAgent agent=null;
 		Pattern pattern=Pattern.compile("Agent[(](\\w+),(\\w+),(\\d+),(\\d+),(\\d+)[)].");
-		Matcher matcher=pattern.matcher(fact);
+		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
-			agent=new PredicateAgent();
-			agent.name=matcher.group(1);
-			agent.typeName=matcher.group(2);
-			agent.frequency=Integer.parseInt(matcher.group(3));
-			agent.necessity=Integer.parseInt(matcher.group(4));
-			agent.capacity=Integer.parseInt(matcher.group(5));
-			
+//			agent=new PredicateAgent();
+			this.name=matcher.group(1);
+			this.typeName=matcher.group(2);
+			this.frequency=Integer.parseInt(matcher.group(3));
+			this.necessity=Integer.parseInt(matcher.group(4));
+			this.capacity=Integer.parseInt(matcher.group(5));
 		}
-		
-		return agent;
 	}
 	
 	@Override

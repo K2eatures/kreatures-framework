@@ -11,6 +11,7 @@ import com.github.kreatures.core.CreateAgentAdapter;
 import com.github.kreatures.core.EnvironmentComponent;
 import com.github.kreatures.core.EnvironmentComponentDefault;
 import com.github.kreatures.core.KReaturesEnvironment;
+import com.github.kreatures.core.logic.ScenarioModelBeliefbase;
 import com.github.kreatures.swarm.basic.SwarmBehavior;
 
 public class SwarmSimulationListener implements  SimulationListener{
@@ -26,7 +27,8 @@ public class SwarmSimulationListener implements  SimulationListener{
 			EnvironmentComponent environmentComponent= new EnvironmentComponentDefault(env.getName());
 			environmentComponent.setScenariomodell(env.getName());
 			AbstractSwarms.getInstance().listEnvironmentComponent.add(environmentComponent);
-			LOG.info(environmentComponent.toString());
+//			LOG.info(environmentComponent.toString());
+			ScenarioModelBeliefbase.addInstance(env.getName());
 			return true;
 		}
 		return false;
@@ -61,10 +63,11 @@ public class SwarmSimulationListener implements  SimulationListener{
 		if(env.getAgentFactory() instanceof CreateAgent) {
 			env.setAgentFactory(new CreateAgentAdapter());
 			AbstractSwarms.getInstance().listEnvironmentComponent.removeIf(environmentComponent->{
-				boolean check=((EnvironmentComponentDefault) environmentComponent).getProjectName().equals(env.getName());
-				LOG.info(environmentComponent.toString()+"\n "+check);
-				return check;
+			boolean check=((EnvironmentComponentDefault) environmentComponent).getProjectName().equals(env.getName());
+//			LOG.info(environmentComponent.toString()+"\n "+check);
+			return check;
 			});
+			ScenarioModelBeliefbase.removeInstance(env.getName());
 		}
 	}
 

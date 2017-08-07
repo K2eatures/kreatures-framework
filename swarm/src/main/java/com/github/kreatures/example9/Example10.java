@@ -54,17 +54,17 @@ public class Example10 {
 	
 	public static void main(String... list) {
 		
-		try {
-//			Agent ag=new Agent("ok", new KReaturesEnvironment());
-//			NewAgent nag=(NewAgent) ag;
-			SwarmPredicate predicate=new SwarmPredicate();
-			PredicateAgent pagent=(PredicateAgent)predicate;
-			System.out.println(pagent.toString());
-		} catch (Exception e) {
-			
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+////			Agent ag=new Agent("ok", new KReaturesEnvironment());
+////			NewAgent nag=(NewAgent) ag;
+//			SwarmPredicate predicate=new SwarmPredicate();
+//			PredicateAgent pagent=(PredicateAgent)predicate;
+//			System.out.println(pagent.toString());
+//		} catch (Exception e) {
+//			
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 }

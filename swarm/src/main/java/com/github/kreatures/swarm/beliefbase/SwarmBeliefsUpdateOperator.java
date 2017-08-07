@@ -27,15 +27,11 @@ public class SwarmBeliefsUpdateOperator extends BaseBeliefsUpdateOperator {
 	protected BaseBeliefbase processImpl(PerceptionParameter objParameter) {
 		NewAgent nAgent = (NewAgent) objParameter.getAgent();
 		FolBeliefbase bb=(FolBeliefbase)objParameter.getBaseBeliefbase();
-		if (objParameter.getPerceptions() == null) {
+		if (objParameter.getPerceptions() == null || objParameter.getPerceptions().isEmpty()) {
 			nAgent.report("no Perceptions receive.");
 			return bb;
 		}
 
-		if (objParameter.getPerceptions().isEmpty()) {
-			nAgent.report("no Perceptions receive.");
-			return bb;
-		}
 		String msg=String.format("received Perceptions : %s",objParameter.getPerceptions());
 		LOG.info(msg);
 		nAgent.report(msg);
@@ -54,20 +50,16 @@ public class SwarmBeliefsUpdateOperator extends BaseBeliefsUpdateOperator {
 
 			if (obj.getFact() == null)
 				return false;
-
 			return true;
 		}).forEach(swarmPercept -> {
 			SwarmPerception obj = (SwarmPerception) swarmPercept;
 			try {
-				FolFormula fol = TransformPredicates.getPredicate(obj.getFact());
+				FolFormula fol = TransformPredicates.getLiteral(obj.getFact());
 				params.getBaseBeliefbase().addKnowledge(fol);
-
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		});
 	}
-
 }

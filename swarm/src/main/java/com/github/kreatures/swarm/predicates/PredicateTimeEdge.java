@@ -3,6 +3,10 @@ package com.github.kreatures.swarm.predicates;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.kreatures.core.Perception;
+
+import net.sf.tweety.logics.fol.syntax.FolFormula;
+
 /**
  * %TimeEdge(Name1,TypeName1,Name2,TypeName2,TimeType,IsDirected,ConnectionType,weight) 
  * @author donfack
@@ -18,14 +22,39 @@ public class PredicateTimeEdge extends SwarmPredicate{
 	private boolean directed;
 	private int conType;
 	private int weight;
-	private static PredicateTimeEdge instance=new PredicateTimeEdge();
 	
-	/**
-	 * This constructor is use to make a copy of the object.
-	 * @param other object to copy
-	 */
-	private PredicateTimeEdge(){
-				
+	public PredicateTimeEdge(FolFormula desire) {
+		super(desire);
+		createInstance(desire);
+	}
+
+	public PredicateTimeEdge(FolFormula desire, Perception reason) {
+		super(desire, reason);
+		createInstance(desire);
+	}
+
+	public PredicateTimeEdge(PredicateTimeEdge other) {
+		super(other);
+		this.firstName=other.firstName;
+		this.firstTypeName=other.firstTypeName;
+		this.secondName=other.secondName;
+		this.secondTypeName=other.secondTypeName;
+		this.timeType=other.timeType;
+		this.directed=other.directed;
+		this.conType=other.conType;
+		this.weight=other.weight;
+		
+	}	
+	
+	@Override
+	public PredicateTimeEdge clone() {
+		return new PredicateTimeEdge(this);
+	}
+	
+	@Override
+	public int hashCode() {
+		return (super.hashCode() +
+				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
 	}
 	
 	public String getFirstName() {
@@ -104,32 +133,25 @@ public class PredicateTimeEdge extends SwarmPredicate{
 	@Override
 	public String getPredicatType() {
 		
-		return "TimeEdge";
+		return getFormulName();
 	}
 
-	public static PredicateTimeEdge getInstance(String fact){
-		return instance.createInstance(fact);
-	}
-	
-	@SuppressWarnings("unchecked")
 	@Override
-	public PredicateTimeEdge createInstance(String fact) {
-		PredicateTimeEdge predicate=null;
+	public void createInstance(FolFormula atom) {
+		//PredicateTimeEdge predicate=null;
 		Pattern pattern=Pattern.compile("TimeEdge[(](\\w+),(\\w+),(\\w+),(\\w+),([01]),({true|false}),([0-3]),(\\d+)[)].");
-		Matcher matcher=pattern.matcher(fact);
+		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
-			predicate=new PredicateTimeEdge();
-			predicate.firstName=matcher.group(1);
-			predicate.firstTypeName=matcher.group(2);
-			predicate.secondName=matcher.group(3);
-			predicate.secondTypeName=matcher.group(4);
-			predicate.timeType=Integer.parseInt(matcher.group(5));
-			predicate.directed=Boolean.parseBoolean(matcher.group(6));
-			predicate.conType=Integer.parseInt(matcher.group(7));
-			predicate.weight=Integer.parseInt(matcher.group(8));
+			//predicate=new PredicateTimeEdge();
+			this.firstName=matcher.group(1);
+			this.firstTypeName=matcher.group(2);
+			this.secondName=matcher.group(3);
+			this.secondTypeName=matcher.group(4);
+			this.timeType=Integer.parseInt(matcher.group(5));
+			this.directed=Boolean.parseBoolean(matcher.group(6));
+			this.conType=Integer.parseInt(matcher.group(7));
+			this.weight=Integer.parseInt(matcher.group(8));
 		}
-		
-		return predicate;
 	}
 	
 	@Override

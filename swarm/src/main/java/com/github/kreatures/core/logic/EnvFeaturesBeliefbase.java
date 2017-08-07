@@ -7,19 +7,14 @@ import com.github.kreatures.core.operators.parameter.BeliefbasePluginParameter;
 import com.github.kreatures.core.util.Pair;
 
 import net.sf.tweety.logics.fol.syntax.FolFormula;
-import net.sf.tweety.lp.asp.syntax.Program;
 
-public class FolBeliefbase extends AspBeliefbase {
 
-	public FolBeliefbase() {
-	}
+public class EnvFeaturesBeliefbase extends AspBeliefbase{
 
-	public FolBeliefbase(AspBeliefbase other) {
+	public EnvFeaturesBeliefbase() {}
+	
+	public EnvFeaturesBeliefbase(AspBeliefbase other) {
 		super(other);
-	}
-	@Override
-	public FolBeliefbase clone() {
-		return new FolBeliefbase(this);
 	}
 
 	
@@ -29,4 +24,5 @@ public class FolBeliefbase extends AspBeliefbase {
 				.process(beliefbaseParams);
 		return reval.first;
 	}
+	
 }

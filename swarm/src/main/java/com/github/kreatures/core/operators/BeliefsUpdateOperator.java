@@ -5,6 +5,6 @@ import com.github.kreatures.core.operators.parameter.OperatorPluginParameter;
 
 public abstract class BeliefsUpdateOperator<TCaller extends AgentAbstract, IN extends OperatorPluginParameter, OUT>
 		extends Operator<TCaller, IN, OUT> {
-	public static final String OPERATION_TYPE = "BeliefsUpdate";
+	public static final String OPERATION_TYPE = "BeliefsUpdateKR";
 
 }

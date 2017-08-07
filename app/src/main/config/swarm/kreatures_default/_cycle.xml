@@ -1,22 +1,47 @@
 <asml-script name="AbstractSwarm">
-	<operation type="BeliefsUpdate">
+	<operation type="BeliefsUpdateKR">
 		<param name="information" value="$perception" />
 		<param name="basebeliefbase" value="$basebeliefbase" />
 		<output>basebeliefbase</output>
 	</operation>
-	<operation type="GeneratesOptions">
-	    <param name="basebeliefbase" value="$basebeliefbase" />
-	    <output>desires</output>	
-	</operation>
-	<operation type="IntentionsUpdate">
+	<!-- running is setting to true in order to allows, that the 
+	while started. -->
+	<assign name="running" value="TRUE" />
+	<!-- evaluated checked whether desires will be evaluted or not. 
+	it is setting to false in order to allows unless one evalution proccess. -->
+	<assign name="evaluated" value="FALSE" />
+	<while condition="$running==TRUE">
+		<!-- GeneratesOptionsKR generates all possible desires of a agent at that time. -->
+
+		<operation type="GeneratesOptionsKR">
+		    <param name="basebeliefbase" value="$basebeliefbase"/>
+		    <output>desiresNumber</output>	
+		</operation>
+		<conditional>
+			<if condition="$evaluated==FALSE">
+				<!-- EvaluationOptionsKR searchs from all possible desires of a agent at that time, which desires 
+				can be following by a agent without make the environment inconsistance. -->
+			 	<operation type="EvaluationOptionsKR">
+				    <param name="basebeliefbase" value="$basebeliefbase" />
+				    <output>evaluated</output>	
+				</operation>
+			</if> 
+			<else>
+			    <assign name="running" value="FALSE" />
+			</else>
+		</conditional>
+		<!--<assign name="searching" value="$changed" />-->
+	</while>
+	<operation type="IntentionsUpdateKR">
 		<param name="desires" value="$desires" />
 		<output>plan</output>	
 	</operation>
-	<operation type="SubgoalsGeneration">
+	<operation type="SubgoalsGenerationKR">
 		<param name="plan" value="$plan" />
 		<output>action</output>	
 	</operation>
-	<operation type="ExecuteAction">
+	<operation type="ExecuteActionKR">
 		<param name="action"  value="$action"/>
 	</operation>
 </asml-script>
+

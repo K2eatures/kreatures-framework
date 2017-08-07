@@ -8,6 +8,7 @@ import com.github.kreatures.core.operators.parameter.GenericOperatorParameter;
 import com.github.kreatures.core.operators.parameter.OperatorPluginParameter;
 import com.github.kreatures.swarm.Utility;
 import com.github.kreatures.swarm.basic.SwarmDesires;
+import com.github.kreatures.swarm.predicates.SwarmPredicate;
 
 public class FilterParameter extends OperatorPluginParameter {
 	
@@ -32,10 +33,12 @@ public class FilterParameter extends OperatorPluginParameter {
 		super.fromGenericParameter(param);
 		
 		Object obj=param.getParameter("desires");
-		if(obj==null || !(obj instanceof FilterParameter)) {
-			throw conversionException("desires", SwarmDesires.class);
-		}
-		
+		if(obj != null) {
+			if(!(obj instanceof SwarmDesires)) {
+				throw conversionException("desires", SwarmDesires.class);
+			}
+			this.desires= (SwarmDesires)obj;
+		}		
 	}
 	@Override
 	public boolean equals(Object otherObject) {

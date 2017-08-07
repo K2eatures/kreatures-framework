@@ -1,35 +1,67 @@
+############################### Erste Version #################################
 <asml-script name="AbstractSwarm">
-    <operation type="BeliefsUpdate">
-        <param name="information" value="$perception" />
-        <param name="beliefs" value="$beliefs" />
-	<output>beliefs</output>
-    </operation>
-     
-	<operation type="GeneratesOptions">
-	    <param name="perception" value="$perception" />
-	    <output>numberOfOption</output>
+	<operation type="BeliefsUpdate">
+		<param name="information" value="$perception" />
+		<param name="basebeliefbase" value="$basebeliefbase" />
+		<output>basebeliefbase</output>
 	</operation>
-	
+	<operation type="GeneratesOptions">
+	    <param name="basebeliefbase" value="$basebeliefbase"/>
+	    <output>desires</output>	
+	</operation>
+ 	<operation type="EvaluationOptions">
+	    <param name="basebeliefbase" value="$basebeliefbase" />
+	    <output>running</output>	
+	</operation>
+	<operation type="IntentionsUpdate">
+		<param name="desires" value="$desires" />
+		<output>plan</output>	
+	</operation>
+	<operation type="SubgoalsGeneration">
+		<param name="plan" value="$plan" />
+		<output>action</output>	
+	</operation>
+	<operation type="ExecuteAction">
+		<param name="action"  value="$action"/>
+	</operation>
+</asml-script>
+############################### zweite Version #################################
+
+<asml-script name="AbstractSwarm">
+	<operation type="BeliefsUpdate">
+		<param name="information" value="$perception" />
+		<param name="basebeliefbase" value="$basebeliefbase" />
+		<output>basebeliefbase</output>
+	</operation>
 	<assign name="running" value="TRUE" />
 	<while condition="$running==TRUE">
-		
-		<operation type="IntentionsUpdate">
-		    <param name="plan" value="$plan" />
-	    	<output>action</output>
+		<operation type="GeneratesOptionsKR">
+		    <param name="basebeliefbase" value="$basebeliefbase"/>
+		    <output>desires</output>	
 		</operation>
-		  
 		<conditional>
-			<if condition="$action==null">
-			 	<operation type="SubgoalsGeneration">
-			 	    <param name="plan" value="$plan" />
-			 	    <output>running</output>
-			 	</operation>
+			<if condition="$desires==null">
+			 	<operation type="EvaluationOptionsKR">
+				    <param name="basebeliefbase" value="$basebeliefbase" />
+				    <output>running</output>	
+				</operation>
 			</if> 
 			<else>
 			    <assign name="running" value="FALSE" />
 			</else>
 		</conditional>
+		<assign name="searching" value="$changed" />
 	</while>
-	
-	<execute action="$action" />
+	<operation type="IntentionsUpdateKR">
+		<param name="desires" value="$desires" />
+		<output>plan</output>	
+	</operation>
+	<operation type="SubgoalsGenerationKR">
+		<param name="plan" value="$plan" />
+		<output>action</output>	
+	</operation>
+	<operation type="ExecuteAction">
+		<param name="action"  value="$action"/>
+	</operation>
 </asml-script>
+

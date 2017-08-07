@@ -1,4 +1,10 @@
 package com.github.kreatures.swarm;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import net.sf.tweety.logics.fol.syntax.FolFormula;
+
 /**
  * This is a list of utility methods for KReatures Project.
  * @author donfack
@@ -25,6 +31,19 @@ public final class Utility {
 		}
 		
 		return hashCodeSuperClass*7;
+	}
+	
+	/**
+	 * @param desire a formula as option for a agent.
+	 * @return the name of the given formula
+	 */
+	public static String getFormulName(FolFormula desire){
+		Pattern pattern=Pattern.compile("(\\w*)[(]");
+		Matcher matcher=pattern.matcher(desire.toString());
+		if(matcher.find()) {
+			return matcher.group(1);
+		}
+		return null;
 	}
 
 }

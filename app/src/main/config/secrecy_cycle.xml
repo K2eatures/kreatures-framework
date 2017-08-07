@@ -16,7 +16,6 @@
 		    <param name="plan" value="$plan" />
 	    	<output>action</output>
 		</operation>
-		  
 		<conditional>
 			<if condition="$action==null">
 			 	<operation type="SubgoalGeneration">

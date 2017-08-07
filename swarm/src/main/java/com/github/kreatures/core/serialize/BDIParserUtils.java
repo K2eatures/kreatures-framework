@@ -2,6 +2,7 @@ package com.github.kreatures.core.serialize;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -9,11 +10,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.simpleframework.xml.core.Persister;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.github.kreatures.core.KReaturesConst._KREaturesAgentCycleConfigGFile;
 import static com.github.kreatures.core.KReaturesConst._KREaturesRandomAgentConfigFile;
@@ -21,7 +25,6 @@ import static com.github.kreatures.core.KReaturesConst._KREaturesHeuristicAgentC
 import static com.github.kreatures.core.KReaturesConst._KREaturesBeliefsConfigFile;
 import static com.github.kreatures.core.KReaturesConst._KReaturesSwarmCategorie;
 import static com.github.kreatures.core.KReaturesConst._KREaturesSimulationConfigSuffixName;
-import static com.github.kreatures.core.KReaturesConst._KREaturesSwarmStrategieFile;
 
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_AGENTS_CONFIG_DIR;
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_BELIEFS_CONFIG_DIR;
@@ -58,6 +61,8 @@ import com.github.kreatures.swarm.exceptions.SwarmException;
  * 
  */
 public final class BDIParserUtils implements BDIParser {
+	/** reference to the logging facility */
+	private static Logger LOG = LoggerFactory.getLogger(BDIParserUtils.class);
 
 	private XmlToBeliefBase obj;
 	/**
@@ -253,6 +258,7 @@ public final class BDIParserUtils implements BDIParser {
 		target = Paths.get(KREATURES_CONFIG_DIR.toString())
 				.resolve(String.format("%s%s", obj.getName(), _KREaturesAgentCycleConfigGFile));
 
+		String cyclePath=target.toString(); //TODO must be delete is reflection is resolve
 		Files.copy(source, target, StandardCopyOption.COPY_ATTRIBUTES,REPLACE_EXISTING);
 		
 		cycleScript.source=target.toFile();
@@ -282,16 +288,55 @@ public final class BDIParserUtils implements BDIParser {
 			target = Paths.get(KREATURES_AGENTS_CONFIG_DIR.toString())
 					.resolve(String.format("%s%s", obj.getName(), _KREaturesHeuristicAgentConfigFile));
 		}
-		
-		AgentConfigReal agentConfigReal=persister.read(AgentConfigReal.class, source.toFile());
-		agentConfigReal.name=obj.getName();
-		agentConfigReal.description=obj.getDescription();
-		agentConfigReal.cylceScript=cycleScript;
-		persister.write(agentConfigReal, target.toFile());
-		agentConfigReal.cylceScript=null;
-		cycleScript=null;
+		createAgentConfigFile(source,target,cyclePath,obj.getName(),obj.getDescription());
+		//TODO All the following comments have to be use when the reflection problem will be resolve.
+//		AgentConfigReal agentConfigReal=persister.read(AgentConfigReal.class, source.toFile());
+//		agentConfigReal.name=obj.getName();
+//		agentConfigReal.description=obj.getDescription();
+//		agentConfigReal.cylceScript=cycleScript;
+//		persister.write(agentConfigReal, target.toFile());
+//		agentConfigReal.cylceScript=null;
+//		cycleScript=null;
 //		Files.copy(source, target, StandardCopyOption.COPY_ATTRIBUTES,REPLACE_EXISTING);
 
+	}
+	/**
+	 * Create the agent config file of each KReatures project. 
+	 * @param sourceAgentConfigPath the path where the defeault kreatures agent config is located.
+	 * @param targetAgentConfigPath the path where the agent config of the load project will be located.
+	 * @param cyclePath the path the cycle config file
+	 * @param projectName the name of the agents which use this agent config file.
+	 * @param description the description of the agents which use this agent config file.
+	 * @throws Exception throws when there are some error by opening, writing or reading a file. 
+	 */
+	
+	protected void createAgentConfigFile(Path sourceAgentConfigPath,Path targetAgentConfigPath, String cyclePath,String projectName,String description) throws Exception {
+		Files.deleteIfExists(targetAgentConfigPath);
+		try(BufferedWriter bufferW=Files.newBufferedWriter(targetAgentConfigPath,StandardOpenOption.CREATE);
+				BufferedReader bufferR=Files.newBufferedReader(sourceAgentConfigPath);){
+			String line=null;
+			while((line=bufferR.readLine())!=null) {
+				if(line.contains("<cycle-script")) {
+					bufferW.write(String.format("<cycle-script source=\"%s\"/>%n", cyclePath));
+				}
+//				else if(line.contains("<name>")) {
+//					bufferW.write(String.format("<name>%s</name>%n", projectName));
+//				}
+				else if(line.contains("<description>")) {
+					bufferW.write(String.format("<description>%s</description>%n", description));
+				}
+//				else if(line.contains("<category>")) {
+//					bufferW.write(String.format("<category>%s</category>", category));
+//				}
+				else{
+					bufferW.write(String.format("%s%n", line));
+				}
+			}
+			bufferW.flush();
+		}catch(Exception ex) {
+			throw ex;
+		}
+		
 	}
 
 	protected Collection<AgentInstance> createAgentInstanceConfig(AgStrategie strategie) {

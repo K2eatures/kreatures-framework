@@ -29,6 +29,7 @@ import com.github.kreatures.swarm.beliefbase.SwarmTranslator;
 import com.github.kreatures.swarm.beliefbase.SwarmAspChangeBeliefs;
 import com.github.kreatures.swarm.beliefbase.SwarmAspReasoner;
 import com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator;
+import com.github.kreatures.swarm.operators.SwarmEvaluationOptionsOperator;
 //import com.github.kreatures.swarm.components.StatusAgentComponents;
 //import com.github.kreatures.swarm.components.SwarmMappingGeneric;
 import com.github.kreatures.swarm.operators.SwarmExecuteOperator;
@@ -96,6 +97,7 @@ public class SwarmPlugin extends KReaturesPluginAdapter {
 	public List<Class<? extends BaseOperator>> getOperators() {
 		List<Class<? extends BaseOperator>> operators = new ArrayList<>();
 		operators.add(SwarmGenerateOptionsOperator.class);
+		operators.add(SwarmEvaluationOptionsOperator.class);
 		operators.add(SwarmIntentionUpdateOperator.class);
 		operators.add(SwarmSubgoalGenerationOperator.class);
 		operators.add(SwarmExecuteOperator.class);

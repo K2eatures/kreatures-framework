@@ -5,5 +5,5 @@ import com.github.kreatures.core.operators.parameter.OperatorPluginParameter;
 
 public abstract class ExecuteOperator<TCaller extends AgentAbstract, IN extends OperatorPluginParameter, OUT> extends Operator<TCaller, IN, OUT> {
 
-	public static final String OPERATION_TYPE = "ExecuteAction";
+	public static final String OPERATION_TYPE = "ExecuteActionKR";
 }

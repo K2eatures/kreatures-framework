@@ -33,8 +33,11 @@ public class SubGoalParameter extends OperatorPluginParameter {
 		super.fromGenericParameter(param);
 		
 		Object obj=param.getParameter("plan");
-		if(obj==null || !(obj instanceof SubGoalParameter)) {
-			throw conversionException("plan", PlanComponent.class);
+		if(obj != null) {
+			if(!(obj instanceof PlanComponent)) {
+				throw conversionException("plan", PlanComponent.class);
+			}
+			this.plan= (PlanComponent)obj;	
 		}
 		
 	}

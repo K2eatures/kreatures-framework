@@ -6,6 +6,10 @@ package com.github.kreatures.swarm.predicates;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.kreatures.core.Perception;
+
+import net.sf.tweety.logics.fol.syntax.FolFormula;
+
 
 /**
  * ItemSetLoadingAgent(AgentName,StationTypeName,ItemNumber).
@@ -19,10 +23,33 @@ public class PredicateItemSetLoadingAgent extends SwarmPredicate {
 	private String stationTypeName;
 	private int itemNumber;
 
-	private static PredicateItemSetLoadingAgent instance = new PredicateItemSetLoadingAgent();
+	public PredicateItemSetLoadingAgent(FolFormula desire) {
+		super(desire);
+		createInstance(desire);
+	}
 
-	private PredicateItemSetLoadingAgent() {
+	public PredicateItemSetLoadingAgent(FolFormula desire, Perception reason) {
+		super(desire, reason);
+		createInstance(desire);
+	}
 
+	public PredicateItemSetLoadingAgent(PredicateItemSetLoadingAgent other) {
+		super(other);
+		this.agentName=other.agentName;
+		this.stationTypeName=other.stationTypeName;
+		this.itemNumber=other.itemNumber;
+		
+	}	
+	
+	@Override
+	public PredicateItemSetLoadingAgent clone() {
+		return new PredicateItemSetLoadingAgent(this);
+	}
+	
+	@Override
+	public int hashCode() {
+		return (super.hashCode() +
+				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
 	}
 
 	public String getAgentName() {
@@ -49,25 +76,17 @@ public class PredicateItemSetLoadingAgent extends SwarmPredicate {
 		this.itemNumber = itemNumber;
 	}
 
-	public static PredicateItemSetLoadingAgent getInstance(String fact) {
-		return instance.createInstance(fact);
-	}
-
-	@SuppressWarnings("unchecked")
 	@Override
-	public PredicateItemSetLoadingAgent createInstance(String fact) {
-		PredicateItemSetLoadingAgent predicate = null;
+	public void createInstance(FolFormula atom) {
+//		PredicateItemSetLoadingAgent predicate = null;
 		Pattern pattern = Pattern.compile("ItemSetLoadingAgent[(](\\w+),(\\w+),(\\d+)[)].");
-		Matcher matcher = pattern.matcher(fact);
+		Matcher matcher = pattern.matcher(atom.toString());
 		if (matcher.find()) {
-			predicate = new PredicateItemSetLoadingAgent();
-			predicate.agentName = matcher.group(1);
-			predicate.stationTypeName = matcher.group(2);
-			predicate.itemNumber = Integer.parseInt(matcher.group(3));
-
+//			predicate = new PredicateItemSetLoadingAgent();
+			this.agentName = matcher.group(1);
+			this.stationTypeName = matcher.group(2);
+			this.itemNumber = Integer.parseInt(matcher.group(3));
 		}
-
-		return predicate;
 	}
 
 	/**
@@ -76,12 +95,6 @@ public class PredicateItemSetLoadingAgent extends SwarmPredicate {
 	@Override
 	public String toString() {
 		return String.format("ItemSetLoadingAgent(%s,%s,%d).", agentName, stationTypeName, itemNumber);
-	}
-
-	@Override
-	public String getPredicatType() {
-
-		return "ItemSetLoadingAgent";
 	}
 
 	@Override

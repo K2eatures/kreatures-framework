@@ -3,6 +3,10 @@ package com.github.kreatures.swarm.predicates;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.kreatures.core.Perception;
+
+import net.sf.tweety.logics.fol.syntax.FolFormula;
+
 
 
 /**
@@ -19,14 +23,38 @@ public class PredicatePlaceEdge extends SwarmPredicate {
 	private String secondTypeName;
 	private int weight;
 	private boolean directed;
-	private static PredicatePlaceEdge instance=new PredicatePlaceEdge();
-
-	/**
-	 * This constructor is use to make a copy of the object.
-	 * @param other object to copy
-	 */
-	public PredicatePlaceEdge(){
 	
+	
+	public PredicatePlaceEdge(FolFormula desire) {
+		super(desire);
+		createInstance(desire);
+	}
+
+	public PredicatePlaceEdge(FolFormula desire, Perception reason) {
+		super(desire, reason);
+		createInstance(desire);
+	}
+
+	public PredicatePlaceEdge(PredicatePlaceEdge other) {
+		super(other);
+		this.firstName=other.firstName;
+		this.firstTypeName=other.firstTypeName;
+		this.secondName=other.secondName;
+		this.secondTypeName=other.secondTypeName;
+		this.weight=other.weight;
+		this.directed=other.directed;
+		
+	}	
+	
+	@Override
+	public PredicatePlaceEdge clone() {
+		return new PredicatePlaceEdge(this);
+	}
+	
+	@Override
+	public int hashCode() {
+		return (super.hashCode() +
+				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
 	}
 	
 	
@@ -111,34 +139,26 @@ public class PredicatePlaceEdge extends SwarmPredicate {
 		return String.format("PlacedEdge(%s,%s,%s,%s,%d,%s).",firstName,firstTypeName,secondName,secondTypeName,weight,directed);
 	}
 
-
-
 	@Override
 	public String getPredicatType() {
 		
-		return "PlaceEdge";
-	}
-	public static PredicatePlaceEdge getInstance(String fact){
-		return instance.createInstance(fact);
+		return getFirstName();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public PredicatePlaceEdge createInstance(String fact) {
-		PredicatePlaceEdge predicate=null;
+	public void createInstance(FolFormula atom) {
+		//PredicatePlaceEdge predicate=null;
 		Pattern pattern=Pattern.compile("PlaceEdge[(](\\w+),(\\w+),(\\w+),(\\w+),(\\d+),({true|false})[)].");
-		Matcher matcher=pattern.matcher(fact);
+		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
-			predicate=new PredicatePlaceEdge();
-			predicate.firstName=matcher.group(1);
-			predicate.firstTypeName=matcher.group(2);
-			predicate.secondName=matcher.group(3);
-			predicate.secondTypeName=matcher.group(4);
-			predicate.weight=Integer.parseInt(matcher.group(5));
-			predicate.directed=Boolean.parseBoolean(matcher.group(6));
+			//predicate=new PredicatePlaceEdge();
+			this.firstName=matcher.group(1);
+			this.firstTypeName=matcher.group(2);
+			this.secondName=matcher.group(3);
+			this.secondTypeName=matcher.group(4);
+			this.weight=Integer.parseInt(matcher.group(5));
+			this.directed=Boolean.parseBoolean(matcher.group(6));
 		}
-		
-		return predicate;
 	}
 	
 	@Override

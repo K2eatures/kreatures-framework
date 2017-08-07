@@ -3,12 +3,13 @@ package com.github.kreatures.swarm.basic;
 import net.sf.tweety.logics.commons.syntax.Predicate;
 import net.sf.tweety.logics.fol.syntax.FOLAtom;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.github.kreatures.core.Desire;
 import com.github.kreatures.core.logic.Desires;
 import com.github.kreatures.swarm.Utility;
+import com.github.kreatures.swarm.predicates.SwarmPredicate;
 
 /**
  * 
@@ -42,22 +43,41 @@ public class SwarmDesires extends Desires {
 	/**
 	 * list of all the current options.
 	 */
-	private Collection<Desire> desires;
+	private Set<SwarmPredicate> desires;
 	
 	/** Default Ctor: Used for dynamic instantiation */
 	public SwarmDesires() {
-		desires=new ArrayList<>();
+		desires=new HashSet<>();
+	}
+	
+	/**
+	 *  Ctor: with given set of desires.
+	 * @param desires set of desires
+	 */
+	public SwarmDesires(Set<SwarmPredicate> desires) {
+		this.desires=desires;
 	}
 	
 	public void clearDesires() {
 		desires.clear();
 	}
 	
-	public void addDesire(Desire desire) {
+	public void addDesires(Set<SwarmPredicate> desires) {
+		desires.stream().forEach(desire->{
+			addDesire(desire);
+		});
+	}
+	
+	public int size() {
+		return desires.size();
+	}
+	
+	public void addDesire(SwarmPredicate desire) {
 		desires.add(desire);
 	}
 	
-	public void removeDesire(Desire desire) {
+	
+	public void removeDesire(SwarmPredicate desire) {
 		desires.remove(desire);
 	}
 	

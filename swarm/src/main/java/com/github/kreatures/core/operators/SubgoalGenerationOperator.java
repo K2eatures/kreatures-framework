@@ -6,6 +6,6 @@ import com.github.kreatures.core.operators.parameter.OperatorPluginParameter;
 
 public abstract class SubgoalGenerationOperator<TCaller extends AgentAbstract, IN extends OperatorPluginParameter, OUT>extends Operator<TCaller, IN, OUT> {
 
-	public static final String OPERATION_TYPE = "SubgoalsGeneration";
+	public static final String OPERATION_TYPE = "SubgoalsGenerationKR";
 
 }

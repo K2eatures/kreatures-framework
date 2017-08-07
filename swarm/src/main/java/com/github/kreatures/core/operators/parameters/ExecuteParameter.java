@@ -32,10 +32,12 @@ public class ExecuteParameter extends OperatorPluginParameter {
 		super.fromGenericParameter(param);
 		
 		Object obj=param.getParameter("action");
-		if(obj==null || !(obj instanceof SwarmAction)) {
-			throw conversionException("action",SwarmAction.class);
+		if(obj!=null) {
+			if(!(obj instanceof SwarmAction)) {
+				throw conversionException("action",SwarmAction.class);
+			}
+			this.action=(SwarmAction)obj;
 		}
-		this.action=(SwarmAction)obj;
 	}
 	
 	@Override
