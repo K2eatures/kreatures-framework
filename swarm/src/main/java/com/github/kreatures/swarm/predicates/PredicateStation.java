@@ -23,7 +23,10 @@ public class PredicateStation extends SwarmPredicate{
 	private int frequency;
 	private int necessity;
 	private int space;
-
+	/**
+	 * true when a station has a item attribut and false otherwise.
+	 */
+	private boolean item=false;
 	/** Default Ctor: Initialize plan and atom with null */
 	protected PredicateStation() {}
 	
@@ -111,6 +114,20 @@ public class PredicateStation extends SwarmPredicate{
 	}
 
 
+
+	/**
+	 * @return the item
+	 */
+	public boolean hasItem() {
+		return item;
+	}
+
+	/**
+	 * @param item the item to set
+	 */
+	public void setItem(boolean item) {
+		this.item = item;
+	}
 
 	/**
 	 * Station(StationName,StattionType,freq,nec,space).

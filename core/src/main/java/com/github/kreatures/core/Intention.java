@@ -74,7 +74,7 @@ public abstract class Intention implements SubgoalListener {
 	public abstract void onSubgoalFinished(Intention subgoal);
 
 	/**
-	 * returns true if this is an atomic intention, an intention which can pe
+	 * returns true if this is an atomic intention, an intention which can be
 	 * performed in one step
 	 */
 	public abstract boolean isAtomic();

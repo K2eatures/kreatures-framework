@@ -5,18 +5,22 @@ import java.util.regex.Pattern;
 
 import com.github.kreatures.core.Desire;
 import com.github.kreatures.core.Perception;
-import com.github.kreatures.swarm.predicates.SwarmPredicate;
 
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 
 public abstract class SwarmDesire extends Desire {
 	/**
+	 * define the main desire corresponding to this desire.
+	 * It is used to construct its plan.
+	 */
+	private MainDesire typeOfDesire=null;
+	
+	/**
 	 * predicate name of the tweety representation desire.
 	 */
 	private String formulName=null;
 	/** Default Ctor: Initialize plan and atom with null */
-	public SwarmDesire() {
-	}
+	public SwarmDesire() {}
 
 	public SwarmDesire(FolFormula desire) {
 		super(desire);
@@ -67,5 +71,21 @@ public abstract class SwarmDesire extends Desire {
 	public int hashCode() {
 		return (super.hashCode() +
 				(this.getFormulName() == null ? 0 : this.getFormulName().hashCode())) * 11;
+	}
+
+	/**
+	 * @return the corresponding main desire of this 
+	 * 			desire.
+	 */
+	public MainDesire getTypeOfDesire() {
+		return typeOfDesire;
+	}
+
+	/**
+	 * @param typeOfDesire is the corresponding main desire of this 
+	 * 						desire.
+	 */
+	public void setTypeOfDesire(MainDesire typeOfDesire) {
+		this.typeOfDesire = typeOfDesire;
 	}
 }

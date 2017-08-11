@@ -70,16 +70,10 @@ public class PredicateNecAgentStation extends SwarmPredicate {
 	}
 
 
-	public int getCountNec() {
-		return countNec;
+	public void incrementNec() {
+		countNec++;
 	}
-
-
-	public void setCountNec(int countNec) {
-		this.countNec = countNec;
-	}
-
-
+	
 	/**
 	 * NecAgentStation(AgentName,StationName,Nec). 
 	 */

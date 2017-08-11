@@ -7,9 +7,9 @@
 	<!-- running is setting to true in order to allows, that the 
 	while started. -->
 	<assign name="running" value="TRUE" />
-	<!-- evaluated checked whether desires will be evaluted or not. 
-	it is setting to false in order to allows unless one evalution proccess. -->
-	<assign name="evaluated" value="FALSE" />
+	<!-- evaluated checked whether desires will be evaluated or not. 
+	it is setting to false in order to allows unless one evaluation process. 
+	<assign name="evaluated" value="FALSE" /> -->
 	<while condition="$running==TRUE">
 		<!-- GeneratesOptionsKR generates all possible desires of a agent at that time. -->
 
@@ -18,12 +18,12 @@
 		    <output>desiresNumber</output>	
 		</operation>
 		<conditional>
-			<if condition="$evaluated==FALSE">
+			<if condition="$desiresNumber==0">
 				<!-- EvaluationOptionsKR searchs from all possible desires of a agent at that time, which desires 
 				can be following by a agent without make the environment inconsistance. -->
 			 	<operation type="EvaluationOptionsKR">
 				    <param name="basebeliefbase" value="$basebeliefbase" />
-				    <output>evaluated</output>	
+				    <output>running</output>	
 				</operation>
 			</if> 
 			<else>
@@ -32,14 +32,36 @@
 		</conditional>
 		<!--<assign name="searching" value="$changed" />-->
 	</while>
-	<operation type="IntentionsUpdateKR">
-		<param name="desires" value="$desires" />
-		<output>plan</output>	
-	</operation>
-	<operation type="SubgoalsGenerationKR">
-		<param name="plan" value="$plan" />
-		<output>action</output>	
-	</operation>
+	<!-- running is setting to true in order to allows, that the
+	while started. -->
+	<assign name="running" value="TRUE" />
+	<!-- checkAction search a next action which will be execute by the
+	execution operator. When action exists, it returns true and false otherwise. 
+	It consists to take a plan a search the next possible action. 
+	<assign name="checkAction" value="FALSE" />-->
+	<while condition="$running==TRUE">
+		<!-- IntentionsUpdateKR choices a desire whose plan will be used
+		by the SubgoalsGenerationKR operator to find the next action.-->
+
+		<operation type="IntentionsUpdateKR">
+			<param name="plan" value="$plan" />
+			<output>action</output>	
+		</operation>
+		<conditional>
+			<if condition="$action==null">
+				<!-- SubgoalsGenerationKR searchs from kown-how component the 
+				next possible action to be run. -->
+				<operation type="SubgoalsGenerationKR">
+					<param name="plan" value="$plan" />
+					<output>running</output>	
+				</operation>
+			</if> 
+			<else>
+			    <assign name="running" value="FALSE" />
+			</else>
+		</conditional>
+		<!--<assign name="searching" value="$changed" />-->
+	</while>
 	<operation type="ExecuteActionKR">
 		<param name="action"  value="$action"/>
 	</operation>

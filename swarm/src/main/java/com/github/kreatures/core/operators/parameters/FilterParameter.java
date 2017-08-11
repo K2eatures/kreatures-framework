@@ -2,29 +2,32 @@ package com.github.kreatures.core.operators.parameters;
 
 import javax.management.AttributeNotFoundException;
 
-import com.github.kreatures.core.AgentAbstract;
+import com.github.kreatures.core.PlanComponent;
 import com.github.kreatures.core.error.ConversionException;
 import com.github.kreatures.core.operators.parameter.GenericOperatorParameter;
 import com.github.kreatures.core.operators.parameter.OperatorPluginParameter;
+import com.github.kreatures.swarm.SwarmContextConst;
 import com.github.kreatures.swarm.Utility;
 import com.github.kreatures.swarm.basic.SwarmDesires;
-import com.github.kreatures.swarm.predicates.SwarmPredicate;
 
 public class FilterParameter extends OperatorPluginParameter {
-	
-	private SwarmDesires desires;
+	/** the actual working goals */
+	private PlanComponent currentPlan;
 
 	/** Default Ctor: Used for dynamic instantiation */
 	public FilterParameter() {}
 
-	public FilterParameter(AgentAbstract caller) {
-		super(caller);
-		desires=null;
+	public FilterParameter(PlanComponent component) {
+		super(component.getAgent());
+		this.currentPlan=component;
 	}
 	
-	public FilterParameter(AgentAbstract caller,SwarmDesires desires) {
-		super(caller);
-		this.desires=desires;
+	/** 
+	 * 
+	 * @return the PlanComponent of the calling Agent 
+	 */
+	public PlanComponent getActualPlan() {
+		return currentPlan;
 	}
 	
 	@Override
@@ -32,14 +35,15 @@ public class FilterParameter extends OperatorPluginParameter {
 			throws ConversionException, AttributeNotFoundException {
 		super.fromGenericParameter(param);
 		
-		Object obj=param.getParameter("desires");
+		Object obj=param.getParameter(SwarmContextConst._PLAN);
 		if(obj != null) {
-			if(!(obj instanceof SwarmDesires)) {
-				throw conversionException("desires", SwarmDesires.class);
+			if(!(obj instanceof PlanComponent)) {
+				throw conversionException(SwarmContextConst._PLAN, SwarmDesires.class);
 			}
-			this.desires= (SwarmDesires)obj;
+			this.currentPlan= (PlanComponent)obj;
 		}		
 	}
+	
 	@Override
 	public boolean equals(Object otherObject) {
 		if(otherObject==null || !(otherObject instanceof FilterParameter))	
@@ -47,10 +51,10 @@ public class FilterParameter extends OperatorPluginParameter {
 		
 		FilterParameter other=(FilterParameter)otherObject;
 		
-		if(other.desires!=null) {
-			if(!other.desires.equals(this.desires))
+		if(other.currentPlan!=null) {
+			if(!other.currentPlan.equals(this.currentPlan))
 				return false;
-		}else if(this.desires!=null) {
+		}else if(this.currentPlan!=null) {
 			return false;
 		}
 		
@@ -59,15 +63,11 @@ public class FilterParameter extends OperatorPluginParameter {
 	
 	@Override
 	public int hashCode() {
-		return Utility.computeHashCode(super.hashCode(),desires);
-	}
-
-	public SwarmDesires getDesires() {
-		return desires;
+		return Utility.computeHashCode(super.hashCode(),currentPlan);
 	}
 	
 	@Override
 	public String toString() {
-		return (desires==null?"no options":desires.toString());
+		return (currentPlan==null?"no plan":currentPlan.toString());
 	}
 }

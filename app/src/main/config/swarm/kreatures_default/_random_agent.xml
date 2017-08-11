@@ -21,8 +21,10 @@
     <operation-set operation-type="BeliefsUpdateKR">
       <default-operator-cls>com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator</default-operator-cls>
    </operation-set>
-   <component>com.github.kreatures.core.logic.Desires</component>
+   <component>com.github.kreatures.swarm.basic.SwarmDesires</component>
+   <component>com.github.kreatures.swarm.basic.ActionState</component>
    <component>com.github.kreatures.core.PlanComponent</component>
+
 <!--   <component>com.github.kreatures.swarm.components.SwarmMappingGeneric</component>
    <component>com.github.kreatures.swarm.components.StatusAgentComponents</component> -->
 </agent-configuration>

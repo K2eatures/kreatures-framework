@@ -15,7 +15,7 @@ import net.sf.tweety.logics.fol.syntax.FolFormula;
 
 /**
  *   
- * 
+ * TODO
  * 
  * @author Cedric Perez Donfack
  *

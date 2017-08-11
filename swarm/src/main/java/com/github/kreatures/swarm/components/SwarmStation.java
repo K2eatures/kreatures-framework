@@ -7,10 +7,9 @@ import com.github.kreatures.swarm.exceptions.SwarmException;
 import com.github.kreatures.swarm.exceptions.SwarmExceptionType;
 
 /**
- * 
- * @author donfack
  * SwarmStation is the basis class and allows to create new generic station.
- *
+ * 
+ * @author Cedric Perez Donfack
  */
 
 
@@ -57,7 +56,8 @@ public class SwarmStation extends SwarmStationType{
 	 * Station(StationName,StattionType,freq,nec,space).
 	 */
 	public String toString() {
-		return String.format("Station(%s,%s,%d,%d,%d).",getName(), getStationTypeName(),frequency,necessity,space);
+//		return String.format("Station(%s,%s,%d,%d,%d).",getName(), getStationTypeName(),frequency,necessity,space);
+		return String.format("Station(%s,%s,0,%d,0).",getName(), getStationTypeName(),necessity);
 	}
 	/**
 	 * This gives the understanding of toString result.

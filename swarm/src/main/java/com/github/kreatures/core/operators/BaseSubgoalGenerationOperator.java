@@ -6,7 +6,7 @@ import com.github.kreatures.core.operators.parameters.PlanParameter;
 import com.github.kreatures.core.util.Pair;
 
 public abstract class BaseSubgoalGenerationOperator extends
-		SubgoalGenerationOperator<NewAgent, PlanParameter, PlanElement> {
+		SubgoalGenerationOperator<NewAgent, PlanParameter, Object> {
 
 	@Override
 	public Pair<String, Class<?>> getOperationType() {

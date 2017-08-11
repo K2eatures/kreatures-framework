@@ -38,7 +38,7 @@ public class Subgoal extends Intention implements Cloneable {
 		super(other);
 		this.fulfillsDesire = new Desire(other.fulfillsDesire);
 		for(Stack<PlanElement> stack : other.stacks) {
-			Stack<PlanElement> newOne = new Stack<PlanElement>();
+			Stack<PlanElement> newOne = new Stack<>();
 			for(int i=0; i<stack.size(); ++i) {
 				newOne.add(new PlanElement(stack.get(i)));
 			}
@@ -65,8 +65,9 @@ public class Subgoal extends Intention implements Cloneable {
 	}
 	
 	/**
-	 * create a new stack for the given complex intention. Is used for creating a stack with a complex intention.
-	 * @param intention	will be put ontop of the newly create stack.
+	 * create a new stack for the given complex intention. 
+	 * Is used for creating a stack with a complex intention.
+	 * @param intention	will be put on top of the newly create stack.
 	 * @return true
 	 */
 	public int newStack(Intention intention) {
@@ -90,7 +91,7 @@ public class Subgoal extends Intention implements Cloneable {
 		if(pe == null)
 			throw new IllegalArgumentException("PlanElement parameter must not be null.");
 		
-		Stack<PlanElement> newStack = new Stack<PlanElement>();
+		Stack<PlanElement> newStack = new Stack<>();
 		newStack.add(pe);
 		stacks.add(newStack);
 		return stacks.size()-1;

@@ -1,15 +1,13 @@
 package com.github.kreatures.core;
 
 /**
- * 
- * @author Cedric Perez Donfack
- *
+ * This is used to create a concrete instance object of {@link AgentAbstract}.
+ * This is hereby a instance of {@link Agent}
+ *@see AgentFactory
  */
 public class CreateAgentAdapter implements AgentFactory {
-
-	public CreateAgentAdapter() {
-		// TODO Auto-generated constructor stub
-	}
+	/** Default Ctor */
+	public CreateAgentAdapter() {}
 
 	
 	@Override

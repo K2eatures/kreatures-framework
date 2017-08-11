@@ -49,7 +49,8 @@ public class KReaturesEnvironment  {
 	/** the root folder of the actual loaded simulation in this environment */
 	private String simDirectory;
 	/**
-	 * This is use to create the appropriated agent type. Per default, Agent class will be created.
+	 * This is use to create the appropriated agent type. 
+	 * Per default, instance object of Agent class will be created.
 	 */
 	private AgentFactory agentF;
 	

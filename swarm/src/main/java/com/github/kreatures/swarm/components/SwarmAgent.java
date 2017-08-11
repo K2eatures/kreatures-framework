@@ -1,7 +1,7 @@
 package com.github.kreatures.swarm.components;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.swarm.exceptions.SwarmException;
 import com.github.kreatures.swarm.exceptions.SwarmExceptionType;
@@ -13,7 +13,7 @@ import com.github.kreatures.swarm.exceptions.SwarmExceptionType;
  */
 
 public class SwarmAgent extends SwarmAgentType{
-	private static final Logger LOG = LoggerFactory.getLogger(SwarmAgent.class);
+//	private static final Logger LOG = LoggerFactory.getLogger(SwarmAgent.class);
 	/**
 	 * this attribute is used in order to always have a unique name for a given agent type.  
 	 */
@@ -63,7 +63,9 @@ public class SwarmAgent extends SwarmAgentType{
 	/**
 	 * Agent(AgentName,AgentType,freq,nec,cap).
 	 */
+	@Override
 	public String toString() {
-		return String.format("Agent(%s,%s,%d,%d,%d).",agentName,getAgentTypeName(),frequency,necessity,capacity);
+//		return String.format("Agent(%s,%s,%d,%d,%d).",agentName,getAgentTypeName(),frequency,necessity,capacity);
+		return String.format("Agent(%s,%s,0,%d,0).",agentName,getAgentTypeName(),necessity);
 	}
 }

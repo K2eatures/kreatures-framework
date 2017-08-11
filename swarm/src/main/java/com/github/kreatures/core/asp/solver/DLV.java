@@ -47,15 +47,17 @@ public class DLV extends  net.sf.tweety.lp.asp.solver.DLV {
 
 	public AnswerSetList runDLV(Program p, int nModels, String... otherOptions) throws SolverException {
 		String params="";
-		
-		for (String option:otherOptions){
-			params+=" "+option;
+		String cmdLine=path2dlv + " -- " + "-N=" + nModels;
+		if(otherOptions.length>0) {
+			for (String option:otherOptions){
+				params+=" "+option;
+			}
+			cmdLine +=SolverOptions.FILTER+params;
 		}
 		
+		
 		checkSolver(path2dlv);
-		
-		String cmdLine = path2dlv + " -- " + "-N=" + nModels+" "+params; 
-		
+			
 		// try running dlv
 		try {
 			ai.executeProgram(cmdLine,p.toStringFlat());

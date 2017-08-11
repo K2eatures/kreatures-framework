@@ -1,79 +1,169 @@
 package com.github.kreatures.core;
 
-import static com.github.kreatures.core.KReaturesPaths.KREATURES_SCENARIO_MODELS;
-
-import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Set;
 
-import net.sf.tweety.lp.asp.parser.ASPParser;
-import net.sf.tweety.lp.asp.parser.InstantiateVisitor;
-import net.sf.tweety.lp.asp.parser.ParseException;
+import com.github.kreatures.core.logic.EnvFeaturesBeliefbase;
+import com.github.kreatures.core.logic.FolBeliefbase;
+import com.github.kreatures.core.logic.ScenarioModelBeliefbase;
+import com.github.kreatures.core.operators.parameters.BaseReasonerParameter;
+import com.github.kreatures.core.parser.ParseException;
+import com.github.kreatures.swarm.Utility;
+import com.github.kreatures.swarm.predicates.SwarmPredicate;
+import com.github.kreatures.swarm.predicates.transform.TransformPredicates;
+
+import net.sf.tweety.logics.fol.FolBeliefSet;
+import net.sf.tweety.logics.fol.syntax.FolFormula;
 import net.sf.tweety.lp.asp.syntax.Program;
-
+/**
+ * TODO
+ * @author Cedric Perez Donfack
+ *
+ */
 public final class EnvironmentComponentDefault implements EnvironmentComponent {
 	
+	/**
+	 * the environment features logic program
+	 * Content all the rules about a environment features.
+	 * This is stored in a object of type {@link EnvFeaturesBeliefbase} 
+	 */
+	private static final EnvFeaturesBeliefbase envFeaturesBB;
+	/**
+	 * Load the environment features and converts it as a set of rules.
+	 * A rule's object comes from tweety library.
+	 * @return a object of type {@link net.sf.tweety.lp.asp.syntax.Program}
+	 */
+	static {
+		envFeaturesBB=new EnvFeaturesBeliefbase();
+		try {
+			envFeaturesBB.parse(Paths.get(KReaturesPaths.KREATURES_ENV_FEATURES.toString()).resolve("envfeatures.asp").toString());
+		} catch (FileNotFoundException e) {
+			LOG.error(e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			LOG.error(e.getMessage());
+			e.printStackTrace();
+		} catch (ParseException e) {
+			LOG.error(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+
 	/**
 	 * @return name of the simulation to which this resource belong.
 	 */
 	private final String projectName;
 	
 	/**
-	 * Content all the rules about a environment features.
-	 * This is stored in a object of type {@link net.sf.tweety.lp.asp.syntax.Program} 
-	 */
-	private static Program programEnvFeatures=null;
-	/**
+	 * the scenario model logic program
 	 * Content all the rules about a scenario model.
-	 * This is stored in a object of type {@link net.sf.tweety.lp.asp.syntax.Program}
+	 * This is stored in a object of type {@link EnvFeaturesBeliefbase}
 	 */
-	private Program programScenarioModel=null;
+	private final ScenarioModelBeliefbase scenarioModelBB;
+	/**
+	 * Load the scenario modell and converts it as a set of rules.
+	 * A rule's object comes from tweety library.
+	 * @return a object of type {@link ScenarioModelBeliefbase}
+	 */
+	{
+		projectName=KReatures.getInstance().getActualSimulation().getName();
+		scenarioModelBB=new ScenarioModelBeliefbase();
+		
+		try {
+			scenarioModelBB.parse(Paths.get(KReaturesPaths.KREATURES_SCENARIO_MODELS.toString()).resolve(projectName).resolve(String.format("%s.asp", projectName)).toString());
+		} catch (FileNotFoundException e) {
+			LOG.error(e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			LOG.error(e.getMessage());
+			e.printStackTrace();
+		} catch (ParseException e) {
+			LOG.error(e.getMessage());
+			e.printStackTrace();
+		}
+	}	
+	
+	/**
+	 * This field contains scenario model logic program and environment features logic program. 
+	 */
+	private final Program scenarioModelAndEnFeaturesBB=new Program();
+	{
+		scenarioModelAndEnFeaturesBB.add(envFeaturesBB.getProgram());
+		scenarioModelAndEnFeaturesBB.add(scenarioModelBB.getProgram());
+	}
 	
 	/**
 	 * Create a environment component object for each simulation instance.
 	 */
-	public EnvironmentComponentDefault(String projectName) {
-		this.projectName=projectName;
-		if(programEnvFeatures==null)
-			programEnvFeatures =EnvironmentComponent.getEnvironmentFeatures();
-	}
-	/**
-	 * @return name of the simulation to which this resource belong.
-	 */
-	public String getProjectName() {
-		return this.projectName;
-	}
+	public EnvironmentComponentDefault() {}
 	
-	/**
-	 * Load the environment features and converts it as a set of rules.
-	 * A rule's object comes from tweety library.
-	 * @return a object of type {@link net.sf.tweety.lp.asp.syntax.Program}
-	 */
-	protected static Program getEnvironmentFeatures() {
-		return programEnvFeatures;
+	@Override
+	public EnvFeaturesBeliefbase getEnvironmentFeatures() {
+		return envFeaturesBB;
 	}
 
 	@Override
-	public void setScenariomodell(String simulationName) {
-		
-		try(BufferedReader buffer=Files.newBufferedReader(Paths.get(KREATURES_SCENARIO_MODELS.toString()).resolve(simulationName).resolve(simulationName+".asp"));) {
-			
-			ASPParser parser = new ASPParser(buffer);
-			InstantiateVisitor visitor = new InstantiateVisitor();
-			programScenarioModel=visitor.visit(parser.Program(), null);
-		
-		}catch(ParseException parseEx) {
-			LOG.error(parseEx.getMessage());
-			parseEx.printStackTrace();			
-		}catch(IOException ioEx) {
-			LOG.error(ioEx.getMessage());
-			ioEx.printStackTrace();
-		}
+	public ScenarioModelBeliefbase getScenariomodell() {
+		return scenarioModelBB;
 	}
+	
 	@Override
 	public String toString() {
-		return String.format("Environment features rules= %s \n\n Scenario modell rules= %s\n", programEnvFeatures.toString(),(programScenarioModel==null?"":programScenarioModel.toString()));
+		return String.format("Environment features rules= %s \n\n Scenario modell rules= %s\n", envFeaturesBB.toString(),(scenarioModelBB==null?"":scenarioModelBB.toString()));
+	}
+	
+	/**
+	 * @return name of the simulation to which this resource belong.
+	 */
+	@Override
+	public String getSimulationName() {
+		return this.projectName;
+	}
+	
+	
+	/**
+	 * @return the logic program of the scenario model and the environment features 
+	 */
+	@Override
+	public Program getScenarioModelAndEnFeaturesBB() {
+		return new Program(scenarioModelAndEnFeaturesBB);
+	}
+	
+	/**
+	 * two {@link EnvironmentComponentDefault} are equal if and only if 
+	 * there have the same simulation name.
+	 */
+	@Override
+	public boolean equals(Object other) {
+		if(other==null || !(other instanceof EnvironmentComponentDefault))
+			return false;
+		
+		EnvironmentComponentDefault envComponent=(EnvironmentComponentDefault)other;
+		
+		return projectName.equals(envComponent.projectName);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Utility.computeHashCode(projectName.hashCode());
+	}
+
+	@Override
+	public Set<SwarmPredicate> askEnvironment(FolBeliefbase bb, String... query) {
+		
+		FolBeliefbase folBB=new FolBeliefbase();
+		folBB.setProgram(new Program());
+		folBB.getProgram().add(scenarioModelAndEnFeaturesBB);
+		folBB.getProgram().add(bb.getProgram());
+		BaseReasonerParameter brParams=new BaseReasonerParameter(folBB,query);
+		Set<FolFormula> result=folBB.infere(brParams);
+		if(result!=null) {
+			return TransformPredicates.getSetPredicat(result);
+		}
+		return null;
 	}
 
 }

@@ -197,19 +197,16 @@
   <modules>
   	<module>asp</module>
   	<module>core</module>
-
   	<module>example</module>
   	<module>gui</module>
   	<module>knowhow</module>
   	<module>secrecy</module>
-  	
   	<module>ocf</module>
   	<module>plwithknowledge</module>
   	<module>simple</module>
   	<module>island</module>
-	<module>swarm</module>
 	<module>defendingagent</module>
- 
+ 	<module>swarm</module>
   	<module>app</module> 
   </modules>
 </project>

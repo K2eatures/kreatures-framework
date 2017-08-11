@@ -54,6 +54,34 @@ public class TransformPredicates {
 		return obj;
 	}
 
+	/**
+	 * This method helps to create a formula through a String. 
+	 * The first parameter must be the predicate name and the others are the terms of the predicate
+	 * in the given order.   
+	 * @param params list of parameters, where the first is the predicate name and the reste
+	 * are the terms in the given order.
+	 * @return predicate as FolFormula object
+	 * @throws IllegalArgumentException when the parameters are less than 2.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <E extends FolFormula,T extends SwarmPredicate> E getLiteral(String ...params) throws Exception {
+
+		if (params.length<2)
+			throw new IllegalArgumentException("The parameters are wrongs");
+		
+		StringBuilder str=new StringBuilder(params[0]).append("(");
+		int counter;
+		for(counter=1;counter<params.length-1;counter++) {
+			str.append(params[counter]);
+		}
+		str.append(params[counter]).append(").");
+		FolFormulaTransform folTransform=new FolFormulaTransform();
+
+		E obj=(E)folTransform.read(str.toString());
+		folTransform=null;
+		str=null;
+		return obj;
+	}
 	
 //	private static <E extends FolFormula>  String getPredicatName(E predicat){
 //		String predicatName=predicat.toString().substring(0, predicat.toString().indexOf("("));
