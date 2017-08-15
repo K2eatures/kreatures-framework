@@ -118,6 +118,19 @@ public class SwarmPlaceEdgeType implements SwarmComponents {
 	}
 	
 	/**
+	 * check whether the given first and second name equals a {@link SwarmPlaceEdgeType}. 
+	 * @param str1 the first or second component name
+	 * @param str2 the first or second component name
+	 * @return the corresponding {@link SwarmPlaceEdgeType}'s object or null otherwise.
+	 */
+	public SwarmPlaceEdgeType checkObject(String str1,String str2) {
+		if(str1==null||str2==null) return null;
+		if((str1.equals(firstStationTypeName)&& str2.equals(secondStationTypeName))||(str2.equals(firstStationTypeName)&& str1.equals(secondStationTypeName)))
+			return this;
+		return null;
+	}
+	
+	/**
 	 * PlacedEdgeType(StationTypeNameIn,StationTypeNameOut,Weight,directed).
 	 */
 	public String toString() {

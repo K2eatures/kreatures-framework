@@ -486,26 +486,43 @@ CurrentAgent(de1,de).
 %	true= if der Agent in station ist and 
 %	false otherwise: agent is moving or waiting at the station.
 %Must be add to the desires at the first time.
-CurrentStation(de1,de,werk1,werk,0,true,true).
+CurrentStation(de1,de,werk1,werk,0,false,false).
 %CurrentStation(usa1,usa,other1,other,1,false,false). % will be added, deleted or updated by agent.
 %Diese ist vorhanden, wenn der Agent unterwegs ist.
 %MoveToStation(AgentName,CurentStationName,TargetStationName,Distance,Pos) 
 %%% MoveToStation muss momentant warten.
 %MoveToStation(cl1,li3,ma2,5,4). % will be added, deleted or updated by agent.
 
+
+
+
+%&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Information about the station for plan &&&&&&&&&&&&&&&&&&&&&&&&&&&
+%StationInfo(StationName,StationTypeName,Time,ItemMotiv).
+%ItemMotiv	=0, if agent can neither take or place item .
+%		=1, if agent can take but cannot place item
+%		=2, if agent can place but cannot take item
+%		=3, if agent can take and place item
+StationInfo(StationName,StationTypeName,Time,0):-Station(StationName,StattionType,_,_,_),StationType(StationTypeName,_,_,Time,_,_,_,_,_),ItemErfullNoAus(StationName,StationTypeName),ItemErfullNoEin(StationName,StationTypeName).
+StationInfo(StationName,StationTypeName,Time,1):-Station(StationName,StattionType,_,_,_),StationType(StationTypeName,_,_,Time,_,_,_,_,_),not ItemErfullNoAus(StationName,StationTypeName),ItemErfullNoEin(StationName,StationTypeName).
+StationInfo(StationName,StationTypeName,Time,2):-Station(StationName,StattionType,_,_,_),StationType(StationTypeName,_,_,Time,_,_,_,_,_),ItemErfullNoAus(StationName,StationTypeName),not ItemErfullNoEin(StationName,StationTypeName).
+StationInfo(StationName,StationTypeName,Time,3):-Station(StationName,StattionType,_,_,_),StationType(StationTypeName,_,_,Time,_,_,_,_,_),not ItemErfullNoAus(StationName,StationTypeName),not ItemErfullNoEin(StationName,StationTypeName).
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Engeischaft von ChoiceStation &&&&&&&&&&&&&&&&&&&&&&&&&&&
 %HasChoiceStation(AgentName,AgentTypeName). The Agent has choosen a station
 HasChoiceStation(AgentName,AgentTypeName):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,_,_,_,false,false).
 %AllConditionErfullChoiceStation(AgentName,StationName)
 %Check if frequency and necessity are fillfully .
-AllConditionErfullChoiceStation(AgentName,StationName):- CurrentAgent(AgentName,_),VisitEdge(AgentName,_,StationName,_,_),not NecErfull(AgentName,StationName),not FreqErfullStation(StationName),not FreqErfullAgent(AgentName).
+AllConditionErfullChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv):- CurrentAgent(AgentName,_),VisitEdge(AgentName,_,StationName,_,_),not NecErfull(AgentName,StationName),not FreqErfullStation(StationName),not FreqErfullAgent(AgentName),TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
+
 %ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
 %motiv: 0=agent and station no time edge;
 %	1=agent has time edge and station no;
 %	2=agent hasn't time edge and station has;
 %	3=agent and station haven time edge.
 %
-ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv):-HasChoiceStation(AgentName,AgentTypeName),AllConditionErfullChoiceStation(AgentName,StationName),CurrentAgent(AgentName,AgentTypeName),TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
+
+
+
+ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Time,ItemMotiv):-HasChoiceStation(AgentName,AgentTypeName),AllConditionErfullChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv),CurrentAgent(AgentName,AgentTypeName),StationInfo(StationName,StationTypeName,Time,ItemMotiv).
 
 %When agent and station haven't timeEdge
 TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,0):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_).
@@ -542,7 +559,7 @@ AllConditionErfullEnterStation(AgentName,StationName):- CurrentAgent(AgentName,_
 %When agent and station haven't timeEdge
 TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,0):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_).
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Engeischaft von ProdcutConsumItem &&&&&&&&&&&&&&&&&&&&&&&&&&&
-%ProdcutConsumItem(AgentName,AgentTypeName,StationName,StationTypeName,ItemNumber,Motiv). This bedeutet: ein agent bekommt ein item and liefert ein anderen 
+%ProductConsumItem(AgentName,AgentTypeName,StationName,StationTypeName,ItemNumber,Motiv). This bedeutet: ein agent bekommt ein item and liefert ein anderen 
 %Motiv	=0, if item can only be taked.
 %	=1, if item can only be placed.
 %	=2, if item can be placed and then taked, buy agent has already placed item. One can only taked item
@@ -550,16 +567,15 @@ TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,0):-Vis
 %ItemNumber =0, infinitly item can be take.
 %	    =n, n items can be take or place depend of motiv.
 %item can only be taked by agent.
-ProdcutConsumItem(AgentName,AgentTypeName,StationName,StationTypeName,0,0):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,_,true,true),canAgentLoadItem(AgentName,StationName),ItemBeladen(StationName,StationTypeName).
+ProductConsumItem(AgentName,AgentTypeName,StationName,StationTypeName,0,0):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,_,true,true),canAgentLoadItem(AgentName,StationName),ItemBeladen(StationName,StationTypeName).
 %item can only be placed by agent.
-ProdcutConsumItem(AgentName,AgentTypeName,StationName,StationTypeName,LadeItemMin,1):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,_,true,true),ItemProductViaInStations(AgentName,StationName,LadeItemMin),ItemErfullNoAus(StationName,StationTypeName).
+ProductConsumItem(AgentName,AgentTypeName,StationName,StationTypeName,LadeItemMin,1):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,_,true,true),ItemProductViaInStations(AgentName,StationName,LadeItemMin),ItemErfullNoAus(StationName,StationTypeName).
 
 %item can be placed and then taked, buy agent has already placed item. One can only taked item
-ProdcutConsumItem(AgentName,AgentTypeName,StationName,StationTypeName,LadeItemMin,2):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,_,true,true),NumberItemToProductInStation(StationName,LadeItemMin),not ItemErfullNoEin(StationName,StationTypeName),not ItemErfullNoAus(StationName,StationTypeName).
+ProductConsumItem(AgentName,AgentTypeName,StationName,StationTypeName,LadeItemMin,2):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,_,true,true),NumberItemToProductInStation(StationName,LadeItemMin),not ItemErfullNoEin(StationName,StationTypeName),not ItemErfullNoAus(StationName,StationTypeName).
 
 %item can be placed and then taked by agent.
-ProdcutConsumItem(AgentName,AgentTypeName,StationName,StationTypeName,LadeItemMin,3):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,_,true,true),ItemProductViaInStations(AgentName,StationName,LadeItemMin),not ItemErfullNoEin(StationName,StationTypeName),not ItemErfullNoAus(StationName,StationTypeName).
-
+ProductConsumItem(AgentName,AgentTypeName,StationName,StationTypeName,LadeItemMin,3):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,_,true,true),ItemProductViaInStations(AgentName,StationName,LadeItemMin),not ItemErfullNoEin(StationName,StationTypeName),not ItemErfullNoAus(StationName,StationTypeName).
 
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Engeischaft von LeaveStation &&&&&&&&&&&&&&&&&&&&&&&&&&&
 %LeaveStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
@@ -569,6 +585,11 @@ LeaveStation(AgentName,AgentTypeName,StationName,StationTypeName,0):-CurrentAgen
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Engeischaft von VisitStation &&&&&&&&&&&&&&&&&&&&&&&&&&&
 %VisitStation(AgentName,AgentTypeName,StationName,StationTypeName).
 
+
+%&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Engeischaft von Know-How &&&&&&&&&&&&&&&&&&&&&&&&&&&
+%StationWithMaxSpace(StationName,StationTypeName,Kriterium,Value).
+
+KnowHow(AgentName,AgentTypeName,StationName,StationTypeName,maxFreeSpace,Value):-AllConditionErfullChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,_),Value=#max{X:Station(StationName,StattionType,_,_,CurrentSpace),StationType(StationTypeName,_,_,_,_,_,_,StationSpace,_),X=StationSpace-CurrentSpace}.
 
 
 %######################## All Do listen #############

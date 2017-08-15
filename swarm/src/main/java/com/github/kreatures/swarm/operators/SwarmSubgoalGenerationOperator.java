@@ -57,8 +57,11 @@ public class SwarmSubgoalGenerationOperator extends
 		
 		if(desires==null||desires.isEmptyDesires())
 			return false;
+		
+		
 		LOG.info("New plans will be generated.");
 		SwarmDesire predicate=desires.getCurrentDesire();
+
 		boolean hasItem=((PredicateStation)predicate).hasItem();
 		if(lastDesire==null||predicate.equals(lastDesire)) {
 			lastDesire=predicate;			

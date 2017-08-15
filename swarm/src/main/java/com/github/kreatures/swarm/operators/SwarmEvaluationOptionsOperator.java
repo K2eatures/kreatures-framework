@@ -40,6 +40,9 @@ public class SwarmEvaluationOptionsOperator extends BaseEvaluationOptionsOperato
 		boolean check=false;
 		// get a copy of the agent.
 		NewAgent agent=(NewAgent)params.getAgent();
+		/**
+		 * Get the agentcomponent where the desires will be stored.
+		 */
 		SwarmDesires swarmDesires=(SwarmDesires) agent.getComponent(SwarmDesires.class);
 		swarmDesires.clear();
 		// get the given filter in the agent context
@@ -47,7 +50,6 @@ public class SwarmEvaluationOptionsOperator extends BaseEvaluationOptionsOperato
 		// get a object of FolBeliefbase
 		FolBeliefbase folBB=(FolBeliefbase)params.getBaseBeliefbase();
 		// keep a object of FolBeliefbase program
-		
 		Set<SwarmPredicate> result=envComponent.askEnvironment(folBB, query);
 		if(result!=null) {
 			swarmDesires.addDesires(result);
@@ -67,7 +69,9 @@ public class SwarmEvaluationOptionsOperator extends BaseEvaluationOptionsOperato
 		
 	}
 	/**
-	 * evaluation each desire and sort it from best to bad desire. 
+	 * Use for the reward.
+	 * Evaluation each desire and sort it from best to bad desire. 
+	 * 
 	 * @param desires
 	 */
 	private void evaluationFunction(SwarmDesires desires) {

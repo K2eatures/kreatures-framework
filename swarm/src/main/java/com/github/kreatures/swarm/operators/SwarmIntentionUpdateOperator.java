@@ -18,6 +18,10 @@ import com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator;
 public class SwarmIntentionUpdateOperator extends BaseIntentionUpdateOperator {
 	/** reference to the logback logger instance */
 	private Logger LOG = LoggerFactory.getLogger(SwarmBeliefsUpdateOperator.class);
+	/** get all station with max free space	 */
+	private static final String _MaxFreeSpace="maxFreeSpace";
+	/** get all station with max space	 */
+	private static final String _MaxSpace="maxSpace";
 	
 	@Override
 	protected PlanElement processImpl(FilterParameter params) {

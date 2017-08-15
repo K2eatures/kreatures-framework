@@ -6,6 +6,7 @@ import net.sf.tweety.logics.fol.syntax.FolFormula;
  * Contains the name of all the AbstractSwarm representation of desire.
  * It is used to convert a tweety represntation of desire to a AbstractSwarm 
  * representation of desire.
+ * 
  * @author Cedric Perez Donfack
  * @see SwarmPredicate for AbstractSwarm representation of desire
  * @see FolFormula for tweety representation of desire.
@@ -23,28 +24,57 @@ public enum PredicateName {
 	 */
 	Station,
 	/**
-	 * a answer set only contains StayStation predicate
+	 * a answer set only contains VisitStation predicate
 	 */
 	VisitStation,
 	/**
 	 * a answer set only contains LeaveStation predicate
 	 */
 	LeaveStation,
-
+	/**
+	 * a answer set only contains EnterStation predicate
+	 */
 	EnterStation,
-	
+	/**
+	 * a answer set only contains ProductItem predicate
+	 */
 	ProductItem,
+	/**
+	 * a answer set only contains ConsumItem predicate
+	 */
 	ConsumItem,
+	/**
+	 * a answer set only contains ProductConsumItem predicate
+	 */
 	ProductConsumItem,
 
 	/* Define all predicates from scenario model properties */
+	/**
+	 * a answer set only contains AgentComponent predicate
+	 */
 	AgentType,
-	
+	/**
+	 * a answer set only contains StationComponent predicate
+	 */
 	StationType,
-	
+	/**
+	 * a answer set only contains PlaceComponent predicate
+	 */
 	PlacedEdge,
-	
+	/**
+	 * a answer set only contains TimeComponent predicate
+	 */
 	TimeEdge,
+	/**
+	 * a answer set only contains information about the shortest path
+	 */
+	ShortPath,
+	
+	/* Define all predicates for know-how properties */
+	/**
+	 * a answer set only contains KnowHow predicate
+	 */
+	KnowHow,
 	
 	/* Define all predicates from environment features properties */
 	/**
@@ -55,7 +85,12 @@ public enum PredicateName {
 	 * a answer set only contains TimeEdgeWaiting predicate
 	 */
 	TimeEdgeWaiting,
-	
+	/**
+	 * Predicate gives information about the item (Which action agent 
+	 * can do: take and/or place or nothings) and time (how long a 
+	 * agent can visit a station) of agent
+	 */
+	StationInfo,
 	/* Define all predicates from agent beliefs properties */
 	
 	Agent,
@@ -141,6 +176,11 @@ public enum PredicateName {
 			break;
 		case ProductItem:str="ProductItem";
 			break;
+		case ShortPath:str="ShortPath";
+		break;
+		case StationInfo:str="StationInfo";
+		break;
+		
 //		default:
 //			break;
 		

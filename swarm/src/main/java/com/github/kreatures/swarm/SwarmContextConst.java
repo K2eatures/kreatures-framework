@@ -41,4 +41,8 @@ public final class SwarmContextConst {
 	 * this context is used to treat the PlanElement objects.
 	 */
 	public static final String _ACTION="action";
+	/**
+	 * 
+	 */
+	public static final String _KNOWHOW="knowhow_criterien";
 }
