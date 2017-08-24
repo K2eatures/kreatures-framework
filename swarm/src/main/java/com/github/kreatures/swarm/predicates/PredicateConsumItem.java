@@ -62,7 +62,7 @@ public class PredicateConsumItem extends SwarmPredicate {
 	 */
 	@Override
 	public String toString() {
-		return String.format("ConsumItem(%s,%s,%s,%s).", agentName, agentTypeName,stationName,stationTypeName);
+		return String.format("ConsumItem(%s,%s,%s,%s)", agentName, agentTypeName,stationName,stationTypeName);
 	}
 
 	@Override
@@ -89,4 +89,8 @@ public class PredicateConsumItem extends SwarmPredicate {
 		return otherName.equals(thisName);
 	}
 
+//	@Override
+//	public String getPredicatType() {
+//		return "Con";
+//	}
 }

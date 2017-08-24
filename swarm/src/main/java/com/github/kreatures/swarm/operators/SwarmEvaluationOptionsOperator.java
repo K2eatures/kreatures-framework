@@ -30,10 +30,7 @@ public class SwarmEvaluationOptionsOperator extends BaseEvaluationOptionsOperato
 	 * reference to environment component of this simulation.  
 	 */
 	private EnvironmentComponent envComponent; 
-	{
-		envComponent=AbstractSwarms.getInstance().getEnvComponent(KReatures.getInstance().getActualSimulation().getName());
-	}
-	
+		
 	
 	@Override
 	protected Boolean processImpl(EvaluationParameter params) {
@@ -50,6 +47,7 @@ public class SwarmEvaluationOptionsOperator extends BaseEvaluationOptionsOperato
 		// get a object of FolBeliefbase
 		FolBeliefbase folBB=(FolBeliefbase)params.getBaseBeliefbase();
 		// keep a object of FolBeliefbase program
+		envComponent=params.getEnvComponent();
 		Set<SwarmPredicate> result=envComponent.askEnvironment(folBB, query);
 		if(result!=null) {
 			swarmDesires.addDesires(result);
@@ -76,7 +74,6 @@ public class SwarmEvaluationOptionsOperator extends BaseEvaluationOptionsOperato
 	 */
 	private void evaluationFunction(SwarmDesires desires) {
 		
-		//TODO evalution
 	}
 
 }

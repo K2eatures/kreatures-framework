@@ -2,10 +2,11 @@ package com.github.kreatures.
 swarm.predicates;
 
 
+import com.github.kreatures.core.KReaturesAtom;
+
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.KReaturesAtom;
 import com.github.kreatures.core.Perception;
 import com.github.kreatures.swarm.basic.SwarmDesire;
 
@@ -52,7 +53,7 @@ public abstract class SwarmPredicate extends SwarmDesire implements KReaturesAto
 	 * 
 	 * @return the predicate name of the desire
 	 */
-	public String getPredicatType() {
+	public String getPredicatType() {;
 		return getFormulName();
 	}
 }

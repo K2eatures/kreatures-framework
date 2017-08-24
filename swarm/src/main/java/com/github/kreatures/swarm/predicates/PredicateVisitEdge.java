@@ -99,7 +99,7 @@ public class PredicateVisitEdge extends SwarmPredicate {
 	 */
 	@Override
 	public String toString() {
-		return String.format("VisitEdge(%s,%s,%s,%s,%s).",agentName, agentTypeName, stationName,stationTypeName,bold);
+		return String.format("VisitEdge(%s,%s,%s,%s,%s)",agentName, agentTypeName, stationName,stationTypeName,bold);
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class PredicateVisitEdge extends SwarmPredicate {
 	@Override
 	public void createInstance(FolFormula atom) {
 		//PredicateVisitEdge predicate=null;
-		Pattern pattern=Pattern.compile("VisitEdge[(](\\w+),(\\w+),(\\w+),(\\w+),({true|false})[)].");
+		Pattern pattern=Pattern.compile("VisitEdge[(](\\w+),(\\w+),(\\w+),(\\w+),(\\w+)[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 			//predicate=new PredicateVisitEdge(atom);

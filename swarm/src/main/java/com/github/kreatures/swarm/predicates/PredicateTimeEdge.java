@@ -126,7 +126,7 @@ public class PredicateTimeEdge extends SwarmPredicate{
 	 */
 	@Override
 	public String toString() {
-		return String.format("TimeEdge(%s,%s,%s,%s,%s,%s,%s,%d).",firstName, firstTypeName,secondName,secondTypeName,
+		return String.format("TimeEdge(%s,%s,%s,%s,%s,%s,%s,%d)",firstName, firstTypeName,secondName,secondTypeName,
 				timeType, directed, conType, weight);
 	}
 
@@ -139,7 +139,7 @@ public class PredicateTimeEdge extends SwarmPredicate{
 	@Override
 	public void createInstance(FolFormula atom) {
 		//PredicateTimeEdge predicate=null;
-		Pattern pattern=Pattern.compile("TimeEdge[(](\\w+),(\\w+),(\\w+),(\\w+),([01]),({true|false}),([0-3]),(\\d+)[)].");
+		Pattern pattern=Pattern.compile("TimeEdge[(](\\w+),(\\w+),(\\w+),(\\w+),([01]),({true|false}),([0-3]),(\\d+)[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 			//predicate=new PredicateTimeEdge();

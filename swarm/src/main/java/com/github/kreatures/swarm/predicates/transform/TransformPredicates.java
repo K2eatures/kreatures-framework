@@ -1,6 +1,7 @@
 package com.github.kreatures.swarm.predicates.transform;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ public class TransformPredicates {
 	public TransformPredicates() {}
 	/**
 	 * transform a {@link FolFormula} to a {@link SwarmPredicat}
-	 * @param predicate a FolFormula object
+	 * @param predicate a FolFormula object	
 	 * @return a SwarmPredicat object.
 	 * @throws NullPointerException when there are no desire AbstractSwarm representation of this tweety represenation
 	 */
@@ -70,19 +71,55 @@ public class TransformPredicates {
 			throw new IllegalArgumentException("The parameters are wrongs");
 		
 		StringBuilder str=new StringBuilder(params[0]).append("(");
+		str.append(params[1]);
 		int counter;
-		for(counter=1;counter<params.length-1;counter++) {
-			str.append(params[counter]);
+		for(counter=2;counter<params.length;counter++) {
+			str.append(",").append(params[counter]);
 		}
-		str.append(params[counter]).append(").");
+		str.append(")");
 		FolFormulaTransform folTransform=new FolFormulaTransform();
 
-		E obj=(E)folTransform.read(str.toString());
+		E obj=(E)folTransform.read(str.toString());		
 		folTransform=null;
 		str=null;
 		return obj;
 	}
 	
+	/**
+	 * This method helps to create a SwarmPredicate through a String. 
+	 * The given String is a Formula.
+	 * @param atom the Formula as String
+	 * @return predicate as SwarmPredicate object
+	 * @throws IllegalArgumentException when the given atom not match a SwarmPredicate.
+	 */
+	public static <T extends SwarmPredicate> T getPredicate(String atom) throws Exception {
+
+		FolFormulaTransform folTransform=new FolFormulaTransform();
+		atom=atom.substring(0, atom.length()-1);
+		FolFormula objE=(FolFormula)folTransform.read(atom);
+		T objT=getSwarmPredicate(objE);
+		folTransform=null;
+		objE=null;
+		return objT;
+	}
+	
+	/**
+	 * This method helps to create a SwarmPredicate through a String. 
+	 * The given String is a Formula.
+	 * @param atom the Formula as String
+	 * @return predicate as SwarmPredicate object
+	 * @throws IllegalArgumentException when the given atom not match a SwarmPredicate.
+	 */
+	public static <T extends SwarmPredicate> Set<T> getSetPredicate(List<String> listAtoms) throws Exception {
+		
+		if(listAtoms==null)return null;
+		Set<T> setObj=new HashSet<>();
+		for(String atom:listAtoms ) {
+			setObj.add(getPredicate(atom));
+		}
+		
+		return setObj;
+	}
 //	private static <E extends FolFormula>  String getPredicatName(E predicat){
 //		String predicatName=predicat.toString().substring(0, predicat.toString().indexOf("("));
 //		return String.format("com.github.kreatures.swarm.predicates.Predicate%s",predicatName);
@@ -100,7 +137,7 @@ public class TransformPredicates {
 				System.out.println(setSwarmPredicate);
 				setSwarmPredicate.add(t);
 			} catch (Exception e) {
-				LOG.error(e.getMessage());
+				LOG.error("FolFormula is : "+ e.getMessage());
 				e.printStackTrace();
 			}
 		});
@@ -118,7 +155,7 @@ public class TransformPredicates {
 			try {
 				setLiteral.add(getLiteral(swarmPredicate));
 			} catch (Exception e) {
-				LOG.error(e.getMessage());
+				LOG.error("SwarmPredicate is "+setSwarmPredicate.toString()+": "+ e.getMessage());
 				e.printStackTrace();
 			}
 		});
@@ -141,7 +178,20 @@ public class TransformPredicates {
 			case "TimeEdge":return PredicateName.TimeEdge;
 			case "TimeEdgeState":return PredicateName.TimeEdgeState;
 			case "VisitEdge" :return PredicateName.VisitEdge;
-			default: throw new NullPointerException("there are no desire swarm representation of this tweety represenation");
+			case "KnowHow" :return PredicateName.KnowHow;
+			case "TimeEdgeReady": return PredicateName.TimeEdgeReady;
+			case "TimeEdgeWaiting":return PredicateName.TimeEdgeWaiting;
+			case "ChoiceStation": return PredicateName.ChoiceStation;
+			case "VisitStation" : return PredicateName.VisitStation;
+			case "LeaveStation" :return PredicateName.LeaveStation;
+			case "AgentType" : return PredicateName.AgentType;
+			case "StationType": return PredicateName.StationType;
+			case "EnterStation": return PredicateName.EnterStation;
+			case "ProductConsumItem":return PredicateName.ProductConsumItem;
+			case "StationTypItem" : return PredicateName.StationTypItem;
+			case "CurrentAgent": return PredicateName.CurrentAgent;
+			case "CurrentStation": return PredicateName.CurrentStation;
+			default: throw new NullPointerException("there are no desire swarm representation of this tweety represenation :"+desireName);
 		}
 	}
 }

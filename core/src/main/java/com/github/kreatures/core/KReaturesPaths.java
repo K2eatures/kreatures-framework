@@ -3,6 +3,10 @@ package com.github.kreatures.core;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.apache.commons.math3.analysis.function.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This behaves all fixed paths
  * 
@@ -10,7 +14,7 @@ import java.nio.file.Paths;
  *
  */
 public enum KReaturesPaths {
-
+	
 	KREATURES_ICONS_DIR, KREATURES_EXAMPLES_DIR, KREATURES_CONFIG_DIR, 
 	KREATURES_AGENTS_CONFIG_DIR, KREATURES_BELIEFS_CONFIG_DIR,
 	/**
@@ -40,6 +44,9 @@ public enum KReaturesPaths {
 	 */
 	SWARM_XML_DIR;
 
+	/** reference to the logging facility */
+	private static Logger LOG = LoggerFactory.getLogger(KReaturesPaths.class);
+	
 	public  static void iniFolder(){
 		//Files.is
 		try{
@@ -51,6 +58,8 @@ public enum KReaturesPaths {
 			Files.createDirectories(Paths.get(KREATURES_ENV_FEATURES.toString()));
 			Files.createDirectories(Paths.get(KREATURES_SCENARIO_MODELS.toString()));
 		}catch(Exception e){
+			LOG.error(e.getMessage());
+			e.printStackTrace();
 			
 		}
 	}

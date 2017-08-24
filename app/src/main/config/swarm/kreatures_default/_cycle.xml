@@ -63,7 +63,9 @@
 		<!--<assign name="searching" value="$changed" />-->
 	</while>
 	<operation type="ExecuteActionKR">
+		<param name="basebeliefbase" value="$basebeliefbase"/>
 		<param name="action"  value="$action"/>
-	</operation>
+	</operation>	
+	<execute action="$action" />
 </asml-script>
 

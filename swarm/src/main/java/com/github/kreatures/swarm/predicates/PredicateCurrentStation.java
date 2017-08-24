@@ -4,11 +4,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.github.kreatures.core.Perception;
+import com.github.kreatures.swarm.Utility;
 import com.github.kreatures.swarm.predicates.transform.TransformPredicates;
 
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 /**
- * CurrentStation(AgentName,AgetnTypeName,StationName,StationTypeName,time,isMove).
+ * 
+ * CurrentStation(AgentName,AgetnTypeName,StationName,StationTypeName,IsInStation,HasChoose).
  * TODO
  * @author Cedric Perez Donfack
  *
@@ -20,23 +22,22 @@ public class PredicateCurrentStation extends SwarmPredicate {
 	private String agentTypeName;
 	private String stationName;
 	private String stationTypeName;
-	private int time;
-	private boolean isMove;
-	
+	private boolean isInStation;
+	private boolean hasChoose;
 	
 	public PredicateCurrentStation(FolFormula desire){
 		super(desire);
 		createInstance(desire);
 	}
 	
-	public PredicateCurrentStation(String agentName,String agentTypeName,String stationName, String stationTypeName, int time, boolean isMove) throws Exception {
-		super(TransformPredicates.getLiteral("CurrentAgent",agentName,agentTypeName,stationName,stationTypeName,""+time,""+isMove));
+	public PredicateCurrentStation(String agentName,String agentTypeName,String stationName, String stationTypeName, boolean isInStation,boolean hasChoose) throws Exception {
+		super(TransformPredicates.getLiteral("CurrentStation",agentName,agentTypeName,stationName,stationTypeName,""+isInStation,""+hasChoose));
 		this.agentName=agentName;
 		this.agentTypeName=agentTypeName;
 		this.stationName=stationName;
 		this.stationTypeName=stationTypeName;
-		this.time=time;
-		this.isMove=isMove;
+		this.isInStation=isInStation;
+		this.hasChoose=hasChoose;
 	}
 
 	public PredicateCurrentStation(FolFormula desire, Perception reason) {
@@ -50,8 +51,8 @@ public class PredicateCurrentStation extends SwarmPredicate {
 		this.agentTypeName=other.agentTypeName;
 		this.stationName=other.stationName;
 		this.stationTypeName=other.stationTypeName;
-		this.time=other.time;
-		this.isMove=other.isMove;	
+		this.isInStation=other.isInStation;
+		this.hasChoose=other.hasChoose;
 	}	
 	
 	@Override
@@ -61,22 +62,21 @@ public class PredicateCurrentStation extends SwarmPredicate {
 	
 	@Override
 	public int hashCode() {
-		return (super.hashCode() +
-				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
+		return Utility.computeHashCode(super.hashCode(), this.agentName,this.stationName);
 	}
 
 	/**
-	 * CurrentStation(AgentName,AgetnTypeName,StationName,StationTypeName,time,isMove).
+	 * CurrentStation(AgentName,AgetnTypeName,StationName,StationTypeName,IsInStation,HasChoose).
 	 */
 	@Override
 	public String toString() {
-		return String.format("CurrentStation(%s,%s,%s,%s,%d,%d).", agentName, agentTypeName,stationName,stationTypeName,time,isMove);
+		return String.format("CurrentStation(%s,%s,%s,%s,%b,%b)", agentName, agentTypeName,stationName,stationTypeName,isInStation,hasChoose);
 	}
 
 	@Override
 	public void createInstance(FolFormula atom) {
 //		PredicateAgent agent=null;
-		Pattern pattern=Pattern.compile("CurrentStation[(](\\w+),(\\w+),(\\w+),(\\w+),(\\d+),(\\w+)[)].");
+		Pattern pattern=Pattern.compile("CurrentStation[(](\\w+),(\\w+),(\\w+),(\\w+),(\\w+),(\\w+)[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 //			agent=new PredicateAgent();
@@ -84,8 +84,8 @@ public class PredicateCurrentStation extends SwarmPredicate {
 			this.agentTypeName=matcher.group(2);
 			this.stationName=matcher.group(3);
 			this.stationTypeName=matcher.group(4);
-			this.time=Integer.parseInt(matcher.group(5));
-			this.isMove=Boolean.parseBoolean(matcher.group(6));
+			this.isInStation=Boolean.parseBoolean(matcher.group(5));
+			this.hasChoose=Boolean.parseBoolean(matcher.group(6));
 		}
 	}
 	
@@ -93,10 +93,83 @@ public class PredicateCurrentStation extends SwarmPredicate {
 	public boolean equals(Object other) {
 		if(other==null || !(other instanceof PredicateCurrentStation ))return false;
 		PredicateCurrentStation obj=(PredicateCurrentStation)other;
-		String otherName=obj.agentName+obj.stationName;
-		String thisName=this.agentName+this.stationName;
+		String otherName=obj.agentName;
+		String thisName=this.agentName;
 		
 		return otherName.equals(thisName);
 	}
+	
+	/**
+	 * @return the stationName
+	 */
+	public String getStationName() {
+		return stationName;
+	}
 
+	/**
+	 * @param stationName the stationName to set
+	 */
+	public void setStationName(String stationName) {
+		this.stationName = stationName;
+	}
+
+	/**
+	 * @return the stationTypeName
+	 */
+	public String getStationTypeName() {
+		return stationTypeName;
+	}
+
+	/**
+	 * @param stationTypeName the stationTypeName to set
+	 */
+	public void setStationTypeName(String stationTypeName) {
+		this.stationTypeName = stationTypeName;
+	}
+	/**
+	 * @return the isInStation
+	 */
+	public boolean isIsInStation() {
+		return isInStation;
+	}
+
+	/**
+	 * @param isInStation the isInStation to set
+	 */
+	public void setIsInStation(boolean isInStation) {
+		this.isInStation = isInStation;
+	}
+
+	/**
+	 * @return the hasChoose
+	 */
+	public boolean isHasChoose() {
+		return hasChoose;
+	}
+
+	/**
+	 * @param hasChoose the hasChoose to set
+	 */
+	public void setHasChoose(boolean hasChoose) {
+		this.hasChoose = hasChoose;
+	}
+
+	/**
+	 * @return the agentName
+	 */
+	public String getAgentName() {
+		return agentName;
+	}
+
+	/**
+	 * @return the agentTypeName
+	 */
+	public String getAgentTypeName() {
+		return agentTypeName;
+	}	
+	
+//	@Override
+//	public String getPredicatType() {
+//		return "CurrentStation";
+//	}
 }

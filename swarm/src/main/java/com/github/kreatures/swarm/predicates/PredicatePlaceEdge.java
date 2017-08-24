@@ -136,19 +136,19 @@ public class PredicatePlaceEdge extends SwarmPredicate {
 	 */
 	@Override
 	public String toString() {
-		return String.format("PlacedEdge(%s,%s,%s,%s,%d,%s).",firstName,firstTypeName,secondName,secondTypeName,weight,directed);
+		return String.format("PlacedEdge(%s,%s,%s,%s,%d,%s)",firstName,firstTypeName,secondName,secondTypeName,weight,directed);
 	}
 
-	@Override
-	public String getPredicatType() {
-		
-		return getFirstName();
-	}
+//	@Override
+//	public String getPredicatType() {
+//		
+//		return "PlaceEdge";
+//	}
 	
 	@Override
 	public void createInstance(FolFormula atom) {
 		//PredicatePlaceEdge predicate=null;
-		Pattern pattern=Pattern.compile("PlaceEdge[(](\\w+),(\\w+),(\\w+),(\\w+),(\\d+),({true|false})[)].");
+		Pattern pattern=Pattern.compile("PlaceEdge[(](\\w+),(\\w+),(\\w+),(\\w+),(\\d+),({true|false})[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 			//predicate=new PredicatePlaceEdge();

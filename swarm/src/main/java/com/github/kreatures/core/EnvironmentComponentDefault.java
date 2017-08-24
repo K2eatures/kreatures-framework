@@ -10,11 +10,12 @@ import com.github.kreatures.core.logic.FolBeliefbase;
 import com.github.kreatures.core.logic.ScenarioModelBeliefbase;
 import com.github.kreatures.core.operators.parameters.BaseReasonerParameter;
 import com.github.kreatures.core.parser.ParseException;
+
 import com.github.kreatures.swarm.Utility;
+import com.github.kreatures.swarm.beliefbase.SwarmAspReasoner;
 import com.github.kreatures.swarm.predicates.SwarmPredicate;
 import com.github.kreatures.swarm.predicates.transform.TransformPredicates;
 
-import net.sf.tweety.logics.fol.FolBeliefSet;
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 import net.sf.tweety.lp.asp.syntax.Program;
 /**
@@ -158,11 +159,20 @@ public final class EnvironmentComponentDefault implements EnvironmentComponent {
 		folBB.setProgram(new Program());
 		folBB.getProgram().add(scenarioModelAndEnFeaturesBB);
 		folBB.getProgram().add(bb.getProgram());
+		LOG.info(folBB.toString());
 		BaseReasonerParameter brParams=new BaseReasonerParameter(folBB,query);
-		Set<FolFormula> result=folBB.infere(brParams);
-		if(result!=null) {
+		SwarmAspReasoner reasonner;
+		try {
+			reasonner = new SwarmAspReasoner();
+			Set<FolFormula> result =reasonner.process(brParams).first;
 			return TransformPredicates.getSetPredicat(result);
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+//		=folBB.infere(brParams);
+		
 		return null;
 	}
 

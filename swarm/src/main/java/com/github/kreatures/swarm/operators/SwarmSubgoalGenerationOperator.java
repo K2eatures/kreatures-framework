@@ -3,12 +3,12 @@ package com.github.kreatures.swarm.operators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Set;
 import java.util.Stack;
+import java.util.TreeSet;
 
-import com.github.kreatures.core.AbstractSwarms;
 import com.github.kreatures.core.Action;
-import com.github.kreatures.core.EnvironmentComponent;
-import com.github.kreatures.core.KReatures;
+import com.github.kreatures.core.Desire;
 import com.github.kreatures.core.PlanComponent;
 import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.Subgoal;
@@ -16,9 +16,14 @@ import com.github.kreatures.core.operators.BaseSubgoalGenerationOperator;
 import com.github.kreatures.core.operators.parameters.PlanParameter;
 import com.github.kreatures.swarm.SwarmContextConst;
 import com.github.kreatures.swarm.basic.MainAction;
-import com.github.kreatures.swarm.basic.SwarmAction;
+import com.github.kreatures.swarm.basic.MainDesire;
+import com.github.kreatures.swarm.basic.SwarmSpeechAct;
 import com.github.kreatures.swarm.basic.SwarmDesire;
 import com.github.kreatures.swarm.basic.SwarmDesires;
+import com.github.kreatures.swarm.optimisation.StationNode;
+import com.github.kreatures.swarm.predicates.PredicateChoiceStation;
+import com.github.kreatures.swarm.predicates.PredicateCurrentStation;
+import com.github.kreatures.swarm.predicates.PredicateKnowHow;
 import com.github.kreatures.swarm.predicates.PredicateStation;
 
 /**
@@ -33,19 +38,30 @@ public class SwarmSubgoalGenerationOperator extends
 	private Logger LOG = LoggerFactory
 			.getLogger(SwarmSubgoalGenerationOperator.class);
 	
-	/**
-	 * reference to environment component of this simulation.  
-	 */
-	private EnvironmentComponent envComponent; 
+	private Set<StationNode> allShortestPaths=new TreeSet<>();
 	{
-		envComponent=AbstractSwarms.getInstance().getEnvComponent(KReatures.getInstance().getActualSimulation().getName());
+		//TODO
 	}
 	
 	/**
-	 * the last fulfilling or following desire. 
+	 * reference to environment component of this simulation.  
+	 */
+//	private EnvironmentComponent envComponent; 
+//	{
+//		envComponent=AbstractSwarms.getInstance().getEnvComponent(KReatures.getInstance().getActualSimulation().getName());
+//	}
+	
+	/**
+	 * the desire which will be chosen at the last time, 
+	 * for the currently choice.
 	 */
 	private SwarmDesire lastDesire=null;
-
+	
+//	/**
+//	 * Count the number of subgoal which will be created.
+//	 */
+//	private int numberOfPlan=0;
+	
 	@Override
 	protected Boolean processImpl(PlanParameter params) {
 		
@@ -57,86 +73,177 @@ public class SwarmSubgoalGenerationOperator extends
 		
 		if(desires==null||desires.isEmptyDesires())
 			return false;
-		
-		
+				
 		LOG.info("New plans will be generated.");
-		SwarmDesire predicate=desires.getCurrentDesire();
-
-		boolean hasItem=((PredicateStation)predicate).hasItem();
-		if(lastDesire==null||predicate.equals(lastDesire)) {
-			lastDesire=predicate;			
-			
-			if(hasItem){
-				plan.addPlan(doVisitPlanWithItem(params));
-			}else {
-				plan.addPlan(doVisitPlanWithoutItem(params));
+		PredicateStation oldStation=(PredicateStation)lastDesire;
+		PredicateChoiceStation bestDesire=doBestDesire("maxFreeSpace",desires);
+		PredicateStation newStation=null;
+		for(Desire desire:desires.getDesires()) {
+			if((desire instanceof PredicateStation)&&((PredicateStation)desire).getName().equals(bestDesire.getStationName())) {
+				newStation=(PredicateStation)desire;
+				break;
 			}
-			params.getAgent().getContext().set(SwarmContextConst._PLAN, plan);
-			return true;
+		}
+		/*
+		 *There must give always a newStation when there are a choiceStation object.
+		 *Therefore the plan isn't created when there are no stations. 
+		 */
+		if(newStation==null)return false;
+		Subgoal subGoal=null;
+		int stackIndex=0;
+		/* Create a plan to move to the next station. */
+		if(oldStation!=null&&!oldStation.getTypeName().equals(bestDesire.getStationTypeName())) {
+			subGoal=doMovePlan(oldStation,newStation,params,stackIndex);
+			if(subGoal!=null)
+				plan.addPlan(subGoal);
 		}
 		
-		lastDesire=predicate;
-		plan.addPlan(doMovePlan(params));			
-		if(hasItem){
-			plan.addPlan(doVisitPlanWithItem(params));
+		subGoal=doVisitPlan(bestDesire, newStation, params,stackIndex);
+		
+		plan.addPlan(subGoal);
+		
+		desires.setCurrentDesire(newStation);
+		desires.setCurrentMainDesire(MainDesire.CHOSE_STATION);
+		desires.setCurrentChoice(bestDesire);
+		PredicateCurrentStation actuellStation=desires.getCurrentStation();
+		if(actuellStation==null) {
+			try {
+				actuellStation=new PredicateCurrentStation(bestDesire.getAgentName(), bestDesire.getAgentTypeName(), bestDesire.getStationName(),bestDesire.getStationTypeName(), false,true);
+				desires.setCurrentStation(actuellStation);
+			} catch (Exception e) {
+				LOG.error("The currentStation object cannot be created: Parser not correct.");
+				e.printStackTrace();
+				return false;
+			}
 		}else {
-			plan.addPlan(doVisitPlanWithoutItem(params));
+			actuellStation.setHasChoose(true);
+			actuellStation.setIsInStation(false);
+			actuellStation.setStationName(newStation.getName());
+			actuellStation.setStationTypeName(newStation.getTypeName());
 		}
+		
+		lastDesire=newStation;
 		params.getAgent().getContext().set(SwarmContextConst._PLAN, plan);
 		
 		return true;
 	}
 	
 	/**
+	 * This method chooses one of the best desires as next goal.
+	 * @param criterion the criterion that will use to define the best desires. 
+	 * @param desires list of all best desires given the criterion.
+	 * @return one of the best desires which will chosen or null when there are no desires.
+	 */
+	private PredicateChoiceStation doBestDesire(String criterion,SwarmDesires desires) {
+		if(criterion==null||desires==null)return null;
+		PredicateKnowHow knowHow=null;
+		for(Desire predicate:desires.getDesires()) {
+			if((predicate instanceof PredicateKnowHow)&&criterion.equals(((PredicateKnowHow)predicate).getCrName())) {
+				knowHow= ((PredicateKnowHow)predicate);
+				break;
+			}			
+		}
+		if(knowHow==null)return null;
+		for(Desire predicate:desires.getDesires()) {
+			if(predicate instanceof PredicateChoiceStation) {
+				PredicateChoiceStation choiceStation=(PredicateChoiceStation)predicate;
+				if(choiceStation.getStationName().equals(knowHow.getStationName())) {
+					return choiceStation;
+				}
+			}			
+		}
+		return null;
+	}
+	
+	/**
 	 * This method generates a sub plan for agent. It define step by step how a agent has to
-	 * walk in order to move from a station A to a station B. 
-	 * @param params 
-	 * @return the generated sub plan.
+	 * walk in order to move from a srcstation to tagstation. 
+	 * @param srcStation the last visited station
+	 * @param tagStation the new chosen station
+	 * @param params the plan parameter of the agent.
+	 * @return the generated sub plan or null when there is no plans to create.
 	 */
-	private Subgoal doMovePlan(PlanParameter params) {
-//		PredicatePlaceEdge place=new PredicateP
-//		Subgoal subGoal=new Subgoal(params.getAgent());
-		return null;
-	}
-	/**
-	 * This method generates a sub plan for agent. It define step by 
-	 * step how a agent has to do visit a station without a item.
-	 * First of all, it has to enter the station. Secondly, it has 
-	 * to do its job: ie do nothings. finally, it has
-	 * to leave the station.
-	 * @param params
-	 * @return the generated sub plan.
-	 */
-	
-	private Subgoal doVisitPlanWithoutItem(PlanParameter... params) {
-		return null;
-	}
-	/**
-	 * This method generates a sub plan for agent. It define step by 
-	 * step how a agent has to do visit a station with a  item. First
-	 * of all, it has to enter the station. Secondly, it has to do its
-	 * job: ie take and/or placed a item. finally, it has to leave the
-	 * station.
-	 * @param params
-	 * @return the generated sub plan.
-	 */
-	
-	private Subgoal doVisitPlanWithItem(PlanParameter params) {
+	private Subgoal doMovePlan(PredicateStation srcStation,PredicateStation tagStation,PlanParameter params,int stackIndex) {
 		Action aIntention=null;
-		Subgoal subGoal=new Subgoal(params.getAgent(),lastDesire);
-		Stack<PlanElement> stack=new Stack<>();
-		aIntention=new SwarmAction(params.getAgent(),MainAction.LEAVE_STATION);
-		stack.push(new PlanElement(aIntention, MainAction.LEAVE_STATION));
-		aIntention=new SwarmAction(params.getAgent(),MainAction.VISIT_STATION);
-		stack.push(new PlanElement(aIntention, MainAction.VISIT_STATION));
-		aIntention=new SwarmAction(params.getAgent(),MainAction.ENTER_STATION);
-		stack.push(new PlanElement(aIntention, MainAction.ENTER_STATION));
+		Subgoal subGoal=new Subgoal(params.getAgent(),tagStation);
+		subGoal.newStack();
+		StationNode stNode=null;
+		for(StationNode node:allShortestPaths) {
+			if(node.checkObject(srcStation.getTypeName(), tagStation.getTypeName())) {
+				stNode=node;
+				break;
+			}
+		}
+		if(stNode==null || stNode.getWeight()==0)
+			return null;
 		
-		subGoal.setStack(0, stack);
+		for(int count=1;count<=stNode.getWeight();count++) {
+			aIntention=new SwarmSpeechAct(params.getAgent(),MainAction.MOVE);
+			subGoal.addToStack(aIntention,MainAction.MOVE, stackIndex);
+		}
+		
+		return subGoal;	
+	}
+	/**
+	 * This method generates a sub plan for agent. It define step by 
+	 * step how a agent has to do visit a station with a  item or not. First
+	 * of all, it has to enter the station. Secondly, it has to do its
+	 * job: ie take and / or placed a item or nothings. thirdly it has 
+	 * to stay into the station util its time is finished. finally, 
+	 * it has to leave the station.
+	 * @param bestDesire the new chosen desire.
+	 * @param tagStation the new chosen station
+	 * @param params the plan parameter of the agent
+	 * @return the generated sub plan.
+	 */
+	
+	private Subgoal doVisitPlan(PredicateChoiceStation bestDesire,PredicateStation tagStation,PlanParameter params,int stackIndex) {
+		Action aIntention=null;
+		Subgoal subGoal=new Subgoal(params.getAgent(),tagStation);
+		subGoal.newStack();
+		aIntention=new SwarmSpeechAct(params.getAgent(),MainAction.LEAVE_STATION);
+		subGoal.addToStack(aIntention,MainAction.LEAVE_STATION, stackIndex);
+		
+		for(int count=2;count<=bestDesire.getTime();count++) {
+			aIntention=new SwarmSpeechAct(params.getAgent(),MainAction.VISIT_STATION);
+			subGoal.addToStack(aIntention,MainAction.VISIT_STATION, stackIndex);
+		}
+		
+		switch(bestDesire.getItemMotiv()) {
+		case 0:
+			aIntention=new SwarmSpeechAct(params.getAgent(),MainAction.PRODUCT_ITEM);
+			subGoal.addToStack(aIntention,MainAction.PRODUCT_ITEM, stackIndex);
+			break;
+		case 1:
+			aIntention=new SwarmSpeechAct(params.getAgent(),MainAction.CONSUM_ITEM);
+			subGoal.addToStack(aIntention,MainAction.PRODUCT_ITEM, stackIndex);
+			break;
+		case 2:
+			aIntention=new SwarmSpeechAct(params.getAgent(),MainAction.CONSUM_ITEM);
+			subGoal.addToStack(aIntention,MainAction.PRODUCT_ITEM, stackIndex);
+			break;
+		case 3:
+			aIntention=new SwarmSpeechAct(params.getAgent(),MainAction.PRODUCT_ITEM);
+			subGoal.addToStack(aIntention,MainAction.PRODUCT_ITEM, stackIndex);
+			break;
+		case 4:
+			aIntention=new SwarmSpeechAct(params.getAgent(),MainAction.PRODUCT_CONSUM_ITEM);
+			subGoal.addToStack(aIntention,MainAction.PRODUCT_CONSUM_ITEM, stackIndex);
+			break;
+		case 5:
+			aIntention=new SwarmSpeechAct(params.getAgent(),MainAction.VISIT_STATION);
+			subGoal.addToStack(aIntention,MainAction.VISIT_STATION, stackIndex);
+			break;
+		default:
+			LOG.error("The value of the item motiv must be between 0 and 5.");
+			break;
+		}
+		
+		aIntention=new SwarmSpeechAct(params.getAgent(),MainAction.ENTER_STATION);
+		subGoal.addToStack(aIntention,MainAction.ENTER_STATION, stackIndex);
 		
 		return subGoal;
 	}
-	
 	
 	@Override
 	protected void prepare(PlanParameter params) {

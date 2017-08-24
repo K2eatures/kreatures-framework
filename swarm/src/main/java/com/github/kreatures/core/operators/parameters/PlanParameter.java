@@ -2,13 +2,16 @@ package com.github.kreatures.core.operators.parameters;
 
 import javax.management.AttributeNotFoundException;
 
+import com.github.kreatures.core.AbstractSwarms;
 import com.github.kreatures.core.AgentAbstract;
+import com.github.kreatures.core.EnvironmentComponent;
+import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.error.ConversionException;
 import com.github.kreatures.core.operators.parameter.GenericOperatorParameter;
 import com.github.kreatures.core.operators.parameter.OperatorPluginParameter;
 
 public class PlanParameter extends OperatorPluginParameter {
-
+	
 	public PlanParameter() {
 		// TODO Auto-generated constructor stub
 	}

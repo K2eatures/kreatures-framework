@@ -70,8 +70,8 @@ public class PredicateAgentType extends SwarmPredicate {
 		this.typeName = typeName;
 	}
 
-	public void incrementFrequency() {
-		frequency++;
+	public int getFrequency() {
+		return frequency;
 	}
 
 	public int getNecessity() {
@@ -122,13 +122,13 @@ public class PredicateAgentType extends SwarmPredicate {
 	 */
 	@Override
 	public String toString() {
-		return String.format("AgentType(%s,%d,%d,%d,%d,%d,%d,%d,%d).", typeName, frequency, necessity,time,priority,cycle, capacity,size,speed);
+		return String.format("AgentType(%s,%d,%d,%d,%d,%d,%d,%d,%d)", typeName, frequency, necessity,time,priority,cycle, capacity,size,speed);
 	}
 
 	@Override
 	public void createInstance(FolFormula atom) {
 //		PredicateAgent agent=null;
-		Pattern pattern=Pattern.compile("AgentType[(](\\w+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+)[)].");
+		Pattern pattern=Pattern.compile("AgentType[(](\\w+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+)[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 //			agent=new PredicateAgent();
@@ -157,5 +157,9 @@ public class PredicateAgentType extends SwarmPredicate {
 		
 		return false;
 	}
-
+	
+//	@Override
+//	public String getPredicatType() {
+//		return "AgentType";
+//	}
 }

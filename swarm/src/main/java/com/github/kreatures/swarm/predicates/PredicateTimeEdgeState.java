@@ -137,7 +137,7 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 	@Override
 	public void createInstance(FolFormula atom) {
 		//PredicateTimeEdgeState predicate=null;
-		Pattern pattern=Pattern.compile("TimeEdgeState[(](\\w+),(\\w+),(\\w+),(\\w+),([01]),(\\d+),({true|false}),({true|false}),({true|false})[)].");
+		Pattern pattern=Pattern.compile("TimeEdgeState[(](\\w+),(\\w+),(\\w+),(\\w+),([01]),(\\d+),({true|false}),({true|false}),({true|false})[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 			//predicate=new PredicateTimeEdgeState(atom);
@@ -160,7 +160,7 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 	 */
 	@Override
 	public String toString(){
-		return String.format("TimeEdgeState(%s,%s,%s,%s,%s,%d,%s,%s,%s).", name,typeName,visitorName,visitorTypeName,compType,tick,isWaiting,isReady,isFinish);
+		return String.format("TimeEdgeState(%s,%s,%s,%s,%s,%d,%s,%s,%s)", name,typeName,visitorName,visitorTypeName,compType,tick,isWaiting,isReady,isFinish);
 	}
 	/**
 	 * This gives the understanding of toString result.

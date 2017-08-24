@@ -10,7 +10,6 @@ import com.github.kreatures.core.operators.BaseGenerateOptionsOperator;
 import com.github.kreatures.core.operators.parameters.OptionsParameter;
 import com.github.kreatures.core.reflection.Context;
 import com.github.kreatures.swarm.SwarmContextConst;
-import com.github.kreatures.swarm.basic.MainDesire;
 import com.github.kreatures.swarm.basic.SwarmDesires;
 import com.github.kreatures.swarm.predicates.PredicateName;
 
@@ -37,8 +36,8 @@ public class SwarmGenerateOptionsOperator extends BaseGenerateOptionsOperator {
 		if(numberDesires==0) {
 			/* The Desires are stations */
 			LOG.info("Generate new desires");
-			swarmDesires.setCurrentMainDesire(MainDesire.STATION_CHOICE);
-			String filter=String.format("%s%s",PredicateName.ChoiceStation,PredicateName.StationInfo,PredicateName.KnowHow,PredicateName.ProductConsumItem);
+//			swarmDesires.setCurrentMainDesire(MainDesire.STATION_CHOICE);
+			String filter=String.format("%s,%s,%s,%s",PredicateName.ChoiceStation,PredicateName.KnowHow,PredicateName.Station,PredicateName.Agent,PredicateName.ShortPath);
 			context.set(SwarmContextConst._FILTER,filter);
 			return 0;
 		}

@@ -54,30 +54,13 @@ public class PredicateStation extends SwarmPredicate{
 		return new PredicateStation(this);
 	}
 	
-	
 	public String getName() {
 		return name;
 	}
 
-
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
-
 	public String getTypeName() {
 		return typeName;
 	}
-
-
-
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
-	}
-
-
 
 	public int getFrequency() {
 		return frequency;
@@ -85,8 +68,8 @@ public class PredicateStation extends SwarmPredicate{
 
 
 
-	public void setFrequency(int frequency) {
-		this.frequency = frequency;
+	public void incrFrequency() {
+		this.frequency++;
 	}
 
 
@@ -95,26 +78,17 @@ public class PredicateStation extends SwarmPredicate{
 		return necessity;
 	}
 
-
-
-	public void setNecessity(int necessity) {
-		this.necessity = necessity;
-	}
-
-
-
 	public int getSpace() {
 		return space;
 	}
 
-
-
-	public void setSpace(int space) {
-		this.space = space;
+	public void incrSpace(int addSpace) {
+		this.space+= addSpace;
 	}
-
-
-
+	
+	public void decrSpace(int substrSpace) {
+		this.space-= substrSpace;
+	}
 	/**
 	 * @return the item
 	 */
@@ -123,18 +97,11 @@ public class PredicateStation extends SwarmPredicate{
 	}
 
 	/**
-	 * @param item the item to set
-	 */
-	public void setItem(boolean item) {
-		this.item = item;
-	}
-
-	/**
 	 * Station(StationName,StattionType,freq,nec,space).
 	 */
 	@Override
 	public String toString() {
-		return String.format("Station(%s,%s,%d,%d,%d).",name, typeName,frequency,necessity,space);
+		return String.format("Station(%s,%s,%d,%d,%d)",name, typeName,frequency,necessity,space);
 	}
 
 	@Override

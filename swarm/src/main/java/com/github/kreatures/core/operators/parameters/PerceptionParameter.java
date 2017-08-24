@@ -55,7 +55,7 @@ public class PerceptionParameter extends OperatorPluginParameter {
 		
 		Object obj=param.getParameter("information");
 		if(obj != null ) {
-			if(! (obj instanceof BaseBeliefbase)) {
+			if(! (obj instanceof KReaturesAtom)) {
 				throw conversionException("information", KReaturesAtom.class);
 			}
 			this.information=(KReaturesAtom)obj;

@@ -19,7 +19,7 @@ public class OptShortPaths {
 	/**
 	 * The set of all the shortest paths.
 	 */
-
+	
 
 	/** Default Ctor:  */
 	public OptShortPaths() {
@@ -55,7 +55,7 @@ public class OptShortPaths {
 				for(String strNode:childs) {
 					StationNode currenNode=null;
 					for(StationNode weightNode:Q) {
-						if(weightNode.checkObject(currentNodeName, strNode)!=null) {
+						if(weightNode.checkObject(currentNodeName, strNode)) {
 							currenNode=weightNode;
 							break;
 						}

@@ -56,9 +56,7 @@ public class SwarmLoaderDefault implements SwarmLoader {
 	 */
 	@Override
 	public boolean init() {
-
 		try {
-
 			Stream<Path> allXmlPath = Files.list(Paths.get(KREATURES_SWARM_XML_DIR.toString()));
 			allXmlPath.filter(path -> Pattern.matches(_KReaturesSwarmXmlPatternFile, path.getFileName().toString()))
 					.filter(path -> {
@@ -137,5 +135,4 @@ public class SwarmLoaderDefault implements SwarmLoader {
 		System.out.println(t);
 
 	}
-
 }

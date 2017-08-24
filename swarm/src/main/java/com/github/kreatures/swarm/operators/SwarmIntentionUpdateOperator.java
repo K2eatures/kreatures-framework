@@ -18,10 +18,10 @@ import com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator;
 public class SwarmIntentionUpdateOperator extends BaseIntentionUpdateOperator {
 	/** reference to the logback logger instance */
 	private Logger LOG = LoggerFactory.getLogger(SwarmBeliefsUpdateOperator.class);
-	/** get all station with max free space	 */
-	private static final String _MaxFreeSpace="maxFreeSpace";
-	/** get all station with max space	 */
-	private static final String _MaxSpace="maxSpace";
+//	/** get all station with max free space	 */
+//	private static final String _MaxFreeSpace="maxFreeSpace";
+//	/** get all station with max space	 */
+//	private static final String _MaxSpace="maxSpace";
 	
 	@Override
 	protected PlanElement processImpl(FilterParameter params) {
@@ -50,9 +50,9 @@ public class SwarmIntentionUpdateOperator extends BaseIntentionUpdateOperator {
 	 * @param params parameter about the current plan and 
 	 * 				the running agent. 
 	 */
-	private void choiceDesire(FilterParameter params) {
-		
-	}
+//	private void choiceDesire(FilterParameter params) {
+//		
+//	}
 	
 	@Override
 	protected void prepare(FilterParameter params) {

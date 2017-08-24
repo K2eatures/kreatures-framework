@@ -49,12 +49,13 @@ public class StationNode implements Comparable<StationNode> {
 	 * @param str2 the first or second component name
 	 * @return the corresponding {@link StationNode}'s object or null otherwise.
 	 */
-	public StationNode checkObject(String str1,String str2) {
-		if(str1==null||str2==null) return null;
+	public boolean checkObject(String str1,String str2) {
+		if(str1==null||str2==null) return false;
 		if((str1.equals(stCompNameIn)&& str2.equals(stCompNameOut))||(str2.equals(stCompNameIn)&& str1.equals(stCompNameOut)))
-			return this;
-		return null;
+			return true;
+		return false;
 	}
+	
 	/* ShortPath(StationComponentName1,StationComponentName2,minWeght).*/
 	@Override
 	public String toString() {

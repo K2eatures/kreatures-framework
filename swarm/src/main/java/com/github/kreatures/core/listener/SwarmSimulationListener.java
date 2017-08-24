@@ -11,6 +11,7 @@ import com.github.kreatures.core.CreateAgentAdapter;
 import com.github.kreatures.core.EnvironmentComponent;
 import com.github.kreatures.core.EnvironmentComponentDefault;
 import com.github.kreatures.core.KReaturesEnvironment;
+import com.github.kreatures.core.NewAgent;
 import com.github.kreatures.swarm.basic.SwarmBehavior;
 
 public class SwarmSimulationListener implements  SimulationListener{
@@ -59,8 +60,10 @@ public class SwarmSimulationListener implements  SimulationListener{
 	
 	@Override
 	public void actionPerformed(AgentAbstract agent, Action act){
-		// TODO Auto-generated method stub
-		LOG.info("SwarmSimulationListener : actionPerformed");
+		if(agent instanceof NewAgent) {
+			// TODO Auto-generated method stub
+			LOG.info("SwarmSimulationListener : actionPerformed");
+		}
 	}
 
 	@Override

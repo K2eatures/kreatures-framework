@@ -265,7 +265,6 @@ public class CreateKReaturesXMLFileDefault implements CreateKReaturesXMLFile {
 		//return !currentSwarmFile.equals(KReaturesSimulationInfo.getName());
 		return KReaturesSimulationInfo.is_currentSimChange();
 	}
-
 	/**
 	 * 
 	 * @param dirName folder where the Abstract_Swarm-Dateien are located.
@@ -273,14 +272,9 @@ public class CreateKReaturesXMLFileDefault implements CreateKReaturesXMLFile {
 	 */
 	private static File[] searchSwarmConfigFile( String dirName){
 		File dir = new File(dirName);
-
 		return dir.listFiles(new FilenameFilter() { 
 			public boolean accept(File dir, String filename)
 			{ return filename.endsWith(".xml"); }
 		} );
-
 	}
-	
-	
-
 }

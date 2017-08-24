@@ -46,15 +46,14 @@ public class DLV extends  net.sf.tweety.lp.asp.solver.DLV {
 	 */
 
 	public AnswerSetList runDLV(Program p, int nModels, String... otherOptions) throws SolverException {
-		String params="";
-		String cmdLine=path2dlv + " -- " + "-N=" + nModels;
-		if(otherOptions.length>0) {
-			for (String option:otherOptions){
-				params+=" "+option;
+		StringBuilder params=new StringBuilder("");
+		String cmdLine=path2dlv + " -- " + "-N=" + nModels+" ";		if(otherOptions.length>0) {
+			params.append(otherOptions[0]);
+			for (int index=1;index<otherOptions.length;index++){
+				params.append(","+otherOptions[index]);
 			}
-			cmdLine +=SolverOptions.FILTER+params;
+			cmdLine +=SolverOptions.FILTER+params.toString();
 		}
-		
 		
 		checkSolver(path2dlv);
 			
@@ -73,6 +72,7 @@ public class DLV extends  net.sf.tweety.lp.asp.solver.DLV {
 				parseable += str;
 			}
 		}
+		
 		return parseAnswerSets(parseable);
 	}
 }

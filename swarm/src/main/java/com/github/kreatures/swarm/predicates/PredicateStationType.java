@@ -126,13 +126,13 @@ public class PredicateStationType extends SwarmPredicate {
 	 */
 	@Override
 	public String toString() {
-		return String.format("StationType(%s,%d,%d,%d,%d,%d,%d,%d,%d).", typeName, frequency, necessity,time,priority,cycle, item,space,count);
+		return String.format("StationType(%s,%d,%d,%d,%d,%d,%d,%d,%d)", typeName, frequency, necessity,time,priority,cycle, item,space,count);
 	}
 
 	@Override
 	public void createInstance(FolFormula atom) {
 //		PredicateAgent agent=null;
-		Pattern pattern=Pattern.compile("StationType[(](\\w+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+)[)].");
+		Pattern pattern=Pattern.compile("StationType[(](\\w+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+)[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 //			agent=new PredicateAgent();

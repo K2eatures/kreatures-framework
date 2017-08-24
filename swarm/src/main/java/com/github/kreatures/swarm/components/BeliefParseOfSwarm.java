@@ -533,11 +533,8 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 			}catch(SwarmException ex){
 				if(ex.getExceptionType()!=SwarmExceptionType.BREAKS&&ex.getExceptionType()!=SwarmExceptionType.INFORM)
 					throw ex;
-					
 			}
 		}
-		
-		
 	}
 
 	/*
@@ -566,15 +563,12 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 				if(ex.getExceptionType()!=SwarmExceptionType.BREAKS&&ex.getExceptionType()!=SwarmExceptionType.INFORM){
 					catchException.add(ex);
 					return;
-				}
-					
+				}	
 			}
 			});
 		
 		if(!catchException.isEmpty())
 			throw catchException.get(0);
-		
-		
 	}
 
 	/*
@@ -606,14 +600,9 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 			}catch(SwarmException ex){
 				if(ex.getExceptionType()!=SwarmExceptionType.BREAKS&&ex.getExceptionType()!=SwarmExceptionType.INFORM)
 					throw ex;
-					
 			}
-		}
-		
-		
+		}	
 	}
-
-
 
 	@Override
 	public Collection<SwarmAgentType> getAllAgentType() {
@@ -621,15 +610,11 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 		return agentsTypeSet;
 	}
 
-
-
 	@Override
 	public Collection<SwarmAgent> getAllAgents() {
 		
 		return agentSet;
 	}
-
-
 
 	@Override
 	public Collection<SwarmStationType> getAllStationType() {
@@ -637,71 +622,50 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 		return stationTypeSet;
 	}
 
-
-
 	@Override
 	public Collection<SwarmStation> getAllStations() {
 		
 		return stationSet;
 	}
-
-
-
 	
 	protected Collection<SwarmPlaceEdgeType> getAllPlaceEdgeType() {
 		
 		return placeEdgeTypeSet;
 	}
 
-
-
 	@Override
 	public Collection<SwarmPlaceEdge> getAllPlaceEdge() {
 		
 		return placeEdgeSet;
 	}
-
-
-
 	
 	protected Collection<SwarmVisitEdgeType> getAllVisitEdgeType() {
 		
 		return visitEdgeTypeSet;
 	}
-
-
-
+	
 	@Override
 	public Collection<SwarmVisitEdge> getAllVisitEdge() {
 		
 		return visitEdgeSet;
 	}
-
-
-
 	
 	protected Collection<SwarmTimeEdgeType> getAllTimeEdgeType() {
 
 		return timeEdgeTypeSet;
 	}
-
-
-
+	
 	@Override
 	public Collection<SwarmTimeEdge> getAllTimeEdge() {
 
 		return timeEdgeSet;
 	}
-
-
-
+	
 	@Override
 	public Collection<NecAgentStation> getAllNecAgentStation() {
 		
 		return necAgentStationSet;
 	}
-
-
 
 	@Override
 	public Collection<ItemSetLoadingAgent> getAllItemSetLoadingAgent() {
@@ -709,20 +673,15 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 		return itemSetLoadingAgentSet;
 	}
 
-
-
 	@Override
 	public Collection<ItemSetLoadingStation> getAllItemSetLoadingStation() {
 		
 		return itemSetLoadingStationSet;
 	}
-
-
-
+	
 	@Override
 	public Collection<TimeEdgeState> getAllTimeEdgeState() {
 		
 		return timeEdgeStateSet;
 	}
-
 }

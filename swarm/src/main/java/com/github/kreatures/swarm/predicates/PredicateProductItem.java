@@ -62,7 +62,7 @@ public class PredicateProductItem extends SwarmPredicate {
 	 */
 	@Override
 	public String toString() {
-		return String.format("ProductItem(%s,%s,%s,%s).", agentName, agentTypeName,stationName,stationTypeName);
+		return String.format("ProductItem(%s,%s,%s,%s)", agentName, agentTypeName,stationName,stationTypeName);
 	}
 
 	@Override
@@ -88,5 +88,8 @@ public class PredicateProductItem extends SwarmPredicate {
 		
 		return otherName.equals(thisName);
 	}
-
+//	@Override
+//	public String getPredicatType() {
+//		return "ProductItem";
+//	}
 }

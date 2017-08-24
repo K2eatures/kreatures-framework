@@ -65,8 +65,10 @@ public class AspBeliefbase extends BaseBeliefbase {
 
 	@Override
 	protected void parseImpl(BufferedReader br) throws ParserException, IOException {
+		
 		ASPParser parser = new ASPParser(br);
 		InstantiateVisitor visitor = new InstantiateVisitor();
+		
 		try {
 			this.program = visitor.visit(parser.Program(), null);
 		} catch (ParseException e) {
@@ -86,6 +88,7 @@ public class AspBeliefbase extends BaseBeliefbase {
 	
 	@Override
 	public boolean isFormulaValid(Formula query) {
+		
 		if(!super.isFormulaValid(query))
 			return false;
 		
@@ -103,7 +106,6 @@ public class AspBeliefbase extends BaseBeliefbase {
 				return false;
 			}
 		}
-		
 		return true;
 	}
 
@@ -136,5 +138,4 @@ public class AspBeliefbase extends BaseBeliefbase {
 	public int hashCode() {
 		return program.hashCode();
 	}
-
 }

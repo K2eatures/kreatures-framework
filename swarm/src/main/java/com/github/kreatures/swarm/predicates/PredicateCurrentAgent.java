@@ -25,6 +25,8 @@ public class PredicateCurrentAgent extends SwarmPredicate {
 		super(desire);
 		createInstance(desire);
 	}
+	
+	
 	public PredicateCurrentAgent(String agentName,String agentTypeName) throws Exception {
 		super(TransformPredicates.getLiteral("CurrentAgent",agentName,agentTypeName));
 		this.name=agentName;
@@ -74,13 +76,13 @@ public class PredicateCurrentAgent extends SwarmPredicate {
 	 */
 	@Override
 	public String toString() {
-		return String.format("CurrentAgent(%s,%s).", name, typeName);
+		return String.format("CurrentAgent(%s,%s)", name, typeName);
 	}
 
 	@Override
 	public void createInstance(FolFormula atom) {
 //		PredicateAgent agent=null;
-		Pattern pattern=Pattern.compile("CurrentAgent[(](\\w+),(\\w+)[)].");
+		Pattern pattern=Pattern.compile("CurrentAgent[(](\\w+),(\\w+)[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 //			agent=new PredicateAgent();
@@ -100,5 +102,8 @@ public class PredicateCurrentAgent extends SwarmPredicate {
 		
 		return false;
 	}
-
+//	@Override
+//	public String getPredicatType() {
+//		return "CurrentAgent";
+//	}
 }

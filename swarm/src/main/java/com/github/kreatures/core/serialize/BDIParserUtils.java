@@ -52,6 +52,8 @@ import com.github.kreatures.swarm.components.SwarmVisitEdge;
 import com.github.kreatures.swarm.components.TimeEdgeState;
 import com.github.kreatures.swarm.components.XmlToBeliefBase;
 import com.github.kreatures.swarm.exceptions.SwarmException;
+import com.github.kreatures.swarm.predicates.PredicateCurrentAgent;
+import com.github.kreatures.swarm.predicates.PredicateCurrentStation;
 
 /**
  * This Class is used to parse the information from the {@link BeliefParseOfSwarm}'s object to a file. This file contents a scenario-model and initial knowledge of all agents.
@@ -86,7 +88,6 @@ public final class BDIParserUtils implements BDIParser {
 		createExamplesDir(strategie);
 		createAgentAsp(tmpAspPathWorldBelief);
 		Files.deleteIfExists(tmpAspPathWorldBelief);
-		
 	}
 
 	/**
@@ -111,7 +112,7 @@ public final class BDIParserUtils implements BDIParser {
 		System.out.println(tmpPathWorldBelief.toAbsolutePath());
 		try (BufferedWriter buffer = Files.newBufferedWriter(tmpPathWorldBelief)) {
 
-			buffer.write(String.format("%s%n", obj.getTimeUnit()));
+//			buffer.write(String.format("%s%n", obj.getTimeUnit()));
 
 			buffer.write(String.format("%s%n", SwarmAgent.getDescriptions()));
 			for (SwarmAgent elt : obj.getAllAgents()) {
@@ -132,14 +133,17 @@ public final class BDIParserUtils implements BDIParser {
 			for (NecAgentStation elt : obj.getAllNecAgentStation()) {
 				buffer.write(String.format("%s%n", elt.toString()));
 			}
+			
 			buffer.write(String.format("%s%n", ItemSetLoadingAgent.getDescriptions()));
 			for (ItemSetLoadingAgent elt : obj.getAllItemSetLoadingAgent()) {
 				buffer.write(String.format("%s%n", elt.toString()));
 			}
+			
 			buffer.write(String.format("%s%n", ItemSetLoadingStation.getDescriptions()));
 			for (ItemSetLoadingStation elt : obj.getAllItemSetLoadingStation()) {
 				buffer.write(String.format("%s%n", elt.toString()));
 			}
+			
 			buffer.write(String.format("%s%n", TimeEdgeState.getDescriptions()));
 			for (TimeEdgeState elt : obj.getAllTimeEdgeState()) {
 				buffer.write(String.format("%s%n", elt.toString()));
@@ -177,6 +181,7 @@ public final class BDIParserUtils implements BDIParser {
 		if(!Files.exists(directoryPathScenarioModell)) {
 			Files.createDirectory(directoryPathScenarioModell);
 		}
+		
 		// Check, if the scenario-model file already exists. 
 		Path pathScenarioModell=directoryPathScenarioModell.resolve(obj.getName()+".asp");
 		if(!Files.exists(pathScenarioModell)) {
@@ -230,10 +235,40 @@ public final class BDIParserUtils implements BDIParser {
 		 * Create agents beliefs.
 		 */
 		for(SwarmAgent agent:obj.getAllAgents()){
-			Files.copy(aspPath, Paths.get(KREATURES_EXAMPLES_DIR.toString()).resolve(obj.getName()).resolve(String.format("%s.asp",agent.getName())));
+			Path target=Files.copy(aspPath, Paths.get(KREATURES_EXAMPLES_DIR.toString()).resolve(obj.getName()).resolve(String.format("%s.asp",agent.getName())));
+			createPredicateForOneAgent(agent,target);
 		}
 		
 		return true;
+	}
+	/**
+	 * Add belief own to agent such as {@link PredicateCurrentAgent}.   
+	 * @param agent the agent which belief will be added
+	 * @param aspPath the path to the created file.
+	 * @return true when all files will be successfully created, and false otherwise.
+	 * @throws Exception when unless one file doesn't exist.
+	 */
+	private boolean createPredicateForOneAgent(SwarmAgent agent,Path aspPath) throws Exception{
+		try(BufferedWriter bufferW=Files.newBufferedWriter(aspPath, StandardOpenOption.APPEND)){
+			String strPredicate=null;
+			
+			bufferW.write(String.format("%% CurrentAgent(AgentName,AgentTypeName). %n"));
+			strPredicate=new PredicateCurrentAgent(agent.getName(), agent.getAgentTypeName()).toString();
+			bufferW.write(String.format("%s.%n", strPredicate));
+			
+			bufferW.write(String.format("%% CurrentStation(AgentName,AgetnTypeName,StationName,StationTypeName,IsInStation,HasChoose). %n"));
+			strPredicate=new PredicateCurrentStation(agent.getName(), agent.getAgentTypeName(), "nothings", "nothings", false, false).toString();
+			bufferW.write(String.format("%s.%n", strPredicate));
+			
+			strPredicate=null;
+			bufferW.flush();
+			bufferW.close();
+		}catch(Exception e) {
+			LOG.error(e.getMessage());
+			throw e;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -409,13 +444,11 @@ public final class BDIParserUtils implements BDIParser {
 					Paths.get(KREATURES_SWARM_XML_DIR.toString()).resolve("Perspectives.lg.xml").toAbsolutePath());
 			new BDIParserUtils(
 					Paths.get(KREATURES_SWARM_XML_DIR.toString()).resolve("Perspectives.lg.xml"),AgStrategie.AGENT_RANDOM_STRATEGIE_FILE);
-			
 		} catch (RuntimeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception | Error ex) {
 			ex.printStackTrace();
 		}
-
 	}
 }

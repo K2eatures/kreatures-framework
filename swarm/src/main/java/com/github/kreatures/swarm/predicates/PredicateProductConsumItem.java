@@ -9,7 +9,7 @@ import com.github.kreatures.swarm.predicates.transform.TransformPredicates;
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 /**
  * TODO
- * ProductConsumItem(AgentName,AgentTypeName,StationName,StationTypeName).
+ * ProductConsumItem(AgentName,AgentTypeName,StationName,StationTypeName,ItemNumber,Motiv).
  * @author Cedric Perez Donfack
  *
  */
@@ -19,18 +19,23 @@ public class PredicateProductConsumItem extends SwarmPredicate {
 	private String agentTypeName;
 	private String stationName;
 	private String stationTypeName;
+	private int itemNumber;
+	private int motiv;
+	
 	
 	public PredicateProductConsumItem(FolFormula desire){
 		super(desire);
 		createInstance(desire);
 	}
 	
-	public PredicateProductConsumItem(String agentName,String agentTypeName,String stationName, String stationTypeName) throws Exception {
-		super(TransformPredicates.getLiteral("CurrentAgent",agentName,agentTypeName,stationName,stationTypeName));
+	public PredicateProductConsumItem(String agentName,String agentTypeName,String stationName, String stationTypeName,int itemNumber,int motiv) throws Exception {
+		super(TransformPredicates.getLiteral("ProductConsumItem",agentName,agentTypeName,stationName,stationTypeName,itemNumber+"",motiv+""));
 		this.agentName=agentName;
 		this.agentTypeName=agentTypeName;
 		this.stationName=stationName;
 		this.stationTypeName=stationTypeName;
+		this.itemNumber=itemNumber;
+		this.motiv=motiv;
 	}
 
 	public PredicateProductConsumItem(FolFormula desire, Perception reason) {
@@ -44,6 +49,8 @@ public class PredicateProductConsumItem extends SwarmPredicate {
 		this.agentTypeName=other.agentTypeName;
 		this.stationName=other.stationName;
 		this.stationTypeName=other.stationTypeName;
+		this.itemNumber=other.itemNumber;
+		this.motiv=other.motiv;
 	}	
 	
 	@Override
@@ -58,17 +65,17 @@ public class PredicateProductConsumItem extends SwarmPredicate {
 	}
 
 	/**
-	 * ProductConsumItem(AgentName,AgetnTypeName,StationName,StationTypeName).
+	 * ProductConsumItem(AgentName,AgentTypeName,StationName,StationTypeName,ItemNumber,Motiv).
 	 */
 	@Override
 	public String toString() {
-		return String.format("ProductConsumItem(%s,%s,%s,%s).", agentName, agentTypeName,stationName,stationTypeName);
+		return String.format("ProductConsumItem(%s,%s,%s,%s,%d,%d)", agentName, agentTypeName,stationName,stationTypeName,itemNumber,motiv);
 	}
 
 	@Override
 	public void createInstance(FolFormula atom) {
 //		PredicateAgent agent=null;
-		Pattern pattern=Pattern.compile("ProductConsumItem[(](\\w+),(\\w+),(\\w+),(\\w+)[)].");
+		Pattern pattern=Pattern.compile("ProductConsumItem[(](\\w+),(\\w+),(\\w+),(\\w+),(\\d+),(\\d)[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 //			agent=new PredicateAgent();
@@ -76,6 +83,8 @@ public class PredicateProductConsumItem extends SwarmPredicate {
 			this.agentTypeName=matcher.group(2);
 			this.stationName=matcher.group(3);
 			this.stationTypeName=matcher.group(4);
+			this.itemNumber=Integer.parseInt(matcher.group(5));
+			this.motiv=Integer.parseInt(matcher.group(6));
 		}
 	}
 	
@@ -89,4 +98,50 @@ public class PredicateProductConsumItem extends SwarmPredicate {
 		return otherName.equals(thisName);
 	}
 
+	/**
+	 * @return the agentName
+	 */
+	public String getAgentName() {
+		return agentName;
+	}
+
+	/**
+	 * @return the agentTypeName
+	 */
+	public String getAgentTypeName() {
+		return agentTypeName;
+	}
+
+	/**
+	 * @return the stationName
+	 */
+	public String getStationName() {
+		return stationName;
+	}
+
+	/**
+	 * @return the stationTypeName
+	 */
+	public String getStationTypeName() {
+		return stationTypeName;
+	}
+
+	/**
+	 * @return the itemNumber
+	 */
+	public int getItemNumber() {
+		return itemNumber;
+	}
+
+	/**
+	 * @return the motiv
+	 */
+	public int getMotiv() {
+		return motiv;
+	}
+	
+//	@Override
+//	public String getPredicatType() {
+//		return "ProductConsumItem";
+//	}
 }

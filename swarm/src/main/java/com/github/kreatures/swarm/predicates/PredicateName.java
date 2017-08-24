@@ -91,6 +91,8 @@ public enum PredicateName {
 	 * agent can visit a station) of agent
 	 */
 	StationInfo,
+	
+	StationTypItem,
 	/* Define all predicates from agent beliefs properties */
 	
 	Agent,
@@ -98,6 +100,8 @@ public enum PredicateName {
 	ItemSetLoadingAgent,
 	ItemSetLoadingStation,
 	NecAgentStation,
+	CurrentAgent,
+	CurrentStation,
 	TimeEdgeState	;
 	
 	/**
@@ -126,6 +130,10 @@ public enum PredicateName {
 			case AgentType:return (T) new PredicateAgentType(desire);
 			case ChoiceStation:return (T) new PredicateChoiceStation(desire);
 			case StationType:return (T) new PredicateStationType(desire);
+			case StationTypItem:return (T) new PredicateStationTypItem(desire);
+			case KnowHow:return (T) new PredicateKnowHow(desire);
+			case CurrentAgent:return (T) new PredicateCurrentAgent(desire);
+			case CurrentStation:return (T) new PredicateCurrentStation(desire);
 //			case TimeEdgeReady:
 //			case timeEdgeWaiting:
 			default: throw new NullPointerException("there are no desire swarm representation of this tweety represenation");
@@ -180,6 +188,14 @@ public enum PredicateName {
 		break;
 		case StationInfo:str="StationInfo";
 		break;
+		case KnowHow: str="KnowHow";
+			break;
+		case StationTypItem: str="StationTypItem";
+			break;
+		case CurrentAgent: str="CurrentAgent";
+			break;
+		case CurrentStation: str="CurrentStation";
+			break;
 		
 //		default:
 //			break;

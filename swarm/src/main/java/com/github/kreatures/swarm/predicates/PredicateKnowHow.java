@@ -9,46 +9,52 @@ import com.github.kreatures.swarm.predicates.transform.TransformPredicates;
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 /**
  * TODO
- * LeaveStation(AgentName,AgentTypeName,StationName,StationTypeName).
+ * KnowHow(AgentName,AgentTypeName,StationName,StationTypeName,CriterieName,CriterieValue).
  * @author Cedric Perez Donfack
  *
  */
-public class PredicateLeaveStation extends SwarmPredicate {
+public class PredicateKnowHow extends SwarmPredicate {
 
 	private String agentName;
 	private String agentTypeName;
 	private String stationName;
 	private String stationTypeName;
+	private String crName;
+	private int crValue;
 	
-	public PredicateLeaveStation(FolFormula desire){
+	public PredicateKnowHow(FolFormula desire){
 		super(desire);
 		createInstance(desire);
 	}
 	
-	public PredicateLeaveStation(String agentName,String agentTypeName,String stationName, String stationTypeName) throws Exception {
+	public PredicateKnowHow(String agentName,String agentTypeName,String stationName, String stationTypeName,String crName, int crValue) throws Exception {
 		super(TransformPredicates.getLiteral("CurrentAgent",agentName,agentTypeName,stationName,stationTypeName));
 		this.agentName=agentName;
 		this.agentTypeName=agentTypeName;
 		this.stationName=stationName;
 		this.stationTypeName=stationTypeName;
+		this.crName=crName;
+		this.crValue=crValue;
 	}
 
-	public PredicateLeaveStation(FolFormula desire, Perception reason) {
+	public PredicateKnowHow(FolFormula desire, Perception reason) {
 		super(desire, reason);
 		createInstance(desire);
 	}
 
-	public PredicateLeaveStation(PredicateLeaveStation other) {
+	public PredicateKnowHow(PredicateKnowHow other) {
 		super(other);
 		this.agentName=other.agentName;
 		this.agentTypeName=other.agentTypeName;
 		this.stationName=other.stationName;
 		this.stationTypeName=other.stationTypeName;
+		this.crName=other.crName;
+		this.crValue=other.crValue;
 	}	
 	
 	@Override
-	public PredicateLeaveStation clone() {
-		return new PredicateLeaveStation(this);
+	public PredicateKnowHow clone() {
+		return new PredicateKnowHow(this);
 	}
 	
 	@Override
@@ -58,17 +64,17 @@ public class PredicateLeaveStation extends SwarmPredicate {
 	}
 
 	/**
-	 * LeaveStation(AgentName,AgetnTypeName,StationName,StationTypeName).
+	 * KnowHow(AgentName,AgentTypeName,StationName,StationTypeName,CriterieName,CriterieValue).
 	 */
 	@Override
 	public String toString() {
-		return String.format("LeaveStation(%s,%s,%s,%s)", agentName, agentTypeName,stationName,stationTypeName);
+		return String.format("KnowHow(%s,%s,%s,%s,%s,%d)", agentName, agentTypeName,stationName,stationTypeName,crName,crValue);
 	}
 
 	@Override
 	public void createInstance(FolFormula atom) {
 //		PredicateAgent agent=null;
-		Pattern pattern=Pattern.compile("LeaveStation[(](\\w+),(\\w+),(\\w+),(\\w+)[)]");
+		Pattern pattern=Pattern.compile("KnowHow[(](\\w+),(\\w+),(\\w+),(\\w+),(\\w+),(\\d+)[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 //			agent=new PredicateAgent();
@@ -76,20 +82,47 @@ public class PredicateLeaveStation extends SwarmPredicate {
 			this.agentTypeName=matcher.group(2);
 			this.stationName=matcher.group(3);
 			this.stationTypeName=matcher.group(4);
+			this.crName=matcher.group(5);
+			this.crValue=Integer.parseInt(matcher.group(6));
 		}
 	}
 	
 	@Override
 	public boolean equals(Object other) {
-		if(other==null || !(other instanceof PredicateLeaveStation ))return false;
-		PredicateLeaveStation obj=(PredicateLeaveStation)other;
+		if(other==null || !(other instanceof PredicateKnowHow ))return false;
+		PredicateKnowHow obj=(PredicateKnowHow)other;
 		String otherName=obj.agentName+obj.stationName;
 		String thisName=this.agentName+this.stationName;
 		
 		return otherName.equals(thisName);
 	}
+
+	public String getAgentName() {
+		return agentName;
+	}
+
+	public String getAgentTypeName() {
+		return agentTypeName;
+	}
+
+	public String getStationName() {
+		return stationName;
+	}
+
+	public String getStationTypeName() {
+		return stationTypeName;
+	}
+
+	public String getCrName() {
+		return crName;
+	}
+
+	public int getCrValue() {
+		return crValue;
+	}
 //	@Override
 //	public String getPredicatType() {
-//		return "LeaveStation";
+//		return "KnowHow";
 //	}
+
 }

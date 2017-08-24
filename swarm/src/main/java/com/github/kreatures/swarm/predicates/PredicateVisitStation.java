@@ -62,13 +62,13 @@ public class PredicateVisitStation extends SwarmPredicate {
 	 */
 	@Override
 	public String toString() {
-		return String.format("VisitStation(%s,%s,%s,%s).", agentName, agentTypeName,stationName,stationTypeName);
+		return String.format("VisitStation(%s,%s,%s,%s)", agentName, agentTypeName,stationName,stationTypeName);
 	}
 
 	@Override
 	public void createInstance(FolFormula atom) {
 //		PredicateAgent agent=null;
-		Pattern pattern=Pattern.compile("VisitStation[(](\\w+),(\\w+),(\\w+),(\\w+)[)].");
+		Pattern pattern=Pattern.compile("VisitStation[(](\\w+),(\\w+),(\\w+),(\\w+)[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 //			agent=new PredicateAgent();
@@ -88,5 +88,4 @@ public class PredicateVisitStation extends SwarmPredicate {
 		
 		return otherName.equals(thisName);
 	}
-
 }

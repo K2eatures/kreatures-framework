@@ -1,25 +1,30 @@
 package com.github.kreatures.swarm.basic;
 
+/**
+ * This helps a agent to know its state in order to 
+ * prepare its actions and send it to the other agents.
+ *  
+ * @author Cedric Perez Donfack
+ *
+ */
 public enum MainDesire {
 	/**
 	 * This desire is used, when a agent want to 
 	 * know all the possible next stations.
 	 */
-	STATION_CHOICE,
+	CHOSE_STATION,
 	/**
-	 * This desire is used, when a agent has selected a station
-	 * and the station has a item.
+	 * This desire is used, when a agent has selected a station,
+	 * it has reached and want to visit it.
 	 */
-	VISIT_WITH_ITEM,
+	VISIT,
 	/**
-	 * This desire is used, when a agent has selected a station
-	 * and the station has no a item.
-	 */
-	VISIT_WITHOUT_ITEM,
-	/**
-	 * This desire is used, when a agent want to move to a next
+	 * This desire is used, when a agent move to a next
 	 * station.
 	 */
-	MOVE_TO_STATION
-
+	MOVE,
+	/**
+	 * This desire is used, when a agent cannot enter the station and has to wait a minute.
+	 */
+	WAIT
 }

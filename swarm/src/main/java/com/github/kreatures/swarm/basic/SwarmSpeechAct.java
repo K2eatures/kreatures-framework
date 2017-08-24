@@ -4,23 +4,26 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import com.github.kreatures.core.Action;
 import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.Intention;
+import com.github.kreatures.core.comm.SpeechAct;
 import com.github.kreatures.swarm.predicates.SwarmPredicate;
+import com.github.kreatures.swarm.predicates.transform.TransformPredicates;
+
+import net.sf.tweety.logics.fol.syntax.FolFormula;
 
 /**
- * In contract to Angerona, a action by AbstractSwarm cannot only be a single 
+ * As Angerona, a action by AbstractSwarm cannot only be a single 
  * Atom, because for example the enter into a station need more than one change
  * in the environment. Therefore, either one take each changes as a atomic intention
  * or one considers all of them as a atomic intention. In order to simplify this work
  * we have retain the second approach. 
  * So atomic intention is a set of specific action. 
- * @author donfack
+ * @author Cedric Perez Donfack
  *
  */
 /*must extends PlanElement*/
-public class SwarmAction extends Action {
+public class SwarmSpeechAct extends SpeechAct {
 	
 	protected MainAction actionTyp;
 	
@@ -30,7 +33,7 @@ public class SwarmAction extends Action {
 	private Set<SwarmPredicate> actions=new HashSet<>();
 	
 	/** Ctor used for deserialization */
-	public SwarmAction(AgentAbstract sender) {
+	public SwarmSpeechAct(AgentAbstract sender) {
 		this(sender,null,null);
 	}
 	
@@ -39,7 +42,7 @@ public class SwarmAction extends Action {
 	 * @param actions all the actions whic have to perform at the same9
 	 * 				time. 
 	 */
-	public SwarmAction(AgentAbstract sender,Set<SwarmPredicate> actions) {
+	public SwarmSpeechAct(AgentAbstract sender,Set<SwarmPredicate> actions) {
 		this(sender,actions,null);
 	}
 	
@@ -53,15 +56,16 @@ public class SwarmAction extends Action {
 	 * @see MainAction for all atomic intentions.
 	 *  
 	 */
-	public SwarmAction(AgentAbstract sender,MainAction actionTyp) {
+	public SwarmSpeechAct(AgentAbstract sender,MainAction actionTyp) {
 		this(sender,null,actionTyp);
 	}
 	
 	/** Ctor used for deserialization */
-	public SwarmAction(AgentAbstract sender,Set<SwarmPredicate> actions, MainAction actionTyp) {
-		super(sender.getName());
+	public SwarmSpeechAct(AgentAbstract sender,Set<SwarmPredicate> actions, MainAction actionTyp) {
+		super(sender.getName(),ALL);
 		super.agent=sender;
-		this.actions.addAll(actions);
+		if(actions!=null)
+			this.actions.addAll(actions);
 		this.actionTyp=actionTyp;
 	}
 	
@@ -114,6 +118,27 @@ public class SwarmAction extends Action {
 		if(super.parent != null) {
 			super.parent.onSubgoalFinished(this);
 		}
+	}
+
+	@Override
+	public SpeechActType getType() {
+		
+		return SpeechActType.SAT_INFORMATIVE;
+	}
+
+	@Override
+	public Set<FolFormula> getContent() {
+		// TODO Auto-generated method stub
+		return TransformPredicates.getSetFolFormula(actions);
+	}
+	
+	/**
+	 * the set of all the new action of a agent.
+	 * @return set of action of a agent.
+	 */
+	public Set<SwarmPredicate> getContentSwarmPredicate() {
+		// TODO Auto-generated method stub
+		return actions;
 	}
 }
 

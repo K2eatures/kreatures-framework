@@ -72,14 +72,22 @@ public class PredicateItemSetLoadingAgent extends SwarmPredicate {
 		return itemNumber;
 	}
 
-	public void setItemNumber(int itemNumber) {
-		this.itemNumber = itemNumber;
+	public void incrItemNumber(int itemNber) {
+		this.itemNumber+= itemNber;
 	}
-
+	public void decrItemNumber(int itemNber) {
+		itemNber=this.itemNumber-itemNber;
+		if(itemNber<=0) {
+			this.itemNumber=0;
+			return;
+		}
+		this.itemNumber= itemNber;
+	}
+	
 	@Override
 	public void createInstance(FolFormula atom) {
 //		PredicateItemSetLoadingAgent predicate = null;
-		Pattern pattern = Pattern.compile("ItemSetLoadingAgent[(](\\w+),(\\w+),(\\d+)[)].");
+		Pattern pattern = Pattern.compile("ItemSetLoadingAgent[(](\\w+),(\\w+),(\\d+)[)]");
 		Matcher matcher = pattern.matcher(atom.toString());
 		if (matcher.find()) {
 //			predicate = new PredicateItemSetLoadingAgent();
@@ -94,7 +102,7 @@ public class PredicateItemSetLoadingAgent extends SwarmPredicate {
 	 */
 	@Override
 	public String toString() {
-		return String.format("ItemSetLoadingAgent(%s,%s,%d).", agentName, stationTypeName, itemNumber);
+		return String.format("ItemSetLoadingAgent(%s,%s,%d)", agentName, stationTypeName, itemNumber);
 	}
 
 	@Override
@@ -117,4 +125,8 @@ public class PredicateItemSetLoadingAgent extends SwarmPredicate {
 
 		return false;
 	}
+//	@Override
+//	public String getPredicatType() {
+//		return "ItemSetLoadingAgent";
+//	}
 }

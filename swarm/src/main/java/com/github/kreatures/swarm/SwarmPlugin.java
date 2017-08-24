@@ -12,6 +12,8 @@ import org.simpleframework.xml.transform.Transform;
 import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.KReaturesPaths;
 import com.github.kreatures.core.KReaturesPluginAdapter;
+import com.github.kreatures.core.PlanComponent;
+import com.github.kreatures.core.AgentComponent;
 //import com.github.kreatures.core.AgentComponent;
 import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.EnvironmentBehavior;
@@ -24,7 +26,9 @@ import com.github.kreatures.core.logic.BaseChangeBeliefs;
 import com.github.kreatures.core.logic.BaseReasoner;
 import com.github.kreatures.core.logic.BaseTranslator;
 import com.github.kreatures.core.logic.FolBeliefbase;
+import com.github.kreatures.swarm.basic.ActionState;
 import com.github.kreatures.swarm.basic.SwarmBehavior;
+import com.github.kreatures.swarm.basic.SwarmDesires;
 import com.github.kreatures.swarm.beliefbase.SwarmTranslator;
 import com.github.kreatures.swarm.beliefbase.SwarmAspChangeBeliefs;
 import com.github.kreatures.swarm.beliefbase.SwarmAspReasoner;
@@ -122,6 +126,15 @@ public class SwarmPlugin extends KReaturesPluginAdapter {
 		List<Class<? extends BaseReasoner>> reval = new LinkedList<>();
 		reval.add(SwarmAspReasoner.class);
 		return reval;
+	}
+	
+	@Override
+	public List<Class<? extends AgentComponent>> getAgentComponentImpl() {
+		List<Class<? extends AgentComponent>> components = new ArrayList<>();
+		components.add(SwarmDesires.class);
+		components.add(ActionState.class);
+		components.add(PlanComponent.class);
+		return components;
 	}
 //	@Override
 //	public List<Class<? extends AgentComponent>> getAgentComponentImpl() {

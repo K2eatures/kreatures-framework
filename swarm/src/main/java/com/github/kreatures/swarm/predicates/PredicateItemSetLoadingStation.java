@@ -69,22 +69,29 @@ public class PredicateItemSetLoadingStation extends SwarmPredicate {
 		return itemNumber;
 	}
 
-	public void setItemNumber(int itemNumber) {
-		this.itemNumber = itemNumber;
+	public void incrItemNumber(int itemNber) {
+		this.itemNumber+= itemNber;
 	}
-
+	public void decrItemNumber(int itemNber) {
+		itemNber=this.itemNumber-itemNber;
+		if(itemNber<=0) {
+			this.itemNumber=0;
+			return;
+		}
+		this.itemNumber= itemNber;
+	}
 	/**
 	 * %ItemSetLoadingStation(StationTypeNameOut,StationNameIn,ItemNumber)
 	 */
 	@Override
 	public String toString() {
-		return String.format("ItemSetLoadingStation(%s,%s,%d).", stationOutTypeName, stationInName, itemNumber);
+		return String.format("ItemSetLoadingStation(%s,%s,%d)", stationOutTypeName, stationInName, itemNumber);
 	}
 	
 	@Override
 	public void createInstance(FolFormula atom) {
 //		PredicateItemSetLoadingStation predicate=null;
-		Pattern pattern=Pattern.compile("ItemSetLoadingStation[(](\\w+),(\\w+),(\\d+)[)].");
+		Pattern pattern=Pattern.compile("ItemSetLoadingStation[(](\\w+),(\\w+),(\\d+)[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 //			predicate=new PredicateItemSetLoadingStation();
@@ -114,5 +121,9 @@ public class PredicateItemSetLoadingStation extends SwarmPredicate {
 
 		return false;
 	}
+//	@Override
+//	public String getPredicatType() {
+//		return "ItemSetLoadingStation";
+//	}
 
 }
