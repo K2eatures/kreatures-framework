@@ -207,6 +207,7 @@
   	<module>plwithknowledge</module>
   	<module>simple</module>
   	<module>island</module>
+  	<module>extraction</module>	
 	<module>defendingagent</module>
  
   	<module>app</module> 
