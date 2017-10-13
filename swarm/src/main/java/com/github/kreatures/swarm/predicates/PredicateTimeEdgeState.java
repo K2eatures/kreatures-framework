@@ -50,7 +50,23 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 		this.isFinish=other.isFinish;
 
 	}	
+	
+	/**
+	 * set the initial value of the object.
+	 * @return
+	 */
+	public PredicateTimeEdgeState init(){
+		this.visitorName="nothing";
+		this.visitorTypeName="nothing";
+//		this.compType=0;
+		this.tick=0;
+		this.isWaiting=false;
+		this.isReady=false;
+		this.isFinish=false;
+		return this;
+	}
 
+	
 	@Override
 	public PredicateTimeEdgeState clone() {
 		return new PredicateTimeEdgeState(this);
@@ -60,17 +76,17 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+//	public void setName(String name) {
+//		this.name = name;
+//	}
 
 	public String getTypeName() {
 		return typeName;
 	}
 
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
-	}
+//	public void setTypeName(String typeName) {
+//		this.typeName = typeName;
+//	}
 
 	public String getVisitorName() {
 		return visitorName;
@@ -92,16 +108,16 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 		return compType;
 	}
 
-	public void setCompType(int compType) {
-		this.compType = compType;
-	}
+//	public void setCompType(int compType) {
+//		this.compType = compType;
+//	}
 
 	public int getTick() {
 		return tick;
 	}
 
-	public void setTick(int tick) {
-		this.tick = tick;
+	public void incrTick() {
+		this.tick++;
 	}
 
 	public boolean isWaiting() {
@@ -131,7 +147,7 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 	@Override
 	public void createInstance(FolFormula atom) {
 		//PredicateTimeEdgeState predicate=null;
-		Pattern pattern=Pattern.compile("TimeEdgeState[(](\\w+),(\\w+),(\\w+),(\\w+),([01]),(\\d+),({true|false}),({true|false}),({true|false})[)]");
+		Pattern pattern=Pattern.compile("TimeEdgeState[(](\\w+),(\\w+),(\\w+),(\\w+),(\\d+),(\\d+),(\\w+),(\\w+),(\\w+)[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 			//predicate=new PredicateTimeEdgeState(atom);

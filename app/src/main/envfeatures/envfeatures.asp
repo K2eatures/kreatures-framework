@@ -548,6 +548,7 @@ StationInfo(StationName,StationTypeName,Time,3):-Station(StationName,StattionTyp
 StationInfo(StationName,StationTypeName,Time,4):-Station(StationName,StattionType,_,_,_),StationType(StationTypeName,_,_,Time,_,_,_,_,_),not ItemErfullNoAus(StationName,StationTypeName),not ItemErfullNoEin(StationName,StationTypeName).
 
 StationInfo(StationName,StationTypeName,Time,5):-Station(StationName,StattionType,_,_,_),StationType(StationTypeName,_,_,Time,_,_,_,_,_),ItemErfullNoAus(StationName,StationTypeName),ItemErfullNoEin(StationName,StationTypeName).
+
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Engeischaft von ChoiceStation &&&&&&&&&&&&&&&&&&&&&&&&&&&
 %HasChoiceStation(AgentName,AgentTypeName). The Agent has choosen a station
 HasChoiceStation(AgentName,AgentTypeName):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,_,_,false,false).
@@ -570,19 +571,19 @@ ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Time,Ite
 TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,0):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_).
 
 %When agent and station haven timeEdge and are waiting
-TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,3):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeWaiting(AgentName,AgentTypeName,_),TimeEdgeWaiting(StationName,StationTypeName,_).
+TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,6):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeWaiting(AgentName,AgentTypeName,_),TimeEdgeWaiting(StationName,StationTypeName,_).
 %When agent hasn't timeEdge and station is waiting
-TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,2):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeWaiting(StationName,StationTypeName,_).
+TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,5):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeWaiting(StationName,StationTypeName,_).
 %When station hasn't timeEdge and agent is waiting
-TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,1):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),TimeEdgeWaiting(AgentName,AgentTypeName,_).
+TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,4):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),TimeEdgeWaiting(AgentName,AgentTypeName,_).
 
 %When agent and station haven timeEdge and are ready
-%TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,3):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeReady(AgentName,AgentTypeName,_),TimeEdgeReady(StationName,StationTypeName,_).
+TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,3):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeReady(AgentName,AgentTypeName,_),TimeEdgeReady(StationName,StationTypeName,_).
 
 %When agent hasn't timeEdge and station is ready
-%TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,2):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeReady(StationName,StationTypeName,_).
+TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,2):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeReady(StationName,StationTypeName,_).
 %When station hasn't timeEdge and agent is ready
-%TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,1):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),TimeEdgeReady(AgentName,AgentTypeName,_).
+TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,1):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),TimeEdgeReady(AgentName,AgentTypeName,_).
 
 %###################################### Definition of atomic Intention ######################################################
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Engeischaft von EnterStation &&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -603,6 +604,24 @@ AllConditionErfullEnterStation(AgentName,StationName):- CurrentAgent(AgentName,_
 
 %When agent and station haven't timeEdge
 TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,0):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_).
+
+%When agent and station haven timeEdge and are waiting
+TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,6):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeWaiting(AgentName,AgentTypeName,_),TimeEdgeWaiting(StationName,StationTypeName,_).
+%When agent hasn't timeEdge and station is waiting
+TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,5):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeWaiting(StationName,StationTypeName,_).
+%When station hasn't timeEdge and agent is waiting
+TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,4):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),TimeEdgeWaiting(AgentName,AgentTypeName,_).
+
+%When agent and station haven timeEdge and are ready
+TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,3):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeReady(AgentName,AgentTypeName,_),TimeEdgeReady(StationName,StationTypeName,_).
+
+%When agent hasn't timeEdge and station is ready
+TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,2):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeReady(StationName,StationTypeName,_).
+%When station hasn't timeEdge and agent is ready
+TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,1):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),TimeEdgeReady(AgentName,AgentTypeName,_).
+
+
+
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Engeischaft von ProdcutConsumItem &&&&&&&&&&&&&&&&&&&&&&&&&&&
 %ProductConsumItem(AgentName,AgentTypeName,StationName,StationTypeName,ItemNumber,Motiv). This bedeutet: ein agent bekommt ein item and liefert ein anderen 
 %Motiv	=0, : Agent can only take item, because there are no ingoing stations.

@@ -47,9 +47,6 @@ public class SwarmSubgoalGenerationOperator extends
 			.getLogger(SwarmSubgoalGenerationOperator.class);
 	
 	private Set<StationNode> allShortestPaths;
-	{
-		//TODO
-	}
 	
 	/**
 	 * reference to environment component of this simulation.  
@@ -59,11 +56,12 @@ public class SwarmSubgoalGenerationOperator extends
 //		envComponent=AbstractSwarms.getInstance().getEnvComponent(KReatures.getInstance().getActualSimulation().getName());
 //	}
 	
-	/**
-	 * the desire which will be chosen at the last time, 
-	 * for the currently choice.
-	 */
-	private SwarmDesire lastDesire=null;
+//	/**
+//	 * the desire which will be chosen at the last time, 
+//	 * for the currently choice.
+//	 */
+//	private SwarmDesire lastDesire=null;
+//	private int count=0;
 	
 //	/**
 //	 * Count the number of subgoal which will be created.
@@ -83,7 +81,7 @@ public class SwarmSubgoalGenerationOperator extends
 			return false;
 		
 		LOG.info("New plans will be generated.");
-		PredicateStation oldStation=(PredicateStation)lastDesire;
+		PredicateStation oldStation=(PredicateStation)desires.getLastDesire();
 		//PredicateChoiceStation bestDesire=doBestDesire("maxFreeSpace",desires);
 		PredicateChoiceStation bestDesire=doBestDesire("minVisited",desires);
 		if(bestDesire==null) return false;
@@ -132,7 +130,7 @@ public class SwarmSubgoalGenerationOperator extends
 			actuellStation.setStationTypeName(newStation.getTypeName());
 		}
 		
-		lastDesire=newStation;
+		desires.setLastDesire(newStation);
 		params.getAgent().getContext().set(SwarmContextConst._PLAN, plan);
 		
 		return true;
@@ -267,14 +265,13 @@ public class SwarmSubgoalGenerationOperator extends
 		return subGoal;
 	}
 
-	private boolean isShorestPathNoLoad=true;
+
 	@Override
 	protected void prepare(PlanParameter params) {
-		if(isShorestPathNoLoad) {
+		if(allShortestPaths==null) {
 			allShortestPaths=((EnvironmentComponentDefault)(AbstractSwarms.getInstance()
 				.getEnvComponent(KReatures.getInstance()
 						.getActualSimulation().getName()))).getAllShortestPaths();
-			isShorestPathNoLoad=false;
 		}
 	}
 }

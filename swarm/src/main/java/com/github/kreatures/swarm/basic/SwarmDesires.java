@@ -2,15 +2,18 @@ package com.github.kreatures.swarm.basic;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import com.github.kreatures.core.logic.Desires;
+import com.github.kreatures.swarm.SwarmConst;
 import com.github.kreatures.swarm.Utility;
 import com.github.kreatures.swarm.predicates.PredicateAgent;
 import com.github.kreatures.swarm.predicates.PredicateAgentType;
 import com.github.kreatures.swarm.predicates.PredicateChoiceStation;
 import com.github.kreatures.swarm.predicates.PredicateCurrentStation;
 import com.github.kreatures.swarm.predicates.PredicateStation;
+import com.github.kreatures.swarm.predicates.PredicateTimeEdgeState;
 import com.github.kreatures.swarm.predicates.SwarmPredicate;
 
 /**
@@ -54,11 +57,80 @@ public class SwarmDesires extends Desires {
 	 * corresponding to the choice desire.
 	 */	
 	private Set<SwarmPredicate> needDesires=new HashSet<>();
-//	/**
-//	 * list of all the current options.
-//	 */
-//	private Set<SwarmPredicate> curentDesires;
+	/**
+	 * the desire which will be chosen at the last time, 
+	 * for the currently choice.
+	 */
+	private SwarmDesire lastDesire=null;
 	
+	/**
+	 * store timeEdgestates components to controller the time-components
+	 */
+	private PredicateTimeEdgeState timeEdgeState=null;
+	
+	/**
+	 * How long a agent can wait.
+	 * Actually, it can only wait 4 units.
+	 */
+	private int waitTime=SwarmConst.WAIT_TIME.getValue();
+	
+	
+	
+	
+	
+	/**
+	 * @return the timeEdgeState
+	 */
+	public Optional<PredicateTimeEdgeState> getTimeEdgeState() {
+		return Optional.of(timeEdgeState);
+	}
+
+	/**
+	 * @param timeEdgeState the timeEdgeState to set
+	 */
+	public void setTimeEdgeState(PredicateTimeEdgeState timeEdgeState) {
+		this.timeEdgeState = timeEdgeState;
+	}
+
+	/**
+	 * @return the waitTime
+	 */
+	public int getWaitTime() {
+		return waitTime;
+	}
+
+	/**
+	 * @param waitTime the waitTime to set
+	 */
+	public void decrWaitTime() {
+		this.waitTime++;
+	}
+
+	/**
+	 * @param waitTime the waitTime to set
+	 */
+	public void initWaitTime() {
+		this.waitTime=SwarmConst.WAIT_TIME.getValue();
+	}
+	
+	/**
+	 * the desire which will be chosen at the last time, 
+	 * for the currently choice.
+	 * @return the lastDesire is a PredicateStation
+	 */
+	public SwarmDesire getLastDesire() {
+		return lastDesire;
+	}
+
+	/**
+	 * the desire which will be chosen at the last time, 
+	 * for the currently choice.
+	 * @param lastDesire the last Desire to set
+	 */
+	public void setLastDesire(SwarmDesire lastDesire) {
+		this.lastDesire = lastDesire;
+	}
+
 	/** Default Ctor: Used for dynamic instantiation */
 	public SwarmDesires() {
 //		curentDesires=new HashSet<>();
@@ -79,6 +151,8 @@ public class SwarmDesires extends Desires {
 	public boolean removeDesire(SwarmPredicate desire) {
 		return super.remove(desire);
 	}
+	
+	
 	
 	/**
 	 * Adds a set of generated desires and shows it on the screen.

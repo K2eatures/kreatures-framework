@@ -3,21 +3,15 @@ package com.github.kreatures.swarm;
 public enum SwarmConst {
 	MAX_INT,
 	UNIT,
-	ZERO_VALUE;
+	ZERO_VALUE,
+	WAIT_TIME;
 	public int getValue(){
-		
-		if(name()=="MAX_INT"){
-			return 1000;
+		switch(this){
+			case MAX_INT: return 1000;
+			case UNIT: return 1;
+			case ZERO_VALUE: return 0;
+			case WAIT_TIME: return 4;
+			default:return 0;
 		}
-		
-		if(name()=="UNIT"){
-			return 1;
-		}
-		
-		if(name()=="ZERO_VALUE"){
-			return 0;
-		}
-		
-		return 0;
 	}
 }
