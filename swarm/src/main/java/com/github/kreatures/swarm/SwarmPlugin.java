@@ -12,7 +12,7 @@ import org.simpleframework.xml.transform.Transform;
 import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.KReaturesPaths;
 import com.github.kreatures.core.KReaturesPluginAdapter;
-import com.github.kreatures.core.PlanComponent;
+import com.github.kreatures.core.SwarmPlanComponent;
 import com.github.kreatures.core.AgentComponent;
 //import com.github.kreatures.core.AgentComponent;
 import com.github.kreatures.core.BaseBeliefbase;
@@ -133,7 +133,7 @@ public class SwarmPlugin extends KReaturesPluginAdapter {
 		List<Class<? extends AgentComponent>> components = new ArrayList<>();
 		components.add(SwarmDesires.class);
 		components.add(ActionState.class);
-		components.add(PlanComponent.class);
+		components.add(SwarmPlanComponent.class);
 		return components;
 	}
 //	@Override

@@ -59,11 +59,6 @@ public class PredicateCurrentStation extends SwarmPredicate {
 	public PredicateCurrentStation clone() {
 		return new PredicateCurrentStation(this);
 	}
-	
-	@Override
-	public int hashCode() {
-		return Utility.computeHashCode(super.hashCode(), this.agentName,this.stationName);
-	}
 
 	/**
 	 * CurrentStation(AgentName,AgetnTypeName,StationName,StationTypeName,IsInStation,HasChoose).
@@ -91,12 +86,19 @@ public class PredicateCurrentStation extends SwarmPredicate {
 	
 	@Override
 	public boolean equals(Object other) {
-		if(other==null || !(other instanceof PredicateCurrentStation ))return false;
-		PredicateCurrentStation obj=(PredicateCurrentStation)other;
-		String otherName=obj.agentName;
-		String thisName=this.agentName;
+		if(!(other instanceof PredicateCurrentStation))
+			return false;
 		
-		return otherName.equals(thisName);
+		PredicateCurrentStation obj=(PredicateCurrentStation)other;
+		boolean isName=obj.agentName==null?this.agentName==null:obj.agentName.equals(this.agentName);
+		boolean isTypeName=obj.agentTypeName==null?this.agentTypeName==null:obj.agentTypeName.equals(this.agentTypeName);
+		
+		return isName & isTypeName;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.agentTypeName.hashCode()* 11;
 	}
 	
 	/**

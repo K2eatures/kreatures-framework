@@ -1,7 +1,5 @@
 package com.github.kreatures.swarm.optimisation;
 
-import com.github.kreatures.swarm.Utility;
-
 public class StationNode implements Comparable<StationNode> {
 
 	private String stCompNameIn;
@@ -9,10 +7,15 @@ public class StationNode implements Comparable<StationNode> {
 	private int weight;
 
 	public StationNode(String stCompNameIn,String stCompNameOut) {
-		this.stCompNameIn=stCompNameIn;
-		this.stCompNameOut=stCompNameOut;
+		this(stCompNameIn,stCompNameOut,0);
 	}
 
+	public StationNode(String stCompNameIn,String stCompNameOut, int weight) {
+		this.stCompNameIn=stCompNameIn;
+		this.stCompNameOut=stCompNameOut;
+		this.weight=weight;
+	}
+	
 	public String getStCompNameIn() {
 		return stCompNameIn;
 	}
@@ -31,16 +34,16 @@ public class StationNode implements Comparable<StationNode> {
 
 	@Override
 	public boolean equals(Object other) {
-		if(other==null) return false;
+		if(!(other instanceof StationNode)) return false;
 		StationNode obj=(StationNode)other;
-		if(obj.stCompNameIn==null || obj.stCompNameOut==null) return false;
-
-		if(obj.stCompNameIn.equals(this.stCompNameIn)&& obj.stCompNameOut.equals(this.stCompNameOut))
-			return true;
-		if(obj.stCompNameIn.equals(this.stCompNameOut)&& obj.stCompNameOut.equals(this.stCompNameIn))
-			return true;	
-
-		return false;	
+	
+		boolean isName=obj.stCompNameIn==null?this.stCompNameIn==null:obj.stCompNameIn.equals(this.stCompNameIn);
+		boolean isTypeName=obj.stCompNameOut==null?this.stCompNameOut==null:obj.stCompNameOut.equals(this.stCompNameOut);
+		
+		boolean isName1=obj.stCompNameIn==null?this.stCompNameOut==null:obj.stCompNameIn.equals(this.stCompNameOut);
+		boolean isTypeName1=obj.stCompNameOut==null?this.stCompNameIn==null:obj.stCompNameOut.equals(this.stCompNameIn);
+		
+		return (isName & isTypeName)|(isName1 & isTypeName1);	
 	}
 
 	/**
@@ -59,20 +62,25 @@ public class StationNode implements Comparable<StationNode> {
 	/* ShortPath(StationComponentName1,StationComponentName2,minWeght).*/
 	@Override
 	public String toString() {
-		return String.format("ShortPah(%s,%s,%d).", stCompNameIn,stCompNameOut,weight);
+		//return String.format("ShortPah(%s,%s,%d).", stCompNameIn,stCompNameOut,weight);
+		return String.format("%s,%s,%d", stCompNameIn,stCompNameOut,weight);
 	}
 
 	@Override
 	public int hashCode() {
-		return Utility.computeHashCode(1, stCompNameIn,stCompNameIn,weight);
+		return (stCompNameIn.hashCode()+stCompNameOut.hashCode())*11;
 	}
 
 	@Override
 	public int compareTo(StationNode other) {
-		if(this.equals(other)) return 0;
-		
-		int compare=this.weight==other.weight?0:this.weight>other.weight?1:-1;
-		return compare;
+				
+		return Integer.compare(this.weight, other.weight);
+	}
+	
+	public static StationNode parseToStationNode(String edge) {
+		String[] splitEdge=edge.split(",");
+		StationNode node=new StationNode(splitEdge[0], splitEdge[1],Integer.parseInt(splitEdge[2]));
+		return node;
 	}
 	
 }

@@ -17,30 +17,35 @@ import com.github.kreatures.core.def.DefaultBehavior;
  */
 public class SwarmBehavior extends DefaultBehavior{
 	private static final Logger LOG = LoggerFactory.getLogger(SwarmBehavior.class);
-	
+
 	@Override
 	public void sendAction(KReaturesEnvironment env, Action act) {
 		// The action send by one agent is the perception of the other one.
 		somethingHappens = true;
-		
+
 		// forward the action if it can be perceived by other agents
 		if(act instanceof Perception) {
 
 			Perception per = (Perception) act;
 			String agentName = per.getReceiverId();
+			
 			localDelegate(env, per, agentName);
 		}
 	}
-	
+
 	@Override
 	protected void localDelegate(KReaturesEnvironment env, Perception percept, String agentName) {
-		for(AgentAbstract agent:env.getAgents()) {
-			
-			if(agent instanceof NewAgent && !((Action)percept).getAgent().equals(agent)) {
-				NewAgent newAgent=(NewAgent)agent;
-				newAgent.getPerceptions().add(percept);
-			}
-		}
+
+		env.getAgents().stream().filter(agent->(agent instanceof NewAgent)&&!agent.equals(((Action) percept).getAgent())).forEach(agent->{
+
+			NewAgent newAgent=(NewAgent)agent;
+			((SwarmSpeechAct)percept).getActions().stream().peek(System.out::println).forEach(newPercept->{
+				newAgent.getPerceptions().stream().peek(System.out::println).forEach(oldPercept->{
+					System.out.println("Hier#############  "+((SwarmSpeechAct)oldPercept).getActions().removeIf(obj->obj.equals(newPercept)));						
+				});
+			});
+			newAgent.getPerceptions().add(percept);
+		});
 	}
 }
 

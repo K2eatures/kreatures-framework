@@ -57,12 +57,6 @@ public class PredicateStationTypItem extends SwarmPredicate {
 		return new PredicateStationTypItem(this);
 	}
 	
-	@Override
-	public int hashCode() {
-		return (super.hashCode() +
-				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
-	}
-
 	/**
 	 * StationTypItem(AgentName,StationNameIn,StationTypNameIn,StationTypeNameOut,item)
 	 */
@@ -88,14 +82,21 @@ public class PredicateStationTypItem extends SwarmPredicate {
 	
 	@Override
 	public boolean equals(Object other) {
-		if(other==null || !(other instanceof PredicateStationTypItem ))return false;
-		PredicateStationTypItem obj=(PredicateStationTypItem)other;
-		String otherName=obj.agentName+obj.stTypNameIn;
-		String thisName=this.agentName+this.stTypNameIn;
+		if(!(other instanceof PredicateStationTypItem))
+			return false;
 		
-		return otherName.equals(thisName);
+		PredicateStationTypItem obj=(PredicateStationTypItem)other;
+		boolean isName=obj.agentName==null?this.agentName==null:obj.agentName.equals(this.agentName);
+		boolean isTypeNameIn=obj.stNameIn==null?this.stNameIn==null:obj.stNameIn.equals(this.stNameIn);
+		boolean isTypeNameOut=obj.stTypNameOut==null?this.stTypNameOut==null:obj.stTypNameOut.equals(this.stTypNameOut);
+		return isName & isTypeNameIn & isTypeNameOut;
 	}
-
+	
+	@Override
+	public int hashCode() {
+		return (this.agentName.hashCode()+this.stNameIn.hashCode())* 11;
+	}
+	
 	/**
 	 * @return the agentName
 	 */

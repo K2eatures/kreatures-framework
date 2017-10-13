@@ -17,7 +17,6 @@ import com.github.kreatures.swarm.predicates.transform.TransformPredicates;
 
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 import net.sf.tweety.logics.translators.aspnlp.AspNlpTranslator;
-import net.sf.tweety.lp.asp.syntax.Program;
 import net.sf.tweety.lp.nlp.syntax.NLPProgram;
 import net.sf.tweety.lp.nlp.syntax.NLPRule;
 

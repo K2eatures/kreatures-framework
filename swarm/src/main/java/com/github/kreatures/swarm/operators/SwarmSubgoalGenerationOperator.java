@@ -3,15 +3,22 @@ package com.github.kreatures.swarm.operators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
-import java.util.Stack;
 import java.util.TreeSet;
 
+import com.github.kreatures.core.AbstractSwarms;
 import com.github.kreatures.core.Action;
 import com.github.kreatures.core.Desire;
+import com.github.kreatures.core.EnvironmentComponent;
+import com.github.kreatures.core.EnvironmentComponentDefault;
+import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.PlanComponent;
-import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.Subgoal;
+import com.github.kreatures.core.SwarmPlanComponent;
 import com.github.kreatures.core.operators.BaseSubgoalGenerationOperator;
 import com.github.kreatures.core.operators.parameters.PlanParameter;
 import com.github.kreatures.swarm.SwarmContextConst;
@@ -25,6 +32,7 @@ import com.github.kreatures.swarm.predicates.PredicateChoiceStation;
 import com.github.kreatures.swarm.predicates.PredicateCurrentStation;
 import com.github.kreatures.swarm.predicates.PredicateKnowHow;
 import com.github.kreatures.swarm.predicates.PredicateStation;
+import com.github.kreatures.swarm.predicates.SwarmPredicate;
 
 /**
  * 
@@ -38,7 +46,7 @@ public class SwarmSubgoalGenerationOperator extends
 	private Logger LOG = LoggerFactory
 			.getLogger(SwarmSubgoalGenerationOperator.class);
 	
-	private Set<StationNode> allShortestPaths=new TreeSet<>();
+	private Set<StationNode> allShortestPaths;
 	{
 		//TODO
 	}
@@ -65,7 +73,7 @@ public class SwarmSubgoalGenerationOperator extends
 	@Override
 	protected Boolean processImpl(PlanParameter params) {
 		
-		PlanComponent plan=params.getAgent().getComponent(PlanComponent.class);
+		PlanComponent plan=params.getAgent().getComponent(SwarmPlanComponent.class);
 		if(plan==null)
 			return false;
 		
@@ -73,12 +81,14 @@ public class SwarmSubgoalGenerationOperator extends
 		
 		if(desires==null||desires.isEmptyDesires())
 			return false;
-				
+		
 		LOG.info("New plans will be generated.");
 		PredicateStation oldStation=(PredicateStation)lastDesire;
-		PredicateChoiceStation bestDesire=doBestDesire("maxFreeSpace",desires);
+		//PredicateChoiceStation bestDesire=doBestDesire("maxFreeSpace",desires);
+		PredicateChoiceStation bestDesire=doBestDesire("minVisited",desires);
+		if(bestDesire==null) return false;
 		PredicateStation newStation=null;
-		for(Desire desire:desires.getDesires()) {
+		for(Desire desire:desires.getNeedDesires()) {
 			if((desire instanceof PredicateStation)&&((PredicateStation)desire).getName().equals(bestDesire.getStationName())) {
 				newStation=(PredicateStation)desire;
 				break;
@@ -136,23 +146,35 @@ public class SwarmSubgoalGenerationOperator extends
 	 */
 	private PredicateChoiceStation doBestDesire(String criterion,SwarmDesires desires) {
 		if(criterion==null||desires==null)return null;
-		PredicateKnowHow knowHow=null;
-		for(Desire predicate:desires.getDesires()) {
-			if((predicate instanceof PredicateKnowHow)&&criterion.equals(((PredicateKnowHow)predicate).getCrName())) {
-				knowHow= ((PredicateKnowHow)predicate);
-				break;
-			}			
-		}
-		if(knowHow==null)return null;
-		for(Desire predicate:desires.getDesires()) {
-			if(predicate instanceof PredicateChoiceStation) {
-				PredicateChoiceStation choiceStation=(PredicateChoiceStation)predicate;
-				if(choiceStation.getStationName().equals(knowHow.getStationName())) {
-					return choiceStation;
-				}
-			}			
-		}
-		return null;
+		
+		Optional<PredicateKnowHow> optKnowHow;
+//		for(Desire predicate:desires.getNeedDesires()) {
+//			if((predicate instanceof PredicateKnowHow)&&criterion.equals(((PredicateKnowHow)predicate).getCrName())) {
+//				knowHow= ((PredicateKnowHow)predicate);
+//				break;
+//			}			
+//		}
+		List<SwarmPredicate> allKnowHow=desires.getNeedDesires().stream()
+				.filter(predicate->(predicate instanceof PredicateKnowHow) && 
+						criterion.equals(((PredicateKnowHow)predicate).getCrName()))
+				.collect(ArrayList::new, ArrayList::add,ArrayList::addAll);
+		allKnowHow.stream().forEach(action->{
+				desires.getAgent().report("New Strategie :"+action.toString());
+			});
+		Random random=new Random();
+		int numbreOfKnowHow=allKnowHow.size();
+		optKnowHow=Optional.ofNullable((PredicateKnowHow)allKnowHow.get(random.nextInt(numbreOfKnowHow)));
+		
+		if(!optKnowHow.isPresent()) return null;
+		
+		return desires.getNeedDesires().stream().filter(predicate->
+		(predicate instanceof PredicateChoiceStation))
+		.map(mapper->(PredicateChoiceStation)mapper)
+		.filter(choiceStation->choiceStation.getStationName().equals(optKnowHow.get().getStationName()))
+		.peek(action->{
+			desires.getAgent().report("Selected Desire :"+action.toString());
+		}).findFirst().get();
+
 	}
 	
 	/**
@@ -244,9 +266,15 @@ public class SwarmSubgoalGenerationOperator extends
 		
 		return subGoal;
 	}
-	
+
+	private boolean isShorestPathNoLoad=true;
 	@Override
 	protected void prepare(PlanParameter params) {
-		
+		if(isShorestPathNoLoad) {
+			allShortestPaths=((EnvironmentComponentDefault)(AbstractSwarms.getInstance()
+				.getEnvComponent(KReatures.getInstance()
+						.getActualSimulation().getName()))).getAllShortestPaths();
+			isShorestPathNoLoad=false;
+		}
 	}
 }

@@ -103,13 +103,7 @@ public class PredicateStation extends SwarmPredicate{
 	public String toString() {
 		return String.format("Station(%s,%s,%d,%d,%d)",name, typeName,frequency,necessity,space);
 	}
-
-	@Override
-	public int hashCode() {
-		return (super.hashCode() +
-				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
-	}
-
+	
 	@Override
 	public String getPredicatType() {
 		
@@ -133,13 +127,19 @@ public class PredicateStation extends SwarmPredicate{
 	
 	@Override
 	public boolean equals(Object other) {
-		if (other == null || !(other instanceof PredicateStation))
+		if(!(other instanceof PredicateStation))
 			return false;
-		PredicateStation obj = (PredicateStation) other;
-
-		if (obj.getName() != null && this.getName() != null) {
-			return obj.getName().equals(this.getName());
-		}
-		return false;
+		
+		PredicateStation obj=(PredicateStation)other;
+		boolean isName=obj.name==null?this.name==null:obj.name.equals(this.name);
+		boolean isTypeName=obj.typeName==null?this.typeName==null:obj.typeName.equals(this.typeName);
+		
+		return isName & isTypeName;
 	}
+	
+	@Override
+	public int hashCode() {
+		return this.typeName.hashCode()* 11;
+	}
+	
 }

@@ -23,7 +23,7 @@
 				<permission.script>${basedir}/src/main/permission.bat</permission.script>
 			</properties>
 		</profile>
-
+		
 		<profile>
 			<id>unix</id>
 			<activation>

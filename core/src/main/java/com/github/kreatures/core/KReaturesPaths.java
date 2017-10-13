@@ -33,7 +33,7 @@ public enum KReaturesPaths {
 	/**
 	 * path where all the scenario-models are saved.
 	 */
-	KREATURES_SCENARIO_MODELS,	
+	KREATURES_SCENARIO_MODELS,
 	/**
 	 * TODO Only for test and must be deleted after. use
 	 * KREATURES_SWARM_CONFIG_DIR instead.
@@ -79,7 +79,7 @@ public enum KReaturesPaths {
 			case KREATURES_SWARM_DEFAULT_CONFIG_DIR: return "config/swarm/kreatures_default";
 			case KREATURES_SWARM_XML_DIR: return "abstractSwarm/Examples";
 			case KREATURES_ENV_FEATURES: return "envfeatures";
-			case KREATURES_SCENARIO_MODELS: return "scenariomodels";
+			case KREATURES_SCENARIO_MODELS: return "scenariomodels"; 
 			/**
 			 * 
 			 * TODO Only for test and must be deleted after.

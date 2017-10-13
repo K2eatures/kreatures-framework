@@ -1,13 +1,12 @@
 package com.github.kreatures.swarm.operators;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.AbstractSwarms;
 import com.github.kreatures.core.EnvironmentComponent;
-import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.NewAgent;
 import com.github.kreatures.core.logic.FolBeliefbase;
 import com.github.kreatures.core.operators.BaseEvaluationOptionsOperator;
@@ -25,13 +24,13 @@ public class SwarmEvaluationOptionsOperator extends BaseEvaluationOptionsOperato
 	/** reference to the logback instance used for logging */
 	private static Logger LOG = LoggerFactory
 			.getLogger(SwarmEvaluationOptionsOperator.class);
-	
+
 	/**
 	 * reference to environment component of this simulation.  
 	 */
 	private EnvironmentComponent envComponent; 
-		
-	
+
+
 	@Override
 	protected Boolean processImpl(EvaluationParameter params) {
 		boolean check=false;
@@ -50,7 +49,11 @@ public class SwarmEvaluationOptionsOperator extends BaseEvaluationOptionsOperato
 		envComponent=params.getEnvComponent();
 		Set<SwarmPredicate> result=envComponent.askEnvironment(folBB, query);
 		if(result!=null) {
-			swarmDesires.addDesires(result);
+			swarmDesires.addNeedDesires(result);
+			swarmDesires.addDesires(result.stream().peek(System.out::println).filter(predicate->
+				predicate.getPredicatType().equals("ChoiceStation")).peek(System.out::println).
+				collect(HashSet::new,HashSet::add,HashSet::addAll)
+			);
 			//TODO it is actually do nothings.
 			evaluationFunction(swarmDesires);  
 			LOG.info("available Desires are:"+result);
@@ -61,10 +64,10 @@ public class SwarmEvaluationOptionsOperator extends BaseEvaluationOptionsOperato
 		}
 		return check;
 	}
-	
+
 	@Override
 	protected void prepare(EvaluationParameter params) {
-		
+
 	}
 	/**
 	 * Use for the reward.
@@ -73,7 +76,7 @@ public class SwarmEvaluationOptionsOperator extends BaseEvaluationOptionsOperato
 	 * @param desires
 	 */
 	private void evaluationFunction(SwarmDesires desires) {
-		
+
 	}
 
 }

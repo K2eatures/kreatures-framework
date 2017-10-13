@@ -56,12 +56,6 @@ public class PredicateKnowHow extends SwarmPredicate {
 	public PredicateKnowHow clone() {
 		return new PredicateKnowHow(this);
 	}
-	
-	@Override
-	public int hashCode() {
-		return (super.hashCode() +
-				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
-	}
 
 	/**
 	 * KnowHow(AgentName,AgentTypeName,StationName,StationTypeName,CriterieName,CriterieValue).
@@ -89,14 +83,22 @@ public class PredicateKnowHow extends SwarmPredicate {
 	
 	@Override
 	public boolean equals(Object other) {
-		if(other==null || !(other instanceof PredicateKnowHow ))return false;
-		PredicateKnowHow obj=(PredicateKnowHow)other;
-		String otherName=obj.agentName+obj.stationName;
-		String thisName=this.agentName+this.stationName;
+		if(!(other instanceof PredicateKnowHow))
+			return false;
 		
-		return otherName.equals(thisName);
+		PredicateKnowHow obj=(PredicateKnowHow)other;
+		boolean isName=obj.agentName==null?this.agentName==null:obj.agentName.equals(this.agentName);
+		boolean isTypeName=obj.stationName==null?this.stationName==null:obj.stationName.equals(this.stationName);
+		boolean isCrName=obj.crName==null?this.crName==null:obj.crName.equals(this.crName);
+		
+		return isName & isTypeName & isCrName;
 	}
-
+	
+	@Override
+	public int hashCode() {
+		return (this.crName.hashCode() + this.agentName.hashCode())* 11;
+	}
+	
 	public String getAgentName() {
 		return agentName;
 	}

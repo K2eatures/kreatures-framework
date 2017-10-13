@@ -6,11 +6,10 @@ import java.util.TreeSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.AbstractSwarms;
 import com.github.kreatures.core.EnvironmentComponent;
-import com.github.kreatures.core.KReatures;
-import com.github.kreatures.core.PlanComponent;
+//import com.github.kreatures.core.PlanComponent;
 import com.github.kreatures.core.PlanElement;
+import com.github.kreatures.core.SwarmPlanComponent;
 import com.github.kreatures.core.logic.FolBeliefbase;
 import com.github.kreatures.core.operators.BaseExecuteOperator;
 import com.github.kreatures.core.operators.parameters.ExecuteParameter;
@@ -66,10 +65,9 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 	protected Boolean processImpl(ExecuteParameter params) {
 		boolean check=false;
 		PlanElement pe=(PlanElement)params.getAgent().getContext().get(SwarmContextConst._ACTION);
+		if(pe==null)return check;
 		envComponent=params.getEnvComponent();
 		SwarmSpeechAct action=(SwarmSpeechAct)pe.getIntention();
-
-
 
 		switch(action.getActionTyp()) {
 		case MOVE:
@@ -132,7 +130,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		if(enterStation==null) {
 			if(waitTime==0) {
 				desires.clear();
-				params.getAgent().getComponent(PlanComponent.class).clear();
+				params.getAgent().getComponent(SwarmPlanComponent.class).clear();
 				waitTime=4;
 				return false;
 			}
@@ -157,11 +155,13 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 					break;
 				if(predicate instanceof PredicateAgent && ((PredicateAgent)predicate).getName().equals(params.getAgent().getName())) {
 					agent=(PredicateAgent)predicate;
+					desires.setCurrentAgent(agent);
 					breakForEach++;
 					continue;
 				}
 				if(predicate instanceof PredicateAgentType && ((PredicateAgentType)predicate).getTypeName().equals(currentStation.getAgentTypeName())) {
 					agentType=(PredicateAgentType)predicate;
+					desires.setCurrentAgentType(agentType);
 					breakForEach++;
 					continue;
 				}
@@ -229,6 +229,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		PredicateStation station=(PredicateStation)desires.getCurrentDesire();
 		station.decrSpace(agentType.getSize());
 		action.getActions().add(station);
+		desires.clear();
 		return true;
 
 	}
@@ -414,8 +415,8 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 
 		/* add station to the action */
 		PredicateStation station=(PredicateStation)desires.getCurrentDesire();
-		station.incrFrequency();
-		station.incrSpace(agentType.getSize());
+		//station.incrFrequency();
+		//station.incrSpace(agentType.getSize());
 		action.getActions().add(station);
 		return true;
 	}

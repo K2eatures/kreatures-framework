@@ -26,7 +26,7 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 	private boolean isWaiting;
 	private boolean isReady;
 	private boolean isFinish;
-	
+
 	public PredicateTimeEdgeState(FolFormula desire) {
 		super(desire);
 		createInstance(desire);
@@ -48,20 +48,14 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 		this.isWaiting=other.isWaiting;
 		this.isReady=other.isReady;
 		this.isFinish=other.isFinish;
-		
+
 	}	
-	
+
 	@Override
 	public PredicateTimeEdgeState clone() {
 		return new PredicateTimeEdgeState(this);
 	}
-	
-	@Override
-	public int hashCode() {
-		return (super.hashCode() +
-				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
-	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -133,7 +127,7 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 	public void setFinish(boolean isFinish) {
 		this.isFinish = isFinish;
 	}
-	
+
 	@Override
 	public void createInstance(FolFormula atom) {
 		//PredicateTimeEdgeState predicate=null;
@@ -150,11 +144,28 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 			this.isWaiting=Boolean.parseBoolean(matcher.group(7));
 			this.isReady=Boolean.parseBoolean(matcher.group(8));
 			this.isFinish=Boolean.parseBoolean(matcher.group(9));
-			
+
 		}
 	}
-	
-		/**
+
+	@Override
+	public boolean equals(Object other) {
+		if(!(other instanceof PredicateTimeEdgeState))
+			return false;
+
+		PredicateTimeEdgeState obj=(PredicateTimeEdgeState)other;
+		boolean isName=obj.name==null?this.name==null:obj.name.equals(this.name);
+		boolean isTypeName=obj.typeName==null?this.typeName==null:obj.typeName.equals(this.typeName);
+
+		return isName & isTypeName;
+	}
+
+	@Override
+	public int hashCode() {
+		return this.typeName.hashCode()* 11;
+	}
+
+	/**
 	 * TimeEdgeState(NameWithTimeEdge,TypeNameWithTimeEdge,NameVisited,TypeNameVisited,
 	 * Type,CountTick,IsWaiting,IsReady,IsFinish). 
 	 */
@@ -170,17 +181,5 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 	@Override
 	public String getPredicatType() {
 		return getFormulName();
-	}
-	
-	@Override
-	public boolean equals(Object other) {
-		if(other==null || !(other instanceof PredicateTimeEdgeState ))return false;
-		PredicateTimeEdgeState obj=(PredicateTimeEdgeState)other;
-		
-		if(obj.getName()!=null && this.getName()!=null) {
-			return obj.getName().equals(this.getName());
-		}
-		
-		return false;
 	}
 }

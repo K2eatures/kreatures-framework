@@ -8,6 +8,8 @@ package com.github.kreatures.swarm.optimisation;
  */
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Predicate;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -30,59 +32,72 @@ public class OptShortPaths {
 	 * @param list of place components
 	 * @return set of shortest pairs paths.
 	 */
-	public Set<StationNode> allShortestPaths(List<SwarmPlaceEdgeType> list){
+	public static Set<StationNode> allShortestPaths(Collection<SwarmPlaceEdgeType> list){		
 		Set<String> allNodes=getAllStCompName(list);
 		Set<String> nodes=new HashSet<>(allNodes);
 		Set<StationNode> stNodes=new HashSet<>();
 		Set<String> allbetweenNodes=new HashSet<>();
-		for(String stCompName:nodes) {
-			nodes.remove(stCompName);
+		allNodes.stream().forEach(stCompName->{
+
+			//nodes.remove(stCompName);
 			Set<StationNode> S=new HashSet<>();
-			Set<StationNode> Q=new TreeSet<>();
-			nodes.stream().forEach(strCompName->{
-				StationNode stNode= new StationNode(stCompName, strCompName);
-				stNode.setWeight(SwarmConst.MAX_INT.getValue());
+			Set<StationNode> Q=new HashSet<>();
+			nodes.stream().filter(predicate->!predicate.equals(stCompName)).forEach(strCompName->{
+				StationNode stNode=stNodes.stream().filter(predicate->predicate.checkObject(stCompName, strCompName))
+				.findFirst().orElseGet(()->{
+					StationNode tmp= new StationNode(stCompName, strCompName);
+						tmp.setWeight(SwarmConst.MAX_INT.getValue());
+						return tmp;
+					}); 
 				Q.add(stNode);
 			});
 			int currentMin=0;
 			String currentNodeName=stCompName;
-
+//			allbetweenNodes.add(stCompName);
+//			Set<StationNode>alreadyInQ=new HashSet<>();
 			while(!Q.isEmpty()) {
-				allbetweenNodes.add(stCompName);
+				
 				Set<String> childs=getChildNode(currentNodeName, list);
-				childs.removeAll(allbetweenNodes);
-
+//				allbetweenNodes.stream().filter(predicate->childs.contains(predicate))
+//				.forEach(action->{
+//					Set<StationNode> containsNodes=stNodes.stream().filter(predicate->
+//								predicate.checkObject(action, stCompName))
+//							.collect(HashSet::new,HashSet::add,HashSet::addAll);
+//					containsNodes.removeAll(alreadyInQ);
+//					alreadyInQ.addAll(containsNodes);
+//					Q.addAll(containsNodes);
+//				});
+				childs.remove(stCompName);
 				for(String strNode:childs) {
-					StationNode currenNode=null;
+					StationNode currentNode=null;
 					for(StationNode weightNode:Q) {
-						if(weightNode.checkObject(currentNodeName, strNode)) {
-							currenNode=weightNode;
+						if(weightNode.checkObject(stCompName, strNode)) {
+							currentNode=weightNode;
 							break;
 						}
 					}
 
-					if(Q.remove(currenNode)) {
+					if(Q.remove(currentNode)) {
 						for(SwarmPlaceEdgeType place:list) {
-							if(place.checkObject(currenNode.getStCompNameIn(), currenNode.getStCompNameOut())!=null){
+							if(place.checkObject(currentNodeName, strNode)!=null){
 								int tmpWeight=currentMin+place.getWeight();
-								if(tmpWeight<currenNode.getWeight()) {
-									currenNode.setWeight(tmpWeight);
+								if(tmpWeight<currentNode.getWeight()) {
+									currentNode.setWeight(tmpWeight);
 								}
 							}
 						}
-						Q.add(currenNode);
+						Q.add(currentNode);
 					}
 				}
-				TreeSet<StationNode> treeQ=(TreeSet<StationNode>)Q;
-				StationNode minStNode=treeQ.last();
-				currentNodeName=minStNode.getStCompNameOut();
+				StationNode minStNode=Q.stream().min(StationNode::compareTo).get();
+				currentNodeName=minStNode.getStCompNameOut().equals(stCompName)?minStNode.getStCompNameIn():minStNode.getStCompNameOut();
 				currentMin=minStNode.getWeight();
 				Q.remove(minStNode);
 				S.add(minStNode);
 			}
-			S.remove(stNodes);
+			//S.remove(stNodes);
 			stNodes.addAll(S);
-		}
+		});
 		return stNodes;
 	}
 
@@ -92,7 +107,7 @@ public class OptShortPaths {
 	 * @param list all the nodes which exist
 	 * @return the children node of the parent
 	 */
-	private Set<String> getChildNode(String node,List<SwarmPlaceEdgeType> list){
+	private static Set<String> getChildNode(String node,Collection<SwarmPlaceEdgeType> list){
 		Set<String> children=new HashSet<>();
 		if(node==null||list==null||list.isEmpty()) return children;
 
@@ -112,7 +127,7 @@ public class OptShortPaths {
 	 * @param list
 	 * @return
 	 */
-	private Set<String> getAllStCompName(List<SwarmPlaceEdgeType> list){
+	private static Set<String> getAllStCompName(Collection<SwarmPlaceEdgeType> list){
 		Set<String> stCompNames=new HashSet<>();
 		if(list==null||list.isEmpty()) return stCompNames;
 

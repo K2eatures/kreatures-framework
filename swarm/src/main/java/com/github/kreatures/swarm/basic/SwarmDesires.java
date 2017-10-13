@@ -1,5 +1,7 @@
 package com.github.kreatures.swarm.basic;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.github.kreatures.core.logic.Desires;
@@ -46,8 +48,12 @@ public class SwarmDesires extends Desires {
 	 * store the state of the current {@link PredicateAgentType} object.
 	 */
 	private PredicateAgentType currentAgentType=null;
-	
-
+	/**
+	 * The needDesires contents not only the generate desires (ie: the really generated desires), 
+	 * but it can also have informations which will be used choice one desire and informations to create the plan 
+	 * corresponding to the choice desire.
+	 */	
+	private Set<SwarmPredicate> needDesires=new HashSet<>();
 //	/**
 //	 * list of all the current options.
 //	 */
@@ -65,28 +71,85 @@ public class SwarmDesires extends Desires {
 	public SwarmDesires(SwarmDesires otherDesires) {
 		super(otherDesires);
 	}
-	
+	/**
+	 * 
+	 * @param desire can be a choice desire or a information which will be use to evaluate the choice desire. 
+	 * @return true if the object is removed or false otherwise.
+	 */
 	public boolean removeDesire(SwarmPredicate desire) {
-		return this.remove(desire);
+		return super.remove(desire);
 	}
 	
-	public void addDesires(Set<SwarmPredicate> desires1) {
-		desires1.stream().forEach(desire->{
-			this.add(desire);
+	/**
+	 * Adds a set of generated desires and shows it on the screen.
+	 * @param desire can be a choice desire or a information which will be use to evaluate the choice desire. 
+	 * @return a set with the new objects.
+	 */
+	public void addDesires(Set<SwarmPredicate> desires) {
+		desires.stream().forEach(desire->{
+			super.add(desire);
 		});
 	}
 	
+	/**
+	 * The needDesires contents not only the generate desires (ie: the really generated desires), 
+	 * but it can also have informations which will be used choice one desire and informations to create the plan 
+	 * corresponding to the choice desire.
+	 * add a set of needed desires
+	 * @param choiceDesire this is a new desire, which can be choose by the agent. 
+	 */
+	public void addNeedDesires(Set<SwarmPredicate> needesDesires) {
+		needesDesires.stream().forEach(desire->{
+			this.needDesires.add(desire);
+		});
+	}
+	
+	/**
+	 * The needDesires contents not only the generate desires (ie: the really generated desires), 
+	 * but it can also have informations which will be used choice one desire and informations to create the plan 
+	 * corresponding to the choice desire.
+	 * @return all the needed desires. 
+	 */
+	public Set<SwarmPredicate> getNeedDesires() {
+			return (Set<SwarmPredicate>) Collections.unmodifiableSet(needDesires);
+	}
+	
+	/**
+	 * The needDesires contents not only the generate desires (ie: the really generated desires), 
+	 * but it can also have informations which will be used choice one desire and informations to create the plan 
+	 * corresponding to the choice desire.
+	 * add needed desires
+	 * @param choiceDesire this is a new desire, which can be choose by the agent. 
+	 */
+	public void addNeedDesire(SwarmPredicate needDesire) {
+		this.needDesires.add(needDesire);
+	}
+	/**
+	 * 
+	 * @return number of generate desires.
+	 */
 	public int sizeDesires() {
 		return this.getDesires().size();
 	}
-	
+	/**
+	 * @return true iff there are no generated desires. 
+	 */
 	public boolean isEmptyDesires() {
 		return this.getDesires().isEmpty();
 	}
+	
+	/**
+	 * add a generated desires.
+	 * @param desire generated desires.
+	 */
 	public void addDesire(SwarmPredicate desire) {
 		this.add(desire);
 	}
 	
+	/**
+	 * remove a set of generated desires.
+	 * @param desire generated desires.
+	 */
 	public void removeDesires(Set<SwarmPredicate> desires) {
 		desires.stream().forEach(desire->{
 			this.remove(desire);
@@ -97,13 +160,7 @@ public class SwarmDesires extends Desires {
 	@Override
 	public int hashCode() {
 		
-		return Utility.computeHashCode(super.hashCode(),getDesires());
-	}
-	
-	
-	@Override
-	public String toString() {
-		return getDesires().toString();
+		return Utility.computeHashCode(super.hashCode());
 	}
 
 	/**
@@ -190,5 +247,19 @@ public class SwarmDesires extends Desires {
 	 */
 	public void setCurrentAgent(PredicateAgent currentAgent) {
 		this.currentAgent = currentAgent;
+	}
+	
+	/**
+	 * Removes all current desires.
+	 */
+	@Override
+	public void clear() {
+		super.clear();
+		this.needDesires= new HashSet<>();
+	}
+	
+	@Override
+	public String toString() {
+		return needDesires.toString();
 	}
 }

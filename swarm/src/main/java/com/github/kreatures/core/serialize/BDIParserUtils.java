@@ -14,6 +14,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
@@ -52,6 +53,8 @@ import com.github.kreatures.swarm.components.SwarmVisitEdge;
 import com.github.kreatures.swarm.components.TimeEdgeState;
 import com.github.kreatures.swarm.components.XmlToBeliefBase;
 import com.github.kreatures.swarm.exceptions.SwarmException;
+import com.github.kreatures.swarm.optimisation.OptShortPaths;
+import com.github.kreatures.swarm.optimisation.StationNode;
 import com.github.kreatures.swarm.predicates.PredicateCurrentAgent;
 import com.github.kreatures.swarm.predicates.PredicateCurrentStation;
 
@@ -99,6 +102,7 @@ public final class BDIParserUtils implements BDIParser {
 	public XmlToBeliefBase getBeliefParseOfSwarmInstance() {
 		return obj;
 	}
+
 	/**
 	 * create and Write a initial belief of all agents into a temporal file.   
 	 * @return the temporal file path
@@ -214,11 +218,35 @@ public final class BDIParserUtils implements BDIParser {
 			}
 			buffer.flush();
 
+			
+		} catch (IOException ex) {
+			throw ex;
+		}finally {
+			pathScenarioModell=null;
+		}
+		
+		Path shortestPathInScenarioModell=directoryPathScenarioModell.resolve(obj.getName()+".opt");
+		if(!Files.exists(shortestPathInScenarioModell)) {
+			Files.createFile(shortestPathInScenarioModell);
+		}
+		
+		System.out.println(shortestPathInScenarioModell.toAbsolutePath());
+		
+		Set<StationNode> allShortestPath=OptShortPaths.allShortestPaths(((BeliefParseOfSwarm)obj).getAllPlaceEdgeType());
+		
+		try (BufferedWriter buffer = Files.newBufferedWriter(shortestPathInScenarioModell)) {
+
+			buffer.write(String.format("%% %s %n","Set of all shortest paths."));
+			for (StationNode elt : allShortestPath) {
+				buffer.write(String.format("%s%n", elt.toString()));				
+			}
+			buffer.flush();
+			
 		} catch (IOException ex) {
 			throw ex;
 		}finally {
 			directoryPathScenarioModell=null;
-			pathScenarioModell=null;
+			shortestPathInScenarioModell=null;
 		}
 	}
 	

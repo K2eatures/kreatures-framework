@@ -4,23 +4,31 @@
 %NecAgentStation(AgentName,StationName,Nec). 
 %Nec=Min(NecAgent,NecStation) zeigt, wieviel oft die Station <s> vom Agent <a> besucht wurde.
 
-NecErfull(AgentName,StationName):-NecAgentStation(AgentName,StationName,Nec),FctSup(AgentName,StationName,MinNec),Nec>=MinNec.
+NecErfull(AgentName,StationName):-NecAgentStation(AgentName,StationName,Nec),FctSup(AgentName,StationName,MinNec) ,Nec<MinNec.
 %FctSup(AgentName,StationName,min(NecStation,NecAgent))
-FctSup(AgentName,StationName,NecStation):-Station(StationName,StationTypeName,_,_,_),Agent(AgentName,AgentTypeName,_,_,_),StationType(StationTypeName,_,NecStation,_,_,_,_,_,_),AgentType(AgentTypeName,_,NecAgent,_,_,_,_,_,_),NecStation<NecAgent.
-FctSup(AgentName,StationName,NecAgent):-Station(StationName,StationTypeName,_,_,_),Agent(AgentName,AgentTypeName,_,_,_),StationType(StationTypeName,_,NecStation,_,_,_,_,_,_),AgentType(AgentTypeName,_,NecAgent,_,_,_,_,_,_),NecAgent<=NecStation.
+FctSup(AgentName,StationName,NecStation):-Station(StationName,StationTypeName,_,_,_),Agent(AgentName,AgentTypeName,_,_,_),StationType(StationTypeName,_,NecStation,_,_,_,_,_,_),AgentType(AgentTypeName,_,NecAgent,_,_,_,_,_,_),VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NecStation<NecAgent.
+FctSup(AgentName,StationName,NecAgent):-Station(StationName,StationTypeName,_,_,_),Agent(AgentName,AgentTypeName,_,_,_),StationType(StationTypeName,_,NecStation,_,_,_,_,_,_),AgentType(AgentTypeName,_,NecAgent,_,_,_,_,_,_),VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NecAgent<=NecStation.
 %##################### Erfüllbarkeit von Space und Size ###################################
 SpaceSizeErfull(AgentName,AgentTypeName,StationName,StationTypeName):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),AgentType(AgentTypeName,_,_,_,_,_,_,Size,_),StationType(StationTypeName,_,_,_,_,_,_,SpaceStationType,_),Station(StationName,StattionType,_,_,SpaceStation),NewSpace=SpaceStation+Size,SpaceStationType>=NewSpace.
 
 %##################### Erfüllbarkeit von Priority ###################################
 %Pour un agent donné (Raison pour laquelle il faut un seul agent et non tous, sinon ca ne fonctionne pas.), rechercher toutes les stations qui lui sont connectés et determinés laquelle à la plus grande priorité. 
-MaxPriorityStation(AgentName,StationName,Prio):-AllVisitEdgeStation(AgentName,StationName,Prio),#max{UsePrio: AllVisitEdgeStation(AgentName,_,UsePrio)}=Prio.
+MaxPriorityStation(AgentName,StationName,Prio):-AllFreeStation(AgentName,StationName,Prio),#max{UsePrio: AllFreeStation(AgentName1,StationName1,UsePrio)}=Prio.
+
+%Alle Stationen, die noch freien Plätze haben und kein Agent ausgewählt hat. 
+AllFreeStation(AgentName,StationName,UsePrio):-AllVisitEdgeStation(AgentName,StationName,UsePrio),VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),not -CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,false,false).
 %Pour un agent donné, rechercher toutes les stations qui lui sont connectés et dont on peut encore y acceder.
-AllVisitEdgeStation(AgentName,StationName,Prio):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),StationType(StationTypeName,_,_,_,Prio,_,_,Space,_),Station(StationName,StationTypeName,_,_,StationSpace),Space>StationSpace.
+AllVisitEdgeStation(AgentName,StationName,Prio):-SpaceSizeErfull(AgentName,AgentTypeName,StationName,StationTypeName),StationType(StationTypeName,_,_,_,Prio,_,_,Space,_).
 
 %Pour une station donné, rechercher toutes les agents qui lui sont connectés et ensuite determinés lequelle à la plus grande priorité.
 %Seul qui ne sont pas à l'interieur d'une station.
-MaxPriorityAgent(AgentName,StationName,Prio):- AllVisitEdgeAgent(AgentName,StationName,Prio),#max{UsePrio: AllVisitEdgeAgent(AgentName1,_,UsePrio),CurrentStation(AgentName1,_,_,_,false,_)}=Prio.
+MaxPriorityAgent(AgentName,StationName,Prio):- AllFreeAgent(AgentName,StationName,Prio),#max{UsePrio: AllFreeAgent(AgentName1,StationName1,UsePrio)}=Prio.
 
+
+%Alle Agenten, die eine Station verfolgen.
+NoFreeAgent(AgentName,AgentTypeName):- -CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,false,false).
+%Alle Agenten, die keine Stationen verfolgen.
+AllFreeAgent(AgentName,StationName,UsePrio):-AllVisitEdgeAgent(AgentName,StationName,UsePrio),VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),not NoFreeAgent(AgentName,AgentTypeName).
 
 %Pour un agent donné, rechercher toutes les stations qui lui sont connectés 
 AllVisitEdgeAgent(AgentName,StationName,Prio):-Agent(AgentName,AgentTypeName,_,_,_),AgentType(AgentTypeName,_,_,_,Prio,_,_,_,_),AllVisitEdgeStation(AgentName,StationName,_).
@@ -28,8 +36,9 @@ AllVisitEdgeAgent(AgentName,StationName,Prio):-Agent(AgentName,AgentTypeName,_,_
 %Gibt genau visitEdge(agentType und stationType) mit höhe priority.
 MaxPriority(AgentTypeName,StationTypeName):-MaxPriorityStation(AgentTypeName,StationTypeName,_),MaxPriorityAgent(AgentTypeName,StationTypeName,_).
 %##################### Erfüllbarkeit von Frequency ###################################
-FreqErfullStation(StationName):-Station(StationName,StationTypeName,FreqStation,_,_),StationType(StationTypeName,Freq,_,_,_,_,_,_,_),FreqStation>Freq.
-FreqErfullAgent(AgentName):-Agent(AgentName,AgentTypeName,FreqAgent,_,_),AgentType(AgentTypeName,Freq,_,_,_,_,_,_,_),FreqAgent>Freq.
+FreqErfullStation(StationName):-Station(StationName,StationTypeName,FreqStation,_,_),StationType(StationTypeName,Freq,_,_,_,_,_,_,_),FreqStation<Freq.
+FreqErfullAgent(AgentName):-Agent(AgentName,AgentTypeName,FreqAgent,_,_),AgentType(AgentTypeName,Freq,_,_,_,_,_,_,_),FreqAgent<Freq.
+
 %################################# Erfüllbarkeit von Capacity und Item ###################################################################
 %+++++++++++++++++++++++++++++++++++++++++++++++++++++Item+++++++++++++++++++++++++++++++++++++++++++
 %Eine Station <s> hat das Attribut Item, wenn es eine ausgehende Kante gibt.
@@ -76,6 +85,8 @@ ItemProductInStation(StationNameOut):-ItemSetLoadingStation(_,StationNameOut,_),
 %NumberItemToProductInStation(StationNameOut,Number): StationNameOut= station, die Item produktieren kann und Number=Menge von produktierbaren Items.
 NumberItemToProductInStation(StationNameIn,Number):-ItemProductInStation(StationNameIn),Number=#min{X:ItemSetLoadingStation(StationTypeNameOut,StationNameIn,ItemNumber),StationType(StationTypeNameOut,_,_,_,_,_,_,_,Count),X=ItemNumber/Count}.
 
+
+
 %################################################## TimeEdge eigenschaft ############################################
 
 %+++++++++++++++++++++++++++ Hierunter sind alle timeEdgeWaiting: D.h: Die varaible Iswaiting kann auf true gesetzt werden.+++++++++++++++++++
@@ -92,9 +103,9 @@ TimeEdgeConnectedNoIcomingReady(Name,TypeName,Type):- TimeEdgeAll(Name,TypeName,
 % if there are only connected Komponentes. Also all edges have to be directed.
 TimeEdgeIncomingReady(NameIn,TypeNameIn,WeightMin,Type):-#count{X:TimeEdge(X,_,StationNameIn,StationTypeNameIn,_,true,false,_)}=0,TimeEdgeAllLogicalIncomingReady(NameIn,TypeNameIn,WeightMin,Type).
 % This triggers if there are only noconnected Komponentes. Also all edges have to be directed.
-TimeEdgeIncomingReady(NameIn,TypeNameIn,WeightMin,Type):-#count{X:TimeEdge(X,_,NameIn,TypeNameIn,_,true,true,_)}=0,#count{Y:TimeEdge(Name1,TypeName1,NameIn,TypeNameIn,Y,true,false,Weight),TimeEdgeStatus(Name1,TypeName1,_,_,_,EchtZeit,false,true,_),EchtZeit>=Weight}>0,TimeEdgeDirectedNoConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type).
+TimeEdgeIncomingReady(NameIn,TypeNameIn,WeightMin,Type):-#count{X:TimeEdge(X,_,NameIn,TypeNameIn,_,true,true,_)}=0,#count{Y:TimeEdge(Name1,TypeName1,NameIn,TypeNameIn,Y,true,false,Weight),TimeEdgeStatus(Name1,TypeName1,_,_,_,EchtZeit,false,true,_),EchtZeit<Weight}>0,TimeEdgeDirectedNoConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type).
 % This triggers if there are connected and noconnected Komponentes. Also all edges have to be directed.
-TimeEdgeIncomingReady(NameIn,TypeNameIn,WeightMin,Type):-TimeEdgeAllLogicalIncomingReady(NameIn,TypeNameIn,WeightMin,Type),#count{Y:TimeEdge(Name1,TypeName1,NameIn,TypeNameIn,Y,true,false,Weight),TimeEdgeStatus(Name1,TypeName1,_,_,_,EchtZeit,false,true,_),EchtZeit>=Weight}>0.
+TimeEdgeIncomingReady(NameIn,TypeNameIn,WeightMin,Type):-TimeEdgeAllLogicalIncomingReady(NameIn,TypeNameIn,WeightMin,Type),#count{Y:TimeEdge(Name1,TypeName1,NameIn,TypeNameIn,Y,true,false,Weight),TimeEdgeStatus(Name1,TypeName1,_,_,_,EchtZeit,false,true,_),EchtZeit<Weight}>0.
 
 
 %TimeEdgeNoCondition(StationName,StationTypeName,Echtzeit,Type).  Type=0 is Station and type=1 is agent.
@@ -221,7 +232,7 @@ TimeEdgeReady(Name,TypeName,Type):-TimeEdgeOnlyOutgoing(Name,TypeName,_,Type).
 TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,Type):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type)}>0,TimeEdgeNoDirectedNoConnectedWeightMin(Name,TypeName,WeightMin,Type).
 
 %Gibt alle nodirected and bothConnected Komponenten zurück, die ihr corresponding Komponent ihr IsReady auf true ist.
-TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutIn(Name1,TypeName1,Name2,TypeName2,_,false,false,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,Echtzeit,false,true,_),WeightMin<=Echtzeit. %Hilfsvariable
+TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutIn(Name1,TypeName1,Name2,TypeName2,_,false,false,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,Echtzeit,false,true,_),WeightMin>Echtzeit. %Hilfsvariable
 %Gibt alle nodirected and noConnected Komponenten zurück, die ihr corresponding Komponent ihr IsWaiting auf true ist.
 TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedNoConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutIn(Name1,TypeName1,Name2,TypeName2,_,false,false,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,Echtzeit,true,false,_). %Hilfsvariable
 
@@ -232,18 +243,18 @@ TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightM
 TimeEdgeDirectedNoConnectedReady(NameIn,TypeNameIn,WeightMin,Type):- #count{X:TimeEdgeOutgoingReady(X,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type)}>0,TimeEdgeDirectedNoConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type).
 
 %Gibt alle Komponenten zurück, die ihr IsReady auf true ist.
-TimeEdgeStatusDirectedOnConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,true,_),WeightMin<=Echtzeit,TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,false,_). %Hilfsvariable
+TimeEdgeStatusDirectedOnConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,true,_),WeightMin>Echtzeit,TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,false,_). %Hilfsvariable
 
 %+++++++++++++++++ NoDirectedBothConnected and NoDirectedBothConnected: IsReady auf true setzen, wenn erfüllt+++++++++++++++++++++++++++++
 
 %Gibt alle Komponenten of TimeEdgeNoDirectedBothConnected(...) zurück, deren timeEdge <IsConnect=both> ist.
 TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,WeightMin,Type):-#count{X:TimeEdgeNoDirectedBothConnectedNoReady(X,TypeName1,Name,TypeName,WeightMin,Type)}=0,TimeEdgeNoDirectedBothConnected(Name1,TypeName1,Name,TypeName,WeightMin,Type).
 
-%Gibt alle coresponding Komponenten of TimeEdgeNoDirectedConnectedReady(...) zurück, deren <IsWaiting=false and IsReady=false>  timeEdge ist.
+%Gibt alle coresponding Komponenten of TimeEdgeNoDirectedOneConnectedReady(...) zurück, deren <IsWaiting=false and IsReady=false>  timeEdge ist.
 TimeEdgeNoDirectedBothConnectedNoReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):- #count{X:TimeEdgeStatusNoDirectedBothConnectedReady(X,TypeName1,_,_,_,_)}=0,TimeEdgeNoDirectedBothConnected(Name1,TypeName1,Name2,TypeName2,WeightMin,Type). %Hilfsvariable
 
 %Gibt alle nodirected and bothConnected Komponenten zurück, die ihr corresponding Komponent ihr IsReady auf true ist.
-TimeEdgeStatusNoDirectedBothConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutInAnd(Name1,TypeName1,Name2,TypeName2,_,false,both,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,Echtzeit,false,true,_),WeightMin<=Echtzeit. %Hilfsvariable
+TimeEdgeStatusNoDirectedBothConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutInAnd(Name1,TypeName1,Name2,TypeName2,_,false,both,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,Echtzeit,false,true,_),WeightMin>Echtzeit. %Hilfsvariable
 %Gibt alle nodirected and bothConnected Komponenten zurück, die ihr corresponding Komponent ihr IsWaiting auf true ist.
 TimeEdgeStatusNoDirectedBothConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutInAnd(Name1,TypeName1,Name2,TypeName2,_,false,both,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,Echtzeit,true,false,_). %Hilfsvariable
 
@@ -257,7 +268,7 @@ TimeEdgeNoDirectedOneConnectedNoReady(Name1,TypeName1,Name2,TypeName2,WeightMin,
 
 %TimeEdgeStatusNoDirectedWaiting(Name1,TypeName1,Name2,TypeName2,WeightMin,Type)
 %Gibt alle nodirected Komponenten zurück, die ihr ISready auf true ist.
-TimeEdgeStatusNoDirectedConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdge(Name1,TypeName1,Name2,TypeName2,_,false,true,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,Echtzeit,false,true,_),WeightMin<=Echtzeit. %Hilfsvariable
+TimeEdgeStatusNoDirectedConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdge(Name1,TypeName1,Name2,TypeName2,_,false,true,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,Echtzeit,false,true,_),WeightMin>Echtzeit. %Hilfsvariable
 
 %+++++++++++++++++ Outgoing and incomingConnected: IsReady auf true setzen, wenn erfüllt +++++++++++++++++++++++++++++
 %TimeEdgeAllLogicalIncomingReady(NameIn,TypeNameIn,WeightMin,Type)
@@ -269,7 +280,7 @@ TimeEdgeDirectedConnectedReady(NameIn,TypeNameIn,WeightMin,Type):- #count{X:Time
 %Gibt alle incoming StationTypen mit IsReady=false und Isconnected=true: <out> ---->  <In>
 TimeEdgeOutgoingReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):-TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type), TimeEdgeAll(NameOut,TypeNameOut,_),#count{X:TimeEdge(X,TypeNameOut,NameIn,TypeNameIn,_,true,true,_)}>0,#count{Y:TimeEdgeStatusDirectedConnectedReady(Y,TypeNameOut,_,_,_,_)}=0. %Hilfsvariable
 %TimeEdgeStatusDirectedConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type): Gibt alle Komponenten zurück, die ihr IsReady auf true ist.
-TimeEdgeStatusDirectedConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,true,_),WeightMin<=Echtzeit,TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,true,_). %Hilfsvariable
+TimeEdgeStatusDirectedConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,true,_),WeightMin>Echtzeit,TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,true,_). %Hilfsvariable
 
 
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Waiting verfahren &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -426,7 +437,7 @@ TimeEdgeDirectedConnectedWaiting(NameIn,TypeNameIn,WeightMin,Type):- #count{X:Ti
 %Gibt alle incoming StationTypen mit IsReady=false und Isconnected=true: <out> ---->  <In>
 TimeEdgeOutgoingWaiting(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):-TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type), TimeEdgeAll(NameOut,TypeNameOut,_),#count{X:TimeEdge(X,TypeNameOut,NameIn,TypeNameIn,_,true,true,_)}>0,#count{Y:TimeEdgeStatusDirectedConnectedWaitingOrReady(Y,TypeNameOut,_,_,_,_)}=0. %Hilfsvariable
 %TimeEdgeStatusDirectedConnectedWaitingOrReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type): Gibt alle Komponenten zurück, die ihr IsReady auf true ist.
-TimeEdgeStatusDirectedConnectedWaitingOrReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,true,_),WeightMin<=Echtzeit,TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,true,_). %Hilfsvariable
+TimeEdgeStatusDirectedConnectedWaitingOrReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,true,_),WeightMin>Echtzeit,TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,true,_). %Hilfsvariable
 %TimeEdgeStatusDirectedConnectedWaitingOrReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type): Gibt alle Komponenten zurück, die ihr IsWaiting auf true ist.
 TimeEdgeStatusDirectedConnectedWaitingOrReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,true,false,_),TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,true,_).
 
@@ -460,7 +471,7 @@ TimeEdgeNoDirectedNoConnectedWeightMin(Name,TypeName,WeightMin,Type):-TimeEdgeOu
 %Return all incoming komponents with its corresponding weight. only noconnected edge are importance.
 TimeEdgeDirectedNoConnectedWeightMin(Name,TypeName,WeightMin,Type):-TimeEdge(_,_,Name,TypeName,_,true,false,Echtzeit),WeightMin=Echtzeit+0,TimeEdgeAll(Name,TypeName,Type).
 
-%++++++++++++++++++++++ timeEdge nodirected both direction ++++++++++++++++++++++++++++++
+%++++++++++++++++++++++ timeEdge nodirected both conected ++++++++++++++++++++++++++++++
 
 TimeEdgeOutIn(NameOut,TypeNameOut,NameIn,TypeNameIn,X,false,Y,Z):-TimeEdge(NameIn,TypeNameIn,NameOut,TypeNameOut,X,false,Y,Z),Y!=true.
 TimeEdgeOutIn(NameOut,TypeNameOut,NameIn,TypeNameIn,X,false,Y,Z):-TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,X,false,Y,Z),Y!=true.
@@ -498,12 +509,22 @@ TimeEdgeStation(StationName,StationTypeName,AgentName,AgentTypeName,CountTime,Is
 %	true= if der Agent in station ist and 
 %	false otherwise: agent is moving or waiting at the station.
 %Must be add to the desires at the first time.
-%CurrentStation(de1,de,werk1,werk,false,false).
+%CurrentStation(de1,de,werk1,werk,false,true).
 %CurrentStation(usa1,usa,other1,other,false,false). % will be added, deleted or updated by agent.
 %Diese ist vorhanden, wenn der Agent unterwegs ist.
 %MoveToStation(AgentName,CurentStationName,TargetStationName,Distance,Pos) 
 %%% MoveToStation muss momentant warten.
 %MoveToStation(cl1,li3,ma2,5,4). % will be added, deleted or updated by agent.
+
+-CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,false,false):- 
+CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,_,_), not CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,false,false).
+%Agent(AgentName,AgentTypeName,_,_,_),Station(StationName,StationTypeName,_,_,_)
+
+
+
+
+
+
 
 
 
@@ -532,7 +553,7 @@ StationInfo(StationName,StationTypeName,Time,5):-Station(StationName,StattionTyp
 HasChoiceStation(AgentName,AgentTypeName):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,_,_,false,false).
 %AllConditionErfullChoiceStation(AgentName,StationName)
 %Check if frequency and necessity are fillfully .
-AllConditionErfullChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv):- CurrentAgent(AgentName,_),VisitEdge(AgentName,_,StationName,_,_),not NecErfull(AgentName,StationName),not FreqErfullStation(StationName),not FreqErfullAgent(AgentName),TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
+AllConditionErfullChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv):- CurrentAgent(AgentName,_),VisitEdge(AgentName,_,StationName,_,_), NecErfull(AgentName,StationName),FreqErfullStation(StationName), FreqErfullAgent(AgentName),TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
 
 %ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Time,ItemMotiv).
 %motiv: 0=agent and station no time edge;
@@ -571,7 +592,10 @@ TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,1):-Vi
 %	2=agent hasn't time edge and station has;
 %	3=agent and station haven time edge.
 %Wenn agent und station keine TimeEdge haben.
+%EnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,false,_),AllConditionErfullEnterStation(AgentName,StationName),TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
+
 EnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv):-CurrentAgent(AgentName,AgentTypeName),ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,_,_,_),AllConditionErfullEnterStation(AgentName,StationName),TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
+
 
 %AllConditionErfullEnterStation(AgentName,StationName)
 %Check if frequency and necessity are fillfully .
@@ -625,31 +649,14 @@ LeaveStation(AgentName,AgentTypeName,StationName,StationTypeName,0):-CurrentAgen
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Engeischaft von Know-How &&&&&&&&&&&&&&&&&&&&&&&&&&&
 %KnowHow(AgentName,AgentTypeName,StationName,StationTypeName,maxFreeSpace,Value).
 
-KnowHow(AgentName,AgentTypeName,StationName,StationTypeName,maxFreeSpace,Value):-ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,_,_,_),Value=#max{X:Station(StationName,StattionType,_,_,CurrentSpace),StationType(StationTypeName,_,_,_,_,_,_,StationSpace,_),X=StationSpace-CurrentSpace}.
+KnowHow(AgentName,AgentTypeName,StationName,StationTypeName,maxFreeSpace,Value):-ChoiceAgentStationFreePlace(AgentName,AgentTypeName,StationName,StationTypeName,FreePlace),Value=#max{X:ChoiceAgentStationFreePlace(AgentName,AgentTypeName,_,_,X)},Value==FreePlace.
+
+%Gibt einen Agenten mit einer ausgewählten Station und ihre entsprechenden freien Plätze.
+ChoiceAgentStationFreePlace(AgentName,AgentTypeName,StationName,StationTypeName,FreePlace):-ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,_,_,_),Station(StationName,StationType,_,_,Space),StationType(StationTypeName,_,_,_,_,_,_,StationSpace,_),FreePlace=StationSpace-Space.
+
+%Gibt die Station, die am wenigstens besucht wird.
+KnowHow(AgentName,AgentTypeName,StationName,StationTypeName,minVisited,Value):-ChoiceAgentStationFreq(AgentName,AgentTypeName,StationName,StationTypeName,Freq),Value=#min{X:ChoiceAgentStationFreq(AgentName,AgentTypeName,_,_,X)},Freq==Value.
 
 
-
-
-%######################## All Do listen #############
-%Prio. ok
-%Freq. ok
-%Nec. ok
-%Time ok
-%for Agent
-%Cap. ok
-%Size ok
-%Speed. ok
-%For Station
-%Item ok
-%Space ok
-%PlaceEdge ok
-%TimeEdge ok (Alle TimeEdge müssen ein Attribute für die directed oder nicht directed haben.)
-%######################## All Todo listen #############
-%VisitEdge
-%Cycle.
-%ChoiceStation
-%StayStation
-%LeaveStation
-%MoveToStation
-%
-%###################### END todo
+%Gibt einen Agenten mit einer ausgewählten Station und ihre entsprechende Besuchshäufigkeit.
+ChoiceAgentStationFreq(AgentName,AgentTypeName,StationName,StationTypeName,Freq):-ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,_,_,_),Station(StationName,StationType,Freq,_,_).

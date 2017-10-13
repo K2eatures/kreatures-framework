@@ -42,12 +42,6 @@ public class PredicateItemSetLoadingStation extends SwarmPredicate {
 	public PredicateItemSetLoadingStation clone() {
 		return new PredicateItemSetLoadingStation(this);
 	}
-	
-	@Override
-	public int hashCode() {
-		return (super.hashCode() +
-				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
-	}
 
 	public String getStationOutTypeName() {
 		return stationOutTypeName;
@@ -103,27 +97,18 @@ public class PredicateItemSetLoadingStation extends SwarmPredicate {
 	
 	@Override
 	public boolean equals(Object other) {
-		if (other == null || !(other instanceof PredicateItemSetLoadingStation))
+		if(!(other instanceof PredicateItemSetLoadingStation))
 			return false;
-		PredicateItemSetLoadingStation obj = (PredicateItemSetLoadingStation) other;
-
-		if (obj.getStationInName() == null || this.getStationInName() == null) {
-			return false;
-		}
-		if (obj.getStationOutTypeName() == null || this.getStationOutTypeName() == null) {
-			return false;
-		}
-
-		if (obj.getStationInName().equals(this.getStationInName())
-				&& obj.getStationOutTypeName().equals(this.getStationOutTypeName())) {
-			return true;
-		}
-
-		return false;
+		
+		PredicateItemSetLoadingStation obj=(PredicateItemSetLoadingStation)other;
+		boolean isName=obj.stationInName==null?this.stationInName==null:obj.stationInName.equals(this.stationInName);
+		boolean isTypeName=obj.stationOutTypeName==null?this.stationOutTypeName==null:obj.stationOutTypeName.equals(this.stationOutTypeName);
+		
+		return isName & isTypeName;
 	}
-//	@Override
-//	public String getPredicatType() {
-//		return "ItemSetLoadingStation";
-//	}
-
+	
+	@Override
+	public int hashCode() {
+		return this.stationInName.hashCode()* 11;
+	}
 }

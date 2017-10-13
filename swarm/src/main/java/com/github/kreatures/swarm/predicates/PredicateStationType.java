@@ -56,12 +56,6 @@ public class PredicateStationType extends SwarmPredicate {
 	public PredicateStationType clone() {
 		return new PredicateStationType(this);
 	}
-	
-	@Override
-	public int hashCode() {
-		return (super.hashCode() +
-				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
-	}
 
 	public String getTypeName() {
 		return typeName;
@@ -150,16 +144,16 @@ public class PredicateStationType extends SwarmPredicate {
 	
 	@Override
 	public boolean equals(Object other) {
-		if(other==null || !(other instanceof PredicateStationType ))
+		if(!(other instanceof PredicateStationType))
 			return false;
 		
 		PredicateStationType obj=(PredicateStationType)other;
 		
-		if(obj.typeName!=null && this.typeName!=null) {
-			return obj.typeName.equals(this.typeName);
-		}
-		
-		return false;
+		return obj.typeName==null?this.typeName==null:obj.typeName.equals(this.typeName);
 	}
-
+	
+	@Override
+	public int hashCode() {
+		return 11;
+	}
 }

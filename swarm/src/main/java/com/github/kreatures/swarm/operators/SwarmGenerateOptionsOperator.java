@@ -31,7 +31,7 @@ public class SwarmGenerateOptionsOperator extends BaseGenerateOptionsOperator {
 		Context context=params.getAgent().getContext();
 //		boolean obj=(Boolean)context.get(SwarmContextConst._EVALUTED);
 		SwarmDesires swarmDesires=params.getAgent().getComponent(SwarmDesires.class);
-		int numberDesires=swarmDesires.getDesires().size();
+		int numberDesires=swarmDesires.getNeedDesires().size();
 		/* Call evaluation-operator when there are no desires more. */
 		if(numberDesires==0) {
 			/* The Desires are stations */

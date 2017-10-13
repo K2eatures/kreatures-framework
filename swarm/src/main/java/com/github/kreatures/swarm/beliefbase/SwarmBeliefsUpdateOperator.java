@@ -1,23 +1,15 @@
 package com.github.kreatures.swarm.beliefbase;
 
-
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.NewAgent;
 import com.github.kreatures.core.Perception;
-import com.github.kreatures.core.comm.SpeechAct;
 import com.github.kreatures.core.logic.FolBeliefbase;
 import com.github.kreatures.core.operators.BaseBeliefsUpdateOperator;
 import com.github.kreatures.core.operators.parameters.PerceptionParameter;
 import com.github.kreatures.swarm.basic.SwarmSpeechAct;
-import com.github.kreatures.swarm.predicates.SwarmPredicate;
-import com.github.kreatures.swarm.predicates.transform.TransformPredicates;
-
-import net.sf.tweety.logics.fol.syntax.FolFormula;
 
 /**
  * 
@@ -32,9 +24,9 @@ public class SwarmBeliefsUpdateOperator extends BaseBeliefsUpdateOperator {
 	protected BaseBeliefbase processImpl(PerceptionParameter params) {
 		NewAgent nAgent = (NewAgent) params.getAgent();
 		FolBeliefbase bb=(FolBeliefbase)params.getBaseBeliefbase();
-		if (params.getPerceptions() == null || params.getPerceptions().isEmpty()) {
-			nAgent.report("no Perceptions receive.");
-		}else {
+		boolean hasPerception=false;
+		if (!(params.getPerceptions() == null || params.getPerceptions().isEmpty())) {
+			hasPerception=true;
 //			Set<SwarmPredicate> oldBelief=TransformPredicates.getSetPredicat();
 			for(Perception  percept:params.getPerceptions()) {
 				SwarmSpeechAct speechAct=(SwarmSpeechAct)percept;
@@ -48,11 +40,16 @@ public class SwarmBeliefsUpdateOperator extends BaseBeliefsUpdateOperator {
 		}
 
 		if(params.getInformation()!=null && !((SwarmSpeechAct) params.getInformation()).getContent().isEmpty() ) {
+			hasPerception=true;
 			SwarmSpeechAct speechAct=(SwarmSpeechAct)(params.getInformation());
 			String msg=String.format("received Perceptions : %s",speechAct.getContent());
 			LOG.info(msg);
 			nAgent.report(msg);
 			bb.addKnowledge(speechAct.getContent());
+		}
+		
+		if(!hasPerception) {
+			nAgent.report("no Perceptions receive.");
 		}
 		
 		return bb;

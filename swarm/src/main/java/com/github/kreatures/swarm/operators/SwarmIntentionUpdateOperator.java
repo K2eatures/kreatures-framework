@@ -3,11 +3,12 @@ package com.github.kreatures.swarm.operators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.PlanComponent;
 import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.Subgoal;
+import com.github.kreatures.core.SwarmPlanComponent;
 import com.github.kreatures.core.operators.parameters.FilterParameter;
 import com.github.kreatures.core.operators.BaseIntentionUpdateOperator;
+import com.github.kreatures.swarm.basic.SwarmSpeechAct;
 import com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator;
 
 /**
@@ -28,7 +29,7 @@ public class SwarmIntentionUpdateOperator extends BaseIntentionUpdateOperator {
 			
 //		NewAgent agent=(NewAgent)params.getAgent();
 //		SwarmDesires swarmDesires=(SwarmDesires) agent.getComponent(SwarmDesires.class);
-		PlanComponent currentPlan=(PlanComponent)params.getActualPlan();
+		SwarmPlanComponent currentPlan=(SwarmPlanComponent)params.getActualPlan();
 		if(currentPlan==null)
 			return null;
 		
@@ -37,7 +38,8 @@ public class SwarmIntentionUpdateOperator extends BaseIntentionUpdateOperator {
 			for(int i=0; i<plan.getNumberOfStacks(); ++i) {
 				PlanElement pe = plan.peekStack(i);
 				if(pe.isAtomic()) {
-					params.report(String.format("%s is the next atomic step candidate", pe.toString()));
+					params.report(String.format("%s is the next atomic step candidate", ((
+							SwarmSpeechAct)pe.getIntention()).getActionTyp()));
 					return pe;
 				}
 			}

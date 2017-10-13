@@ -23,7 +23,7 @@
    </operation-set>
    <component>com.github.kreatures.swarm.basic.SwarmDesires</component>
    <component>com.github.kreatures.swarm.basic.ActionState</component>
-   <component>com.github.kreatures.core.PlanComponent</component>
+   <component>com.github.kreatures.core.SwarmPlanComponent</component>
 
 <!--   <component>com.github.kreatures.swarm.components.SwarmMappingGeneric</component>
    <component>com.github.kreatures.swarm.components.StatusAgentComponents</component> -->

@@ -51,12 +51,6 @@ public class PredicateProductItem extends SwarmPredicate {
 		return new PredicateProductItem(this);
 	}
 	
-	@Override
-	public int hashCode() {
-		return (super.hashCode() +
-				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
-	}
-
 	/**
 	 * ProductItem(AgentName,AgetnTypeName,StationName,StationTypeName).
 	 */
@@ -81,15 +75,19 @@ public class PredicateProductItem extends SwarmPredicate {
 	
 	@Override
 	public boolean equals(Object other) {
-		if(other==null || !(other instanceof PredicateProductItem ))return false;
-		PredicateProductItem obj=(PredicateProductItem)other;
-		String otherName=obj.agentName+obj.stationName;
-		String thisName=this.agentName+this.stationName;
+		if(!(other instanceof PredicateProductItem))
+			return false;
 		
-		return otherName.equals(thisName);
+		PredicateProductItem obj=(PredicateProductItem)other;
+		boolean isName=obj.agentName==null?this.agentName==null:obj.agentName.equals(this.agentName);
+		boolean isTypeName=obj.stationName==null?this.stationName==null:obj.stationName.equals(this.stationName);
+		
+		return isName & isTypeName;
 	}
-//	@Override
-//	public String getPredicatType() {
-//		return "ProductItem";
-//	}
+	
+	@Override
+	public int hashCode() {
+		return this.agentName.hashCode()* 11;
+	}
+	
 }

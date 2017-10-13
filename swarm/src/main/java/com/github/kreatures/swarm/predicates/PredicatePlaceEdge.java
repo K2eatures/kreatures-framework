@@ -51,14 +51,6 @@ public class PredicatePlaceEdge extends SwarmPredicate {
 		return new PredicatePlaceEdge(this);
 	}
 	
-	@Override
-	public int hashCode() {
-		return (super.hashCode() +
-				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
-	}
-	
-	
-	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -163,22 +155,18 @@ public class PredicatePlaceEdge extends SwarmPredicate {
 	
 	@Override
 	public boolean equals(Object other) {
-		if (other == null || !(other instanceof PredicatePlaceEdge))
+		if(!(other instanceof PredicatePlaceEdge))
 			return false;
-		PredicatePlaceEdge obj = (PredicatePlaceEdge) other;
-
-		if (obj.getFirstName() == null || this.getFirstName() == null) {
-			return false;
-		}
-		if (obj.getSecondName() == null || this.getSecondName() == null) {
-			return false;
-		}
-
-		if (obj.getFirstName().equals(this.getFirstName())
-				&& obj.getSecondName().equals(this.getSecondName())) {
-			return true;
-		}
-
-		return false;
+		
+		PredicatePlaceEdge obj=(PredicatePlaceEdge)other;
+		boolean isName=obj.firstName==null?this.firstName==null:obj.firstName.equals(this.firstName);
+		boolean isTypeName=obj.secondName==null?this.secondName==null:obj.secondName.equals(this.secondName);
+		
+		return isName & isTypeName;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.firstName.hashCode()* 11;
 	}
 }

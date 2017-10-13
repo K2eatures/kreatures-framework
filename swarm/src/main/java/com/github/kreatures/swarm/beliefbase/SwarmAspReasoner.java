@@ -11,23 +11,18 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.BaseBeliefbase;
 import com.github.kreatures.core.asp.solver.DLV;
 import com.github.kreatures.core.asp.solver.ESolverWrapper;
-import com.github.kreatures.core.logic.BaseReasoner;
-import com.github.kreatures.core.logic.KReaturesAnswer;
 import com.github.kreatures.core.logic.FolBeliefbase;
 import com.github.kreatures.core.logic.asp.AspBeliefbase;
 import com.github.kreatures.core.logic.asp.AspReasoner;
 import com.github.kreatures.core.logic.asp.ISolverWrapper;
 import com.github.kreatures.core.operators.parameter.ReasonerParameter;
 import com.github.kreatures.core.operators.parameters.BaseReasonerParameter;
-import com.github.kreatures.core.util.Pair;
 import com.github.kreatures.swarm.SwarmConst;
 
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 import net.sf.tweety.logics.translators.aspfol.AspFolTranslator;
-import net.sf.tweety.lp.asp.solver.Solver;
 import net.sf.tweety.lp.asp.solver.SolverException;
 import net.sf.tweety.lp.asp.syntax.DLPLiteral;
 import net.sf.tweety.lp.asp.util.AnswerSet;

@@ -46,12 +46,6 @@ public class PredicateItemSetLoadingAgent extends SwarmPredicate {
 		return new PredicateItemSetLoadingAgent(this);
 	}
 	
-	@Override
-	public int hashCode() {
-		return (super.hashCode() +
-				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
-	}
-
 	public String getAgentName() {
 		return agentName;
 	}
@@ -97,6 +91,23 @@ public class PredicateItemSetLoadingAgent extends SwarmPredicate {
 		}
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		if(!(other instanceof PredicateItemSetLoadingAgent))
+			return false;
+		
+		PredicateItemSetLoadingAgent obj=(PredicateItemSetLoadingAgent)other;
+		boolean isName=obj.agentName==null?this.agentName==null:obj.agentName.equals(this.agentName);
+		boolean isTypeName=obj.stationTypeName==null?this.stationTypeName==null:obj.stationTypeName.equals(this.stationTypeName);
+		
+		return isName & isTypeName;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.agentName.hashCode()* 11;
+	}
+
 	/**
 	 * ItemSetLoadingAgent(AgentName,StationTypeName,ItemNumber).
 	 */
@@ -105,28 +116,4 @@ public class PredicateItemSetLoadingAgent extends SwarmPredicate {
 		return String.format("ItemSetLoadingAgent(%s,%s,%d)", agentName, stationTypeName, itemNumber);
 	}
 
-	@Override
-	public boolean equals(Object other) {
-		if (other == null || !(other instanceof PredicateItemSetLoadingAgent))
-			return false;
-		PredicateItemSetLoadingAgent obj = (PredicateItemSetLoadingAgent) other;
-
-		if (obj.getAgentName() == null || this.getAgentName() == null) {
-			return false;
-		}
-		if (obj.getStationTypeName() == null || this.getStationTypeName() == null) {
-			return false;
-		}
-
-		if (obj.getAgentName().equals(this.getAgentName())
-				&& obj.getStationTypeName().equals(this.getStationTypeName())) {
-			return true;
-		}
-
-		return false;
-	}
-//	@Override
-//	public String getPredicatType() {
-//		return "ItemSetLoadingAgent";
-//	}
 }

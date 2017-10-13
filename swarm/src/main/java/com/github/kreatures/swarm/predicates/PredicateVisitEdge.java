@@ -47,13 +47,7 @@ public class PredicateVisitEdge extends SwarmPredicate {
 	public PredicateVisitEdge clone() {
 		return new PredicateVisitEdge(this);
 	}
-	
-	@Override
-	public int hashCode() {
-		return (super.hashCode() +
-				(this.toString() == null ? 0 : this.toString().hashCode())) * 11;
-	}
-	
+
 	public String getAgentName() {
 		return agentName;
 	}
@@ -124,22 +118,19 @@ public class PredicateVisitEdge extends SwarmPredicate {
 	
 	@Override
 	public boolean equals(Object other) {
-		if (other == null || !(other instanceof PredicateVisitEdge))
+		if(!(other instanceof PredicateVisitEdge))
 			return false;
-		PredicateVisitEdge obj = (PredicateVisitEdge) other;
-
-		if (obj.getAgentName() == null || this.getAgentName() == null) {
-			return false;
-		}
-		if (obj.getStationName() == null || this.getStationName() == null) {
-			return false;
-		}
-
-		if (obj.getAgentName().equals(this.getAgentName())
-				&& obj.getStationName().equals(this.getStationName())) {
-			return true;
-		}
-
-		return false;
+		
+		PredicateVisitEdge obj=(PredicateVisitEdge)other;
+		boolean isName=obj.agentName==null?this.agentName==null:obj.agentName.equals(this.agentName);
+		boolean isTypeName=obj.stationName==null?this.stationName==null:obj.stationName.equals(this.stationName);
+		
+		return isName & isTypeName;
 	}
+	
+	@Override
+	public int hashCode() {
+		return this.agentName.hashCode()* 11;
+	}
+	
 }

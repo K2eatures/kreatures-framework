@@ -4,6 +4,8 @@
 package com.github.kreatures.core;
 
 import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,6 +20,7 @@ import com.github.kreatures.core.operators.OperatorCallWrapper;
 import com.github.kreatures.core.operators.parameter.EvaluateParameter;
 import com.github.kreatures.core.operators.parameters.PerceptionParameter;
 import com.github.kreatures.core.reflection.Context;
+import com.github.kreatures.core.reflection.ContextFactory;
 import com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator;
 
 /**
@@ -99,6 +102,39 @@ public class NewAgent extends AgentAbstract {
 		
 		return asmlCylce.execute(c);
 	}
+	
+	@Override
+	public PlanComponent getPlanComponent() {
+		PlanComponent plan = getComponent(SwarmPlanComponent.class);
+		if (plan == null) {
+			LOG.warn(
+					"Tried to access the plan-component of agent '{}' which has no plan-component.",
+					getName());
+			return null;
+		}
+		return plan;
+	}
+	@Override
+	public Context getContext() {
+		return context;
+	}
+
+	@Override
+	protected void regenContext() {
+		context = ContextFactory.createContext(this);
+		context.set("operators", this.operators);
+		context.set("plan", this.getComponent(SwarmPlanComponent.class));
+		if (beliefs != null) {
+			context.set("world", beliefs.getWorldKnowledge());
+			Map<String, BaseBeliefbase> views = beliefs.getViewKnowledge();
+			Context vc = new Context();
+			context.attachContext("views", vc);
+			for (Entry<String, BaseBeliefbase> ent : views.entrySet()) {
+				vc.set(ent.getKey(), ent.getValue());
+			}
+		}
+	}
+
 	
 	@Override
 	public boolean equals(Object other) {

@@ -128,9 +128,9 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 		/*
 		 * All these were help's variable. 
 		 */
-		placeEdgeTypeSet=null;
-		timeEdgeTypeSet=null;
-		visitEdgeTypeSet=null;
+//		placeEdgeTypeSet=null;
+//		timeEdgeTypeSet=null;
+//		visitEdgeTypeSet=null;
 	}
 	
 	/*
@@ -628,7 +628,7 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 		return stationSet;
 	}
 	
-	protected Collection<SwarmPlaceEdgeType> getAllPlaceEdgeType() {
+	public Collection<SwarmPlaceEdgeType> getAllPlaceEdgeType() {
 		
 		return placeEdgeTypeSet;
 	}

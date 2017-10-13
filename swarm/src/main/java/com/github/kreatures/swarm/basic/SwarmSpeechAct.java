@@ -93,6 +93,14 @@ public class SwarmSpeechAct extends SpeechAct {
 	}
 	
 	/**
+	 * 
+	 * @return a MainAction corresponding to this SpeechAction.
+	 */
+	public MainAction getAction() {
+		return actionTyp;
+	}
+	
+	/**
 	 * @param actions the actions to set
 	 */
 	public void setActions(Set<SwarmPredicate> actions) {
@@ -140,6 +148,10 @@ public class SwarmSpeechAct extends SpeechAct {
 		// TODO Auto-generated method stub
 		return actions;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s: %s", getAgent().getName(),actions.toString());
+				
+	}
 }
-
-
