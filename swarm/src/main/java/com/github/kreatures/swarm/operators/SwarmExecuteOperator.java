@@ -112,7 +112,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		SwarmDesires desires=params.getAgent().getComponent(SwarmDesires.class);
 		// keep a object of FolBeliefbase program
 		Set<SwarmPredicate> result=envComponent.askEnvironment(folBB, Options);
-		PredicateEnterStation enterStation=null;
+		
 		
 		Set<SwarmPredicate> enterStationSet=result.stream().filter(predicate->(predicate instanceof PredicateEnterStation)&& 
 				((PredicateEnterStation)predicate).getStationName().equals(desires.getCurrentStation().getStationName()))
@@ -144,12 +144,14 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		/* update the Timeedgestate predicate which will be performed.  */
 		
 		Optional<PredicateTimeEdgeState> optTimeEdgeState=Optional.empty();
-		enterStation=optEnterStation.get();
+		PredicateEnterStation enterStation=optEnterStation.orElseGet(()->enterStationSet.stream()
+				.map(predicate->(PredicateEnterStation)predicate)
+				.findFirst().get());
 		
 		if(enterStation.getMotiv()!=0){
 			optTimeEdgeState=result.stream().filter(predicate->(predicate instanceof PredicateTimeEdgeState))
 					.map(predicate->(PredicateTimeEdgeState)predicate)
-					.filter(predicate->predicate.getName().equals(optEnterStation.get().getStationName()))
+					.filter(predicate->predicate.getName().equals(enterStation.getStationName()))
 					.findFirst();
 			optTimeEdgeState.get().incrTick();
 			if(optEnterStation.isPresent()){
@@ -166,12 +168,14 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 
 					params.getAgent().getComponent(SwarmPlanComponent.class).clear();
 					desires.initWaitTime();
-					return false;					
 				}
 				
 				desires.decrWaitTime();
 						
 				optTimeEdgeState.get().setWaiting(true);
+				action.getActions().add(optTimeEdgeState.get());
+				desires.setTimeEdgeState(optTimeEdgeState.get());
+				return false;
 			}
 			
 			action.getActions().add(optTimeEdgeState.get());
