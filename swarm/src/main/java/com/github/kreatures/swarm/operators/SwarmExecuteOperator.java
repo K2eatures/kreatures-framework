@@ -35,11 +35,10 @@ import com.github.kreatures.swarm.predicates.PredicateTimeEdgeState;
 import com.github.kreatures.swarm.predicates.SwarmPredicate;
 import com.github.kreatures.swarm.basic.MainDesire;
 /**
- * TODO
  * @author Cedric Perez Donfack
- *
  */
 public class SwarmExecuteOperator extends BaseExecuteOperator {
+	
 	/** reference to the logback logger instance */
 	private Logger LOG = LoggerFactory.getLogger(SwarmExecuteOperator.class);
 
@@ -47,19 +46,18 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 	 * reference to environment component of this simulation.  
 	 */
 	private EnvironmentComponent envComponent;
-
-
-	//	/**
-	//	 * This attribute helps a agent to know which atoms it has to 
-	//	 * update when it leaves a station. 
-	//	 * visitTyp 
-	//	 * =0, if the agent has taken a item.
-	//	 * =1, if the agent has placed a item.
-	//	 * =2, if the agent has placed a item and a other agent can take it.
-	//	 * =3, if the agent has taken and placed a item.
-	//	 * =4, if the agent has only visit a station. This is the default value.  
-	//	 */
-	//	private int visitTyp=4;
+	
+//		/**
+//		 * This attribute helps a agent to know which atoms it has to 
+//		 * update when it leaves a station. 
+//		 * visitTyp 
+//		 * =0, if the agent has taken a item.
+//		 * =1, if the agent has placed a item.
+//		 * =2, if the agent has placed a item and a other agent can take it.
+//		 * =3, if the agent has taken and placed a item.
+//		 * =4, if the agent has only visit a station. This is the default value.  
+//		 */
+//		private int visitTyp=4;
 	@Override
 	protected Boolean processImpl(ExecuteParameter params) {
 		boolean check=false;
@@ -72,6 +70,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		case MOVE:
 			check=doMove(action,params);
 			break;
+		
 		case ENTER_STATION:
 			check=doEnter(action,params);
 			break;
@@ -79,7 +78,6 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		case CONSUM_ITEM:
 			doProductConsumItem(action,params);
 			break;
-
 
 		case PRODUCT_CONSUM_ITEM:
 			/* Product and Consume must execute at the same time. Hereby we have to use ItemSetLoading 
@@ -94,25 +92,28 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		case VISIT_STATION:
 			check=doVisit(action,params);
 			break;
+
 		case LEAVE_STATION:
 			check=doLeave(action,params);
 			break;
 		default: return false;
-
 		}
 		return check;
 	}
-
+	
 	private boolean doEnter(SwarmSpeechAct action,ExecuteParameter params) {
+		
 		String[] Options= {PredicateName.EnterStation.toString(),PredicateName.Agent.toString(),PredicateName.AgentType.toString(),
 				PredicateName.Station.toString(),PredicateName.NecAgentStation.toString(),PredicateName.ChoiceStation.toString(),PredicateName.TimeEdgeState.toString()};
+		
 		// get a object of FolBeliefbase
 		FolBeliefbase folBB=(FolBeliefbase)params.getBaseBeliefbase();
+		
 		/* List of desires and related informations */
 		SwarmDesires desires=params.getAgent().getComponent(SwarmDesires.class);
+		
 		// keep a object of FolBeliefbase program
 		Set<SwarmPredicate> result=envComponent.askEnvironment(folBB, Options);
-		
 		
 		Set<SwarmPredicate> enterStationSet=result.stream().filter(predicate->(predicate instanceof PredicateEnterStation)&& 
 				((PredicateEnterStation)predicate).getStationName().equals(desires.getCurrentStation().getStationName()))
@@ -120,18 +121,18 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		Optional<PredicateEnterStation> optEnterStation=enterStationSet.stream()
 				.map(predicate->(PredicateEnterStation)predicate)
 				.filter(predicate->predicate.getMotiv()<4).findFirst();
-		
+
 		/* add currentStation to the action */
 		PredicateCurrentStation currentStation=desires.getCurrentStation();
 		if(desires.getCurrentMainDesire()==MainDesire.CHOSE_STATION) {
 			desires.setCurrentMainDesire(MainDesire.WAIT);
 			action.getActions().add(currentStation);			
 		}
+		
 		/* check whether agent can enter the station. */
 		if(enterStationSet.isEmpty()) {
 			if(desires.getWaitTime()==0) {
 				desires.clear();
-
 				params.getAgent().getComponent(SwarmPlanComponent.class).clear();
 				desires.initWaitTime();
 				return false;
@@ -140,14 +141,11 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 			return false;
 		}
 
-
 		/* update the Timeedgestate predicate which will be performed.  */
-		
 		Optional<PredicateTimeEdgeState> optTimeEdgeState=Optional.empty();
 		PredicateEnterStation enterStation=optEnterStation.orElseGet(()->enterStationSet.stream()
 				.map(predicate->(PredicateEnterStation)predicate)
-				.findFirst().get());
-		
+				.findFirst().get());		
 		if(enterStation.getMotiv()!=0){
 			optTimeEdgeState=result.stream().filter(predicate->(predicate instanceof PredicateTimeEdgeState))
 					.map(predicate->(PredicateTimeEdgeState)predicate)
@@ -177,21 +175,19 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 				desires.setTimeEdgeState(optTimeEdgeState.get());
 				return false;
 			}
-			
 			action.getActions().add(optTimeEdgeState.get());
 			desires.setTimeEdgeState(optTimeEdgeState.get());
 		}
 		
-		
-		
-		
 		desires.initWaitTime();
+		
 		/* set that agent has enter the station */
 		currentStation.setIsInStation(true);
 		desires.setCurrentMainDesire(MainDesire.VISIT);
 		if(desires.getCurrentMainDesire()!=MainDesire.CHOSE_STATION) {
 			action.getActions().add(currentStation);			
 		}
+		
 		/* search agent, agentType and necAgentStation */
 		PredicateAgent agent=null;
 		PredicateAgentType agentType=null;
@@ -245,10 +241,6 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		return true;
 	}
 
-	
-	
-	
-	
 	private boolean doMove(SwarmSpeechAct action,ExecuteParameter params) {
 
 		/* List of desires and related informations */

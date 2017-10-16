@@ -89,6 +89,12 @@ NumberItemToProductInStation(StationNameIn,Number):-ItemProductInStation(Station
 
 %################################################## TimeEdge eigenschaft ############################################
 
+%TimeEdgeComp(Name,TypeName,Type,StatusTyp,Status)
+%Gibt entweder ein TimeEdgeWaiting oder ein TimeEdgeReady zück. wobei Name, TypeName und Type dieselbe bedeutung wie die Terme in TimeEdgeReady. Status deutet an: 0=TimeEdgeWaiting und 1=TimeEdgeReady
+% Status means nothings when StatusTyp=0 
+TimeEdgeComp(Name,TypeName,Type,1,Status):-TimeEdgeReady(Name,TypeName,Type,Status).
+TimeEdgeComp(Name,TypeName,Type,0,5):-TimeEdgeWaiting(Name,TypeName,Type), not TimeEdgeCompNoStatus(Name,TypeName,Type).
+TimeEdgeCompNoStatus(Name,TypeName,Type):-TimeEdgeReady(Name,TypeName,Type,_).
 %+++++++++++++++++++++++++++ Hierunter sind alle timeEdgeWaiting: D.h: Die varaible Iswaiting kann auf true gesetzt werden.+++++++++++++++++++
 %TimeEdgeNoconnectedNoIncomingReady(Name,TypeName,Type). 
 %Gibt alle Komponenten ohne incoming Kanten zurück, die keine <Isconnected=true und nicht directed> timeEdge hat.
@@ -130,157 +136,210 @@ TimeEdgeNoCondition(Name,TypeName,Echtzeit,Type):- TimeEdgeAll(Name,TypeName,Typ
 %+++++++++++++++++++++++++++++++++++++++++++  IsReady allgemein ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 %Nur DirectedConnected and DirectedNoConnected and NoDirectedConnected and NoDirectedBothConneted and NoDirectedNoConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type).
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status).
 
 %Nur DirectedConnected and NoDirectedConnected and NoDirectedBothConneted and NoDirectedNoConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0.
 
 %Nur DirectedConnected and DirectedNoConnected and NoDirectedBothConneted and NoDirectedNoConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
 
 %Nur DirectedConnected and DirectedNoConnected and NoDirectedConnected and NoDirectedNoConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0.
 
 %Nur DirectedConnected and DirectedNoConnected and NoDirectedConnected and NoDirectedBothConneted
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,false,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,false,_)}=0.
 
 %Nur NoDirectedNoConnected and DirectedNoConnected and NoDirectedConnected and NoDirectedBothConneted
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
 
 %Nur DirectedConnected and NoDirectedConnected and NoDirectedNoConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0.
 
 %Nur DirectedConnected and DirectedNoConnected and NoDirectedNoConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
 
 %Nur DirectedConnected  and DirectedNoConnected and NoDirectedBothConneted
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
 
 %Nur NoDirectedNoConnected and DirectedNoConnected and NoDirectedBothConneted
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),#count{Z:TimeEdge(_,Z,Name,TypeName,_,_,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),#count{Z:TimeEdge(_,Z,Name,TypeName,_,_,true,_)}=0.
 
 %Nur DirectedConnected and NoDirectedBothConneted and NoDirectedNoConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
 
 %Nur DirectedConnected  and NoDirectedConnected and NoDirectedBothConneted
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,false,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,false,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0.
 
 %Nur NoDirectedNoConnected and NoDirectedConnected and NoDirectedBothConneted
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
 
 %Nur DirectedConnected and DirectedNoConnected and NoDirectedConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0.
 
 %Nur NoDirectedNoConnected and DirectedNoConnected and NoDirectedConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Typ,Statuse),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
 
 %Nur NoDirectedBothConneted and DirectedNoConnected and NoDirectedConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
 
 %Nur DirectedConnected and NoDirectedNoConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
 
 %Nur DirectedConnected and NoDirectedBothConneted
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,false,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,false,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
 
 %Nur NoDirectedNoConnected and NoDirectedBothConneted
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,_,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,_,true,_)}=0.
 
 %Nur DirectedConnected and NoDirectedConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0.
 
 %Nur NoDirectedNoConnected and NoDirectedConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
 
 %Nur NoDirectedBothConneted and NoDirectedConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,false,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,false,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
 
 %Nur DirectedConnected and DirectedNoConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
 
 %Nur NoDirectedNoConnected and DirectedNoConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,_,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,_,true,_)}=0.
 
 %Nur NoDirectedBothConneted and DirectedNoConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,_,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,_,true,_)}=0.
 
 %Nur NoDirectedConnected and DirectedNoConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
 
 %Nur DirectedConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
 
 %Nur NoDirectedNoConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,_,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,both,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,_,true,_)}=0.
 
 %Nur NoDirectedBothConneted
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,false,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,_,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,false,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,_,true,_)}=0.
 
 %Nur NoDirectedConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
 
 %Nur DirectedNoConnected
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,true,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
+TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedNoConnectedReady(Name,TypeName,_,Type,Status),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,true,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
 
-% nur outgoing
-TimeEdgeReady(Name,TypeName,Type):-TimeEdgeOnlyOutgoing(Name,TypeName,_,Type).
+% nur outgoing. Status=0
+TimeEdgeReady(Name,TypeName,Type,0):-TimeEdgeOnlyOutgoing(Name,TypeName,_,Type).
 
 
-%+++++++++++++++++ NoDirectedNoConnected and NoDirectedNoConnected: IsReady auf true setzen, wenn erfüllt+++++++++++++++++++++++++++++
+%+++++++++++++++++ NoDirectedNoConnected: IsReady auf true setzen, wenn erfüllt+++++++++++++++++++++++++++++
+
+%Status	3=the both components are waiting without waiting time
+%Status	2=the both components are reading after the waiting time 
+%Status 1=one component is ready and the other can begin to count.
+%Status 0=the both components are waiting
 
 %Gibt alle noConnected Komponenten zurück, deren correspondings Komponent <mindesten ein IsWaiting or IsReady auf true> ist.
-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,Type):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type)}>0,TimeEdgeNoDirectedNoConnectedWeightMin(Name,TypeName,WeightMin,Type).
+TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,Type,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(_,_,Name,TypeName,WeightMin,Type,Status).
+%TimeEdgeNoDirectedNoConnectedWeightMin(Name,TypeName,WeightMin,Type).
 
-%Gibt alle nodirected and bothConnected Komponenten zurück, die ihr corresponding Komponent ihr IsReady auf true ist.
-TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutIn(Name1,TypeName1,Name2,TypeName2,_,false,false,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,Echtzeit,false,true,_),WeightMin>Echtzeit. %Hilfsvariable
+%Gibt alle nodirected and noConnected Komponenten zurück, die ihr corresponding Komponent ihr IsReady auf true ist.
+%TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type,Status)
+%	3=the both components are waiting without waiting time
+TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,0,Type,3):-TimeEdgeNoDirectedNoConnectedWeightMin(Name2,TypeName2,0,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,0,true,false,_),TimeEdgeOutIn(Name1,TypeName1,Name2,TypeName2,_,false,false,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,0,false,true,_).
+%	2=the both components are reading after the waiting time 
+TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type,2):-TimeEdgeNoDirectedNoConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutIn(Name1,TypeName1,Name2,TypeName2,_,false,false,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,_,false,true,_),WeightMin<=Echtzeit,WeightMin<>0.
+%	1=one component is ready and the other can begin to count.
+TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type,1):-TimeEdgeNoDirectedNoConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutIn(Name1,TypeName1,Name2,TypeName2,_,false,false,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,_,false,true,_),WeightMin>Echtzeit.
 %Gibt alle nodirected and noConnected Komponenten zurück, die ihr corresponding Komponent ihr IsWaiting auf true ist.
-TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedNoConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutIn(Name1,TypeName1,Name2,TypeName2,_,false,false,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,Echtzeit,true,false,_). %Hilfsvariable
+%Status: 0=the both components are waiting
+TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type,0):-TimeEdgeNoDirectedNoConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,_,true,false,_),TimeEdgeOutIn(Name1,TypeName1,Name2,TypeName2,_,false,false,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,_,true,false,_). %Hilfsvariable
 
-%+++++++++++++++++ Outgoing and incomingNoConnected: IsReady auf true setzen, wenn erfüllt +++++++++++++++++++++++++++++
+%+++++++++++++++++ Outgoing and DirectedNoConnected: IsReady auf true setzen, wenn erfüllt +++++++++++++++++++++++++++++
+
+%Status	3=the both components are waiting without waiting time
+TimeEdgeDirectedNoConnectedReady(NameIn,TypeNameIn,0,Type,3):- TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,0,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,0,true,false,false).
+%Status	1=one component is ready and the other can begin to count.
+TimeEdgeDirectedNoConnectedReady(NameIn,TypeNameIn,WeightMin,Type,1):- TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,Echtzeit,true,false,false),WeightMin>Echtzeit.
+%Status	2=the both components are reading after the waiting time 
+TimeEdgeDirectedNoConnectedReady(NameIn,TypeNameIn,WeightMin,Type,2):- TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,Echtzeit,true,false,false),WeightMin<=Echtzeit,WeightMin<>0.
 
 %Gibt alle incoming Komponenten deren outgoing Komponenten ihrer Isconnected=false und mindesten ein ihrer IsReady=true zurück.
 %mindesten eine <out,IsConnected=false,IsReady=true> --> <In>
-TimeEdgeDirectedNoConnectedReady(NameIn,TypeNameIn,WeightMin,Type):- #count{X:TimeEdgeOutgoingReady(X,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type)}>0,TimeEdgeDirectedNoConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type).
+TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type):- #count{X:TimeEdgeOutgoingReady(X,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type)}>0,TimeEdgeDirectedNoConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type).
 
 %Gibt alle Komponenten zurück, die ihr IsReady auf true ist.
-TimeEdgeStatusDirectedOnConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,true,_),WeightMin>Echtzeit,TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,false,_). %Hilfsvariable
-
+TimeEdgeStatusDirectedOnConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,true,_),TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,false,_).
 %+++++++++++++++++ NoDirectedBothConnected and NoDirectedBothConnected: IsReady auf true setzen, wenn erfüllt+++++++++++++++++++++++++++++
 
+
+%Status	3=the both components are waiting without waiting time
+TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,0,Type,3):-TimeEdgeNoDirectedBothConnectedReadyIn(Name,TypeName,0,Type),TimeEdgeStatus(Name,TypeName,_,_,_,0,true,false,_).
+%Status	2=the both components are reading after the waiting time 
+TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,WeightMin,Type,2):-TimeEdgeNoDirectedBothConnectedReadyIn(Name,TypeName,WeightMin,Type),TimeEdgeStatus(Name,TypeName,_,_,_,Echtzeit,true,false,_),WeightMin<=Echtzeit,WeightMin<>0.
+%Status	1=one component is ready and the other can begin to count.
+TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,WeightMin,Type,1):-TimeEdgeNoDirectedBothConnectedReadyIn(Name,TypeName,WeightMin,Type),TimeEdgeStatus(Name,TypeName,_,_,_,Echtzeit,true,false,_),WeightMin>Echtzeit.
+
 %Gibt alle Komponenten of TimeEdgeNoDirectedBothConnected(...) zurück, deren timeEdge <IsConnect=both> ist.
-TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,WeightMin,Type):-#count{X:TimeEdgeNoDirectedBothConnectedNoReady(X,TypeName1,Name,TypeName,WeightMin,Type)}=0,TimeEdgeNoDirectedBothConnected(Name1,TypeName1,Name,TypeName,WeightMin,Type).
+TimeEdgeNoDirectedBothConnectedReadyIn(Name,TypeName,WeightMin,Type):-#count{X:TimeEdgeNoDirectedBothConnectedNoReady(X,TypeName1,Name,TypeName,WeightMin,Type)}=0,TimeEdgeNoDirectedBothConnected(Name1,TypeName1,Name,TypeName,WeightMin,Type).
 
 %Gibt alle coresponding Komponenten of TimeEdgeNoDirectedOneConnectedReady(...) zurück, deren <IsWaiting=false and IsReady=false>  timeEdge ist.
 TimeEdgeNoDirectedBothConnectedNoReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):- #count{X:TimeEdgeStatusNoDirectedBothConnectedReady(X,TypeName1,_,_,_,_)}=0,TimeEdgeNoDirectedBothConnected(Name1,TypeName1,Name2,TypeName2,WeightMin,Type). %Hilfsvariable
 
 %Gibt alle nodirected and bothConnected Komponenten zurück, die ihr corresponding Komponent ihr IsReady auf true ist.
-TimeEdgeStatusNoDirectedBothConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutInAnd(Name1,TypeName1,Name2,TypeName2,_,false,both,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,Echtzeit,false,true,_),WeightMin>Echtzeit. %Hilfsvariable
+TimeEdgeStatusNoDirectedBothConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedBothConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,_,true,false,_),TimeEdgeOutInAnd(Name1,TypeName1,Name2,TypeName2,_,false,both,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,_,false,true,_). %Hilfsvariable
 %Gibt alle nodirected and bothConnected Komponenten zurück, die ihr corresponding Komponent ihr IsWaiting auf true ist.
-TimeEdgeStatusNoDirectedBothConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutInAnd(Name1,TypeName1,Name2,TypeName2,_,false,both,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,Echtzeit,true,false,_). %Hilfsvariable
+TimeEdgeStatusNoDirectedBothConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,_,true,false,_),TimeEdgeOutInAnd(Name1,TypeName1,Name2,TypeName2,_,false,both,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,_,true,false,_). %Hilfsvariable
 
 %+++++++++++++++++ NoDirectedConnected and NoDirectedNoConnected: IsReady auf true setzen, wenn erfüllt+++++++++++++++++++++++++++++
 
+
+%Status	3=the both components are waiting without waiting time
+TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,0,Type,3):-TimeEdgeNoDirectedOneConnectedReadyIn(Name,TypeName,0,Type),TimeEdgeStatus(Name,TypeName,_,_,_,0,false,true,_).
+%Status	2=the both components are reading after the waiting time 
+TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,WeightMin,Type,2):-TimeEdgeNoDirectedOneConnectedReadyIn(Name,TypeName,WeightMin,Type),TimeEdgeStatus(Name,TypeName,_,_,_,Echtzeit,true,false,_),WeightMin<=Echtzeit,WeightMin<>0.
+%Status	1=one component is ready and the other can begin to count. 
+TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,WeightMin,Type,1):-TimeEdgeNoDirectedOneConnectedReadyIn(Name,TypeName,WeightMin,Type),TimeEdgeStatus(Name,TypeName,_,_,_,Echtzeit,true,false,_),WeightMin>Echtzeit.
+
 %Gibt alle Komponenten of TimeEdgeNoDirectedOneConnected(...) zurück, deren correspndings komponenten mindesten eine Iswaiting=true ist.
-TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,WeightMin,Type):- #count{X:TimeEdgeNoDirectedOneConnectedNoReady(X,TypeName1,Name,TypeName,WeightMin,Type)}=0,TimeEdgeNoDirectedOneConnected(Name1,TypeName1,Name,TypeName,WeightMin,Type).
+TimeEdgeNoDirectedOneConnectedReadyIn(Name,TypeName,WeightMin,Type):- #count{X:TimeEdgeNoDirectedOneConnectedNoReady(X,TypeName1,Name,TypeName,WeightMin,Type)}=0,TimeEdgeNoDirectedOneConnected(Name1,TypeName1,Name,TypeName,WeightMin,Type).
 
 %Gibt alle coresponding Komponenten of TimeEdgeNoDirectedConnectedReady(...) zurück, deren <IsWaiting=false>  timeEdge ist.
 TimeEdgeNoDirectedOneConnectedNoReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):- #count{X:TimeEdgeStatusNoDirectedWaiting(X,TypeName1,_,_,_,_)}=0,TimeEdgeNoDirectedOneConnected(Name1,TypeName1,Name2,TypeName2,WeightMin,Type). %Hilfsvariable
 
-%TimeEdgeStatusNoDirectedWaiting(Name1,TypeName1,Name2,TypeName2,WeightMin,Type)
+%TimeEdgeStatusNoDirectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type,Status)
 %Gibt alle nodirected Komponenten zurück, die ihr ISready auf true ist.
-TimeEdgeStatusNoDirectedConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type):-TimeEdgeNoDirectedConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdge(Name1,TypeName1,Name2,TypeName2,_,false,true,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,Echtzeit,false,true,_),WeightMin>Echtzeit. %Hilfsvariable
+TimeEdgeStatusNoDirectedConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type,1):-TimeEdgeNoDirectedConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,_,true,false,_),TimeEdge(Name1,TypeName1,Name2,TypeName2,_,false,true,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,_,false,true,_).
 
 %+++++++++++++++++ Outgoing and incomingConnected: IsReady auf true setzen, wenn erfüllt +++++++++++++++++++++++++++++
+
+
+%TimeEdgeDirectedConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type,Status): Gibt alle Komponenten zurück, die ihr IsReady auf true ist.
+%Status	2=the both components are reading after the waiting time
+TimeEdgeDirectedConnectedReady(NameIn,TypeNameIn,WeightMin,Type,2):- TimeEdgeDirectedConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,Echtzeit,true,false,false),WeightMin<=Echtzeit,WeightMin<>0.
+%Status	1=one component is ready and the other can begin to count.
+TimeEdgeDirectedConnectedReady(NameIn,TypeNameIn,WeightMin,Type,1):- TimeEdgeDirectedConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,Echtzeit,true,false,false),WeightMin>Echtzeit.
+%Status	3=the both components are waiting without waiting time
+TimeEdgeDirectedConnectedReady(NameIn,TypeNameIn,0,Type,3):- TimeEdgeDirectedConnectedReadyIn(NameIn,TypeNameIn,0,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,0,true,false,false).
+
 %TimeEdgeAllLogicalIncomingReady(NameIn,TypeNameIn,WeightMin,Type)
 %Gibt alle incoming Komponenten deren outgoing Komponenten ihrer Isconnected=true und ihrer IsReady=true zurück.
 %alle <out,IsConnected=true,IsReady=true> --> <In>
-TimeEdgeDirectedConnectedReady(NameIn,TypeNameIn,WeightMin,Type):- #count{X:TimeEdgeOutgoingReady(X,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type)}=0,TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type).
+TimeEdgeDirectedConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type):- #count{X:TimeEdgeOutgoingReady(X,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type)}=0,TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type).
 
 %TimeEdgeOutgoingReady(StationNameOut,StationTypeNameOut,StationNameIn,StationTypeNameIn,EchtzeitMin,Type). Dies ist eine Hilfsvariable.
 %Gibt alle incoming StationTypen mit IsReady=false und Isconnected=true: <out> ---->  <In>
 TimeEdgeOutgoingReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):-TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type), TimeEdgeAll(NameOut,TypeNameOut,_),#count{X:TimeEdge(X,TypeNameOut,NameIn,TypeNameIn,_,true,true,_)}>0,#count{Y:TimeEdgeStatusDirectedConnectedReady(Y,TypeNameOut,_,_,_,_)}=0. %Hilfsvariable
-%TimeEdgeStatusDirectedConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type): Gibt alle Komponenten zurück, die ihr IsReady auf true ist.
-TimeEdgeStatusDirectedConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,true,_),WeightMin>Echtzeit,TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,true,_). %Hilfsvariable
+%TimeEdgeStatusDirectedConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type,Status): Gibt alle Komponenten zurück, die ihr IsReady auf true ist.
+TimeEdgeStatusDirectedConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,false,true),TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,true,_).
+
+
+
+
+
+
+
+
 
 
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Waiting verfahren &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -401,7 +460,7 @@ TimeEdgeOnlyOutgoing(Name,TypeName,Echtzeit,Type):- TimeEdgeAll(Name,TypeName,Ty
 %+++++++++++++++++ NoDirectedNoConnected and NoDirectedNoConnected: IsWaiting auf true setzen, wenn erfüllt+++++++++++++++++++++++++++++
 
 %Gibt alle Komponenten zurück, die mindesten eine <Isconnected=false and no directed>  timeEdge hat.
-TimeEdgeNoDirectedNoConnectedWaiting(Name,TypeName,WeightMin,Type):- TimeEdgeNoDirectedNoConnectedWeightMin(Name,TypeName,WeightMin,Type). 
+TimeEdgeNoDirectedNoConnectedWaiting(Name,TypeName,WeightMin,Type):- TimeEdgeNoDirectedNoConnectedWeightMin(Name,TypeName,WeightMin,Type).
 
 %+++++++++++++++++ NoDirectedBothConnected and NoDirectedBothConnected: IsWaiting auf true setzen, wenn erfüllt+++++++++++++++++++++++++++++
 
@@ -437,7 +496,7 @@ TimeEdgeDirectedConnectedWaiting(NameIn,TypeNameIn,WeightMin,Type):- #count{X:Ti
 %Gibt alle incoming StationTypen mit IsReady=false und Isconnected=true: <out> ---->  <In>
 TimeEdgeOutgoingWaiting(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):-TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type), TimeEdgeAll(NameOut,TypeNameOut,_),#count{X:TimeEdge(X,TypeNameOut,NameIn,TypeNameIn,_,true,true,_)}>0,#count{Y:TimeEdgeStatusDirectedConnectedWaitingOrReady(Y,TypeNameOut,_,_,_,_)}=0. %Hilfsvariable
 %TimeEdgeStatusDirectedConnectedWaitingOrReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type): Gibt alle Komponenten zurück, die ihr IsReady auf true ist.
-TimeEdgeStatusDirectedConnectedWaitingOrReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,true,_),WeightMin>Echtzeit,TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,true,_). %Hilfsvariable
+TimeEdgeStatusDirectedConnectedWaitingOrReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,true,_),TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,true,_). %Hilfsvariable
 %TimeEdgeStatusDirectedConnectedWaitingOrReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type): Gibt alle Komponenten zurück, die ihr IsWaiting auf true ist.
 TimeEdgeStatusDirectedConnectedWaitingOrReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,true,false,_),TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,true,_).
 
@@ -470,6 +529,10 @@ TimeEdgeNoDirectedNoConnectedWeightMin(Name,TypeName,WeightMin,Type):-TimeEdgeOu
 %TimeEdgeDirectedNoConnectedWeightMin(Name,TypeName,WeightMin,Type): Type is either station or agent
 %Return all incoming komponents with its corresponding weight. only noconnected edge are importance.
 TimeEdgeDirectedNoConnectedWeightMin(Name,TypeName,WeightMin,Type):-TimeEdge(_,_,Name,TypeName,_,true,false,Echtzeit),WeightMin=Echtzeit+0,TimeEdgeAll(Name,TypeName,Type).
+
+%TimeEdgeNoDirectedBothConnectedWeightMin(Name2,TypeName2,WeightMin,Type): Type is either station or agent
+%Return all komponents with its corresponding weight. only both connected edge are importance.
+TimeEdgeNoDirectedBothConnectedWeightMin(Name,TypeName,WeightMin,Type):-#min{EchtzeitX:TimeEdgeOutIn(_,_,Name,TypeName,_,false,false,EchtzeitX)}=WeightMin,TimeEdgeAll(Name,TypeName,Type).
 
 %++++++++++++++++++++++ timeEdge nodirected both conected ++++++++++++++++++++++++++++++
 
@@ -554,7 +617,7 @@ StationInfo(StationName,StationTypeName,Time,5):-Station(StationName,StattionTyp
 HasChoiceStation(AgentName,AgentTypeName):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,_,_,false,false).
 %AllConditionErfullChoiceStation(AgentName,StationName)
 %Check if frequency and necessity are fillfully .
-AllConditionErfullChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv):- CurrentAgent(AgentName,_),VisitEdge(AgentName,_,StationName,_,_), NecErfull(AgentName,StationName),FreqErfullStation(StationName), FreqErfullAgent(AgentName),TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
+AllConditionErfullChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Status):- CurrentAgent(AgentName,_),VisitEdge(AgentName,_,StationName,_,_), NecErfull(AgentName,StationName),FreqErfullStation(StationName), FreqErfullAgent(AgentName),TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Status).
 
 %ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Time,ItemMotiv).
 %motiv: 0=agent and station no time edge;
@@ -565,25 +628,7 @@ AllConditionErfullChoiceStation(AgentName,AgentTypeName,StationName,StationTypeN
 
 
 
-ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Time,ItemMotiv):-HasChoiceStation(AgentName,AgentTypeName),AllConditionErfullChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv),CurrentAgent(AgentName,AgentTypeName),StationInfo(StationName,StationTypeName,Time,ItemMotiv).
-
-%When agent and station haven't timeEdge
-TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,0):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_).
-
-%When agent and station haven timeEdge and are waiting
-TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,6):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeWaiting(AgentName,AgentTypeName,_),TimeEdgeWaiting(StationName,StationTypeName,_).
-%When agent hasn't timeEdge and station is waiting
-TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,5):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeWaiting(StationName,StationTypeName,_).
-%When station hasn't timeEdge and agent is waiting
-TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,4):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),TimeEdgeWaiting(AgentName,AgentTypeName,_).
-
-%When agent and station haven timeEdge and are ready
-TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,3):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeReady(AgentName,AgentTypeName,_),TimeEdgeReady(StationName,StationTypeName,_).
-
-%When agent hasn't timeEdge and station is ready
-TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,2):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeReady(StationName,StationTypeName,_).
-%When station hasn't timeEdge and agent is ready
-TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,1):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),TimeEdgeReady(AgentName,AgentTypeName,_).
+ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Time,ItemMotiv):-HasChoiceStation(AgentName,AgentTypeName),AllConditionErfullChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,_),CurrentAgent(AgentName,AgentTypeName),StationInfo(StationName,StationTypeName,Time,ItemMotiv).
 
 %###################################### Definition of atomic Intention ######################################################
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Engeischaft von EnterStation &&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -595,31 +640,40 @@ TimeEdgeChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,1):-Vi
 %Wenn agent und station keine TimeEdge haben.
 %EnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,false,_),AllConditionErfullEnterStation(AgentName,StationName),TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
 
-EnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv):-CurrentAgent(AgentName,AgentTypeName),ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,_,_,_),AllConditionErfullEnterStation(AgentName,StationName),TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
+EnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Status):-CurrentAgent(AgentName,AgentTypeName),ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,_,_,_),AllConditionErfullEnterStation(AgentName,StationName,Motiv,Status).
 
 
 %AllConditionErfullEnterStation(AgentName,StationName)
 %Check if frequency and necessity are fillfully .
-AllConditionErfullEnterStation(AgentName,StationName):- CurrentAgent(AgentName,_),VisitEdge(AgentName,_,StationName,_,_),SpaceSizeErfull(AgentName,_,StationName,_),MaxPriority(AgentName,StationName).
+AllConditionErfullEnterStation(AgentName,StationName,Motiv,Status):- CurrentAgent(AgentName,_),VisitEdge(AgentName,_,StationName,_,_),SpaceSizeErfull(AgentName,_,StationName,_),MaxPriority(AgentName,StationName),TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Status).
+
+
+
+%Status	3=the both components are waiting without waiting time
+%Status	2=the both components are reading after the waiting time 
+%Status 1=one component is ready and the other can begin to count.
+%Status 0=the both components are waiting
 
 %When agent and station haven't timeEdge
-TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,0):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_).
+TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,0,0):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_).
 
 %When agent and station haven timeEdge and are waiting
-TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,6):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeWaiting(AgentName,AgentTypeName,_),TimeEdgeWaiting(StationName,StationTypeName,_).
+TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,6,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,_,Status),TimeEdgeComp(StationName,StationTypeName,_,StatusTyp,Status),StatusTyp<>1.
+
+TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,6,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,StatusTyp,Status),TimeEdgeComp(StationName,StationTypeName,_,_,Status),StatusTyp<>1.
 %When agent hasn't timeEdge and station is waiting
-TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,5):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeWaiting(StationName,StationTypeName,_).
+TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,5,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeComp(StationName,StationTypeName,_,0,Status).
 %When station hasn't timeEdge and agent is waiting
-TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,4):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),TimeEdgeWaiting(AgentName,AgentTypeName,_).
+TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,4,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,0,Status).
 
 %When agent and station haven timeEdge and are ready
-TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,3):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeReady(AgentName,AgentTypeName,_),TimeEdgeReady(StationName,StationTypeName,_).
+TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,3,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,1,0),TimeEdgeComp(StationName,StationTypeName,_,1,Status).
 
 %When agent hasn't timeEdge and station is ready
-TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,2):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeReady(StationName,StationTypeName,_).
+TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,2,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeComp(StationName,StationTypeName,_,1,Status).
 %When station hasn't timeEdge and agent is ready
-TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,1):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),TimeEdgeReady(AgentName,AgentTypeName,_).
-
+TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,1,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,1,Status).
+%TimeEdgeComp(Name,TypeName,Type,StatusTyp,Status)
 
 
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Engeischaft von ProdcutConsumItem &&&&&&&&&&&&&&&&&&&&&&&&&&&
