@@ -56,13 +56,13 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 	 * @return
 	 */
 	public PredicateTimeEdgeState init(){
-		this.visitorName="nothing";
-		this.visitorTypeName="nothing";
+//		this.visitorName="nothing";
+//		this.visitorTypeName="nothing";
 //		this.compType=0;
 		this.tick=0;
 		this.isWaiting=false;
 		this.isReady=false;
-		this.isFinish=false;
+//		this.isFinish=false;
 		return this;
 	}
 
@@ -92,17 +92,17 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 		return visitorName;
 	}
 
-	public void setVisitorName(String visitorName) {
-		this.visitorName = visitorName;
-	}
+//	public void setVisitorName(String visitorName) {
+//		this.visitorName = visitorName;
+//	}
 
 	public String getVisitorTypeName() {
 		return visitorTypeName;
 	}
 
-	public void setVisitorTypeName(String visitorTypeName) {
-		this.visitorTypeName = visitorTypeName;
-	}
+//	public void setVisitorTypeName(String visitorTypeName) {
+//		this.visitorTypeName = visitorTypeName;
+//	}
 
 	public int getCompType() {
 		return compType;

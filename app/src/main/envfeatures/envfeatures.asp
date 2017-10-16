@@ -248,7 +248,7 @@ TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,Type,Status):-#count{
 %	3=the both components are waiting without waiting time
 TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,0,Type,3):-TimeEdgeNoDirectedNoConnectedWeightMin(Name2,TypeName2,0,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,0,true,false,_),TimeEdgeOutIn(Name1,TypeName1,Name2,TypeName2,_,false,false,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,0,false,true,_).
 %	2=the both components are reading after the waiting time 
-TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type,2):-TimeEdgeNoDirectedNoConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutIn(Name1,TypeName1,Name2,TypeName2,_,false,false,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,_,false,true,_),WeightMin<=Echtzeit,WeightMin<>0.
+TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type,2):-TimeEdgeNoDirectedNoConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutIn(Name1,TypeName1,Name2,TypeName2,_,false,false,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,_,false,true,_),WeightMin<=Echtzeit,WeightMin!=0.
 %	1=one component is ready and the other can begin to count.
 TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type,1):-TimeEdgeNoDirectedNoConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,Echtzeit,true,false,_),TimeEdgeOutIn(Name1,TypeName1,Name2,TypeName2,_,false,false,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,_,false,true,_),WeightMin>Echtzeit.
 %Gibt alle nodirected and noConnected Komponenten zurück, die ihr corresponding Komponent ihr IsWaiting auf true ist.
@@ -262,7 +262,7 @@ TimeEdgeDirectedNoConnectedReady(NameIn,TypeNameIn,0,Type,3):- TimeEdgeDirectedN
 %Status	1=one component is ready and the other can begin to count.
 TimeEdgeDirectedNoConnectedReady(NameIn,TypeNameIn,WeightMin,Type,1):- TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,Echtzeit,true,false,false),WeightMin>Echtzeit.
 %Status	2=the both components are reading after the waiting time 
-TimeEdgeDirectedNoConnectedReady(NameIn,TypeNameIn,WeightMin,Type,2):- TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,Echtzeit,true,false,false),WeightMin<=Echtzeit,WeightMin<>0.
+TimeEdgeDirectedNoConnectedReady(NameIn,TypeNameIn,WeightMin,Type,2):- TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,Echtzeit,true,false,false),WeightMin<=Echtzeit,WeightMin!=0.
 
 %Gibt alle incoming Komponenten deren outgoing Komponenten ihrer Isconnected=false und mindesten ein ihrer IsReady=true zurück.
 %mindesten eine <out,IsConnected=false,IsReady=true> --> <In>
@@ -276,7 +276,7 @@ TimeEdgeStatusDirectedOnConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,Wei
 %Status	3=the both components are waiting without waiting time
 TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,0,Type,3):-TimeEdgeNoDirectedBothConnectedReadyIn(Name,TypeName,0,Type),TimeEdgeStatus(Name,TypeName,_,_,_,0,true,false,_).
 %Status	2=the both components are reading after the waiting time 
-TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,WeightMin,Type,2):-TimeEdgeNoDirectedBothConnectedReadyIn(Name,TypeName,WeightMin,Type),TimeEdgeStatus(Name,TypeName,_,_,_,Echtzeit,true,false,_),WeightMin<=Echtzeit,WeightMin<>0.
+TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,WeightMin,Type,2):-TimeEdgeNoDirectedBothConnectedReadyIn(Name,TypeName,WeightMin,Type),TimeEdgeStatus(Name,TypeName,_,_,_,Echtzeit,true,false,_),WeightMin<=Echtzeit,WeightMin!=0.
 %Status	1=one component is ready and the other can begin to count.
 TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,WeightMin,Type,1):-TimeEdgeNoDirectedBothConnectedReadyIn(Name,TypeName,WeightMin,Type),TimeEdgeStatus(Name,TypeName,_,_,_,Echtzeit,true,false,_),WeightMin>Echtzeit.
 
@@ -297,7 +297,7 @@ TimeEdgeStatusNoDirectedBothConnectedReady(Name1,TypeName1,Name2,TypeName2,Weigh
 %Status	3=the both components are waiting without waiting time
 TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,0,Type,3):-TimeEdgeNoDirectedOneConnectedReadyIn(Name,TypeName,0,Type),TimeEdgeStatus(Name,TypeName,_,_,_,0,false,true,_).
 %Status	2=the both components are reading after the waiting time 
-TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,WeightMin,Type,2):-TimeEdgeNoDirectedOneConnectedReadyIn(Name,TypeName,WeightMin,Type),TimeEdgeStatus(Name,TypeName,_,_,_,Echtzeit,true,false,_),WeightMin<=Echtzeit,WeightMin<>0.
+TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,WeightMin,Type,2):-TimeEdgeNoDirectedOneConnectedReadyIn(Name,TypeName,WeightMin,Type),TimeEdgeStatus(Name,TypeName,_,_,_,Echtzeit,true,false,_),WeightMin<=Echtzeit,WeightMin!=0.
 %Status	1=one component is ready and the other can begin to count. 
 TimeEdgeNoDirectedOneConnectedReady(Name,TypeName,WeightMin,Type,1):-TimeEdgeNoDirectedOneConnectedReadyIn(Name,TypeName,WeightMin,Type),TimeEdgeStatus(Name,TypeName,_,_,_,Echtzeit,true,false,_),WeightMin>Echtzeit.
 
@@ -316,7 +316,7 @@ TimeEdgeStatusNoDirectedConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin
 
 %TimeEdgeDirectedConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type,Status): Gibt alle Komponenten zurück, die ihr IsReady auf true ist.
 %Status	2=the both components are reading after the waiting time
-TimeEdgeDirectedConnectedReady(NameIn,TypeNameIn,WeightMin,Type,2):- TimeEdgeDirectedConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,Echtzeit,true,false,false),WeightMin<=Echtzeit,WeightMin<>0.
+TimeEdgeDirectedConnectedReady(NameIn,TypeNameIn,WeightMin,Type,2):- TimeEdgeDirectedConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,Echtzeit,true,false,false),WeightMin<=Echtzeit,WeightMin!=0.
 %Status	1=one component is ready and the other can begin to count.
 TimeEdgeDirectedConnectedReady(NameIn,TypeNameIn,WeightMin,Type,1):- TimeEdgeDirectedConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,Echtzeit,true,false,false),WeightMin>Echtzeit.
 %Status	3=the both components are waiting without waiting time
@@ -634,9 +634,12 @@ ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Time,Ite
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Engeischaft von EnterStation &&&&&&&&&&&&&&&&&&&&&&&&&&&
 %EnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
 %motiv: 0=agent and station no time edge;
-%	1=agent has time edge and station no;
+%	6=agent has time edge and station no;
+%	5=agent hasn't time edge and station has;
+%	4=agent and station haven time edge.
+%	3=agent has time edge and station no;
 %	2=agent hasn't time edge and station has;
-%	3=agent and station haven time edge.
+%	1=agent and station haven time edge.
 %Wenn agent und station keine TimeEdge haben.
 %EnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,false,_),AllConditionErfullEnterStation(AgentName,StationName),TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
 
@@ -649,8 +652,8 @@ AllConditionErfullEnterStation(AgentName,StationName,Motiv,Status):- CurrentAgen
 
 
 
-%Status	3=the both components are waiting without waiting time
-%Status	2=the both components are reading after the waiting time 
+%Status	3=the both components are ready without waiting time
+%Status	2=the both components are ready after the waiting time 
 %Status 1=one component is ready and the other can begin to count.
 %Status 0=the both components are waiting
 
@@ -658,9 +661,9 @@ AllConditionErfullEnterStation(AgentName,StationName,Motiv,Status):- CurrentAgen
 TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,0,0):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_).
 
 %When agent and station haven timeEdge and are waiting
-TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,6,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,_,Status),TimeEdgeComp(StationName,StationTypeName,_,StatusTyp,Status),StatusTyp<>1.
+TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,6,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,_,Status),TimeEdgeComp(StationName,StationTypeName,_,StatusTyp,Status),StatusTyp!=1.
 
-TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,6,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,StatusTyp,Status),TimeEdgeComp(StationName,StationTypeName,_,_,Status),StatusTyp<>1.
+TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,6,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,StatusTyp,Status),TimeEdgeComp(StationName,StationTypeName,_,_,Status),StatusTyp!=1.
 %When agent hasn't timeEdge and station is waiting
 TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,5,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeComp(StationName,StationTypeName,_,0,Status).
 %When station hasn't timeEdge and agent is waiting

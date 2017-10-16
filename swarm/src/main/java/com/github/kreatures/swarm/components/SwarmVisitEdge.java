@@ -85,4 +85,13 @@ public class SwarmVisitEdge extends SwarmVisitEdgeType {
 
 		return "%VisitEdge(agentName,AgentTypeName,StationName,StationTypeName,bold).";
 	}
+	
+	public String getAgentTypeName(){
+		return super.agentTypeName;
+	}
+
+	
+	public String getStationTypeName(){
+		return super.stationTypeName;
+	}
 }

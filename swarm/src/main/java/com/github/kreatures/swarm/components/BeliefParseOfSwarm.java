@@ -125,6 +125,7 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 		setItemSetLoadingAgent(getAllVisitEdgeType());
 		setItemSetLoadingStation(getAllPlaceEdgeType());
 		setTimeEdgeState(getAllTimeEdge());
+		setVisitorOfTimeEdgeState(timeEdgeStateSet,visitEdgeSet);
 		/*
 		 * All these were help's variable. 
 		 */
@@ -603,7 +604,39 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 			}
 		}	
 	}
-
+	/**
+	 * assign all the visit element to the timeEdgeState components
+	 * @param setTimeEdgeSet
+	 * @param visitEdgeSet
+	 */
+	protected void setVisitorOfTimeEdgeState(Collection<TimeEdgeState> setTimeEdgeSet,Collection<SwarmVisitEdge> visitEdgeSet){
+		Collection<TimeEdgeState> result=new HashSet<>();
+		
+		setTimeEdgeSet.stream().forEach(timeEdgeState->{
+			visitEdgeSet.stream().peek(visitEdge->{
+				System.out.println(visitEdge.getAgentName()+"  "+timeEdgeState.getName()+"   "+visitEdge.getStationName());
+			}).filter(visitEdge->visitEdge.getAgentName().equals(timeEdgeState.getName())||visitEdge.getStationName().equals(timeEdgeState.getName()))
+			
+			.forEach(visitEdge->{
+				if(visitEdge.getStationName().equals(timeEdgeState.getName())){
+					TimeEdgeState tmp=new TimeEdgeState(timeEdgeState);
+					tmp.setVisitorName(visitEdge.getAgentName());
+					tmp.setVisitorTypeName(visitEdge.getAgentTypeName());
+					result.add(tmp);
+				}else{
+					TimeEdgeState tmp=new TimeEdgeState(timeEdgeState);
+					tmp.setVisitorName(visitEdge.getStationName());
+					tmp.setVisitorTypeName(visitEdge.getStationTypeName());
+					result.add(tmp);
+				}
+			});
+		});
+		
+		setTimeEdgeSet.clear();
+		setTimeEdgeSet.addAll(result);
+		
+	}
+	
 	@Override
 	public Collection<SwarmAgentType> getAllAgentType() {
 		

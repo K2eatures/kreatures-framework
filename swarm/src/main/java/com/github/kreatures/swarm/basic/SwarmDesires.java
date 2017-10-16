@@ -2,7 +2,6 @@ package com.github.kreatures.swarm.basic;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import com.github.kreatures.core.logic.Desires;
@@ -66,7 +65,7 @@ public class SwarmDesires extends Desires {
 	/**
 	 * store timeEdgestates components to controller the time-components
 	 */
-	private PredicateTimeEdgeState timeEdgeState=null;
+	private Set<PredicateTimeEdgeState> timeEdgeStateSet=new HashSet<>();
 	
 	/**
 	 * How long a agent can wait.
@@ -81,15 +80,16 @@ public class SwarmDesires extends Desires {
 	/**
 	 * @return the timeEdgeState
 	 */
-	public Optional<PredicateTimeEdgeState> getTimeEdgeState() {
-		return Optional.of(timeEdgeState);
+	public Set<PredicateTimeEdgeState> getTimeEdgeState() {
+		return timeEdgeStateSet;
 	}
 
 	/**
 	 * @param timeEdgeState the timeEdgeState to set
 	 */
-	public void setTimeEdgeState(PredicateTimeEdgeState timeEdgeState) {
-		this.timeEdgeState = timeEdgeState;
+	public void setTimeEdgeState(Set<PredicateTimeEdgeState> timeEdgeStateSet) {
+		this.timeEdgeStateSet.clear();
+		this.timeEdgeStateSet.addAll( timeEdgeStateSet);
 	}
 
 	/**

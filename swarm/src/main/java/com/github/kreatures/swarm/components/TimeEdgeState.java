@@ -89,7 +89,7 @@ public class TimeEdgeState implements SwarmComponents {
 	 */
 	@Override
 	public String getName() {
-		return String.format("TimeEdgeState:%s", name);
+		return name;//String.format("TimeEdgeState:%s", name);
 	}
 
 	/**
@@ -100,14 +100,12 @@ public class TimeEdgeState implements SwarmComponents {
 		return String.format("Define the time state of component %s",name);
 	}
 	
-	public boolean equals(TimeEdgeState other){
-		if(other==null)
-			return false;
-		if(other.getName()==null||this.getName()==null)
-			return false;
-		if(this.getName().equals(other.getName()))
-			return true;
-		return false;
+	@Override
+	public boolean equals(Object other){
+		if(!(other instanceof TimeEdgeState))return false;
+		TimeEdgeState obj=(TimeEdgeState)other;
+		return obj.name==null?this.name==null:obj.name.equals(this.name);
+		
 	}
 	/** 
 	 * @see com.github.kreatures.core.serialize.Resource#getResourceType()
@@ -147,6 +145,18 @@ public class TimeEdgeState implements SwarmComponents {
 	public int getIdentity(){
 		//TODO
 		return hashCode();
+	}
+	/**
+	 * @param visitorName the visitorName to set
+	 */
+	public void setVisitorName(String visitorName) {
+		this.visitorName = visitorName;
+	}
+	/**
+	 * @param visitorTypeName the visitorTypeName to set
+	 */
+	public void setVisitorTypeName(String visitorTypeName) {
+		this.visitorTypeName = visitorTypeName;
 	}
 
 }
