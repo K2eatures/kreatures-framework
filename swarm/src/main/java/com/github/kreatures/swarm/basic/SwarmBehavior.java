@@ -30,6 +30,7 @@ public class SwarmBehavior extends DefaultBehavior{
 			String agentName = per.getReceiverId();
 			
 			localDelegate(env, per, agentName);
+			
 		}
 	}
 
@@ -41,10 +42,11 @@ public class SwarmBehavior extends DefaultBehavior{
 			NewAgent newAgent=(NewAgent)agent;
 			((SwarmSpeechAct)percept).getActions().stream().peek(System.out::println).forEach(newPercept->{
 				newAgent.getPerceptions().stream().peek(System.out::println).forEach(oldPercept->{
-					System.out.println("Hier#############  "+((SwarmSpeechAct)oldPercept).getActions().removeIf(obj->obj.equals(newPercept)));						
+					System.out.println("Hier #  "+((SwarmSpeechAct)oldPercept).getActions().removeIf(obj->obj.equals(newPercept)));						
 				});
 			});
 			newAgent.getPerceptions().add(percept);
+			LOG.debug(String.format("All Perceptions of %s%n %s%n",newAgent.getName(),newAgent.getPerceptions().toString()));
 		});
 	}
 }

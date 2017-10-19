@@ -13,12 +13,13 @@ import com.github.kreatures.core.error.ConversionException;
 import com.github.kreatures.core.operators.parameter.GenericOperatorParameter;
 import com.github.kreatures.core.operators.parameter.OperatorPluginParameter;
 import com.github.kreatures.swarm.Utility;
+import com.github.kreatures.swarm.basic.SwarmInformation;
 
 public class PerceptionParameter extends OperatorPluginParameter {
 	
-	private KReaturesAtom information;
+//	private KReaturesAtom information;
 	
-	private Collection<Perception> perceptions;
+	private Collection<Perception> informations;
 	
 	private BaseBeliefbase baseBeliefbase;
 	
@@ -26,26 +27,17 @@ public class PerceptionParameter extends OperatorPluginParameter {
 	public PerceptionParameter() {}
 	
 	public PerceptionParameter(AgentAbstract caller) {
-		super(caller);
+		this(caller,caller.getBeliefs().getWorldKnowledge(),((NewAgent)caller).getPerceptions());
 	}
-	public PerceptionParameter(AgentAbstract caller,KReaturesAtom intention) {
-		super(caller);
-		this.information=intention;
-		this.baseBeliefbase=caller.getBeliefs().getWorldKnowledge();
-		this.perceptions=((NewAgent)caller).getPerceptions();
-	}
-	public PerceptionParameter(AgentAbstract caller,BaseBeliefbase beliefs,KReaturesAtom intention) {
-		super(caller);
-		this.baseBeliefbase=beliefs;
-		this.information=intention;
-		this.perceptions=((NewAgent)caller).getPerceptions();
+
+	public PerceptionParameter(AgentAbstract caller,BaseBeliefbase beliefs) {
+		this(caller,beliefs,((NewAgent)caller).getPerceptions());
 	}
 	
-	public PerceptionParameter(AgentAbstract caller,BaseBeliefbase beliefs,KReaturesAtom intention, Collection<Perception> perceptions) {
+	public PerceptionParameter(AgentAbstract caller,BaseBeliefbase beliefs, Collection<Perception> informations) {
 		super(caller);
 		this.baseBeliefbase=beliefs;
-		this.information=intention;
-		this.perceptions=perceptions;
+		this.informations=informations;
 	}
 	
 	@Override
@@ -55,12 +47,11 @@ public class PerceptionParameter extends OperatorPluginParameter {
 		
 		Object obj=param.getParameter("information");
 		if(obj != null ) {
-			if(! (obj instanceof KReaturesAtom)) {
-				throw conversionException("information", KReaturesAtom.class);
+			if(! (obj instanceof SwarmInformation)) {
+				throw conversionException("information", SwarmInformation.class);
 			}
-			this.information=(KReaturesAtom)obj;
+			this.informations=((SwarmInformation)obj).getPerceptions();
 		}
-		
 		
 		obj=param.getParameter("basebeliefbase");
 		if(obj != null ) {
@@ -76,54 +67,27 @@ public class PerceptionParameter extends OperatorPluginParameter {
 			}
 					
 		}
-		
-		
-		
 	}
 //	@SuppressWarnings({ "null", "unused" })
 	@Override
-	public boolean equals(Object otherObject) {
+	public boolean equals(Object other) {
 		
-		if(otherObject==null || !(otherObject instanceof PerceptionParameter))	
-			return false;
+		if(!(other instanceof PerceptionParameter)) return false;
 		
-		PerceptionParameter other=(PerceptionParameter)otherObject;
+		PerceptionParameter obj=(PerceptionParameter)other;
 		
-		if(other.information!=null) {
-			if(!other.information.equals(this.information))
-				return false;
-		}else if(this.information!=null) {
-			return false;
-		}
-		
-		if(other.baseBeliefbase!=null) {
-			if(!other.baseBeliefbase.equals(this.baseBeliefbase))
-				return false;
-		}else if(this.baseBeliefbase!=null) {
-			return false;
-		}
-		
-		if(other.perceptions!=null) {
-			if(!other.perceptions.equals(this.perceptions))
-				return false;
-		}else if(this.perceptions!=null) {
-			return false;
-		}
-		
-		return true;
+		boolean isInfo=this.informations==null?this.informations==null:this.informations.equals(obj.informations);
+		boolean isBb=this.baseBeliefbase==null?this.baseBeliefbase==null:this.baseBeliefbase.equals(obj.baseBeliefbase);
+		return isInfo & isBb;
 	}
 	
 	@Override
 	public int hashCode() {
-		return Utility.computeHashCode(super.hashCode(),information,baseBeliefbase,perceptions);
-	}
-
-	public KReaturesAtom getInformation() {
-		return information;
+		return 11;
 	}
 
 	public Collection<Perception> getPerceptions() {
-		return perceptions;
+		return informations;
 	}
 
 	public BaseBeliefbase getBaseBeliefbase() {
@@ -132,6 +96,6 @@ public class PerceptionParameter extends OperatorPluginParameter {
 	
 	@Override
 	public String toString() {
-		return (perceptions==null?"no perceptions":perceptions.toString());
+		return (informations==null?"no perceptions":informations.toString());
 	}
 }

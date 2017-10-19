@@ -101,6 +101,7 @@ public abstract class Operator<TCaller extends OperatorCaller, IN extends Operat
 	 * @param params	The parameters for the operator invocation in specialized version.
 	 * @return	
 	 */
+	@Override
 	public OUT process(OperatorParameter params) {
 		params.getStack().pushOperator(this);
 		@SuppressWarnings("unchecked")

@@ -613,9 +613,11 @@ public class BeliefParseOfSwarm implements XmlToBeliefBase {
 		Collection<TimeEdgeState> result=new HashSet<>();
 		
 		setTimeEdgeSet.stream().forEach(timeEdgeState->{
-			visitEdgeSet.stream().peek(visitEdge->{
-				System.out.println(visitEdge.getAgentName()+"  "+timeEdgeState.getName()+"   "+visitEdge.getStationName());
-			}).filter(visitEdge->visitEdge.getAgentName().equals(timeEdgeState.getName())||visitEdge.getStationName().equals(timeEdgeState.getName()))
+			visitEdgeSet.stream()
+//			.peek(visitEdge->{
+//				System.out.println(visitEdge.getAgentName()+"  "+timeEdgeState.getName()+"   "+visitEdge.getStationName());
+//			})
+			.filter(visitEdge->visitEdge.getAgentName().equals(timeEdgeState.getName())||visitEdge.getStationName().equals(timeEdgeState.getName()))
 			
 			.forEach(visitEdge->{
 				if(visitEdge.getStationName().equals(timeEdgeState.getName())){

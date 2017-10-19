@@ -21,7 +21,9 @@ import com.github.kreatures.core.operators.parameter.EvaluateParameter;
 import com.github.kreatures.core.operators.parameters.PerceptionParameter;
 import com.github.kreatures.core.reflection.Context;
 import com.github.kreatures.core.reflection.ContextFactory;
+import com.github.kreatures.swarm.basic.SwarmInformation;
 import com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator;
+import com.github.kreatures.swarm.comm.SwarmInform;
 
 /**
  * TODO
@@ -31,6 +33,9 @@ import com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator;
 public class NewAgent extends AgentAbstract {
 	/** reference to the logback logger instance */
 	private static Logger LOG = LoggerFactory.getLogger(NewAgent.class);
+	
+	
+	private SwarmInformation informations= new SwarmInformation();
 	
 	/**
 	 * @param name
@@ -76,9 +81,11 @@ public class NewAgent extends AgentAbstract {
 	public Beliefs updateBeliefs(KReaturesAtom perception,  Beliefs beliefs) {
 		if (perception != null) {
 			// save the perception for later use in messaging system.
-			if(perception instanceof Perception)
+			if(perception instanceof Perception) {
 				lastUpdateBeliefsPercept = (Perception)perception;
-			PerceptionParameter param = new PerceptionParameter(this, beliefs.getWorldKnowledge(), perception);
+			}
+			informations.setPerception((Perception)perception);
+			PerceptionParameter param = new PerceptionParameter(this, beliefs.getWorldKnowledge(), informations.getPerceptions());
 			OperatorCallWrapper bubo = operators.getPreferedByType(BaseBeliefsUpdateOperator.OPERATION_TYPE);
 			bubo.process(param);
 //			FolBeliefbase actuelBelief=(FolBeliefbase)
@@ -92,14 +99,15 @@ public class NewAgent extends AgentAbstract {
 	
 	@Override
 	public boolean cycle() {
-		Perception percept = perceptions.isEmpty() ? null : perceptions.get(0);
+//		Perception percept = perceptions.isEmpty() ? null : perceptions.get(0);
+		informations.setPerceptions(perceptions); 
 		perceptions.clear();
-		LOG.info("[" + this.getName() + "] Cylce starts: " + percept);
+		LOG.info("[" + this.getName() + "] Cylce starts: " + informations);
 
 		regenContext();
 		Context c = getContext();
-		c.set("perception", percept);
-		
+		c.set("perception", informations);
+//		boolean checkExe=asmlCylce.execute(c);
 		return asmlCylce.execute(c);
 	}
 	

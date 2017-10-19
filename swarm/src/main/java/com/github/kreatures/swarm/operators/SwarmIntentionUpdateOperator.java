@@ -7,7 +7,9 @@ import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.Subgoal;
 import com.github.kreatures.core.SwarmPlanComponent;
 import com.github.kreatures.core.operators.parameters.FilterParameter;
+import com.github.kreatures.core.util.Pair;
 import com.github.kreatures.core.operators.BaseIntentionUpdateOperator;
+import com.github.kreatures.swarm.basic.SwarmDesires;
 import com.github.kreatures.swarm.basic.SwarmSpeechAct;
 import com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator;
 
@@ -30,16 +32,25 @@ public class SwarmIntentionUpdateOperator extends BaseIntentionUpdateOperator {
 //		NewAgent agent=(NewAgent)params.getAgent();
 //		SwarmDesires swarmDesires=(SwarmDesires) agent.getComponent(SwarmDesires.class);
 		SwarmPlanComponent currentPlan=(SwarmPlanComponent)params.getActualPlan();
+		/* List of desires and related informations */
 		if(currentPlan==null)
 			return null;
-		
+		SwarmDesires desires=params.getAgent().getComponent(SwarmDesires.class);
+		Pair<Boolean,PlanElement> checkEnter=desires.getCheckEnterStation();
 		LOG.info("Run Default-Intention-Update");
+		if(checkEnter.first) {
+			PlanElement pe=checkEnter.second;
+			params.report(String.format("%s is the next atomic step candidate", ((
+					SwarmSpeechAct)pe.getIntention()).getActionTyp()));
+			return checkEnter.second;
+		}else
 		for(Subgoal plan : currentPlan.getPlans()) {
 			for(int i=0; i<plan.getNumberOfStacks(); ++i) {
 				PlanElement pe = plan.peekStack(i);
 				if(pe.isAtomic()) {
 					params.report(String.format("%s is the next atomic step candidate", ((
 							SwarmSpeechAct)pe.getIntention()).getActionTyp()));
+					checkEnter.second=pe;
 					return pe;
 				}
 			}

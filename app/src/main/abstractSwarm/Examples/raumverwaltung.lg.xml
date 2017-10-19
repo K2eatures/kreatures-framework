@@ -20,6 +20,7 @@
 <size value = "1"/>
 </agentType>
 <stationType id = "82" name = "Room" x = "8" y = "1" count = "1" colorRed = "255" colorGreen = "0" colorBlue = "0" interface = "no">
+<necessity value = "2"/>
 <space value = "1"/>
 </stationType>
 </perspective>

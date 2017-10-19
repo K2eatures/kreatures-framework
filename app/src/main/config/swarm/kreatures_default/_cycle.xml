@@ -65,6 +65,7 @@
 	<operation type="ExecuteActionKR">
 		<param name="basebeliefbase" value="$basebeliefbase"/>
 		<param name="action"  value="$action"/>
+		<output>checkExecute</output>	
 	</operation>	
 	<execute action="$action" />
 </asml-script>

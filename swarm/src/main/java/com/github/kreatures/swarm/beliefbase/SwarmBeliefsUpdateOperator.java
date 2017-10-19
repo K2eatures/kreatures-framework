@@ -23,6 +23,14 @@ public class SwarmBeliefsUpdateOperator extends BaseBeliefsUpdateOperator {
 	@Override
 	protected BaseBeliefbase processImpl(PerceptionParameter params) {
 		NewAgent nAgent = (NewAgent) params.getAgent();
+//		/*
+//		 * When the checkExecute=false, that means 
+//		 * the action was successful and false otherwise.
+//		 *  
+//		 */
+//		Boolean checkExecuteObj=(Boolean)params.getAgent().getContext().get("checkExecute"); 
+//		boolean checkExecute=checkExecuteObj==null?false:checkExecuteObj;
+		
 		FolBeliefbase bb=(FolBeliefbase)params.getBaseBeliefbase();
 		boolean hasPerception=false;
 		if (!(params.getPerceptions() == null || params.getPerceptions().isEmpty())) {
@@ -32,21 +40,37 @@ public class SwarmBeliefsUpdateOperator extends BaseBeliefsUpdateOperator {
 				SwarmSpeechAct speechAct=(SwarmSpeechAct)percept;
 				if(speechAct.getContent().isEmpty())
 					continue;
-				String msg=String.format("received Perceptions : %s",speechAct.getContent());
+				String msg=String.format("received Perceptions from %s : %s",speechAct.getSenderId(),speechAct.getContent());
 				LOG.info(msg);
 				nAgent.report(msg);
 				bb.addKnowledge(speechAct.getContent());
+				
+//				if(!checkExecute) {
+//					/* List of desires and related informations */
+//					SwarmDesires desires = params.getAgent().getComponent(SwarmDesires.class);
+//					if(desires.getCurrentStation()!=null) {
+//						desires.getCurrentStation().setHasChoose(false);
+//						/*
+//						 * When the agent is waiting ie: wait to enter a station.
+//						 * Then currentStation has to have the hasChoice =false instead of true.   
+//						 */
+//						Set<FolFormula> predicates=new HashSet<>();
+//						predicates.add(new PredicateCurrentStation(desires.getCurrentStation()).getFormula());
+//						bb.addKnowledge(predicates);
+//					}
+//				}
+					
 			}			
 		}
 
-		if(params.getInformation()!=null && !((SwarmSpeechAct) params.getInformation()).getContent().isEmpty() ) {
-			hasPerception=true;
-			SwarmSpeechAct speechAct=(SwarmSpeechAct)(params.getInformation());
-			String msg=String.format("received Perceptions : %s",speechAct.getContent());
-			LOG.info(msg);
-			nAgent.report(msg);
-			bb.addKnowledge(speechAct.getContent());
-		}
+//		if(params.getInformation()!=null && !((SwarmSpeechAct) params.getInformation()).getContent().isEmpty() ) {
+//			hasPerception=true;
+//			SwarmSpeechAct speechAct=(SwarmSpeechAct)(params.getInformation());
+//			String msg=String.format("received Perceptions : %s",speechAct.getContent());
+//			LOG.info(msg);
+//			nAgent.report(msg);
+//			bb.addKnowledge(speechAct.getContent());
+//		}
 		
 		if(!hasPerception) {
 			nAgent.report("no Perceptions receive.");

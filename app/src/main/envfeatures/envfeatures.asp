@@ -626,8 +626,10 @@ AllConditionErfullChoiceStation(AgentName,AgentTypeName,StationName,StationTypeN
 %	3=agent and station haven time edge.
 %
 
-
-
+%This is use when the agent has choice a station and cannot enter it 
+%because the conditions isn't satisfied.
+ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,10,10,10):-CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,false,true),CurrentAgent(AgentName,AgentTypeName).
+%tihs is use when the agent hasn't already choose a station.
 ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Time,ItemMotiv):-HasChoiceStation(AgentName,AgentTypeName),AllConditionErfullChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,_),CurrentAgent(AgentName,AgentTypeName),StationInfo(StationName,StationTypeName,Time,ItemMotiv).
 
 %###################################### Definition of atomic Intention ######################################################
@@ -648,8 +650,11 @@ EnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Status):-
 
 %AllConditionErfullEnterStation(AgentName,StationName)
 %Check if frequency and necessity are fillfully .
-AllConditionErfullEnterStation(AgentName,StationName,Motiv,Status):- CurrentAgent(AgentName,_),VisitEdge(AgentName,_,StationName,_,_),SpaceSizeErfull(AgentName,_,StationName,_),MaxPriority(AgentName,StationName),TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Status).
-
+AllConditionErfullEnterStation(AgentName,StationName,Motiv,Status):- CurrentAgent(AgentName,_),VisitEdge(AgentName,_,StationName,_,_),SpaceSizeErfull(AgentName,_,StationName,_),MaxPriorityGet(AgentName,StationName),TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Status).
+%This use to the get the components with the best priority.
+MaxPriorityGet(AgentName,StationName):- MaxPriority(AgentName,StationName).
+%This use to alows the agent to enter a station because it has already choose it.
+MaxPriorityGet(AgentName,StationName):- CurrentStation(AgentName,_,StationName,_,false,true).
 
 
 %Status	3=the both components are ready without waiting time

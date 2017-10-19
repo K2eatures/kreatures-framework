@@ -4,7 +4,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.logic.Desires;
+import com.github.kreatures.core.util.Pair;
 import com.github.kreatures.swarm.SwarmConst;
 import com.github.kreatures.swarm.Utility;
 import com.github.kreatures.swarm.predicates.PredicateAgent;
@@ -72,8 +74,33 @@ public class SwarmDesires extends Desires {
 	 * Actually, it can only wait 4 units.
 	 */
 	private int waitTime=SwarmConst.WAIT_TIME.getValue();
-	
-	
+	/**
+	 * The first parameter is use to checked whether the agent can enter a station or not. 
+	 * True means that the agent can enter a station and false otherwise.
+	 */
+	private Pair<Boolean, PlanElement> checkEnterStation=new Pair<>();
+	{
+		checkEnterStation.first=false;
+	}
+	/**
+	 * The first parameter is use to checked whether the agent can enter a station or not. 
+	 * 
+	 * @param first True means that the agent can enter a station and false otherwise.
+	 * @param second the plan whose action a agent has to repeat.
+	 */
+	public void setCheckEnterStation(Boolean first,PlanElement second) {
+		this.checkEnterStation.first=first;
+		this.checkEnterStation.second=second;
+	}
+	/**
+	 * The first parameter is use to checked whether the agent can enter a station or not.
+	 * True means that the agent can enter a station and false otherwise.
+	 * @return a pair boolean and plan. first=true the agent do the next plan.
+	 * first=false then agent repeat plan in second.
+	 */
+	public Pair<Boolean, PlanElement> getCheckEnterStation(){
+		return checkEnterStation;
+	}
 	
 	
 	

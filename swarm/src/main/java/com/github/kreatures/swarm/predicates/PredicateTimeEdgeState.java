@@ -171,14 +171,14 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 
 		PredicateTimeEdgeState obj=(PredicateTimeEdgeState)other;
 		boolean isName=obj.name==null?this.name==null:obj.name.equals(this.name);
-		boolean isTypeName=obj.typeName==null?this.typeName==null:obj.typeName.equals(this.typeName);
+		boolean isStName=obj.visitorName==null?this.visitorName==null:obj.visitorName.equals(this.visitorName);
 
-		return isName & isTypeName;
+		return isName & isStName;
 	}
 
 	@Override
 	public int hashCode() {
-		return this.typeName.hashCode()* 11;
+		return this.name.hashCode()* 11;
 	}
 
 	/**
