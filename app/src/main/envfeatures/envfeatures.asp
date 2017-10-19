@@ -9,14 +9,14 @@ NecErfull(AgentName,StationName):-NecAgentStation(AgentName,StationName,Nec),Fct
 FctSup(AgentName,StationName,NecStation):-Station(StationName,StationTypeName,_,_,_),Agent(AgentName,AgentTypeName,_,_,_),StationType(StationTypeName,_,NecStation,_,_,_,_,_,_),AgentType(AgentTypeName,_,NecAgent,_,_,_,_,_,_),VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NecStation<NecAgent.
 FctSup(AgentName,StationName,NecAgent):-Station(StationName,StationTypeName,_,_,_),Agent(AgentName,AgentTypeName,_,_,_),StationType(StationTypeName,_,NecStation,_,_,_,_,_,_),AgentType(AgentTypeName,_,NecAgent,_,_,_,_,_,_),VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NecAgent<=NecStation.
 %##################### Erfüllbarkeit von Space und Size ###################################
-SpaceSizeErfull(AgentName,AgentTypeName,StationName,StationTypeName):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),AgentType(AgentTypeName,_,_,_,_,_,_,Size,_),StationType(StationTypeName,_,_,_,_,_,_,SpaceStationType,_),Station(StationName,StattionType,_,_,SpaceStation),NewSpace=SpaceStation+Size,SpaceStationType>=NewSpace.
+SpaceSizeErfull(AgentName,AgentTypeName,StationName,StationTypeName):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),AgentType(AgentTypeName,_,_,_,_,_,_,Size,_),StationType(StationTypeName,_,_,_,_,_,_,SpaceStationType,_),Station(StationName,StationTypeName,_,_,SpaceStation),NewSpace=SpaceStation+Size,SpaceStationType>=NewSpace.
 
 %##################### Erfüllbarkeit von Priority ###################################
 %Pour un agent donné (Raison pour laquelle il faut un seul agent et non tous, sinon ca ne fonctionne pas.), rechercher toutes les stations qui lui sont connectés et determinés laquelle à la plus grande priorité. 
 MaxPriorityStation(AgentName,StationName,Prio):-AllFreeStation(AgentName,StationName,Prio),#max{UsePrio: AllFreeStation(AgentName1,StationName1,UsePrio)}=Prio.
 
 %Alle Stationen, die noch freien Plätze haben und kein Agent ausgewählt hat. 
-AllFreeStation(AgentName,StationName,UsePrio):-AllVisitEdgeStation(AgentName,StationName,UsePrio),VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),not -CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,false,false).
+AllFreeStation(AgentName,StationName,UsePrio):-AllVisitEdgeStation(AgentName,StationName,UsePrio),VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),not  -CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,false,false).
 %Pour un agent donné, rechercher toutes les stations qui lui sont connectés et dont on peut encore y acceder.
 AllVisitEdgeStation(AgentName,StationName,Prio):-SpaceSizeErfull(AgentName,AgentTypeName,StationName,StationTypeName),StationType(StationTypeName,_,_,_,Prio,_,_,Space,_).
 
@@ -231,6 +231,69 @@ TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedNoConnectedReady(Name,
 % nur outgoing. Status=0
 TimeEdgeReady(Name,TypeName,Type,0):-TimeEdgeOnlyOutgoing(Name,TypeName,_,Type).
 
+% ########################################### TimeEdgeLock definieren. #################################################
+
+%+++++++++++++++++++++ preparation of TimeEdgeLock help Components++++++++++++++++++++++++++++++++++++++++++
+%SpaceSizeErfull(AgentName,_,StationName,_)
+
+%SpaceFreqFreeStation(StationName,SpaceFree).
+%Take a station and compute the free place.
+SpaceFreqFreeStation(StationName,SpaceFree,FreqFree):- Station(StationName,StationTypeName,StationFreq,_,SpaceStation), StationType(StationTypeName,StationTypeFreq,_,_,_,_,_,SpaceStationType,_),SpaceFree=SpaceStationType-SpaceStation,FreqFree=StationTypeFreq-StationFreq.
+
+
+%AgentSize(AgentName,Size)
+%return the agent size
+AgentSize(AgentName,Size):- Agent(AgentName,AgentTypeName,_,_,_), AgentType(AgentTypeName,_,_,_,_,_,_,Size,_).
+%+++++++++++++++++++++++++++++ NoDirectedNoConnected: TimeEdgeLock for NoDNoC  +++++++++++++++++++++++++++++++
+
+%TimeEdgeSpaceNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Type1,Type2).
+%The is a time component between Name1 and Name2. Also, the Name1 visits VisitName1 and Name2 visits VisitName2.
+%Lock1=true when Component Name1 was throught this timeEgde activated and false otherwise.
+%Lock2=true when Component Name2 was throught this timeEgde activated and false otherwise.
+% Type_i=0 means Name_i is station and Type_i=2 means Name_i is agent.
+TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,false,false,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,true,false,_),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,true,false,_),TimeEdgeOutIn(Name1,_,Name2,_,_,false,false,_).
+
+TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,false,true,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,true,false,_),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,false,true,_),TimeEdgeOutIn(Name1,_,Name2,_,_,false,false,_).
+
+TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,true,false,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,false,true,_),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,true,false,_),TimeEdgeOutIn(Name1,_,Name2,_,_,false,false,_).
+
+%TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2)
+%SpaceFree1 is the free place of station 1 and SpaceFree2 is the free place of station 2.
+%Freq1 is the rest frequency of station 1 and SpaceFree2 is the rest frequency of station 2.
+%Size1 is the size of agent 1 and Size2 is the size of agent 2.
+
+%Name1 and Name2 are stations
+TimeEdgeSpaceSizeNoDNoC(VisitName1,Name1,VisitName2,Name2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,0,0),SpaceFreqFreeStation(Name1,SpaceFree1,Freq1),SpaceFreqFreeStation(Name2,SpaceFree2,Freq2),AgentSize(VisitName1,Size1),AgentSize(VisitName2,Size2).
+
+%Name1 and Name2 are agents
+TimeEdgeSpaceSizeNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,1,1),SpaceFreqFreeStation(VisitName1,SpaceFree1,Freq1),SpaceFreqFreeStation(VisitName2,SpaceFree2,Freq2),AgentSize(Name1,Size1),AgentSize(Name2,Size2).
+
+%Name1 is station and Name2 is agent
+TimeEdgeSpaceSizeNoDNoC(VisitName1,Name1,Name2,VisitName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,0,1),SpaceFreqFreeStation(Name1,SpaceFree1,Freq1),SpaceFreqFreeStation(VisitName2,SpaceFree2,Freq2),AgentSize(VisitName1,Size1),AgentSize(Name2,Size2).
+
+%Name1 is agent and Name2 is station
+TimeEdgeSpaceSizeNoDNoC(Name1,VisitName1,VisitName2,Name2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,1,0),SpaceFreqFreeStation(VisitName1,SpaceFree1,Freq1),SpaceFreqFreeStation(Name2,SpaceFree2,Freq2),AgentSize(Name1,Size1),AgentSize(VisitName2,Size2).
+
+%Define TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2).
+TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2):- TimeEdgeSpaceSizeNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2).
+
+%Define the classic negation of TimeEdgeLockNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2).
+-TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,false,false):- TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,_,_), not TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,false, false).
+
+%TimeEdgeLockMinSpaceNoDNoC(AgentName,StationName)
+%Name is the is formation about the current agent
+%define which component can visit which throught which corresponding.
+
+%Neither the current agent nor a other correpondings agent has locked. 
+TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,false,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{X,X1: TimeEdgeSpaceSizeNoDNoC(X1,StationName1,_,_,true,false,X,_,_,_,_,_),X1!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Z,Z1: TimeEdgeSpaceSizeNoDNoC(Z1,StationName1,_,_,true,false,_,_,_,_,Z,_),Z1!=AgentName1}=CFreq1,CFreq1<Freq1, #sum{Y,Y1: TimeEdgeSpaceSizeNoDNoC(_,_,Y1,StationName2,true,false,_,Y,_,_,_,_),Y1!=AgentName2}=SumSpace1,BusySpace1=SumSpace1+Size2,BusySpace1<=SpaceFree2, #count{T,T1: TimeEdgeSpaceSizeNoDNoC(_,_,T1,StationName2,true,false,_,_,_,_,_,T),T1!=AgentName2}<Freq2.%,CurrentAgent(AgentName1,_).
+
+%the current agent want to check if it can lock and one other correpondings agent has locked.
+TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,true,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{X,X1: TimeEdgeSpaceSizeNoDNoC(X1,StationName1,_,_,true,true,X,_,_,_,_,_),X1!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Z,Z1: TimeEdgeSpaceSizeNoDNoC(Z1,StationName1,_,_,true,true,_,_,_,_,Z,_),Z1!=AgentName1}<Freq1.
+
+
+
+
+
 
 %+++++++++++++++++ NoDirectedNoConnected: IsReady auf true setzen, wenn erfüllt+++++++++++++++++++++++++++++
 
@@ -240,8 +303,21 @@ TimeEdgeReady(Name,TypeName,Type,0):-TimeEdgeOnlyOutgoing(Name,TypeName,_,Type).
 %Status 0=the both components are waiting
 
 %Gibt alle noConnected Komponenten zurück, deren correspondings Komponent <mindesten ein IsWaiting or IsReady auf true> ist.
-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,Type,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(_,_,Name,TypeName,WeightMin,Type,Status).
-%TimeEdgeNoDirectedNoConnectedWeightMin(Name,TypeName,WeightMin,Type).
+%Da wir nicht genau wissen, zwischen welchen corresponds component von Name bei the TimeEdgeLock Atom the timeedge an ihn angeschlossen wurden, werden alle vier möglichkeiten gechecket. 
+TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,0,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,0,Status),TimeEdgeLockNoDNoC(_,Name,NameCorresponds,_).
+
+TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,0,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,0,Status),TimeEdgeLockNoDNoC(_,Name,_,NameCorresponds).
+
+TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,1,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,1,Status),TimeEdgeLockNoDNoC(Name,_,NameCorresponds,_).
+
+TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,1,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,1,Status),TimeEdgeLockNoDNoC(Name,_,_,NameCorresponds).
+
+
+
+
+
+
+
 
 %Gibt alle nodirected and noConnected Komponenten zurück, die ihr corresponding Komponent ihr IsReady auf true ist.
 %TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type,Status)
@@ -548,7 +624,7 @@ TimeEdgeOutInAnd(NameOut,TypeNameOut,NameIn,TypeNameIn,X,false,true,Z):-TimeEdge
 TimeEdgeAll(Name,TypeName,0):-Station(Name,TypeName,_,_,_).
 TimeEdgeAll(Name,TypeName,1):-Agent(Name,TypeName,_,_,_).
 %+++++++++++++++++++++++++++ from TimeEdgeState, TimeEdgeStatus will be genered . +++++++++++++++
-%TimeEdgeStatus(Name1,TypeName1,Name2,TypeName2,Type,TimeUnit,IsWaiting,IsReady,IsFinish). convert the CountTick to TimeUnit.
+%TimeEdgeState(Name1,TypeName1,Name2,TypeName2,Type,TimeUnit,IsWaiting,IsReady,IsFinish). convert the CountTick to TimeUnit.
 TimeEdgeStatus(Name1,TypeName1,Name2,TypeName2,Type,TimeUnit,IsWaiting,IsReady,IsFinish):-TimeEdgeState(Name1,TypeName1,Name2,TypeName2,Type,CountTime,IsWaiting,IsReady,IsFinish),ZeitEinheit(Unit),TimeUnit=CountTime/Unit.
 %+++++++++++++++++++++++++++ from TimeEdgeStatus, TimeEdgeAgent and TimeEdgeStation will be genered  +++++++++++++++
 %++ The agent has the time edge and it is located at station.
@@ -581,6 +657,7 @@ TimeEdgeStation(StationName,StationTypeName,AgentName,AgentTypeName,CountTime,Is
 
 -CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,false,false):- 
 CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,_,_), not CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,false,false).
+
 %Agent(AgentName,AgentTypeName,_,_,_),Station(StationName,StationTypeName,_,_,_)
 
 
@@ -632,16 +709,14 @@ ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,10,10,10):-Cur
 %tihs is use when the agent hasn't already choose a station.
 ChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,Time,ItemMotiv):-HasChoiceStation(AgentName,AgentTypeName),AllConditionErfullChoiceStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv,_),CurrentAgent(AgentName,AgentTypeName),StationInfo(StationName,StationTypeName,Time,ItemMotiv).
 
+
 %###################################### Definition of atomic Intention ######################################################
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Engeischaft von EnterStation &&&&&&&&&&&&&&&&&&&&&&&&&&&
 %EnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
 %motiv: 0=agent and station no time edge;
-%	6=agent has time edge and station no;
-%	5=agent hasn't time edge and station has;
-%	4=agent and station haven time edge.
-%	3=agent has time edge and station no;
+%	1=agent has time edge and station no;
 %	2=agent hasn't time edge and station has;
-%	1=agent and station haven time edge.
+%	3=agent and station haven time edge.
 %Wenn agent und station keine TimeEdge haben.
 %EnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv):-CurrentAgent(AgentName,AgentTypeName),CurrentStation(AgentName,AgentTypeName,StationName,StationTypeName,false,_),AllConditionErfullEnterStation(AgentName,StationName),TimeEdgeEnterStation(AgentName,AgentTypeName,StationName,StationTypeName,Motiv).
 
@@ -656,9 +731,8 @@ MaxPriorityGet(AgentName,StationName):- MaxPriority(AgentName,StationName).
 %This use to alows the agent to enter a station because it has already choose it.
 MaxPriorityGet(AgentName,StationName):- CurrentStation(AgentName,_,StationName,_,false,true).
 
-
-%Status	3=the both components are ready without waiting time
-%Status	2=the both components are ready after the waiting time 
+%Status	3=the both components are waiting without waiting time
+%Status	2=the both components are reading after the waiting time 
 %Status 1=one component is ready and the other can begin to count.
 %Status 0=the both components are waiting
 

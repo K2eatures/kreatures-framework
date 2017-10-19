@@ -130,7 +130,7 @@ public class SwarmDesires extends Desires {
 	 * @param waitTime the waitTime to set
 	 */
 	public void decrWaitTime() {
-		this.waitTime++;
+		this.waitTime--;
 	}
 
 	/**

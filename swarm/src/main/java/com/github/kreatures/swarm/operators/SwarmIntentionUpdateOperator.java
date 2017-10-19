@@ -9,6 +9,7 @@ import com.github.kreatures.core.SwarmPlanComponent;
 import com.github.kreatures.core.operators.parameters.FilterParameter;
 import com.github.kreatures.core.util.Pair;
 import com.github.kreatures.core.operators.BaseIntentionUpdateOperator;
+import com.github.kreatures.swarm.basic.MainAction;
 import com.github.kreatures.swarm.basic.SwarmDesires;
 import com.github.kreatures.swarm.basic.SwarmSpeechAct;
 import com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator;
@@ -39,10 +40,13 @@ public class SwarmIntentionUpdateOperator extends BaseIntentionUpdateOperator {
 		Pair<Boolean,PlanElement> checkEnter=desires.getCheckEnterStation();
 		LOG.info("Run Default-Intention-Update");
 		if(checkEnter.first) {
-			PlanElement pe=checkEnter.second;
+//			((SwarmSpeechAct) checkEnter.second.getIntention()).getActions().clear();
+			
+			PlanElement pe= new PlanElement(new SwarmSpeechAct(params.getAgent(),MainAction.ENTER_STATION));
 			params.report(String.format("%s is the next atomic step candidate", ((
 					SwarmSpeechAct)pe.getIntention()).getActionTyp()));
-			return checkEnter.second;
+			
+			return  pe;
 		}else
 		for(Subgoal plan : currentPlan.getPlans()) {
 			for(int i=0; i<plan.getNumberOfStacks(); ++i) {

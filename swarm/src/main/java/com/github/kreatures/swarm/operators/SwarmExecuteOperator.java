@@ -64,7 +64,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 	protected Boolean processImpl(ExecuteParameter params) {
 		boolean check = false;
 		PlanElement pe = (PlanElement) params.getAgent().getContext().get(SwarmContextConst._ACTION);
-		if (pe == null)
+		if (pe == null)//Agent Muss be remove
 			return check;
 		envComponent = params.getEnvComponent();
 		SwarmSpeechAct action = (SwarmSpeechAct) pe.getIntention();
@@ -180,8 +180,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 			case 5:
 				timeEdgeStateSet = result.stream().filter(predicate -> (predicate instanceof PredicateTimeEdgeState))
 						.map(predicate -> (PredicateTimeEdgeState) predicate)
-						.filter(predicate -> predicate.getName().equals(enterStation.getStationName())
-								&& predicate.getVisitorName().equals(enterStation.getAgentName()))
+						.filter(predicate -> predicate.getName().equals(enterStation.getStationName())&& predicate.getVisitorName().equals(enterStation.getAgentName()))
 						.collect(HashSet::new, HashSet::add, HashSet::addAll);
 				break;
 			case 3:/* if 3 or 6 */
@@ -220,15 +219,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 
 			} else {
 
-				if (desires.getWaitTime() == SwarmConst.WAIT_TIME.getValue()) {
-					timeEdgeStateSet.stream().filter(predicate -> !predicate.isWaiting())
-						.forEach(predicate ->{
-							timeEdgeStateSet.stream().forEach(action.getActions()::add);
-							predicate.setWaiting(true);
-							desires.setTimeEdgeState(timeEdgeStateSet);
-						});
-					checkEnter.first = true;
-				} else if (desires.getWaitTime() == 0) {
+				if (desires.getWaitTime() == 0) {
 					timeEdgeStateSet.stream().forEach(PredicateTimeEdgeState::init);
 					desires.clear();
 					params.getAgent().getComponent(SwarmPlanComponent.class).clear();
@@ -236,8 +227,18 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 					checkEnter.first = false;
 					timeEdgeStateSet.stream().forEach(action.getActions()::add);
 					desires.setTimeEdgeState(timeEdgeStateSet);
+					
+				} else{
+					timeEdgeStateSet.stream().filter(predicate -> !predicate.isWaiting())
+					.forEach(predicate ->{
+						//timeEdgeStateSet.stream().forEach();
+						predicate.setWaiting(true);
+						action.getActions().add(predicate);
+						desires.setTimeEdgeState(timeEdgeStateSet);
+					});
+					checkEnter.first = true;
 				}
-
+				
 				return false;
 			}
 
@@ -306,7 +307,12 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		agent.incrFrequency();
 		action.getActions().add(agent);
 		/* given the next actions which will be performed. */
-		PredicateStation station = (PredicateStation) desires.getCurrentDesire();
+		PredicateStation station =result.stream().filter(predicate-> predicate instanceof PredicateStation)
+				.map(predicate-> (PredicateStation)predicate)
+				.filter(predicate->predicate.equals(desires.getCurrentDesire()))
+				.findFirst().orElseGet(()->(PredicateStation)desires.getCurrentDesire());
+		desires.setCurrentDesire(station);		
+
 		station.incrFrequency();
 		station.incrSpace(agentType.getSize());
 
@@ -338,7 +344,23 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 	}
 
 	private boolean doLeave(SwarmSpeechAct action, ExecuteParameter params) {
+		
+		
+		String[] Options = { PredicateName.Station.toString()};
 
+		// get a object of FolBeliefbase
+		FolBeliefbase folBB = (FolBeliefbase) params.getBaseBeliefbase();
+
+		/**
+		 * The first parameter is use to checked whether the agent can enter a
+		 * station or not.
+		 * 
+		 * first True means that the agent can enter a station and false
+		 * otherwise. second the plan whose action a agent has to repeat.
+		 */
+		// keep a object of FolBeliefbase program
+		Set<SwarmPredicate> result = envComponent.askEnvironment(folBB, Options);
+		
 		/* List of desires and related informations */
 		SwarmDesires desires = params.getAgent().getComponent(SwarmDesires.class);
 		/* add currentStation to the action */
@@ -350,7 +372,13 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		/* search agent and agentType */
 		PredicateAgentType agentType = desires.getCurrentAgentType();
 		/* add station to the action */
-		PredicateStation station = (PredicateStation) desires.getCurrentDesire();
+		PredicateStation station =result.stream().filter(predicate-> predicate instanceof PredicateStation)
+				.map(predicate-> (PredicateStation)predicate)
+				.filter(predicate->predicate.equals(desires.getCurrentDesire()))
+				.findFirst().orElseGet(()->(PredicateStation)desires.getCurrentDesire());
+		desires.setCurrentDesire(station);
+		
+		
 		station.decrSpace(agentType.getSize());
 		action.getActions().add(station);
 
@@ -559,12 +587,13 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 			agent.decrCapacity(sumItem5);
 			break;
 		}
-
+		
 		/* add station to the action */
-		PredicateStation station = (PredicateStation) desires.getCurrentDesire();
+//		PredicateStation station = (PredicateStation) desires.getCurrentDesire();
+				
 		// station.incrFrequency();
 		// station.incrSpace(agentType.getSize());
-		action.getActions().add(station);
+//		action.getActions().add(station);
 		desires.getTimeEdgeState().stream().peek(PredicateTimeEdgeState::incrTick).forEach(action.getActions()::add);
 
 		return true;
