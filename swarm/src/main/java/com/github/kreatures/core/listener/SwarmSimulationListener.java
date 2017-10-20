@@ -12,6 +12,7 @@ import com.github.kreatures.core.EnvironmentComponent;
 import com.github.kreatures.core.EnvironmentComponentDefault;
 import com.github.kreatures.core.KReaturesEnvironment;
 import com.github.kreatures.core.NewAgent;
+import com.github.kreatures.core.serialize.SwarmLoaderDefault;
 import com.github.kreatures.swarm.basic.SwarmBehavior;
 
 public class SwarmSimulationListener implements  SimulationListener{
@@ -79,6 +80,9 @@ public class SwarmSimulationListener implements  SimulationListener{
 			env.setAgentFactory(new CreateAgentAdapter());
 			AbstractSwarms.getInstance().removeEnvComponent(env.getName());
 		}
+		
+		SwarmLoaderDefault.getInstance().unloading();
+		SwarmLoaderDefault.freeInstance();
 	}
 
 	@Override

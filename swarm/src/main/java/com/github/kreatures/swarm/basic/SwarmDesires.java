@@ -1,5 +1,8 @@
 package com.github.kreatures.swarm.basic;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -74,6 +77,41 @@ public class SwarmDesires extends Desires {
 	 * Actually, it can only wait 4 units.
 	 */
 	private int waitTime=SwarmConst.WAIT_TIME.getValue();
+	
+	/**
+	 * Contents the historic of the agent behaviours.
+	 */
+	private List<String> logData=new ArrayList<>();
+	
+	/**
+	 * 
+	 * @param strLogData a log information about the agent behaviours.
+	 * @return same as {@link List#add(Object)}
+	 */
+	public boolean addLogData(String strLogData){
+		return logData.add(strLogData);
+	}
+	/**
+	 * clear the historic of the agent behaviours.
+	 */
+	public void clearLogData(){
+		logData.clear();
+	}
+	
+	/**
+	 * check whether there are no historic data.
+	 */
+	public boolean isLogDataLeer(){
+		return logData.isEmpty();
+	}
+	
+	/**
+	 * @return a unmodifiable list of log information.
+	 */
+	public Collection<String> getLogData(){
+		return Collections.unmodifiableList(logData);
+	}
+	
 	/**
 	 * The first parameter is use to checked whether the agent can enter a station or not. 
 	 * True means that the agent can enter a station and false otherwise.

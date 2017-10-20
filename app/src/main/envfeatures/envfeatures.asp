@@ -257,6 +257,21 @@ TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,false,true,Type1,Type2
 
 TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,true,false,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,false,true,_),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,true,false,_),TimeEdgeOutIn(Name1,_,Name2,_,_,false,false,_).
 
+TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,true,true,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,false,true,_),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,false,true,_),TimeEdgeOutIn(Name1,_,Name2,_,_,false,false,_).
+
+%TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2).
+% Schreibt das Atom TimeEdgeLockStateNoDNoC um, so dass man nicht mehr weißt, wer ist der VisitComponent und wer ist an TimeEdge angeschlossen.
+% Sondern man kann klar sehen, wer ist der Agent bzw Station.
+
+TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2):-TimeEdgeLockStateNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2,1,1).
+
+TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2):-TimeEdgeLockStateNoDNoC(StationName1,AgentName1,AgentName2,StationName2,Lock1,Lock2,0,1).
+
+TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2):-TimeEdgeLockStateNoDNoC(AgentName1,StationName1,StationName2,AgentName2,Lock1,Lock2,1,0).
+
+TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2):-TimeEdgeLockStateNoDNoC(StationName1,AgentName1,StationName2,AgentName2,Lock1,Lock2,0,0).
+
+
 %TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2)
 %SpaceFree1 is the free place of station 1 and SpaceFree2 is the free place of station 2.
 %Freq1 is the rest frequency of station 1 and SpaceFree2 is the rest frequency of station 2.
@@ -275,22 +290,20 @@ TimeEdgeSpaceSizeNoDNoC(VisitName1,Name1,Name2,VisitName2,Lock1,Lock2,Size1,Size
 TimeEdgeSpaceSizeNoDNoC(Name1,VisitName1,VisitName2,Name2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,1,0),SpaceFreqFreeStation(VisitName1,SpaceFree1,Freq1),SpaceFreqFreeStation(Name2,SpaceFree2,Freq2),AgentSize(Name1,Size1),AgentSize(VisitName2,Size2).
 
 %Define TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2).
-TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2):- TimeEdgeSpaceSizeNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2).
+%TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2):- TimeEdgeSpaceSizeNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2).
 
 %Define the classic negation of TimeEdgeLockNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2).
--TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,false,false):- TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,_,_), not TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,false, false).
+%-TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,false,false):- TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,_,_), not TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,false, false).
 
 %TimeEdgeLockMinSpaceNoDNoC(AgentName,StationName)
 %Name is the is formation about the current agent
 %define which component can visit which throught which corresponding.
 
 %Neither the current agent nor a other correpondings agent has locked. 
-TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,false,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{X,X1: TimeEdgeSpaceSizeNoDNoC(X1,StationName1,_,_,true,false,X,_,_,_,_,_),X1!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Z,Z1: TimeEdgeSpaceSizeNoDNoC(Z1,StationName1,_,_,true,false,_,_,_,_,Z,_),Z1!=AgentName1}=CFreq1,CFreq1<Freq1, #sum{Y,Y1: TimeEdgeSpaceSizeNoDNoC(_,_,Y1,StationName2,true,false,_,Y,_,_,_,_),Y1!=AgentName2}=SumSpace1,BusySpace1=SumSpace1+Size2,BusySpace1<=SpaceFree2, #count{T,T1: TimeEdgeSpaceSizeNoDNoC(_,_,T1,StationName2,true,false,_,_,_,_,_,T),T1!=AgentName2}<Freq2.%,CurrentAgent(AgentName1,_).
+TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,false,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{Xa,Xb: TimeEdgeSpaceSizeNoDNoC(Xb,StationName1,_,_,true,false,Xa,_,_,_,_,_),Xb!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Za,Zb: TimeEdgeSpaceSizeNoDNoC(Zb,StationName1,_,_,true,false,_,_,_,_,Za,_),Zb!=AgentName1}=CFreq1,CFreq1<Freq1, #sum{Ya,Yb: TimeEdgeSpaceSizeNoDNoC(_,_,Yb,StationName2,true,false,_,Ya,_,_,_,_),Yb!=AgentName2}=SumSpace1,BusySpace1=SumSpace1+Size2,BusySpace1<=SpaceFree2, #count{Ta,Tb: TimeEdgeSpaceSizeNoDNoC(_,_,Tb,StationName2,true,false,_,_,_,_,_,Ta),Tb!=AgentName2}<Freq2.%,CurrentAgent(AgentName1,_).
 
 %the current agent want to check if it can lock and one other correpondings agent has locked.
-TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,true,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{X,X1: TimeEdgeSpaceSizeNoDNoC(X1,StationName1,_,_,true,true,X,_,_,_,_,_),X1!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Z,Z1: TimeEdgeSpaceSizeNoDNoC(Z1,StationName1,_,_,true,true,_,_,_,_,Z,_),Z1!=AgentName1}<Freq1.
-
-
+TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,true,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{Xa,Xb: TimeEdgeSpaceSizeNoDNoC(Xb,StationName1,_,_,true,true,Xa,_,_,_,_,_),Xb!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Za,Zb: TimeEdgeSpaceSizeNoDNoC(Zb,StationName1,_,_,true,true,_,_,_,_,Za,_),Zb!=AgentName1}<Freq1,#count{Ag:TimeEdgeLockStatusNoDNoC(Ag,St,AgentName2,StationName2,true,true)}=0.
 
 
 
@@ -304,13 +317,15 @@ TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSp
 
 %Gibt alle noConnected Komponenten zurück, deren correspondings Komponent <mindesten ein IsWaiting or IsReady auf true> ist.
 %Da wir nicht genau wissen, zwischen welchen corresponds component von Name bei the TimeEdgeLock Atom the timeedge an ihn angeschlossen wurden, werden alle vier möglichkeiten gechecket. 
-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,0,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,0,Status),TimeEdgeLockNoDNoC(_,Name,NameCorresponds,_).
+%Gibt alle noConnected Komponenten zurück, deren correspondings Komponent <mindesten ein IsWaiting or IsReady auf true> ist.
+%Da wir nicht genau wissen, zwischen welchen corresponds component von Name bei the TimeEdgeLock Atom the timeedge an ihn angeschlossen wurden, werden alle vier möglichkeiten gechecket. 
+TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,0,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,0,Status),TimeEdgeLockNoDNoC(AgName,Name,NameCorresponds,_),CurrentAgent(AgName,_).
 
-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,0,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,0,Status),TimeEdgeLockNoDNoC(_,Name,_,NameCorresponds).
+TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,0,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,0,Status),TimeEdgeLockNoDNoC(AgName,Name,_,NameCorresponds),CurrentAgent(AgName,_).
 
-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,1,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,1,Status),TimeEdgeLockNoDNoC(Name,_,NameCorresponds,_).
+TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,1,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,1,Status),TimeEdgeLockNoDNoC(AgName,_,NameCorresponds,_),CurrentAgent(AgName,_).
 
-TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,1,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,1,Status),TimeEdgeLockNoDNoC(Name,_,_,NameCorresponds).
+TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,1,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,1,Status),TimeEdgeLockNoDNoC(AgName,_,_,NameCorresponds),CurrentAgent(AgName,_).
 
 
 

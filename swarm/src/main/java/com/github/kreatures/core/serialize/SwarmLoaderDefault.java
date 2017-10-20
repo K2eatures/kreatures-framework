@@ -7,22 +7,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import org.apache.commons.math3.analysis.function.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kreatures.core.Perception;
-
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_SWARM_XML_DIR;
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_EXAMPLES_DIR;
-
 import static com.github.kreatures.core.KReaturesConst._KReaturesSwarmXmlPatternFile;
 import static com.github.kreatures.core.KReaturesConst.AgStrategie.AGENT_RANDOM_STRATEGIE_FILE;
-import static com.github.kreatures.core.KReaturesConst.AgStrategie.AGENT_HEURISTIC_STRATEGIE_FILE;
+//import static com.github.kreatures.core.KReaturesConst.AgStrategie.AGENT_HEURISTIC_STRATEGIE_FILE;
 
 /**
  * @author donfack
@@ -35,6 +31,8 @@ public class SwarmLoaderDefault implements SwarmLoader {
 	private static SwarmLoader instance = new SwarmLoaderDefault();
 
 	public static SwarmLoader getInstance() {
+		if(instance==null)
+			instance=new SwarmLoaderDefault();
 		return instance;
 	}
 	
@@ -100,7 +98,7 @@ public class SwarmLoaderDefault implements SwarmLoader {
 	 */
 	@Override
 	public boolean unloading() {
-		// TODO Auto-generated method stub
+		LOG.debug("### gin###");
 		return false;
 	}
 
@@ -114,25 +112,25 @@ public class SwarmLoaderDefault implements SwarmLoader {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-
-		//new SwarmLoaderDefault().init();
-		Collection<String> t=new ArrayList<>(); 
-		t.add("oui");
-		t.add("non");
-		t.add("oui");
-		t.add("qui");
-		t.add("oui");
-		System.out.println(t);
-		while(t.remove("oui")) {
-			
-		}
-		
-		System.out.println(t);
-
-	}
+//
+//	/**
+//	 * @param args
+//	 */
+//	public static void main(String[] args) {
+//
+//		//new SwarmLoaderDefault().init();
+//		Collection<String> t=new ArrayList<>(); 
+//		t.add("oui");
+//		t.add("non");
+//		t.add("oui");
+//		t.add("qui");
+//		t.add("oui");
+//		System.out.println(t);
+//		while(t.remove("oui")) {
+//			
+//		}
+//		
+//		System.out.println(t);
+//
+//	}
 }

@@ -89,8 +89,9 @@ public class SwarmAspReasoner extends AspReasoner {
 		List<AnswerSet> reval = null;
 		
 		try {
+//			System.out.println(bb);
 			reval = runSolver(bb,options);
-			LOG.info(reval.toString());
+//			LOG.info(reval.toString());
 		} catch(SolverException ex) {
 			LOG.error("Error occured: " + ex.getMessage());
 		}

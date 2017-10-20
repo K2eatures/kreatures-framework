@@ -26,7 +26,6 @@ import static com.github.kreatures.core.KReaturesConst._KREaturesHeuristicAgentC
 import static com.github.kreatures.core.KReaturesConst._KREaturesBeliefsConfigFile;
 import static com.github.kreatures.core.KReaturesConst._KReaturesSwarmCategorie;
 import static com.github.kreatures.core.KReaturesConst._KREaturesSimulationConfigSuffixName;
-
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_AGENTS_CONFIG_DIR;
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_BELIEFS_CONFIG_DIR;
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_CONFIG_DIR;
@@ -35,6 +34,7 @@ import static com.github.kreatures.core.KReaturesPaths.KREATURES_SWARM_DEFAULT_C
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_SWARM_XML_DIR;
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_SCENARIO_MODELS;
 
+import com.github.kreatures.core.KReaturesPaths;
 import com.github.kreatures.core.KReaturesConst.AgStrategie;
 import com.github.kreatures.core.serialize.AgentConfigImport;
 import com.github.kreatures.core.serialize.AgentInstance;
@@ -91,6 +91,13 @@ public final class BDIParserUtils implements BDIParser {
 		createExamplesDir(strategie);
 		createAgentAsp(tmpAspPathWorldBelief);
 		Files.deleteIfExists(tmpAspPathWorldBelief);
+		//Simulation Name
+		String simName=obj.getName();
+		//Log Data folder for all agents
+		Path logDataPath=Paths.get(KReaturesPaths.KREATURES_EXAMPLES_DIR.toString()).resolve(simName).resolve("historic");
+		if(!Files.exists(logDataPath)){
+			Files.createDirectory(logDataPath);
+		}
 	}
 
 	/**

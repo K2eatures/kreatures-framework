@@ -10,7 +10,7 @@ public enum SwarmConst {
 			case MAX_INT: return 1000;
 			case UNIT: return 1;
 			case ZERO_VALUE: return 0;
-			case WAIT_TIME: return 4;
+			case WAIT_TIME: return 6;
 			default:return 0;
 		}
 	}

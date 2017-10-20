@@ -1,5 +1,10 @@
 package com.github.kreatures.swarm.operators;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -9,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.EnvironmentComponent;
+import com.github.kreatures.core.KReaturesPaths;
 //import com.github.kreatures.core.PlanComponent;
 import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.SwarmPlanComponent;
@@ -18,6 +24,8 @@ import com.github.kreatures.core.operators.parameters.ExecuteParameter;
 import com.github.kreatures.core.util.Pair;
 import com.github.kreatures.swarm.SwarmConst;
 import com.github.kreatures.swarm.SwarmContextConst;
+import com.github.kreatures.swarm.Utility;
+import com.github.kreatures.swarm.basic.MainAction;
 import com.github.kreatures.swarm.basic.SwarmSpeechAct;
 import com.github.kreatures.swarm.basic.SwarmDesires;
 import com.github.kreatures.swarm.predicates.PredicateAgent;
@@ -64,14 +72,42 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 	protected Boolean processImpl(ExecuteParameter params) {
 		boolean check = false;
 		PlanElement pe = (PlanElement) params.getAgent().getContext().get(SwarmContextConst._ACTION);
-		if (pe == null)//Agent Muss be remove
+		/* List of desires and related informations */
+		SwarmDesires desires = params.getAgent().getComponent(SwarmDesires.class);
+		if (pe == null){//TODO Agent Muss be remove
+			if(!desires.isLogDataLeer()){
+				String simName=params.getAgent().getEnvironment().getName();
+				Path logDataDir=Paths.get(KReaturesPaths.KREATURES_EXAMPLES_DIR.toString()).resolve(simName).resolve("historic");
+				Path logDataFile=logDataDir.resolve(params.getAgent().getName()+".swarm");
+				try {
+					Files.deleteIfExists(logDataFile);
+					Files.createFile(logDataFile);
+					try(BufferedWriter bufferW= Files.newBufferedWriter(logDataFile)){
+						for(String str:desires.getLogData()){
+							bufferW.write(str);
+						}
+						bufferW.flush();
+						desires.clearLogData();
+					}catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			return check;
+		}
 		envComponent = params.getEnvComponent();
 		SwarmSpeechAct action = (SwarmSpeechAct) pe.getIntention();
 
 		switch (action.getActionTyp()) {
 		case MOVE:
 			check = doMove(action, params);
+
+
 			break;
 
 		case ENTER_STATION:
@@ -105,6 +141,8 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		default:
 			return false;
 		}
+
+		desires.addLogData(Utility.logData(params.getAgent().getEnvironment().getSimulationTick(),action.getActionTyp(),((PredicateStation)desires.getCurrentDesire()).getName(),desires.getWaitTime()));
 		return check;
 	}
 
@@ -134,7 +172,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		Set<SwarmPredicate> enterStationSet = result.stream()
 				.filter(predicate -> (predicate instanceof PredicateEnterStation) && ((PredicateEnterStation) predicate)
 						.getStationName().equals(desires.getCurrentStation().getStationName()))
-				.collect(HashSet::new, HashSet::add, HashSet::addAll);
+						.collect(HashSet::new, HashSet::add, HashSet::addAll);
 		Optional<PredicateEnterStation> optEnterStation = enterStationSet.stream()
 				.map(predicate -> (PredicateEnterStation) predicate).filter(predicate -> predicate.getMotiv() < 4)
 				.findFirst();
@@ -171,26 +209,26 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 			case 1:/* if 1 or 4 */
 			case 4:
 				timeEdgeStateSet = result.stream().filter(predicate -> (predicate instanceof PredicateTimeEdgeState))
-						.map(predicate -> (PredicateTimeEdgeState) predicate)
-						.filter(predicate -> predicate.getName().equals(enterStation.getAgentName())
-								&& predicate.getVisitorName().equals(enterStation.getStationName()))
+				.map(predicate -> (PredicateTimeEdgeState) predicate)
+				.filter(predicate -> predicate.getName().equals(enterStation.getAgentName())
+						&& predicate.getVisitorName().equals(enterStation.getStationName()))
 						.collect(HashSet::new, HashSet::add, HashSet::addAll);
 				break;
 			case 2:/* if 2 or 5 */
 			case 5:
 				timeEdgeStateSet = result.stream().filter(predicate -> (predicate instanceof PredicateTimeEdgeState))
-						.map(predicate -> (PredicateTimeEdgeState) predicate)
-						.filter(predicate -> predicate.getName().equals(enterStation.getStationName())&& predicate.getVisitorName().equals(enterStation.getAgentName()))
-						.collect(HashSet::new, HashSet::add, HashSet::addAll);
+				.map(predicate -> (PredicateTimeEdgeState) predicate)
+				.filter(predicate -> predicate.getName().equals(enterStation.getStationName())&& predicate.getVisitorName().equals(enterStation.getAgentName()))
+				.collect(HashSet::new, HashSet::add, HashSet::addAll);
 				break;
 			case 3:/* if 3 or 6 */
 			case 6:
 				timeEdgeStateSet = result.stream().filter(predicate -> (predicate instanceof PredicateTimeEdgeState))
-						.map(predicate -> (PredicateTimeEdgeState) predicate)
-						.filter(predicate -> (predicate.getName().equals(enterStation.getStationName())
-								&& predicate.getVisitorName().equals(enterStation.getAgentName()))
-								|| (predicate.getName().equals(enterStation.getAgentName()))
-										&& predicate.getVisitorName().equals(enterStation.getStationName()))
+				.map(predicate -> (PredicateTimeEdgeState) predicate)
+				.filter(predicate -> (predicate.getName().equals(enterStation.getStationName())
+						&& predicate.getVisitorName().equals(enterStation.getAgentName()))
+						|| (predicate.getName().equals(enterStation.getAgentName()))
+						&& predicate.getVisitorName().equals(enterStation.getStationName()))
 						.collect(HashSet::new, HashSet::add, HashSet::addAll);
 				break;
 			default:
@@ -227,7 +265,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 					checkEnter.first = false;
 					timeEdgeStateSet.stream().forEach(action.getActions()::add);
 					desires.setTimeEdgeState(timeEdgeStateSet);
-					
+
 				} else{
 					timeEdgeStateSet.stream().filter(predicate -> !predicate.isWaiting())
 					.forEach(predicate ->{
@@ -236,9 +274,10 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 						action.getActions().add(predicate);
 						desires.setTimeEdgeState(timeEdgeStateSet);
 					});
+					desires.decrWaitTime();
 					checkEnter.first = true;
 				}
-				
+
 				return false;
 			}
 
@@ -281,7 +320,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 				if (predicate instanceof PredicateNecAgentStation
 						&& ((PredicateNecAgentStation) predicate).getAgentName().equals(currentStation.getAgentName())
 						&& ((PredicateNecAgentStation) predicate).getStationName()
-								.equals(currentStation.getStationName())) {
+						.equals(currentStation.getStationName())) {
 					necAgentStation = (PredicateNecAgentStation) predicate;
 					breakForEach++;
 					continue;
@@ -294,7 +333,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 				if (predicate instanceof PredicateNecAgentStation
 						&& ((PredicateNecAgentStation) predicate).getAgentName().equals(currentStation.getAgentName())
 						&& ((PredicateNecAgentStation) predicate).getStationName()
-								.equals(currentStation.getStationName())) {
+						.equals(currentStation.getStationName())) {
 					necAgentStation = (PredicateNecAgentStation) predicate;
 					continue;
 				}
@@ -344,8 +383,8 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 	}
 
 	private boolean doLeave(SwarmSpeechAct action, ExecuteParameter params) {
-		
-		
+
+
 		String[] Options = { PredicateName.Station.toString()};
 
 		// get a object of FolBeliefbase
@@ -360,7 +399,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		 */
 		// keep a object of FolBeliefbase program
 		Set<SwarmPredicate> result = envComponent.askEnvironment(folBB, Options);
-		
+
 		/* List of desires and related informations */
 		SwarmDesires desires = params.getAgent().getComponent(SwarmDesires.class);
 		/* add currentStation to the action */
@@ -377,8 +416,8 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 				.filter(predicate->predicate.equals(desires.getCurrentDesire()))
 				.findFirst().orElseGet(()->(PredicateStation)desires.getCurrentDesire());
 		desires.setCurrentDesire(station);
-		
-		
+
+
 		station.decrSpace(agentType.getSize());
 		action.getActions().add(station);
 
@@ -452,7 +491,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 
 		switch (productConsumItem.getMotiv()) {
 		case 0:// =0, : Agent can only take item, because there are no ingoing
-				// stations.
+			// stations.
 			/* update and add itemSetLoadingAgent to the action */
 			for (PredicateItemSetLoadingAgent predicate : itemSetLoadingAgents) {
 				if (predicate.getStationTypeName().equals(productConsumItem.getStationTypeName())) {
@@ -464,7 +503,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 			}
 			break;
 		case 1:// =1, : Agent can only place item, because there are no outgoing
-				// stations.
+			// stations.
 			int sumItem1 = 0;
 			/* update and add itemSetLoadingAgent to the action */
 			for (PredicateStationTypItem predicateStTypItem : stationTypItems) {
@@ -493,7 +532,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 			agent.decrCapacity(sumItem1);
 			break;
 		case 2:// =2, : Agent can only place item, because there are outgoing
-				// stations, but agent cannot visit it.
+			// stations, but agent cannot visit it.
 			int sumItem2 = 0;
 			/* update and add itemSetLoadingAgent to the action */
 			for (PredicateStationTypItem predicateStTypItem : stationTypItems) {
@@ -522,7 +561,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 			agent.decrCapacity(sumItem2);
 			break;
 		case 3:// =3, : Agent can only take item, because there are ingoing
-				// stations, but agent cannot visit it.
+			// stations, but agent cannot visit it.
 			/* update and add itemSetLoadingStation to the action */
 			for (PredicateItemSetLoadingStation predicate : itemSetLoadingStations) {
 				predicate.decrItemNumber(productConsumItem.getItemNumber());
@@ -531,7 +570,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 			agent.incrCapacity(productConsumItem.getItemNumber() * stationType.getItem());
 			break;
 		case 4:// =4, : Agent can take and place item, because there are ingoing
-				// and outgoing stations, and the agent can visit it.
+			// and outgoing stations, and the agent can visit it.
 			int sumItem4 = 0;
 			/* update and add itemSetLoadingAgent to the action */
 			for (PredicateStationTypItem predicateStTypItem : stationTypItems) {
@@ -555,10 +594,10 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 			agent.incrCapacity(productConsumItem.getItemNumber() * stationType.getItem());
 
 		case 5:/*
-				 * =5, : Agent can place and cannot take item, because there are
-				 * ingoing and outgoing stations, and the condition to take is
-				 * not fullfilly.
-				 */
+		 * =5, : Agent can place and cannot take item, because there are
+		 * ingoing and outgoing stations, and the condition to take is
+		 * not fullfilly.
+		 */
 			int sumItem5 = 0;
 			/* update and add itemSetLoadingAgent to the action */
 			for (PredicateStationTypItem predicateStTypItem : stationTypItems) {
@@ -587,13 +626,13 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 			agent.decrCapacity(sumItem5);
 			break;
 		}
-		
+
 		/* add station to the action */
-//		PredicateStation station = (PredicateStation) desires.getCurrentDesire();
-				
+		//		PredicateStation station = (PredicateStation) desires.getCurrentDesire();
+
 		// station.incrFrequency();
 		// station.incrSpace(agentType.getSize());
-//		action.getActions().add(station);
+		//		action.getActions().add(station);
 		desires.getTimeEdgeState().stream().peek(PredicateTimeEdgeState::incrTick).forEach(action.getActions()::add);
 
 		return true;

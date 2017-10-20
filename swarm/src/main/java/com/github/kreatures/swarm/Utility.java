@@ -3,6 +3,8 @@ package com.github.kreatures.swarm;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.kreatures.swarm.basic.MainAction;
+
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 
 /**
@@ -44,6 +46,18 @@ public final class Utility {
 			return matcher.group(1);
 		}
 		return null;
+	}
+	/**
+	 * This format the log information of a agent. At the end of the simulation, a agent has to stored its information
+	 * into a files data whose name is the agent name.
+	 * @param tick the current tick number
+	 * @param actionTyp Which action a agent has current do. The MainAction are defined in {@link MainAction}.  
+	 * @param stationId the of a station.
+	 * @param waitTime give how many time a agent has wait before enter to a station. 
+	 * @return data which will be stored by the agent in the format tick,actionTyp,stationId
+	 */
+	public static String logData(long tick,MainAction mainAction, String stationId, int waitTime ){
+		return String.format("%d,%s,%s,%d%n", tick,mainAction.name(),stationId,waitTime);
 	}
 
 }

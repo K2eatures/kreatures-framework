@@ -81,6 +81,7 @@ public class SwarmPlugin extends KReaturesPluginAdapter {
 			sh.removeTransformMapping(entry.getKey());
 		}
 		matcherMap.clear();
+		
 	}
 	
 	@Override
