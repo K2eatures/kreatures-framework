@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kreatures.core.EnvironmentComponent;
+import com.github.kreatures.core.KReaturesConst;
 import com.github.kreatures.core.KReaturesPaths;
 //import com.github.kreatures.core.PlanComponent;
 import com.github.kreatures.core.PlanElement;
@@ -77,8 +78,8 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		if (pe == null){//TODO Agent Muss be remove
 			if(!desires.isLogDataLeer()){
 				String simName=params.getAgent().getEnvironment().getName();
-				Path logDataDir=Paths.get(KReaturesPaths.KREATURES_EXAMPLES_DIR.toString()).resolve(simName).resolve("historic");
-				Path logDataFile=logDataDir.resolve(params.getAgent().getName()+".swarm");
+				Path logDataDir=Paths.get(KReaturesPaths.KREATURES_EXAMPLES_DIR.toString()).resolve(simName).resolve(KReaturesConst._KREaturesLogDataFolderName);
+				Path logDataFile=logDataDir.resolve(params.getAgent().getName()+KReaturesConst._KREaturesLogDataFileExt);
 				try {
 					Files.deleteIfExists(logDataFile);
 					Files.createFile(logDataFile);
@@ -138,6 +139,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		case LEAVE_STATION:
 			check = doLeave(action, params);
 			break;
+		case WAIT:LOG.debug("Agent is waiting.");
 		default:
 			return false;
 		}

@@ -10,9 +10,11 @@ import java.nio.file.Paths;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import org.apache.commons.math3.analysis.function.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.kreatures.core.KReatures;
+import com.github.kreatures.gui.controller.ShowResult;
 
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_SWARM_XML_DIR;
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_EXAMPLES_DIR;
@@ -21,7 +23,7 @@ import static com.github.kreatures.core.KReaturesConst.AgStrategie.AGENT_RANDOM_
 //import static com.github.kreatures.core.KReaturesConst.AgStrategie.AGENT_HEURISTIC_STRATEGIE_FILE;
 
 /**
- * @author donfack
+ * @author Cedric Perez Donfack
  *
  */
 public class SwarmLoaderDefault implements SwarmLoader {
@@ -98,8 +100,9 @@ public class SwarmLoaderDefault implements SwarmLoader {
 	 */
 	@Override
 	public boolean unloading() {
-		LOG.debug("### gin###");
-		return false;
+		
+		new ShowResult(KReatures.getInstance().getActualSimulation().getName()).show();
+		return true;
 	}
 
 	/*

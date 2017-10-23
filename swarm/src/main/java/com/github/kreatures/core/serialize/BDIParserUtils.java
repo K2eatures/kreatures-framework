@@ -35,6 +35,7 @@ import static com.github.kreatures.core.KReaturesPaths.KREATURES_SWARM_XML_DIR;
 import static com.github.kreatures.core.KReaturesPaths.KREATURES_SCENARIO_MODELS;
 
 import com.github.kreatures.core.KReaturesPaths;
+import com.github.kreatures.core.KReaturesConst;
 import com.github.kreatures.core.KReaturesConst.AgStrategie;
 import com.github.kreatures.core.serialize.AgentConfigImport;
 import com.github.kreatures.core.serialize.AgentInstance;
@@ -94,7 +95,8 @@ public final class BDIParserUtils implements BDIParser {
 		//Simulation Name
 		String simName=obj.getName();
 		//Log Data folder for all agents
-		Path logDataPath=Paths.get(KReaturesPaths.KREATURES_EXAMPLES_DIR.toString()).resolve(simName).resolve("historic");
+		Path logDataPath=Paths.get(KReaturesPaths.KREATURES_EXAMPLES_DIR.toString()).resolve(simName).resolve(KReaturesConst._KREaturesLogDataFolderName
+				);
 		if(!Files.exists(logDataPath)){
 			Files.createDirectory(logDataPath);
 		}

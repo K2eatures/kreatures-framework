@@ -7,7 +7,11 @@ package com.github.kreatures.swarm.basic;
  *
  */
 public enum MainAction {
-
+	
+	/**
+	 * A agent want to enter a station but cannot
+	 */
+	WAIT,
 	/**
 	 * A agent is located at a station and is entering it.
 	 */

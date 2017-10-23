@@ -69,6 +69,9 @@ public class SwarmSimulationListener implements  SimulationListener{
 
 	@Override
 	public void simulationStarted(KReaturesEnvironment simulationEnvironment) {
+		//TODO Must be deleted later
+		SwarmLoaderDefault.getInstance().unloading();
+		SwarmLoaderDefault.freeInstance();
 		LOG.info("SwarmSimulationListener : simulationStarted");
 	}
 
