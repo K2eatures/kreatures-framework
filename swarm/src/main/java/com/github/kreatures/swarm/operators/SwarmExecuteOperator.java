@@ -157,9 +157,9 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 
 		// get a object of FolBeliefbase
 		FolBeliefbase folBB = (FolBeliefbase) params.getBaseBeliefbase();
-		LOG.debug("########    "+  params.getAgent().getName() +"    ####################################################################################");
-		System.out.println(folBB);
-		LOG.debug("########    ##########################################################################################################################");
+//		LOG.debug("########    "+  params.getAgent().getName() +"    ####################################################################################");
+//		System.out.println(folBB);
+//		LOG.debug("########    ##########################################################################################################################");
 
 		/* List of desires and related informations */
 		SwarmDesires desires = params.getAgent().getComponent(SwarmDesires.class);
