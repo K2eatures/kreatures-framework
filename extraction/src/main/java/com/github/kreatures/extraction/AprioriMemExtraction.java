@@ -174,13 +174,13 @@ public class AprioriMemExtraction<S, A> {
 		});
 
 		// create a list of premise-tuples for the collected literals
-		final List<PremiseTuple<S, A>> premisses = new LinkedList<>();
+		final List<PremiseTuple<S, A>> premiseTupels = new LinkedList<>();
 		map.forEach((prem, supp) -> {
 			if (minSupport == 0 || (double) supp.size() / seq.size() > minSupport)
-				premisses.add(new PremiseTuple<>(prem, supp, rules));
+				premiseTupels.add(new PremiseTuple<>(prem, supp, rules));
 		});
 
-		return premisses;
+		return premiseTupels;
 	}
 
 	/**

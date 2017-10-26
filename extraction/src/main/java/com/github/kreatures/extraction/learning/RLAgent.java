@@ -17,7 +17,7 @@ public interface RLAgent<P, A> {
 	 * @param perception the perception the {@link RLAgent} perceives
 	 * @return the action the {@link RLAgent} will execute
 	 */
-	A generateAction(P perception);
+	A generateAction(P perception, long tick);
 
 	/**
 	 * Optional way of learning by rewards
@@ -25,6 +25,6 @@ public interface RLAgent<P, A> {
 	 * @param reward a numeric value rating the last action
 	 * @param terminal whether the following state is terminal
 	 */
-	default void reward(double reward, boolean terminal) {};
+	default void update(P perceptiom, A action, double reward, P next, boolean terminal) {};
 
 }

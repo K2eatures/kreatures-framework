@@ -28,9 +28,9 @@ public class AGENT<P, A> implements RLAgent<P, A> {
 		this.krAgent = Objects.requireNonNull(krAgent, "kreatures agent must not be null");
 		this.queue = Objects.requireNonNull(queue, "queue must not be null");
 	}
-
+	
 	@Override
-	public A generateAction(P perception) {
+	public A generateAction(P perception, long tick) {
 		this.krAgent.perceive(new PERCEPTION<P>(krAgent, perception));
 		this.krAgent.cycle();
 
@@ -42,7 +42,7 @@ public class AGENT<P, A> implements RLAgent<P, A> {
 	}
 
 	@Override
-	public void reward(double reward, boolean terminal) {
+	public void update(P perceptiom, A action, double reward, P next, boolean terminal) {
 		@SuppressWarnings("unchecked")
 		ValuesComponent<P, A> values = krAgent.getComponent(ValuesComponent.class);
 

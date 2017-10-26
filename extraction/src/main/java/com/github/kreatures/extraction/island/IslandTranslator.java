@@ -11,7 +11,7 @@ import com.github.kreatures.extraction.Translator;
 public class IslandTranslator implements Translator<IslandPerception> {
 
 	@Override
-	public Premise stateToPremise(com.github.kreatures.extraction.island.IslandPerception state) {
+	public Premise stateToPremise(IslandPerception state) {
 		Premise premise = new Premise();
 
 		premise.put("site", state.getSite());

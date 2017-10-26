@@ -12,8 +12,8 @@ import com.github.kreatures.core.KReatures;
 import com.github.kreatures.core.KReaturesEnvironment;
 import com.github.kreatures.core.Perception;
 import com.github.kreatures.core.def.DefaultBehavior;
+import com.github.kreatures.extraction.learning.BasicEnvironment;
 import com.github.kreatures.extraction.learning.RLAgent;
-import com.github.kreatures.extraction.learning.RLEnvironment;
 
 /**
  * 
@@ -22,7 +22,7 @@ import com.github.kreatures.extraction.learning.RLEnvironment;
  */
 public abstract class ENVIRONMENT<P, A> extends DefaultBehavior {
 
-	protected RLEnvironment<P, A> env;
+	protected BasicEnvironment<P, A> env;
 	protected BlockingQueue<A> queue = new LinkedBlockingQueue<>();
 
 	@SuppressWarnings("unchecked")
@@ -68,7 +68,7 @@ public abstract class ENVIRONMENT<P, A> extends DefaultBehavior {
 		return somethingHappens;
 	}
 
-	protected abstract RLEnvironment<P, A> createEnv(List<RLAgent<P, A>> agents);
+	protected abstract BasicEnvironment<P, A> createEnv(List<RLAgent<P, A>> agents);
 
 	protected List<RLAgent<P, A>> wrapAgents(Collection<Agent> krAgents) {
 		final List<RLAgent<P, A>> agents = new LinkedList<>();
