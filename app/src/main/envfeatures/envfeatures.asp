@@ -232,6 +232,18 @@ TimeEdgeReady(Name,TypeName,Type,Status):-TimeEdgeDirectedNoConnectedReady(Name,
 TimeEdgeReady(Name,TypeName,Type,0):-TimeEdgeOnlyOutgoing(Name,TypeName,_,Type).
 
 % ########################################### TimeEdgeLock definieren. #################################################
+%TimeEdgeLockValue(AgentName1,StationName1,AgentName2,StationName2,EdgeType,IsActiv,Lock1,Lock2,Finish1,Finish2).
+% Schreibt das Atom TimeEdgeLockStateNoDNoC um, so dass man nicht mehr weißt, wer ist der VisitComponent und wer ist an TimeEdge angeschlossen.
+% Sondern man kann klar sehen, wer ist der Agent bzw Station.
+% EdgeType is the type of time edge
+% 0 for NoDNoC 
+TimeEdgeLockGet(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2):-TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2), not TimeEdgeLockStateUse(AgentName2,StationName2,0),CurrentAgent(AgentName1, _),TimeEdgeLockStateNoUse(AgentName2,StationName2).
+
+%check if there free place and if the station can be visit.
+TimeEdgeLockStateNoUse(AgentName,StationName):- AgentSize(AgentName,Size),SpaceFreqFreeStation(StationName,SpaceFree,FreqFree),#sum{Xa,Xb:TimeEdgeLockState(_,_,Xb,StationName,0,true,true,false,_,_),AgentSize(Xb,Xa)}=AgentsSize,AllSize=AgentsSize+Size,AllSize<=SpaceFree,VisitEdge(AgentName, _, StationName, _, _),#count{Ag:TimeEdgeLockState(_,_,Ag,StationName,0,true,true,false,_,_)}<FreqFree.
+
+TimeEdgeLockStateUse(AgentName2,StationName2,0):- TimeEdgeLockState(Ag,St,AgentName2,StationName2,0,true,true,_,_,_).
+
 
 %+++++++++++++++++++++ preparation of TimeEdgeLock help Components++++++++++++++++++++++++++++++++++++++++++
 %SpaceSizeErfull(AgentName,_,StationName,_)
@@ -251,26 +263,29 @@ AgentSize(AgentName,Size):- Agent(AgentName,AgentTypeName,_,_,_), AgentType(Agen
 %Lock1=true when Component Name1 was throught this timeEgde activated and false otherwise.
 %Lock2=true when Component Name2 was throught this timeEgde activated and false otherwise.
 % Type_i=0 means Name_i is station and Type_i=2 means Name_i is agent.
-TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,false,false,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,true,false,_),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,true,false,_),TimeEdgeOutIn(Name1,_,Name2,_,_,false,false,_).
+TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,false,false,Finish1,Finish2,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,true,false,Finish1),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,true,false,Finish2),TimeEdgeOutIn(Name1,_,Name2,_,_,false,false,_).
 
-TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,false,true,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,true,false,_),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,false,true,_),TimeEdgeOutIn(Name1,_,Name2,_,_,false,false,_).
+TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,false,true,Finish1,Finish2,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,true,false,Finish1),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,false,true,Finish2),TimeEdgeOutIn(Name1,_,Name2,_,_,false,false,_).
 
-TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,true,false,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,false,true,_),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,true,false,_),TimeEdgeOutIn(Name1,_,Name2,_,_,false,false,_).
+TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,true,false,Finish1,Finish2,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,false,true,Finish1),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,true,false,Finish2),TimeEdgeOutIn(Name1,_,Name2,_,_,false,false,_).
 
-TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,true,true,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,false,true,_),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,false,true,_),TimeEdgeOutIn(Name1,_,Name2,_,_,false,false,_).
+TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,true,true,Finish1,Finish2,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,false,true,Finish1),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,false,true,Finish2),TimeEdgeOutIn(Name1,_,Name2,_,_,false,false,_).
 
-%TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2).
+%TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,EdgeType,Lock1,Lock2,Finish1,Finish2).
 % Schreibt das Atom TimeEdgeLockStateNoDNoC um, so dass man nicht mehr weißt, wer ist der VisitComponent und wer ist an TimeEdge angeschlossen.
 % Sondern man kann klar sehen, wer ist der Agent bzw Station.
+% EdgeType is the type of time edge
 
-TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2):-TimeEdgeLockStateNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2,1,1).
+TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2):-TimeEdgeLockStateNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2,Finish1,Finish2,1,1).
 
-TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2):-TimeEdgeLockStateNoDNoC(StationName1,AgentName1,AgentName2,StationName2,Lock1,Lock2,0,1).
+TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2):-TimeEdgeLockStateNoDNoC(AgentName1,StationName1,StationName2,AgentName2,Lock1,Lock2,Finish1,Finish2,1,0).
 
-TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2):-TimeEdgeLockStateNoDNoC(AgentName1,StationName1,StationName2,AgentName2,Lock1,Lock2,1,0).
+TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2):-TimeEdgeLockStateNoDNoC(StationName1,AgentName1,AgentName2,StationName2,Lock1,Lock2,Finish1,Finish2,0,1).
 
-TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2):-TimeEdgeLockStateNoDNoC(StationName1,AgentName1,StationName2,AgentName2,Lock1,Lock2,0,0).
+TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2):-TimeEdgeLockStateNoDNoC(StationName1,AgentName1,StationName2,AgentName2,Lock1,Lock2,Finish1,Finish2,0,0).
 
+
+%TimeEdgeLockState(AgentName2,StationName2,AgentName1,StationName1,0,IsActiv,Lock2,Lock1,Finish2,Finish1).
 
 %TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2)
 %SpaceFree1 is the free place of station 1 and SpaceFree2 is the free place of station 2.
@@ -278,16 +293,16 @@ TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,L
 %Size1 is the size of agent 1 and Size2 is the size of agent 2.
 
 %Name1 and Name2 are stations
-TimeEdgeSpaceSizeNoDNoC(VisitName1,Name1,VisitName2,Name2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,0,0),SpaceFreqFreeStation(Name1,SpaceFree1,Freq1),SpaceFreqFreeStation(Name2,SpaceFree2,Freq2),AgentSize(VisitName1,Size1),AgentSize(VisitName2,Size2).
+TimeEdgeSpaceSizeNoDNoC(VisitName1,Name1,VisitName2,Name2,Lock1,Lock2,Finish1,Finish2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Finish1,Finish2,0,0),SpaceFreqFreeStation(Name1,SpaceFree1,Freq1),SpaceFreqFreeStation(Name2,SpaceFree2,Freq2),AgentSize(VisitName1,Size1),AgentSize(VisitName2,Size2).
 
 %Name1 and Name2 are agents
-TimeEdgeSpaceSizeNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,1,1),SpaceFreqFreeStation(VisitName1,SpaceFree1,Freq1),SpaceFreqFreeStation(VisitName2,SpaceFree2,Freq2),AgentSize(Name1,Size1),AgentSize(Name2,Size2).
+TimeEdgeSpaceSizeNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Finish1,Finish2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Finish1,Finish2,1,1),SpaceFreqFreeStation(VisitName1,SpaceFree1,Freq1),SpaceFreqFreeStation(VisitName2,SpaceFree2,Freq2),AgentSize(Name1,Size1),AgentSize(Name2,Size2).
 
 %Name1 is station and Name2 is agent
-TimeEdgeSpaceSizeNoDNoC(VisitName1,Name1,Name2,VisitName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,0,1),SpaceFreqFreeStation(Name1,SpaceFree1,Freq1),SpaceFreqFreeStation(VisitName2,SpaceFree2,Freq2),AgentSize(VisitName1,Size1),AgentSize(Name2,Size2).
+TimeEdgeSpaceSizeNoDNoC(VisitName1,Name1,Name2,VisitName2,Lock1,Lock2,Finish1,Finish2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Finish1,Finish2,0,1),SpaceFreqFreeStation(Name1,SpaceFree1,Freq1),SpaceFreqFreeStation(VisitName2,SpaceFree2,Freq2),AgentSize(VisitName1,Size1),AgentSize(Name2,Size2).
 
 %Name1 is agent and Name2 is station
-TimeEdgeSpaceSizeNoDNoC(Name1,VisitName1,VisitName2,Name2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,1,0),SpaceFreqFreeStation(VisitName1,SpaceFree1,Freq1),SpaceFreqFreeStation(Name2,SpaceFree2,Freq2),AgentSize(Name1,Size1),AgentSize(VisitName2,Size2).
+TimeEdgeSpaceSizeNoDNoC(Name1,VisitName1,VisitName2,Name2,Lock1,Lock2,Finish1,Finish2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Finish1,Finish2,1,0),SpaceFreqFreeStation(VisitName1,SpaceFree1,Freq1),SpaceFreqFreeStation(Name2,SpaceFree2,Freq2),AgentSize(Name1,Size1),AgentSize(VisitName2,Size2).
 
 %Define TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2).
 %TimeEdgeCheckNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2):- TimeEdgeSpaceSizeNoDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2).
@@ -300,15 +315,16 @@ TimeEdgeSpaceSizeNoDNoC(Name1,VisitName1,VisitName2,Name2,Lock1,Lock2,Size1,Size
 %define which component can visit which throught which corresponding.
 
 %Neither the current agent nor a other correpondings agent has locked. 
-TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,false,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{Xa,Xb: TimeEdgeSpaceSizeNoDNoC(Xb,StationName1,_,_,true,false,Xa,_,_,_,_,_),Xb!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Za,Zb: TimeEdgeSpaceSizeNoDNoC(Zb,StationName1,_,_,true,false,_,_,_,_,Za,_),Zb!=AgentName1}=CFreq1,CFreq1<Freq1, #sum{Ya,Yb: TimeEdgeSpaceSizeNoDNoC(_,_,Yb,StationName2,true,false,_,Ya,_,_,_,_),Yb!=AgentName2}=SumSpace1,BusySpace1=SumSpace1+Size2,BusySpace1<=SpaceFree2, #count{Ta,Tb: TimeEdgeSpaceSizeNoDNoC(_,_,Tb,StationName2,true,false,_,_,_,_,_,Ta),Tb!=AgentName2}<Freq2.%,CurrentAgent(AgentName1,_).
+TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- CurrentAgent(AgentName1,_),TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,false,false,false,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{Xa,Xb:TimeEdgeSpaceSizeNoDNoC(Xb,StationName1,_,_,true,false,_,_,Xa,_,_,_,_,_),Xb!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Za,Zb: TimeEdgeSpaceSizeNoDNoC(Zb,StationName1,_,_,true,false,_,_,_,_,_,_,Za,_),Zb!=AgentName1}=CFreq1,CFreq1<Freq1, #sum{Ya,Yb: TimeEdgeSpaceSizeNoDNoC(_,_,Yb,StationName2,true,false,_,_,_,Ya,_,_,_,_),TimeEdgeLockStateUse(Yb,StationName2,0),Yb!=AgentName2}=SumSpace1,BusySpace1=SumSpace1+Size2,BusySpace1<=SpaceFree2, #count{Ta,Tb: TimeEdgeSpaceSizeNoDNoC(_,_,Tb,StationName2,true,false,_,_,_,_,_,_,_,Ta),TimeEdgeLockStateUse(Tb,StationName2,0),Tb!=AgentName2}<Freq2,#sum{Wa,Wb:TimeEdgeLockState(_,_,Wb,StationName1,0,true,true,false,Finish1,Finish2),AgentSize(Wb,Wa),Wb!=AgentName1}=SumSpace3,BusySpace3=SumSpace3+Size1,BusySpace3<=SpaceFree1, #count{Qa,Qb: TimeEdgeLockState(_,_,Qb,StationName1,Qa,true,true,false,Finish1,Finish2),Qb!=AgentName2}<Freq1, not TimeEdgeLockStateUse(AgentName2,StationName2,0).
+
+%TimeEdgeLockState(AgentName2,StationName2,AgentName1,StationName1,0,IsActiv,Lock2,Lock1,Finish2,Finish1).
+
 
 %the current agent want to check if it can lock and one other correpondings agent has locked.
-TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,true,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{Xa,Xb: TimeEdgeSpaceSizeNoDNoC(Xb,StationName1,_,_,true,true,Xa,_,_,_,_,_),Xb!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Za,Zb: TimeEdgeSpaceSizeNoDNoC(Zb,StationName1,_,_,true,true,_,_,_,_,Za,_),Zb!=AgentName1}<Freq1,#count{Ag:TimeEdgeLockStatusNoDNoC(Ag,St,AgentName2,StationName2,true,true)}=0.
+TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,true,false,_,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{Xa,Xb: TimeEdgeSpaceSizeNoDNoC(Xb,StationName1,_,_,true,true,_,_,Xa,_,_,_,_,_),Xb!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Za,Zb: TimeEdgeSpaceSizeNoDNoC(Zb,StationName1,_,_,true,true,_,_,_,_,_,_,Za,_),Zb!=AgentName1}<Freq1,TimeEdgeLockState(AgentName2,StationName2,AgentName1,StationName1,0,true,true,false,Finish2,Finish1),CurrentAgent(AgentName1, _).
 
 
-
-
-%+++++++++++++++++ NoDirectedNoConnected: IsReady auf true setzen, wenn erfüllt+++++++++++++++++++++++++++++
+%+++++++++++++++++ NoDirectedNoConnected: IsReady auf true setzen, wenn erfüllt +++++++++++++++++++++++++++++
 
 %Status	3=the both components are waiting without waiting time
 %Status	2=the both components are reading after the waiting time 

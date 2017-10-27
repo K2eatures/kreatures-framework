@@ -17,6 +17,7 @@ import com.github.kreatures.swarm.predicates.PredicateAgentType;
 import com.github.kreatures.swarm.predicates.PredicateChoiceStation;
 import com.github.kreatures.swarm.predicates.PredicateCurrentStation;
 import com.github.kreatures.swarm.predicates.PredicateStation;
+import com.github.kreatures.swarm.predicates.PredicateTimeEdgeLockState;
 import com.github.kreatures.swarm.predicates.PredicateTimeEdgeState;
 import com.github.kreatures.swarm.predicates.SwarmPredicate;
 
@@ -71,6 +72,11 @@ public class SwarmDesires extends Desires {
 	 * store timeEdgestates components to controller the time-components
 	 */
 	private Set<PredicateTimeEdgeState> timeEdgeStateSet=new HashSet<>();
+	
+	/**
+	 * store timeEdgesLocktates components to lock the time-components
+	 */
+	private Set<PredicateTimeEdgeLockState> timeEdgeLockStateSet=new HashSet<>();
 	
 	/**
 	 * How long a agent can wait.
@@ -140,7 +146,49 @@ public class SwarmDesires extends Desires {
 		return checkEnterStation;
 	}
 	
+	/**
+	 * @return the timeEdgeState
+	 */
+	public Set<PredicateTimeEdgeLockState> getTimeEdgeLockState() {
+		return timeEdgeLockStateSet;
+	}
 	
+	
+	/**
+	 * add one timeEdgeLockState element
+	 * @param timeEdgeLockState the set of all active timeEdgeLockState
+	 */
+	public void setTimeEdgeLockState(PredicateTimeEdgeLockState timeEdgeLockState) {
+		
+		this.timeEdgeLockStateSet.add( timeEdgeLockState);
+	}
+
+	/**
+	 * add a set of timeEdgeLockState elements
+	 * @param timeEdgeLockStateSet the set of all active timeEdgeLockState
+	 */
+	public void setTimeEdgeLockState(Set<PredicateTimeEdgeLockState> timeEdgeLockStateSet) {
+		
+		this.timeEdgeLockStateSet.addAll( timeEdgeLockStateSet);
+	}
+	
+	/**
+	 * check whether there are no timeedgelock
+	 * 
+	 */
+	public boolean isTimeEdgeLockStateEmpty() {
+		
+		return this.timeEdgeLockStateSet.isEmpty();
+	}
+	
+	/**
+	 * clear the set of TimeEdgeLockState atome
+	 * 
+	 */
+	public void clearTimeEdgeLockState() {
+		
+		this.timeEdgeLockStateSet.clear();
+	}
 	
 	/**
 	 * @return the timeEdgeState

@@ -191,6 +191,8 @@ public class TransformPredicates {
 			case "StationTypItem" : return PredicateName.StationTypItem;
 			case "CurrentAgent": return PredicateName.CurrentAgent;
 			case "CurrentStation": return PredicateName.CurrentStation;
+			case "TimeEdgeLockState": return PredicateName.TimeEdgeLockState;
+			case "TimeEdgeLockGet": return PredicateName.TimeEdgeLockGet;
 			default: throw new NullPointerException("there are no desire swarm representation of this tweety represenation :"+desireName);
 		}
 	}

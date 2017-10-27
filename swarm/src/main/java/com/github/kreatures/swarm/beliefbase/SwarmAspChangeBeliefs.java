@@ -12,6 +12,7 @@ import com.github.kreatures.core.logic.BaseChangeBeliefs;
 import com.github.kreatures.core.logic.FolBeliefbase;
 import com.github.kreatures.core.logic.asp.AspBeliefbase;
 import com.github.kreatures.core.operators.parameter.ChangeBeliefbaseParameter;
+import com.github.kreatures.swarm.predicates.PredicateTimeEdgeLockState;
 import com.github.kreatures.swarm.predicates.SwarmPredicate;
 import com.github.kreatures.swarm.predicates.transform.TransformPredicates;
 
@@ -44,6 +45,12 @@ public class SwarmAspChangeBeliefs extends BaseChangeBeliefs {
 				SwarmPredicate swarmPredicate=TransformPredicates.getPredicate(atom) ;
 				
 				test=setPredicate.remove(getEquivalentPredicate(setPredicate,swarmPredicate));
+				// Remove TimeEdgeLockState and not add as new Information when it is not more activ.
+				if(swarmPredicate instanceof PredicateTimeEdgeLockState){
+					PredicateTimeEdgeLockState predicateUpdate=(PredicateTimeEdgeLockState)swarmPredicate;
+					if(!predicateUpdate.isActiv())
+						continue;
+				}
 				newSetPredicate.add(swarmPredicate);
 			}
 			if(!newSetPredicate.isEmpty()) {

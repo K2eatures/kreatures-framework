@@ -102,7 +102,9 @@ public enum PredicateName {
 	NecAgentStation,
 	CurrentAgent,
 	CurrentStation,
-	TimeEdgeState	;
+	TimeEdgeState,
+	TimeEdgeLockState,
+	TimeEdgeLockGet;
 	
 	/**
 	 * @param desire tweety representation of desire.
@@ -134,8 +136,8 @@ public enum PredicateName {
 			case KnowHow:return (T) new PredicateKnowHow(desire);
 			case CurrentAgent:return (T) new PredicateCurrentAgent(desire);
 			case CurrentStation:return (T) new PredicateCurrentStation(desire);
-//			case TimeEdgeReady:
-//			case timeEdgeWaiting:
+			case TimeEdgeLockGet: return (T) new PredicateTimeEdgeLockGet(desire);
+			case TimeEdgeLockState: return (T) new PredicateTimeEdgeLockState(desire);
 			default: throw new NullPointerException("there are no desire swarm representation of this tweety represenation");
 		}
 	}
@@ -195,6 +197,12 @@ public enum PredicateName {
 		case CurrentAgent: str="CurrentAgent";
 			break;
 		case CurrentStation: str="CurrentStation";
+			break;
+		case TimeEdgeLockGet: str="TimeEdgeLockGet";
+			break;
+		case TimeEdgeLockState: str="TimeEdgeLockState";
+			break;
+		default:
 			break;
 		
 //		default:
