@@ -250,6 +250,14 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 			default:
 				timeEdgeStateSet = new HashSet<PredicateTimeEdgeState>();
 			}
+			
+//			/* Set the finish state of TimeEdgeState to false */
+//			timeEdgeStateSet.stream().filter(predicate->predicate.isFinish()).
+//			forEach(predicate->{
+//				predicate.setFinish(false);
+////				action.getActions().add(predicate);
+//			});
+			
 			/* 
 			 * Is the current agent in waiting or ready state.
 			 * %Status	=3 means: the both components are waiting without waiting time
@@ -309,7 +317,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 				case 3:
 					timeEdgeStateSet.stream().forEach(predicate -> {
 						predicate.setReady(true);
-						predicate.setFinish(false);
+//						predicate.setFinish(false);
 						predicate.setWaiting(false);
 					});
 					break;
@@ -333,6 +341,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 					.forEach(predicate ->{
 						//timeEdgeStateSet.stream().forEach();
 						predicate.setWaiting(true);
+						predicate.setFinish(false);
 						action.getActions().add(predicate);
 						desires.setTimeEdgeState(timeEdgeStateSet);
 					});

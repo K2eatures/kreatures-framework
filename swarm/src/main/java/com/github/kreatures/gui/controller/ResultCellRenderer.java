@@ -60,7 +60,7 @@ public class ResultCellRenderer extends JScrollPane implements TableCellRenderer
 	    	  txtArea.setBackground(new Color(255, 0, 0));
 	      }else if(content.contains(MainAction.MOVE.name())) {
 	    	  txtArea.setBackground(new Color(255, 255, 0));
-	      }else if(content.length()>1){
+	      }else if(content.length()>4){
 	    	  txtArea.setBackground(new Color(0, 255, 0));
 	      }
 	    	  

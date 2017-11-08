@@ -113,7 +113,7 @@ public class ResultData {
 	
 	/**
 	 * format row for KReatures output result with all output of each agent
-	 * @param logData the agent data about its historic behaviors.
+	 * @param logData the agent data about its historic behaviours.
 	 * @return result data as rows of a table
 	 */
 	@SuppressWarnings("unchecked")

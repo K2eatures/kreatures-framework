@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <logisticsGraph>
 <perspective id = "65" name = "" x = "4" y = "58" width = "13" height = "11">
-<agentType id = "66" name = "Klassen" x = "1" y = "3" count = "3" colorRed = "255" colorGreen = "255" colorBlue = "255" interface = "no">
+<agentType id = "66" name = "Klassen" x = "1" y = "3" count = "5" colorRed = "255" colorGreen = "255" colorBlue = "255" interface = "no">
 <time value = "1"/>
 <size value = "1"/>
 </agentType>
-<stationType id = "68" name = "Mathematik" x = "8" y = "1" count = "1" colorRed = "255" colorGreen = "255" colorBlue = "128" interface = "no">
+<stationType id = "68" name = "Mathematik" x = "8" y = "1" count = "2" colorRed = "255" colorGreen = "255" colorBlue = "128" interface = "no">
 <necessity value = "1"/>
 <space value = "1"/>
 </stationType>
-<stationType id = "77" name = "Literatur" x = "8" y = "7" count = "2" colorRed = "255" colorGreen = "128" colorBlue = "255" interface = "no">
+<stationType id = "77" name = "Literatur" x = "8" y = "7" count = "3" colorRed = "255" colorGreen = "128" colorBlue = "255" interface = "no">
 <necessity value = "1"/>
 <space value = "1"/>
 </stationType>
 </perspective>
 <perspective id = "100" name = "" x = "20" y = "58" width = "11" height = "11">
-<stationType id = "102" name = "Raume" x = "7" y = "3" count = "2" colorRed = "255" colorGreen = "0" colorBlue = "0" interface = "no">
+<stationType id = "102" name = "Raume" x = "7" y = "3" count = "4" colorRed = "255" colorGreen = "0" colorBlue = "0" interface = "no">
+<necessity value = "1"/>
 <space value = "1"/>
 </stationType>
-<agentType id = "105" name = "Lehrern" x = "2" y = "3" count = "3" colorRed = "0" colorGreen = "255" colorBlue = "0" interface = "no">
-<frequency value = "3"/>
+<agentType id = "105" name = "Lehrern" x = "2" y = "3" count = "5" colorRed = "0" colorGreen = "255" colorBlue = "0" interface = "no">
 <time value = "1"/>
 <size value = "1"/>
 </agentType>

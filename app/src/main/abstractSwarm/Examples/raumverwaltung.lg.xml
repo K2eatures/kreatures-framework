@@ -1,4 +1,4 @@
- <?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="ISO-8859-1" ?>
 <logisticsGraph>
 <perspective id = "65" name = "Class coordination" x = "19" y = "57" width = "12" height = "11">
 <agentType id = "66" name = "Class" x = "2" y = "4" count = "2" colorRed = "255" colorGreen = "255" colorBlue = "255" interface = "no">

@@ -9,6 +9,8 @@
 
 	<properties>
 		<tools.home>${basedir}/src/main/tools</tools.home>
+	<!--	<maven-assembly-plugin-version>2.4.1</maven-assembly-plugin-version>	-->
+		<main.class>com.github.kreatures.app.GUIApplication</main.class>	
 	</properties>
 
 	<profiles>
@@ -62,7 +64,7 @@
 					<archive>
 						<manifest>
 							<!-- Specifies the main class of the application -->
-							<mainClass>com.github.kreatures.app.GUIApplication</mainClass>
+							<mainClass>${main.class}</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -251,7 +253,7 @@
 								<!-- automatically creates the classpath using all project dependencies, 
 									also adding the project build directory -->
 								<classpath />
-								<argument>com.github.kreatures.app.GUIApplication</argument>
+								<argument>${main.class}</argument>
 							</arguments>
 						</configuration>
 					</execution>
@@ -295,13 +297,41 @@
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>com.github.kreatures.app.GUIApplication</mainClass>
+									<mainClass>${main.class}</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+			<!-- Maven Assembly Plugin for building the jar  
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>${maven-assembly-plugin-version}</version>
+				// get all project dependencies 
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					// MainClass in manifest make a executable jar 
+					<archive>
+						<manifest>
+							<mainClass>${main.class}</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						// Bind to the packaging phase 
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin> -->
 		</plugins>
 
 		<pluginManagement>

@@ -43,7 +43,8 @@ public class SwarmConfigDefault extends SwarmConfigBridge {
 				scenario= persister.read(SwarmConfigRead.class, file);
 				
 			} catch (Exception e) {
-				LOG.error("The Abstract_Swarm's file doesn't exist. Check the giving directory.");
+//				LOG.error("The Abstract_Swarm's file doesn't exist. Check the giving directory.");
+				LOG.error(e.getMessage());
 				e.printStackTrace();
 			}finally{
 				persister=null;

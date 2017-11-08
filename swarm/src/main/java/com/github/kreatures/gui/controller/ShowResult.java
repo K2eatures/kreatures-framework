@@ -48,7 +48,7 @@ public class ShowResult {
 		resultData= new ResultData(logDataFolder);
 		tableModel=new ResultDatamodell(resultData);
 		jframe=new ResultView();
-		jframe.setTablemodel(tableModel);		
+		jframe.setTablemodel(tableModel,simName);		
 	}
 
 	public void show() {

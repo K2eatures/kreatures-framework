@@ -29,6 +29,7 @@ public class SwarmSimulationListener implements  SimulationListener{
 			AbstractSwarms.getInstance().addEnvComponent(environmentComponent);
 //			LOG.info(environmentComponent.toString());
 //			ScenarioModelBeliefbase.addInstance(env.getName());
+
 			return true;
 		}
 		return false;
@@ -70,8 +71,8 @@ public class SwarmSimulationListener implements  SimulationListener{
 	@Override
 	public void simulationStarted(KReaturesEnvironment simulationEnvironment) {
 		//TODO Must be deleted later
-//		SwarmLoaderDefault.getInstance().unloading();
-//		SwarmLoaderDefault.freeInstance();
+		SwarmLoaderDefault.getInstance().unloading();
+		SwarmLoaderDefault.freeInstance();
 		LOG.info("SwarmSimulationListener : simulationStarted");
 	}
 

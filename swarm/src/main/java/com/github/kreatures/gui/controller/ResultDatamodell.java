@@ -96,5 +96,10 @@ public class ResultDatamodell extends AbstractTableModel {
 		row.get(colIndex);
 		fireTableCellUpdated(rowIndex, colIndex);
 	}
+	
+	@Override
+	public String toString(){
+		return String.format("column= %s %n rows=%s",columnNames.toString(), rows.toString());
+	}
 
 }
