@@ -6,8 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
@@ -26,10 +24,8 @@ import com.github.kreatures.core.logic.FolBeliefbase;
 import com.github.kreatures.core.operators.BaseExecuteOperator;
 import com.github.kreatures.core.operators.parameters.ExecuteParameter;
 import com.github.kreatures.core.util.Pair;
-import com.github.kreatures.swarm.SwarmConst;
 import com.github.kreatures.swarm.SwarmContextConst;
 import com.github.kreatures.swarm.Utility;
-import com.github.kreatures.swarm.basic.MainAction;
 import com.github.kreatures.swarm.basic.SwarmSpeechAct;
 import com.github.kreatures.swarm.basic.SwarmDesires;
 import com.github.kreatures.swarm.predicates.PredicateAgent;
@@ -162,9 +158,6 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 
 		// get a object of FolBeliefbase
 		FolBeliefbase folBB = (FolBeliefbase) params.getBaseBeliefbase();
-		//		LOG.debug("########    "+  params.getAgent().getName() +"    ####################################################################################");
-		//		System.out.println(folBB);
-		//		LOG.debug("########    ##########################################################################################################################");
 
 		/* List of desires and related informations */
 		SwarmDesires desires = params.getAgent().getComponent(SwarmDesires.class);
@@ -178,12 +171,13 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		Pair<Boolean, PlanElement> checkEnter = desires.getCheckEnterStation();
 		// keep a object of FolBeliefbase program
 		Set<SwarmPredicate> result = envComponent.askEnvironment(folBB, Options);
-
+		//		get enterstation predicate with current agent and same choose station
 		Set<SwarmPredicate> enterStationSet = result.stream()
 				.filter(predicate -> (predicate instanceof PredicateEnterStation) && ((PredicateEnterStation) predicate)
 						.getStationName().equals(desires.getCurrentStation().getStationName()))
 						.collect(HashSet::new, HashSet::add, HashSet::addAll);
-		Optional<PredicateEnterStation> optEnterStation = enterStationSet.stream()
+
+		Optional<PredicateEnterStation> optEnterStationReady = enterStationSet.stream()
 				.map(predicate -> (PredicateEnterStation) predicate).filter(predicate -> predicate.getMotiv() < 4)
 				.findFirst();
 
@@ -211,7 +205,8 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 
 		/* update the Timeedgestate predicate which will be performed. */
 		Set<PredicateTimeEdgeState> timeEdgeStateSet;
-		PredicateEnterStation enterStation = optEnterStation.orElseGet(
+		//		
+		PredicateEnterStation enterStationReady = optEnterStationReady.orElseGet(
 				() -> enterStationSet.stream().map(predicate -> (PredicateEnterStation) predicate).findFirst().get());
 		/*
 		 * %motiv: 0=agent and station no time edge;
@@ -219,58 +214,66 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 		 * %	2=agent hasn't time edge and station has;
 		 * %	3=agent and station haven time edge. 
 		 */
-		if (enterStation.getMotiv() != 0) {
+		if (enterStationReady.getMotiv() != 0) {
 
-			switch (enterStation.getMotiv()) {
+			switch (enterStationReady.getMotiv()) {
 			case 1:/* if 1 or 4 */
 			case 4:
 				timeEdgeStateSet = result.stream().filter(predicate -> (predicate instanceof PredicateTimeEdgeState))
 				.map(predicate -> (PredicateTimeEdgeState) predicate)
-				.filter(predicate -> predicate.getName().equals(enterStation.getAgentName())
-						&& predicate.getVisitorName().equals(enterStation.getStationName()))
+				.filter(predicate -> predicate.getName().equals(enterStationReady.getAgentName())
+						&& predicate.getVisitorName().equals(enterStationReady.getStationName()))
 						.collect(HashSet::new, HashSet::add, HashSet::addAll);
 				break;
 			case 2:/* if 2 or 5 */
 			case 5:
 				timeEdgeStateSet = result.stream().filter(predicate -> (predicate instanceof PredicateTimeEdgeState))
 				.map(predicate -> (PredicateTimeEdgeState) predicate)
-				.filter(predicate -> predicate.getName().equals(enterStation.getStationName())&& predicate.getVisitorName().equals(enterStation.getAgentName()))
+				.filter(predicate -> predicate.getName().equals(enterStationReady.getStationName())&& predicate.getVisitorName().equals(enterStationReady.getAgentName()))
 				.collect(HashSet::new, HashSet::add, HashSet::addAll);
 				break;
 			case 3:/* if 3 or 6 */
 			case 6:
 				timeEdgeStateSet = result.stream().filter(predicate -> (predicate instanceof PredicateTimeEdgeState))
 				.map(predicate -> (PredicateTimeEdgeState) predicate)
-				.filter(predicate -> (predicate.getName().equals(enterStation.getStationName())
-						&& predicate.getVisitorName().equals(enterStation.getAgentName()))
-						|| (predicate.getName().equals(enterStation.getAgentName()))
-						&& predicate.getVisitorName().equals(enterStation.getStationName()))
+				.filter(predicate -> (predicate.getName().equals(enterStationReady.getStationName())
+						&& predicate.getVisitorName().equals(enterStationReady.getAgentName()))
+						|| (predicate.getName().equals(enterStationReady.getAgentName()))
+						&& predicate.getVisitorName().equals(enterStationReady.getStationName()))
 						.collect(HashSet::new, HashSet::add, HashSet::addAll);
 				break;
 			default:
 				timeEdgeStateSet = new HashSet<PredicateTimeEdgeState>();
 			}
-			
-//			/* Set the finish state of TimeEdgeState to false */
-//			timeEdgeStateSet.stream().filter(predicate->predicate.isFinish()).
-//			forEach(predicate->{
-//				predicate.setFinish(false);
-////				action.getActions().add(predicate);
-//			});
-			
+
 			/* 
 			 * Is the current agent in waiting or ready state.
 			 * %Status	=3 means: the both components are waiting without waiting time
 			 * %Status	=2 means: the both components are reading after the waiting time
 			 * %Status  =1 means: one component is ready and the other can begin to count.
 			 * %Status  =0 means: the both components are waiting
-			 * %Status  >3 means: the current is in waiting state.
+			 * %Status  >3 means: the current agent is in waiting state.
 			 */
-			if (optEnterStation.isPresent()) {
+			if (optEnterStationReady.isPresent()) {
+				/*
+				 * Check whether the agent has already lock some timeedge.
+				 * This can happen, when a agent have to waiting before beginning. 
+				 */
 				if(desires.isTimeEdgeLockStateEmpty()){
-					Optional<PredicateTimeEdgeLockState> OptTimeEdgeLock= result.stream().filter(predicate -> predicate instanceof PredicateTimeEdgeLockState)
+					/*
+					 * All the timeedgelockstate predicate.
+					 */
+					Set<PredicateTimeEdgeLockState> timeEdgeLockStateSet= result.stream().filter(predicate -> predicate instanceof PredicateTimeEdgeLockState)
 							.map(predicate->(PredicateTimeEdgeLockState)predicate)
-							.filter(predicate->{return predicate.compareToCurrentStation(currentStation);})
+							.collect(HashSet::new,HashSet::add,HashSet::addAll);
+
+					Set<PredicateTimeEdgeLockGet> TimeEdgeLockGetSet= result.stream().filter(predicate -> predicate instanceof PredicateTimeEdgeLockGet)
+							.map(predicate->(PredicateTimeEdgeLockGet)predicate)
+							.collect(HashSet::new, HashSet::add, HashSet::addAll);
+
+					//					When the are timeedge of type NoDNoC then do following				
+					Optional<PredicateTimeEdgeLockState> OptTimeEdgeLock= timeEdgeLockStateSet.stream()
+							.filter(predicate->{return predicate.getEdgeType()==0 & predicate.compareToCurrentStation(currentStation);})
 							.findFirst();
 					if(OptTimeEdgeLock.isPresent()){
 						PredicateTimeEdgeLockState timeEdgeLock=OptTimeEdgeLock.get();
@@ -279,17 +282,16 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 						desires.setTimeEdgeLockState(timeEdgeLock);
 
 					}else{
-						Set<PredicateTimeEdgeLockGet> TimeEdgeLockGetSet= result.stream().filter(predicate -> predicate instanceof PredicateTimeEdgeLockGet)
-								.map(predicate->(PredicateTimeEdgeLockGet)predicate)
-								.filter(predicate->{return predicate.compareToCurrentStation(currentStation);})
+						Set<PredicateTimeEdgeLockGet> TimeEdgeLockGetSetNoDNoC= TimeEdgeLockGetSet.stream()
+								.filter(predicate->{return predicate.getEdgeType()==0 & predicate.compareToCurrentStation(currentStation);})
 								.filter(predicate->!predicate.isLock1()&!predicate.isLock2())
 								.collect(HashSet::new, HashSet::add, HashSet::addAll);
 
-						if(!TimeEdgeLockGetSet.isEmpty()){
+						if(!TimeEdgeLockGetSetNoDNoC.isEmpty()){
 							Random random=new Random();
-							int rd=random.nextInt(TimeEdgeLockGetSet.size());
+							int rd=random.nextInt(TimeEdgeLockGetSetNoDNoC.size());
 							int i=0;
-							for(PredicateTimeEdgeLockGet timeEdgeLockGet :TimeEdgeLockGetSet){
+							for(PredicateTimeEdgeLockGet timeEdgeLockGet :TimeEdgeLockGetSetNoDNoC){
 								if(rd==i){
 									PredicateTimeEdgeLockState timeEdgeLock=timeEdgeLockGet.convertToTimeEdgeLockState();
 									timeEdgeLock.setLock1(true);
@@ -302,10 +304,83 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 							}
 						}
 					}
+
+					//										When the are timeedge of type DNoC then do following
+
+					Set<PredicateTimeEdgeLockGet> TimeEdgeLockGetSetDNoC= TimeEdgeLockGetSet.stream()
+							.filter(predicate->{return predicate.getEdgeType()==1;})
+							.collect(HashSet::new, HashSet::add, HashSet::addAll);
+
+					/*
+					 * check whether the current agent is at the first position.
+					 */
+
+					Optional<PredicateTimeEdgeLockGet> optTimeEdgeLockGet=TimeEdgeLockGetSetDNoC.stream()
+							.filter(predicate->{return predicate.compareToCurrentStation(currentStation);})
+							.findFirst();
+
+					if(optTimeEdgeLockGet.isPresent()){
+						/*
+						 * the current agent is at the first position
+						 * */
+						PredicateTimeEdgeLockState timeEdgeLock=optTimeEdgeLockGet.get().convertToTimeEdgeLockState(true);
+						timeEdgeLock.setLock1(true);
+						timeEdgeLock.setActiv(true);
+						action.getActions().add(timeEdgeLock);
+						desires.setTimeEdgeLockState(timeEdgeLock);
+
+					}
+
+					
+//					When the are timeedge of type DNoC then do following
+
+						/*
+						 * All the timeedgelockstate predicate.
+						 */
+//						Set<PredicateTimeEdgeLockState> timeEdgeLockStateSet= result.stream().filter(predicate -> predicate instanceof PredicateTimeEdgeLockState)
+//								.map(predicate->(PredicateTimeEdgeLockState)predicate)
+//								.collect(HashSet::new,HashSet::add,HashSet::addAll);
+//
+//						Set<PredicateTimeEdgeLockGet> TimeEdgeLockGetSet= result.stream().filter(predicate -> predicate instanceof PredicateTimeEdgeLockGet)
+//								.map(predicate->(PredicateTimeEdgeLockGet)predicate)
+//								.collect(HashSet::new, HashSet::add, HashSet::addAll);
+
+						/*
+						 * check whether the current agent is at the second position.
+						 */
+
+//						Set<PredicateTimeEdgeLockGet> TimeEdgeLockGetSetDNoC= TimeEdgeLockGetSet.stream()
+//								.filter(predicate->{return predicate.getEdgeType()==1;})
+//								.collect(HashSet::new, HashSet::add, HashSet::addAll);
+
+
+						Optional<PredicateTimeEdgeLockGet> optTimeEdgeLockGet1=TimeEdgeLockGetSetDNoC.stream()
+								.filter(predicate->{return predicate.compareToKorrespondElement(currentStation);})
+								.findAny();
+
+						if(optTimeEdgeLockGet1.isPresent()){
+							/*
+							 * the current agent is at the second position
+							 */
+//							Optional<PredicateTimeEdgeLockState> 
+							OptTimeEdgeLock= timeEdgeLockStateSet.stream()
+									.filter(predicate->{return predicate.getEdgeType()==1 && predicate.isFinish1()&& !predicate.isLock2()&& predicate.compareToTimeEdgeLockGet(optTimeEdgeLockGet1.get()); })
+									.findAny();
+
+							if(OptTimeEdgeLock.isPresent()){
+								PredicateTimeEdgeLockState timeEdgeLock= OptTimeEdgeLock.get();
+								timeEdgeLock.setCurrentAgentAndStation(currentStation);
+								timeEdgeLock.setLock2(true);
+								action.getActions().add(timeEdgeLock);
+								desires.setTimeEdgeLockState(timeEdgeLock);
+							}
+						}
+					
+
 				}
 
 
-				switch (enterStation.getStatus()) {
+				switch (enterStationReady.getStatus()) {
 				case 1:
 					timeEdgeStateSet.stream().forEach(PredicateTimeEdgeState::incrTick);
 					timeEdgeStateSet.stream().forEach(action.getActions()::add);
@@ -317,7 +392,7 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 				case 3:
 					timeEdgeStateSet.stream().forEach(predicate -> {
 						predicate.setReady(true);
-//						predicate.setFinish(false);
+						//						predicate.setFinish(false);
 						predicate.setWaiting(false);
 					});
 					break;
@@ -325,8 +400,8 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 					throw new IllegalArgumentException("Status in EnterStation component must be between 0 and 3."); 
 				}
 
-			} else {
-
+			} else{
+				
 				if (desires.getWaitTime() == 0) {
 					timeEdgeStateSet.stream().forEach(PredicateTimeEdgeState::init);
 					desires.clear();
@@ -497,20 +572,20 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 			predicate.setFinish(true);
 			action.getActions().add(predicate);
 		});
-		
+
 		/*
 		 * update or delete TimeEdgeLockState on the beliefbase.
 		 */
-		
+
 		if(!desires.isTimeEdgeLockStateEmpty()){
-			
+
 			PredicateTimeEdgeLockState timeEdgeLockStateOld=desires.getTimeEdgeLockState().stream().findFirst().get();
-			
+
 			Optional<PredicateTimeEdgeLockState> OptTimeEdgeLock= result.stream().filter(predicate -> predicate instanceof PredicateTimeEdgeLockState)
 					.map(predicate->(PredicateTimeEdgeLockState)predicate)
 					.filter(predicate->predicate.equals(timeEdgeLockStateOld))
 					.findFirst();
-			
+
 			if(OptTimeEdgeLock.isPresent()){
 				desires.clearTimeEdgeLockState();
 				PredicateTimeEdgeLockState timeEdgeLockStateNew=OptTimeEdgeLock.get();
@@ -527,11 +602,11 @@ public class SwarmExecuteOperator extends BaseExecuteOperator {
 					timeEdgeLockStateNew.setFinish1(true);
 					action.getActions().add(timeEdgeLockStateNew);
 				}
-				
+
 			}
 		}
 		desires.clear();
-		
+
 		return true;
 
 	}

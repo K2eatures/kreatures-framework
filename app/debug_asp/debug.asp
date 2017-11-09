@@ -1,90 +1,148 @@
-Station(raume1, raume, 2, 1000, 0).
-TimeEdgeState(lehrern3, lehrern, raume2, raume, 1, 0, true, false, true).
-TimeEdgeState(literatur2, literatur, klassen2, klassen, 0, 0, true, false, false).
-CurrentStation(lehrern2, lehrern, raume1, raume, false, true).
-NecAgentStation(klassen2, mathematik1, 1).
-TimeEdgeState(lehrern3, lehrern, raume1, raume, 1, 0, false, false, false).
-VisitEdge(lehrern2, lehrern, raume2, raume, false).
-TimeEdgeState(lehrern1, lehrern, raume2, raume, 1, 0, true, false, true).
-Station(literatur1, literatur, 2, 1, 0).
-TimeEdgeState(literatur1, literatur, klassen3, klassen, 0, 0, false, false, true).
-VisitEdge(klassen3, klassen, literatur1, literatur, false).
-VisitEdge(lehrern1, lehrern, raume2, raume, false).
-TimeEdgeState(lehrern2, lehrern, raume1, raume, 1, 0, true, false, true).
-NecAgentStation(klassen2, literatur2, 0).
-Agent(klassen1, klassen, 1, 1000, 0).
-NecAgentStation(lehrern3, raume2, 1).
-TimeEdgeState(mathematik1, mathematik, klassen1, klassen, 0, 0, true, false, false).
-NecAgentStation(lehrern1, raume2, 1).
-CurrentStation(klassen1, klassen, mathematik1, mathematik, false, true).
-TimeEdgeState(literatur1, literatur, klassen2, klassen, 0, 0, false, false, true).
-Agent(lehrern2, lehrern, 2, 1000, 0).
-VisitEdge(klassen2, klassen, literatur2, literatur, false).
-VisitEdge(klassen3, klassen, mathematik1, mathematik, false).
-TimeEdgeState(literatur2, literatur, klassen3, klassen, 0, 0, true, false, false).
-Agent(lehrern1, lehrern, 2, 1000, 0).
-VisitEdge(klassen2, klassen, mathematik1, mathematik, false).
-NecAgentStation(lehrern2, raume1, 1).
-VisitEdge(lehrern3, lehrern, raume2, raume, false).
-VisitEdge(klassen1, klassen, literatur2, literatur, false).
-NecAgentStation(klassen2, literatur1, 1).
-Station(literatur2, literatur, 1, 1, 0).
-CurrentStation(klassen3, klassen, literatur2, literatur, false, true).
-Agent(lehrern3, lehrern, 1, 1000, 0).
-VisitEdge(lehrern2, lehrern, raume1, raume, false).
-VisitEdge(klassen1, klassen, mathematik1, mathematik, false).
-TimeEdgeState(literatur1, literatur, klassen1, klassen, 0, 0, false, false, false).
-NecAgentStation(klassen3, mathematik1, 1).
-TimeEdgeState(mathematik1, mathematik, klassen2, klassen, 0, 0, false, false, true).
-Agent(klassen3, klassen, 2, 1000, 0).
-NecAgentStation(klassen1, mathematik1, 0).
-CurrentStation(lehrern3, lehrern, raume2, raume, false, true).
-VisitEdge(lehrern1, lehrern, raume1, raume, false).
-VisitEdge(klassen3, klassen, literatur2, literatur, false).
-NecAgentStation(klassen1, literatur2, 1).
-CurrentStation(klassen2, klassen, literatur2, literatur, false, true).
-Station(raume2, raume, 3, 1000, 0).
-NecAgentStation(lehrern2, raume2, 1).
-NecAgentStation(klassen3, literatur2, 0).
-VisitEdge(klassen2, klassen, literatur1, literatur, false).
-TimeEdgeState(mathematik1, mathematik, klassen3, klassen, 0, 0, false, false, true).
-TimeEdgeState(lehrern2, lehrern, raume2, raume, 1, 0, false, false, true).
-Station(mathematik1, mathematik, 2, 1, 0).
-CurrentAgent(klassen1, klassen).
-NecAgentStation(klassen1, literatur1, 0).
-TimeEdgeState(lehrern1, lehrern, raume1, raume, 1, 0, false, false, true).
-NecAgentStation(lehrern3, raume1, 0).
-NecAgentStation(lehrern1, raume1, 1).
-VisitEdge(lehrern3, lehrern, raume1, raume, false).
-TimeEdgeState(literatur2, literatur, klassen1, klassen, 0, 0, false, false, true).
-Agent(klassen2, klassen, 2, 1000, 0).
-CurrentStation(lehrern1, lehrern, raume2, raume, false, true).
-VisitEdge(klassen1, klassen, literatur1, literatur, false).
-NecAgentStation(klassen3, literatur1, 1).
+%Agent(AgentName,AgentType,freq,nec,cap).
+Agent(product22,product2,0,1000,0).
+Agent(product11,product1,0,1000,0).
+Agent(worker1,worker,0,1000,0).
+Agent(worker2,worker,0,1000,0).
+Agent(product21,product2,0,1000,0).
+Agent(product12,product1,0,1000,0).
+Agent(worker3,worker,0,1000,0).
+%Station(StationName,StattionType,freq,nec,space).
+Station(analysis11,analysis1,0,1,0).
+Station(production22,production2,0,1000,0).
+Station(production11,production1,0,1000,0).
+Station(production21,production2,0,1000,0).
+Station(production12,production1,0,1000,0).
+Station(monitoring1,monitoring,0,1000,0).
+Station(analysis31,analysis3,0,1,0).
+Station(analysis21,analysis2,0,1,0).
+%VisitEdge(agentName,AgentTypeName,StationName,StationTypeName,bold).
+VisitEdge(worker2,worker,production12,production1,false).
+VisitEdge(worker3,worker,monitoring1,monitoring,false).
+VisitEdge(worker3,worker,production22,production2,false).
+VisitEdge(product11,product1,analysis31,analysis3,false).
+VisitEdge(product11,product1,analysis11,analysis1,false).
+VisitEdge(product21,product2,analysis31,analysis3,false).
+VisitEdge(worker2,worker,production11,production1,false).
+VisitEdge(worker1,worker,production21,production2,false).
+VisitEdge(worker2,worker,production21,production2,false).
+VisitEdge(product22,product2,analysis11,analysis1,false).
+VisitEdge(worker1,worker,monitoring1,monitoring,false).
+VisitEdge(product12,product1,analysis31,analysis3,false).
+VisitEdge(product22,product2,analysis31,analysis3,false).
+VisitEdge(worker1,worker,production22,production2,false).
+VisitEdge(product11,product1,analysis21,analysis2,false).
+VisitEdge(worker2,worker,production22,production2,false).
+VisitEdge(worker3,worker,production11,production1,false).
+VisitEdge(worker2,worker,monitoring1,monitoring,false).
+VisitEdge(worker1,worker,production11,production1,false).
+VisitEdge(product12,product1,analysis21,analysis2,false).
+VisitEdge(product21,product2,analysis21,analysis2,false).
+VisitEdge(product21,product2,analysis11,analysis1,false).
+VisitEdge(worker3,worker,production21,production2,false).
+VisitEdge(product12,product1,analysis11,analysis1,false).
+VisitEdge(product22,product2,analysis21,analysis2,false).
+VisitEdge(worker1,worker,production12,production1,false).
+VisitEdge(worker3,worker,production12,production1,false).
+%NecAgentStation(AgentName,StationName,Nec).
+NecAgentStation(worker2,production22,0). 
+NecAgentStation(product21,analysis21,0). 
+NecAgentStation(product21,analysis31,0). 
+NecAgentStation(worker1,monitoring1,0). 
+NecAgentStation(worker2,production21,0). 
+NecAgentStation(product11,analysis21,0). 
+NecAgentStation(worker3,production12,0). 
+NecAgentStation(worker1,production22,0). 
+NecAgentStation(worker1,production12,0). 
+NecAgentStation(worker2,production11,0). 
+NecAgentStation(worker1,production11,0). 
+NecAgentStation(worker3,monitoring1,0). 
+NecAgentStation(worker2,production12,0). 
+NecAgentStation(product12,analysis31,0). 
+NecAgentStation(product12,analysis21,0). 
+NecAgentStation(worker3,production11,0). 
+NecAgentStation(worker1,production21,0). 
+NecAgentStation(product22,analysis31,0). 
+NecAgentStation(worker3,production22,0). 
+NecAgentStation(worker3,production21,0). 
+NecAgentStation(product22,analysis21,0). 
+NecAgentStation(product12,analysis11,0). 
+NecAgentStation(product22,analysis11,0). 
+NecAgentStation(product11,analysis31,0). 
+NecAgentStation(product11,analysis11,0). 
+NecAgentStation(worker2,monitoring1,0). 
+NecAgentStation(product21,analysis11,0). 
+%ItemSetLoadingAgent(AgentName,StationTypeName,ItemNumber).
+%ItemSetLoadingStation(StationTypeNameIn,StationNameOut,ItemNumber).
+%TimeEdgeStatus(NameWithTimeEdge,TypeNameWithTimeEdge,NameVisited,TypeNameVisited,Type,CountTick,IsWaiting,IsReady,IsFinish).
+TimeEdgeState(analysis31,analysis3,product22,product2,0,0,false,false,false).
+TimeEdgeState(analysis31,analysis3,product12,product1,0,0,false,false,false).
+TimeEdgeState(production11,production1,worker2,worker,0,0,false,false,false).
+TimeEdgeState(product22,product2,analysis31,analysis3,1,0,false,false,false).
+TimeEdgeState(monitoring1,monitoring,worker3,worker,0,0,false,false,false).
+TimeEdgeState(product11,product1,analysis31,analysis3,1,0,false,false,false).
+TimeEdgeState(production12,production1,worker3,worker,0,0,false,false,false).
+TimeEdgeState(production11,production1,worker1,worker,0,0,false,false,false).
+TimeEdgeState(product12,product1,analysis11,analysis1,1,0,false,false,false).
+TimeEdgeState(product21,product2,analysis11,analysis1,1,0,false,false,false).
+TimeEdgeState(product22,product2,analysis21,analysis2,1,0,false,false,false).
+TimeEdgeState(production11,production1,worker3,worker,0,0,false,false,false).
+TimeEdgeState(monitoring1,monitoring,worker2,worker,0,0,false,false,false).
+TimeEdgeState(product11,product1,analysis21,analysis2,1,0,false,false,false).
+TimeEdgeState(production12,production1,worker1,worker,0,0,false,false,false).
+TimeEdgeState(production22,production2,worker2,worker,0,0,false,false,false).
+TimeEdgeState(product21,product2,analysis31,analysis3,1,0,false,false,false).
+TimeEdgeState(production22,production2,worker3,worker,0,0,false,false,false).
+TimeEdgeState(production21,production2,worker3,worker,0,0,false,false,false).
+TimeEdgeState(analysis31,analysis3,product21,product2,0,0,false,false,false).
+TimeEdgeState(monitoring1,monitoring,worker1,worker,0,0,false,false,false).
+TimeEdgeState(production21,production2,worker1,worker,0,0,false,false,false).
+TimeEdgeState(production12,production1,worker2,worker,0,0,false,false,false).
+TimeEdgeState(product22,product2,analysis11,analysis1,1,0,false,false,false).
+TimeEdgeState(product12,product1,analysis21,analysis2,1,0,false,false,false).
+TimeEdgeState(production21,production2,worker2,worker,0,0,false,false,false).
+TimeEdgeState(product11,product1,analysis11,analysis1,1,0,false,false,false).
+TimeEdgeState(analysis31,analysis3,product11,product1,0,0,false,false,false).
+TimeEdgeState(product21,product2,analysis21,analysis2,1,0,false,false,false).
+TimeEdgeState(product12,product1,analysis31,analysis3,1,0,false,false,false).
+TimeEdgeState(production22,production2,worker1,worker,0,0,false,false,false).
+% CurrentAgent(AgentName,AgentTypeName). 
+CurrentAgent(worker1,worker).
+% CurrentStation(AgentName,AgetnTypeName,StationName,StationTypeName,IsInStation,HasChoose). 
+CurrentStation(worker1,worker,nothings,nothings,false,false).
 
 
 % ##################### Szenario modell ##############################
 ZeitEinheit(1).
 %AgentType(AgentTypeName,freq,nec,time,prio,cycle,cap,size,speed).
-AgentType(klassen,1000,1000,1,1,0,1000,1,1).
-AgentType(lehrern,3,1000,1,1,0,1000,1,1).
+AgentType(product1,1000,1000,1,1,0,1000,1,1).
+AgentType(product2,1000,1000,1,1,0,1000,1,1).
+AgentType(worker,1000,1000,1,1,0,1000,0,1).
 %StationType(StationTypeName,freq,nec,time,prio,cylce,item,space,count)
-StationType(raume,1000,1000,1,1,0,0,1,2).
-StationType(mathematik,1000,1,1,1,0,0,1,1).
-StationType(literatur,1000,1,1,1,0,0,1,2).
+StationType(analysis2,1000,1,2,1,0,0,3,1).
+StationType(analysis3,1000,1,3,1,0,0,1,1).
+StationType(production2,1,1000,5,1,0,0,1,2).
+StationType(production1,1,1000,6,1,0,0,1,2).
+StationType(analysis1,1000,1,1,1,0,0,1,1).
+StationType(monitoring,1000,1000,3,1,0,0,1,1).
 %PlacedEdge(StationNameIn,StationTypeNameIn,StationNameOut,StationTypeNameOut,Weight,directed).
-PlacedEdge(mathematik1,mathematik,literatur2,literatur,0,false).
-PlacedEdge(mathematik1,mathematik,literatur1,literatur,0,false).
+PlacedEdge(production12,production1,production21,production2,0,false).
+PlacedEdge(production22,production2,monitoring1,monitoring,0,false).
+PlacedEdge(production11,production1,production21,production2,0,false).
+PlacedEdge(production11,production1,production22,production2,0,false).
+PlacedEdge(analysis21,analysis2,analysis31,analysis3,0,false).
+PlacedEdge(analysis11,analysis1,analysis21,analysis2,0,false).
+PlacedEdge(production12,production1,production22,production2,0,false).
+PlacedEdge(production21,production2,monitoring1,monitoring,0,false).
 %TimeEdge(Name1,TypeName1,Name2,TypeName2,TimeType,IsDirected,ConnectionType,weight).
-TimeEdge(literatur2,literatur,lehrern3,lehrern,2,false,false,0).
-TimeEdge(literatur2,literatur,lehrern2,lehrern,2,false,false,0).
-TimeEdge(literatur2,literatur,lehrern1,lehrern,2,false,false,0).
-TimeEdge(literatur1,literatur,lehrern3,lehrern,2,false,false,0).
-TimeEdge(literatur1,literatur,lehrern1,lehrern,2,false,false,0).
-TimeEdge(mathematik1,mathematik,lehrern2,lehrern,2,false,false,0).
-TimeEdge(mathematik1,mathematik,lehrern3,lehrern,2,false,false,0).
-TimeEdge(mathematik1,mathematik,lehrern1,lehrern,2,false,false,0).
-TimeEdge(literatur1,literatur,lehrern2,lehrern,2,false,false,0).
+TimeEdge(production12,production1,product12,product1,2,true,false,1).
+TimeEdge(production21,production2,product21,product2,2,true,false,2).
+TimeEdge(production22,production2,product22,product2,2,true,false,2).
+TimeEdge(production12,production1,product11,product1,2,true,false,1).
+TimeEdge(production22,production2,product21,product2,2,true,false,2).
+TimeEdge(production11,production1,product11,product1,2,true,false,1).
+TimeEdge(monitoring1,monitoring,analysis31,analysis3,0,false,false,0).
+TimeEdge(production11,production1,product12,product1,2,true,false,1).
+TimeEdge(production21,production2,product22,product2,2,true,false,2).
 
 % ##################### Environment Features ##############################
 
@@ -325,7 +383,10 @@ TimeEdgeReady(Name,TypeName,Type,0):-TimeEdgeOnlyOutgoing(Name,TypeName,_,Type).
 % Sondern man kann klar sehen, wer ist der Agent bzw Station.
 % EdgeType is the type of time edge
 % 0 for NoDNoC 
+% 1 for DNoC 
 TimeEdgeLockGet(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2):-TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2), not TimeEdgeLockStateUse(AgentName2,StationName2,0),CurrentAgent(AgentName1, _),TimeEdgeLockStateNoUse(AgentName2,StationName2).
+
+TimeEdgeLockGet(AgentName1,StationName1,AgentName2,StationName2,1,Lock1,Lock2,Finish1,Finish2):-TimeEdgeLockStatusDNoC(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2), not TimeEdgeLockStateUse(AgentName2,StationName2,0),CurrentAgent(AgentName1, _),TimeEdgeLockStateNoUse(AgentName2,StationName2).
 
 %check if there free place and if the station can be visit.
 TimeEdgeLockStateNoUse(AgentName,StationName):- AgentSize(AgentName,Size),SpaceFreqFreeStation(StationName,SpaceFree,FreqFree),#sum{Xa,Xb:TimeEdgeLockState(_,_,Xb,StationName,0,true,true,false,_,_),AgentSize(Xb,Xa)}=AgentsSize,AllSize=AgentsSize+Size,AllSize<=SpaceFree,VisitEdge(AgentName, _, StationName, _, _),#count{Ag:TimeEdgeLockState(_,_,Ag,StationName,0,true,true,false,_,_)}<FreqFree.
@@ -410,6 +471,81 @@ TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- CurrentAge
 
 %the current agent want to check if it can lock and one other correpondings agent has locked.
 TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,true,false,_,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{Xa,Xb: TimeEdgeSpaceSizeNoDNoC(Xb,StationName1,_,_,true,true,_,_,Xa,_,_,_,_,_),Xb!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Za,Zb: TimeEdgeSpaceSizeNoDNoC(Zb,StationName1,_,_,true,true,_,_,_,_,_,_,Za,_),Zb!=AgentName1}<Freq1,TimeEdgeLockState(AgentName2,StationName2,AgentName1,StationName1,0,true,true,false,Finish2,Finish1),CurrentAgent(AgentName1, _).
+
+
+
+%&&&&&&&&&&&&&&&&&&&&+++++++++++++++++++ DirectedNoConnected: TimeEdgeLock for DNoC  +++++++++++++++++&&&&&&&&&&&&&&&&
+
+%TimeEdgeSpaceDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Type1,Type2).
+%The is a time component between Name1 and Name2. Also, the Name1 visits VisitName1 and Name2 visits VisitName2.
+%Lock1=true when Component Name1 was throught this timeEgde activated and false otherwise.
+%Lock2=true when Component Name2 was throught this timeEgde activated and false otherwise.
+% Type_i=0 means Name_i is station and Type_i=2 means Name_i is agent.
+TimeEdgeLockStateDNoC(Name1,VisitName1,Name2,VisitName2,false,false,Finish1,Finish2,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,true,false,Finish1),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,true,false,Finish2),TimeEdge(Name1,_,Name2,_,_,true,false,_).
+
+TimeEdgeLockStateDNoC(Name1,VisitName1,Name2,VisitName2,false,true,Finish1,Finish2,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,true,false,Finish1),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,false,true,Finish2),TimeEdge(Name1,_,Name2,_,_,true,false,_).
+
+TimeEdgeLockStateNoDNoC(Name1,VisitName1,Name2,VisitName2,true,false,Finish1,Finish2,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,false,true,Finish1),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,true,false,Finish2),TimeEdge(Name1,_,Name2,_,_,true,false,_).
+
+TimeEdgeLockStateDNoC(Name1,VisitName1,Name2,VisitName2,true,true,Finish1,Finish2,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,false,true,Finish1),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,false,true,Finish2),TimeEdge(Name1,_,Name2,_,_,true,false,_).
+
+%TimeEdgeLockStatusDNoC(AgentName1,StationName1,AgentName2,StationName2,EdgeType,Lock1,Lock2,Finish1,Finish2).
+% Schreibt das Atom TimeEdgeLockStateDNoC um, so dass man nicht mehr weißt, wer ist der VisitComponent und wer ist an TimeEdge angeschlossen.
+% Sondern man kann klar sehen, wer ist der Agent bzw Station.
+% EdgeType is the type of time edge
+
+TimeEdgeLockStatusDNoC(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2):-TimeEdgeLockStateDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2,Finish1,Finish2,1,1).
+
+TimeEdgeLockStatusDNoC(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2):-TimeEdgeLockStateDNoC(AgentName1,StationName1,StationName2,AgentName2,Lock1,Lock2,Finish1,Finish2,1,0).
+
+TimeEdgeLockStatusDNoC(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2):-TimeEdgeLockStateDNoC(StationName1,AgentName1,AgentName2,StationName2,Lock1,Lock2,Finish1,Finish2,0,1).
+
+TimeEdgeLockStatusDNoC(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2):-TimeEdgeLockStateDNoC(StationName1,AgentName1,StationName2,AgentName2,Lock1,Lock2,Finish1,Finish2,0,0).
+
+
+%TimeEdgeLockState(AgentName2,StationName2,AgentName1,StationName1,0,IsActiv,Lock2,Lock1,Finish2,Finish1).
+
+%TimeEdgeSpaceSizeDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2)
+%SpaceFree1 is the free place of station 1 and SpaceFree2 is the free place of station 2.
+%Freq1 is the rest frequency of station 1 and SpaceFree2 is the rest frequency of station 2.
+%Size1 is the size of agent 1 and Size2 is the size of agent 2.
+
+%Name1 and Name2 are stations
+TimeEdgeSpaceSizeDNoC(VisitName1,Name1,VisitName2,Name2,Lock1,Lock2,Finish1,Finish2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Finish1,Finish2,0,0),SpaceFreqFreeStation(Name1,SpaceFree1,Freq1),SpaceFreqFreeStation(Name2,SpaceFree2,Freq2),AgentSize(VisitName1,Size1),AgentSize(VisitName2,Size2).
+
+%Name1 and Name2 are agents
+TimeEdgeSpaceSizeDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Finish1,Finish2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Finish1,Finish2,1,1),SpaceFreqFreeStation(VisitName1,SpaceFree1,Freq1),SpaceFreqFreeStation(VisitName2,SpaceFree2,Freq2),AgentSize(Name1,Size1),AgentSize(Name2,Size2).
+
+%Name1 is station and Name2 is agent
+TimeEdgeSpaceSizeDNoC(VisitName1,Name1,Name2,VisitName2,Lock1,Lock2,Finish1,Finish2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Finish1,Finish2,0,1),SpaceFreqFreeStation(Name1,SpaceFree1,Freq1),SpaceFreqFreeStation(VisitName2,SpaceFree2,Freq2),AgentSize(VisitName1,Size1),AgentSize(Name2,Size2).
+
+%Name1 is agent and Name2 is station
+TimeEdgeSpaceSizeDNoC(Name1,VisitName1,VisitName2,Name2,Lock1,Lock2,Finish1,Finish2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Finish1,Finish2,1,0),SpaceFreqFreeStation(VisitName1,SpaceFree1,Freq1),SpaceFreqFreeStation(Name2,SpaceFree2,Freq2),AgentSize(Name1,Size1),AgentSize(VisitName2,Size2).
+
+%Define TimeEdgeCheckDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2).
+%TimeEdgeCheckDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2):- TimeEdgeSpaceSizeDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2).
+
+%Define the classic negation of TimeEdgeLockDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2).
+%-TimeEdgeCheckDNoC(Name1,VisitName1,Name2,VisitName2,false,false):- TimeEdgeCheckDNoC(Name1,VisitName1,Name2,VisitName2,_,_), not TimeEdgeCheckDNoC(Name1,VisitName1,Name2,VisitName2,false, false).
+
+%TimeEdgeLockMinSpaceDNoC(AgentName,StationName)
+%Name is the is formation about the current agent
+%define which component can visit which throught which corresponding.
+
+%Neither the current agent nor a other correpondings agent has locked. 
+TimeEdgeLockDNoC(AgentName1,StationName1,AgentName2,StationName2):- CurrentAgent(AgentName1,_),TimeEdgeSpaceSizeDNoC(AgentName1,StationName1,AgentName2,StationName2,false,false,false,false,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{Xa,Xb:TimeEdgeSpaceSizeDNoC(Xb,StationName1,_,_,true,false,_,_,Xa,_,_,_,_,_),Xb!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Za,Zb: TimeEdgeSpaceSizeDNoC(Zb,StationName1,_,_,true,false,_,_,_,_,_,_,Za,_),Zb!=AgentName1}=CFreq1,CFreq1<Freq1, #sum{Ya,Yb: TimeEdgeSpaceSizeDNoC(_,_,Yb,StationName2,true,false,_,_,_,Ya,_,_,_,_),TimeEdgeLockStateUse(Yb,StationName2,0),Yb!=AgentName2}=SumSpace1,BusySpace1=SumSpace1+Size2,BusySpace1<=SpaceFree2, #count{Ta,Tb: TimeEdgeSpaceSizeDNoC(_,_,Tb,StationName2,true,false,_,_,_,_,_,_,_,Ta),TimeEdgeLockStateUse(Tb,StationName2,0),Tb!=AgentName2}<Freq2,#sum{Wa,Wb:TimeEdgeLockState(_,_,Wb,StationName1,0,true,true,false,Finish1,Finish2),AgentSize(Wb,Wa),Wb!=AgentName1}=SumSpace3,BusySpace3=SumSpace3+Size1,BusySpace3<=SpaceFree1, #count{Qa,Qb: TimeEdgeLockState(_,_,Qb,StationName1,Qa,true,true,false,Finish1,Finish2),Qb!=AgentName2}<Freq1, not TimeEdgeLockStateUse(AgentName2,StationName2,0).
+
+%TimeEdgeLockState(AgentName2,StationName2,AgentName1,StationName1,0,IsActiv,Lock2,Lock1,Finish2,Finish1).
+
+
+%the current agent want to check if it can lock and one other correpondings agent has locked.
+TimeEdgeLockDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSpaceSizeDNoC(AgentName1,StationName1,AgentName2,StationName2,false,true,false,_,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{Xa,Xb: TimeEdgeSpaceSizeDNoC(Xb,StationName1,_,_,true,true,_,_,Xa,_,_,_,_,_),Xb!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Za,Zb: TimeEdgeSpaceSizeDNoC(Zb,StationName1,_,_,true,true,_,_,_,_,_,_,Za,_),Zb!=AgentName1}<Freq1,TimeEdgeLockState(AgentName2,StationName2,AgentName1,StationName1,0,true,true,false,Finish2,Finish1),CurrentAgent(AgentName1, _).
+
+
+
+
+
+
 
 
 %+++++++++++++++++ NoDirectedNoConnected: IsReady auf true setzen, wenn erfüllt +++++++++++++++++++++++++++++

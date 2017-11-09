@@ -99,10 +99,26 @@ public class PredicateTimeEdgeLockGet extends SwarmPredicate {
 
 		}
 	}
-
+	/**
+	 * When the current agent if the first element of the timeedgeLockGet predicate
+	 * @param currentStation current station of the current agent.
+	 * @return true when matches and false otherwise.
+	 */
 	public boolean compareToCurrentStation(PredicateCurrentStation currentStation){
 		boolean isAgName=currentStation.getAgentName()==null?this.agName1==null:currentStation.getAgentName().equals(this.agName1);
 		boolean isStName=currentStation.getStationName()==null?this.stName1==null:currentStation.getStationName().equals(this.stName1);
+		
+		return isAgName & isStName;
+	}
+	
+	/**
+	 * When the current agent if the second element of the timeedgeLockGet predicate
+	 * @param currentStation current station of the current agent.
+	 * @return true when matches and false otherwise.
+	 */
+	public boolean compareToKorrespondElement(PredicateCurrentStation currentStation){
+		boolean isAgName=currentStation.getAgentName()==null?this.agName2==null:currentStation.getAgentName().equals(this.agName2);
+		boolean isStName=currentStation.getStationName()==null?this.stName2==null:currentStation.getStationName().equals(this.stName2);
 		
 		return isAgName & isStName;
 	}
@@ -209,6 +225,14 @@ public class PredicateTimeEdgeLockGet extends SwarmPredicate {
 	
 	public PredicateTimeEdgeLockState convertToTimeEdgeLockState(){
 		return new PredicateTimeEdgeLockState(this);
+	}
+	/**
+	 * 
+	 * @param notCorrespondence information about the correspondence. Variable is actually not use.
+	 * @return
+	 */
+	public PredicateTimeEdgeLockState convertToTimeEdgeLockState(boolean notCorrespondence){
+		return new PredicateTimeEdgeLockState(this,notCorrespondence);
 	}
 	
 }

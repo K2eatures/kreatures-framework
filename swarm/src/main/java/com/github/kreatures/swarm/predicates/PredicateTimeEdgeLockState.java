@@ -17,7 +17,7 @@ import net.sf.tweety.logics.fol.syntax.FolFormula;
  *
  */
 public class PredicateTimeEdgeLockState extends SwarmPredicate {
-	
+
 	private long id;
 	private String agName1;
 	private String stName1;
@@ -32,7 +32,7 @@ public class PredicateTimeEdgeLockState extends SwarmPredicate {
 
 	public PredicateTimeEdgeLockState(FolFormula desire) {
 		this(desire,null);
-		
+
 	}
 
 	public PredicateTimeEdgeLockState(FolFormula desire, Perception reason) {
@@ -41,6 +41,10 @@ public class PredicateTimeEdgeLockState extends SwarmPredicate {
 		id++;
 	}
 
+	/**
+	 * make a copy of this object.
+	 * @param other
+	 */
 	public PredicateTimeEdgeLockState(PredicateTimeEdgeLockState other) {
 		super(other);
 		this.agName1=other.agName1;
@@ -56,8 +60,11 @@ public class PredicateTimeEdgeLockState extends SwarmPredicate {
 		id++;
 
 	}	
-	
-	
+	/**
+	 * 
+	 * @param other a instance of the {@link PredicateTimeEdgeLockGet} object which will be copied.
+	 */
+
 	public PredicateTimeEdgeLockState(PredicateTimeEdgeLockGet other) {
 		super(other);
 		this.agName1=other.getAgName1();
@@ -73,7 +80,27 @@ public class PredicateTimeEdgeLockState extends SwarmPredicate {
 		id++;
 
 	}	
-	
+	/**
+	 * 
+	 * @param other a instance of the {@link PredicateTimeEdgeLockGet} object which will be copied.
+	 * @param notCorrespondanz makes a copy without the information about the correspondence
+	 */
+	public PredicateTimeEdgeLockState(PredicateTimeEdgeLockGet other, boolean notCorrespondence) {
+		super(other);
+		this.agName1=other.getAgName1();
+		this.stName1=other.getStName1();
+		this.agName2="nothings";
+		this.stName2="nothings";
+		this.edgeType=other.getEdgeType();
+		this.isActiv=false;
+		this.isLock1=other.isLock1();
+		this.isLock2=other.isLock2();
+		this.isFinish1=other.isFinish1();
+		this.isFinish2=other.isFinish2();
+		id++;
+
+	}
+
 	/**
 	 * set the initial value of the object.
 	 * @return
@@ -88,13 +115,13 @@ public class PredicateTimeEdgeLockState extends SwarmPredicate {
 		return this;
 	}
 
-	
+
 	@Override
 	public PredicateTimeEdgeLockState clone() {
 		return new PredicateTimeEdgeLockState(this);
 	}
 
-	
+
 	/**
 	 * {@link PredicateTimeEdgeLockState}
 	 * TimeEdgeLockState(AgentName1,StationName1,AgentName2,StationName2,EdgeType,IsActiv,Lock1,Lock2,Finish1,Finish2).
@@ -127,27 +154,58 @@ public class PredicateTimeEdgeLockState extends SwarmPredicate {
 	public boolean compareToCurrentStation(PredicateCurrentStation currentStation){
 		boolean isAgName=currentStation.getAgentName()==null?this.agName2==null:currentStation.getAgentName().equals(this.agName2);
 		boolean isStName=currentStation.getStationName()==null?this.stName2==null:currentStation.getStationName().equals(this.stName2);
-		
+
 		return isAgName & isStName;
 	}
+
 	@Override
 	public boolean equals(Object other) {
 		if(!(other instanceof PredicateTimeEdgeLockState))
 			return false;
 
 		PredicateTimeEdgeLockState obj=(PredicateTimeEdgeLockState)other;
+
+		if(this.edgeType==1){
+
+			boolean isNothings=this.agName2==null?false:this.agName2.equals("nothings");
+			if(isNothings){
+				boolean isAgName1=obj.agName1==null?this.agName1==null:obj.agName1.equals(this.agName1);
+				boolean isStName1=obj.stName1==null?this.stName1==null:obj.stName1.equals(this.stName1);
+
+				return isAgName1 & isStName1;
+			}
+		}
+
+
 		boolean isAgName1=obj.agName1==null?this.agName1==null:obj.agName1.equals(this.agName1);
 		boolean isAgName2=obj.agName2==null?this.agName2==null:obj.agName2.equals(this.agName2);
 		boolean isStName1=obj.stName1==null?this.stName1==null:obj.stName1.equals(this.stName1);
 		boolean isStName2=obj.stName2==null?this.stName2==null:obj.stName2.equals(this.stName2);
-		
+
 
 		return isAgName1 & isAgName2 & isStName2 & isStName1;
 	}
 
+	/**
+	 * check whether the first agent on the {@link PredicateTimeEdgeLockGet} object is the same on the first agent of this object. 
+	 * @param other a instance of the {@link PredicateTimeEdgeLockGet} predicate.
+	 * @return true when matches and false otherwise
+	 */
+	public boolean compareToTimeEdgeLockGet(PredicateTimeEdgeLockGet other) {
+
+		boolean isAgName1=other.getAgName1()==null?this.agName1==null:other.getAgName1().equals(this.agName1);
+		//		boolean isAgName2=other.getAgName2()==null?this.agName2==null:other.getAgName2().equals(this.agName2);
+		boolean isStName1=other.getStName1()==null?this.stName1==null:other.getStName1().equals(this.stName1);
+		//		boolean isStName2=other.getStName2()==null?this.stName2==null:other.getStName2().equals(this.stName2);
+
+
+		return isAgName1 & isStName1;// & isAgName2 & isStName2;
+	}
+
 	@Override
 	public int hashCode() {
-		return ((agName1==null?0:agName1.hashCode())+(agName2==null?0:agName2.hashCode()))* 11;
+			
+		return ((agName1==null?0:agName1.hashCode())+(stName1==null?0:stName1.hashCode()))* 11;
 	}
 
 	/**
@@ -172,6 +230,17 @@ public class PredicateTimeEdgeLockState extends SwarmPredicate {
 	 */
 	public String getAgName1() {
 		return agName1;
+	}
+
+	/**
+	 * This is only possible by direct time edge
+	 * @param currentStation the information about the current agent and its current station
+	 */
+	public void setCurrentAgentAndStation(PredicateCurrentStation currentStation) {
+		if(edgeType==1){
+			this.agName2=currentStation.getAgentName();
+			this.stName2=currentStation.getStationName();
+		}
 	}
 
 	/**
@@ -278,6 +347,6 @@ public class PredicateTimeEdgeLockState extends SwarmPredicate {
 	public long getId() {
 		return id;
 	}
-	
-	
+
+
 }
