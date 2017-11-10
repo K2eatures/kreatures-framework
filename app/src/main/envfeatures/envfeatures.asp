@@ -237,13 +237,20 @@ TimeEdgeReady(Name,TypeName,Type,0):-TimeEdgeOnlyOutgoing(Name,TypeName,_,Type).
 % Sondern man kann klar sehen, wer ist der Agent bzw Station.
 % EdgeType is the type of time edge
 % 0 for NoDNoC 
+% 1 for DNoC 
 TimeEdgeLockGet(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2):-TimeEdgeLockStatusNoDNoC(AgentName1,StationName1,AgentName2,StationName2,0,Lock1,Lock2,Finish1,Finish2), not TimeEdgeLockStateUse(AgentName2,StationName2,0),CurrentAgent(AgentName1, _),TimeEdgeLockStateNoUse(AgentName2,StationName2).
+
+TimeEdgeLockGet(AgentName1,StationName1,AgentName2,StationName2,1,Lock1,Lock2,Finish1,Finish2):-TimeEdgeLockStatusDNoC(AgentName1,StationName1,AgentName2,StationName2,1,Lock1,Lock2,Finish1,Finish2), CurrentAgent(AgentName1,_).% not TimeEdgeLockStateUse(AgentName2,StationName2,0),TimeEdgeLockStateNoUse(AgentName2,StationName2), 
+
+TimeEdgeLockGet(AgentName1,StationName1,AgentName2,StationName2,1,Lock1,Lock2,Finish1,Finish2):-TimeEdgeLockStatusDNoC(AgentName1,StationName1,AgentName2,StationName2,1,Lock1,Lock2,Finish1,Finish2), TimeEdgeLockStateUseDNoC(AgentName1,StationName1,1), CurrentAgent(AgentName2,_).
 
 %check if there free place and if the station can be visit.
 TimeEdgeLockStateNoUse(AgentName,StationName):- AgentSize(AgentName,Size),SpaceFreqFreeStation(StationName,SpaceFree,FreqFree),#sum{Xa,Xb:TimeEdgeLockState(_,_,Xb,StationName,0,true,true,false,_,_),AgentSize(Xb,Xa)}=AgentsSize,AllSize=AgentsSize+Size,AllSize<=SpaceFree,VisitEdge(AgentName, _, StationName, _, _),#count{Ag:TimeEdgeLockState(_,_,Ag,StationName,0,true,true,false,_,_)}<FreqFree.
 
 TimeEdgeLockStateUse(AgentName2,StationName2,0):- TimeEdgeLockState(Ag,St,AgentName2,StationName2,0,true,true,_,_,_).
 
+% all TimeEdgeLockState where the first agent is finish and there aren't second agents
+TimeEdgeLockStateUseDNoC(AgentName1,StationName1,1):- TimeEdgeLockState(AgentName1,StationName1,_,_,1,true,true,false,true,_).
 
 %+++++++++++++++++++++ preparation of TimeEdgeLock help Components++++++++++++++++++++++++++++++++++++++++++
 %SpaceSizeErfull(AgentName,_,StationName,_)
@@ -252,6 +259,27 @@ TimeEdgeLockStateUse(AgentName2,StationName2,0):- TimeEdgeLockState(Ag,St,AgentN
 %Take a station and compute the free place.
 SpaceFreqFreeStation(StationName,SpaceFree,FreqFree):- Station(StationName,StationTypeName,StationFreq,_,SpaceStation), StationType(StationTypeName,StationTypeFreq,_,_,_,_,_,SpaceStationType,_),SpaceFree=SpaceStationType-SpaceStation,FreqFree=StationTypeFreq-StationFreq.
 
+%&&&&&&& This define the TimeEdgeLockState such as one can know who is the visited element. 
+%The connected element stay at the first position.
+%Agent - agent
+TimeEdgeLockStateVisit(AgentName1,StationName1,AgentName2,StationName2,EdgeType,Activ,Lock1,Lock2,Finish1,Finish2):-
+TimeEdgeLockState(AgentName1,StationName1,AgentName2,StationName2,EdgeType,Activ,Lock1,Lock2,Finish1,Finish2),TimeEdge(AgentName1,_,AgentName2,_,_,_,_,_).
+%Station - agent
+TimeEdgeLockStateVisit(StationName1,AgentName1,AgentName2,StationName2,EdgeType,Activ,Lock1,Lock2,Finish1,Finish2):-
+TimeEdgeLockState(AgentName1,StationName1,AgentName2,StationName2,EdgeType,Activ,Lock1,Lock2,Finish1,Finish2),TimeEdge(StationName1,_,AgentName2,_,_,_,_,_).
+%Agent - Station
+TimeEdgeLockStateVisit(AgentName1,StationName1,StationName2,AgentName2,EdgeType,Activ,Lock1,Lock2,Finish1,Finish2):-
+TimeEdgeLockState(AgentName1,StationName1,AgentName2,StationName2,EdgeType,Activ,Lock1,Lock2,Finish1,Finish2),TimeEdge(AgentName1,_,StationName2,_,_,_,_,_).
+%Station - Station
+TimeEdgeLockStateVisit(StationName1,AgentName1,StationName2,AgentName2,EdgeType,Activ,Lock1,Lock2,Finish1,Finish2):-
+TimeEdgeLockState(AgentName1,StationName1,AgentName2,StationName2,EdgeType,Activ,Lock1,Lock2,Finish1,Finish2),TimeEdge(StationName1,_,StationName2,_,_,_,_,_).
+%When there are nothings by TimeEdgeLockState, then do following in order to create TimeEdgeLockStateVisit with nothings.
+%Agent - Nothings
+TimeEdgeLockStateVisit(AgentName1,StationName1,nothings,nothings,EdgeType,Activ,Lock1,Lock2,Finish1,Finish2):-
+TimeEdgeLockState(AgentName1,StationName1,nothings,nothings,EdgeType,Activ,Lock1,Lock2,Finish1,Finish2),TimeEdge(AgentName1,_,_,_,_,true,_,_).
+%Station - Nothings
+TimeEdgeLockStateVisit(StationName1,AgentName1,nothings,nothings,EdgeType,Activ,Lock1,Lock2,Finish1,Finish2):-
+TimeEdgeLockState(AgentName1,StationName1,nothings,nothings,EdgeType,Activ,Lock1,Lock2,Finish1,Finish2),TimeEdge(StationName1,_,_,_,_,true,_,_).
 
 %AgentSize(AgentName,Size)
 %return the agent size
@@ -324,6 +352,68 @@ TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- CurrentAge
 TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,true,false,_,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{Xa,Xb: TimeEdgeSpaceSizeNoDNoC(Xb,StationName1,_,_,true,true,_,_,Xa,_,_,_,_,_),Xb!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Za,Zb: TimeEdgeSpaceSizeNoDNoC(Zb,StationName1,_,_,true,true,_,_,_,_,_,_,Za,_),Zb!=AgentName1}<Freq1,TimeEdgeLockState(AgentName2,StationName2,AgentName1,StationName1,0,true,true,false,Finish2,Finish1),CurrentAgent(AgentName1, _).
 
 
+
+%&&&&&&&&&&&&&&&&&&&&+++++++++++++++++++ DirectedNoConnected: TimeEdgeLock for DNoC  +++++++++++++++++&&&&&&&&&&&&&&&&
+
+%TimeEdgeSpaceDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Type1,Type2).
+%The is a time component between Name1 and Name2. Also, the Name1 visits VisitName1 and Name2 visits VisitName2.
+%Lock1=true when Component Name1 was throught this timeEgde activated and false otherwise.
+%Lock2=true when Component Name2 was throught this timeEgde activated and false otherwise.
+% Type_i=0 means Name_i is station and Type_i=2 means Name_i is agent.
+
+TimeEdgeLockStateDNoC(Name1,VisitName1,Name2,VisitName2,Ready1,Ready2,Finish1,Finish2,Type1,Type2):- TimeEdgeState(Name1,_,VisitName1,_,Type1,_,_,Ready1,Finish1),TimeEdgeState(Name2,_,VisitName2,_,Type2,_,_,Ready2,Finish2),TimeEdge(Name1,_,Name2,_,_,true,false,_).
+
+%TimeEdgeLockStatusDNoC(AgentName1,StationName1,AgentName2,StationName2,EdgeType,Ready1,Lock2,Lock1,Finish2).
+% Schreibt das Atom TimeEdgeLockStateDNoC um, so dass man nicht mehr weißt, wer ist der VisitComponent und wer ist an TimeEdge angeschlossen.
+% Sondern man kann klar sehen, wer ist der Agent bzw Station.
+% EdgeType is the type of time edge
+
+TimeEdgeLockStatusDNoC(AgentName1,StationName1,AgentName2,StationName2,1,Ready1,Lock2,Lock1,Finish2):-TimeEdgeLockStateDNoC(AgentName1,StationName1,AgentName2,StationName2,Ready1,Lock2,Lock1,Finish2,1,1).
+
+TimeEdgeLockStatusDNoC(AgentName1,StationName1,AgentName2,StationName2,1,Ready1,Lock2,Lock1,Finish2):-TimeEdgeLockStateDNoC(AgentName1,StationName1,StationName2,AgentName2,Ready1,Lock2,Lock1,Finish2,1,0).
+
+TimeEdgeLockStatusDNoC(AgentName1,StationName1,AgentName2,StationName2,1,Ready1,Lock2,Lock1,Finish2):-TimeEdgeLockStateDNoC(StationName1,AgentName1,AgentName2,StationName2,Ready1,Lock2,Lock1,Finish2,0,1).
+
+TimeEdgeLockStatusDNoC(AgentName1,StationName1,AgentName2,StationName2,1,Ready1,Lock2,Lock1,Finish2):-TimeEdgeLockStateDNoC(StationName1,AgentName1,StationName2,AgentName2,Ready1,Lock2,Lock1,Finish2,0,0).
+
+%TimeEdgeSpaceSizeDNoC(AgentName1,StationName1,AgentName2,StationName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2)
+%SpaceFree1 is the free place of station 1 and SpaceFree2 is the free place of station 2.
+%Freq1 is the rest frequency of station 1 and SpaceFree2 is the rest frequency of station 2.
+%Size1 is the size of agent 1 and Size2 is the size of agent 2.
+
+%Name1 and Name2 are stations
+TimeEdgeSpaceSizeDNoC(VisitName1,Name1,VisitName2,Name2,Ready1,Lock2,Lock1,Finish2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateDNoC(Name1,VisitName1,Name2,VisitName2,Ready1,Lock2,Lock1,Finish2,0,0),SpaceFreqFreeStation(Name1,SpaceFree1,Freq1),SpaceFreqFreeStation(Name2,SpaceFree2,Freq2),AgentSize(VisitName1,Size1),AgentSize(VisitName2,Size2).
+
+%Name1 and Name2 are agents
+TimeEdgeSpaceSizeDNoC(Name1,VisitName1,Name2,VisitName2,Ready1,Lock2,Lock1,Finish2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateDNoC(Name1,VisitName1,Name2,VisitName2,Ready1,Lock2,Lock1,Finish2,1,1),SpaceFreqFreeStation(VisitName1,SpaceFree1,Freq1),SpaceFreqFreeStation(VisitName2,SpaceFree2,Freq2),AgentSize(Name1,Size1),AgentSize(Name2,Size2).
+
+%Name1 is station and Name2 is agent
+TimeEdgeSpaceSizeDNoC(VisitName1,Name1,Name2,VisitName2,Ready1,Lock2,Lock1,Finish2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateDNoC(Name1,VisitName1,Name2,VisitName2,Ready1,Lock2,Lock1,Finish2,0,1),SpaceFreqFreeStation(Name1,SpaceFree1,Freq1),SpaceFreqFreeStation(VisitName2,SpaceFree2,Freq2),AgentSize(VisitName1,Size1),AgentSize(Name2,Size2).
+
+%Name1 is agent and Name2 is station
+TimeEdgeSpaceSizeDNoC(Name1,VisitName1,VisitName2,Name2,Ready1,Lock2,Lock1,Finish2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2):- TimeEdgeLockStateDNoC(Name1,VisitName1,Name2,VisitName2,Ready1,Lock2,Lock1,Finish2,1,0),SpaceFreqFreeStation(VisitName1,SpaceFree1,Freq1),SpaceFreqFreeStation(Name2,SpaceFree2,Freq2),AgentSize(Name1,Size1),AgentSize(VisitName2,Size2).
+
+%Define TimeEdgeCheckDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2).
+%TimeEdgeCheckDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2):- TimeEdgeSpaceSizeDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2).
+
+%Define the classic negation of TimeEdgeLockDNoC(Name1,VisitName1,Name2,VisitName2,Lock1,Lock2).
+%-TimeEdgeCheckDNoC(Name1,VisitName1,Name2,VisitName2,false,false):- TimeEdgeCheckDNoC(Name1,VisitName1,Name2,VisitName2,_,_), not TimeEdgeCheckDNoC(Name1,VisitName1,Name2,VisitName2,false, false).
+
+%TimeEdgeLockMinSpaceDNoC(AgentName,StationName)
+%Name is the is formation about the current agent
+%define which component can visit which throught which corresponding.
+
+% current agent is at the start station. The waiting time is more than 0.
+TimeEdgeLockDNoC(AgentName1,StationName1,AgentName2,StationName2):- CurrentAgent(AgentName1,_),TimeEdgeSpaceSizeDNoC(AgentName1,StationName1,AgentName2,StationName2,false,false,false,false,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2).
+%Neither the current agent nor a other correpondings agent has locked. 
+%TimeEdgeLockDNoC(AgentName1,StationName1,AgentName2,StationName2):- CurrentAgent(AgentName1,_),TimeEdgeSpaceSizeDNoC(AgentName1,StationName1,AgentName2,StationName2,false,false,false,false,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{Xa,Xb:TimeEdgeSpaceSizeDNoC(Xb,StationName1,_,_,true,false,_,_,Xa,_,_,_,_,_),Xb!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Za,Zb: TimeEdgeSpaceSizeDNoC(Zb,StationName1,_,_,true,false,_,_,_,_,_,_,Za,_),Zb!=AgentName1}=CFreq1,CFreq1<Freq1, #sum{Ya,Yb: TimeEdgeSpaceSizeDNoC(_,_,Yb,StationName2,true,false,_,_,_,Ya,_,_,_,_),TimeEdgeLockStateUse(Yb,StationName2,0),Yb!=AgentName2}=SumSpace1,BusySpace1=SumSpace1+Size2,BusySpace1<=SpaceFree2, #count{Ta,Tb: TimeEdgeSpaceSizeDNoC(_,_,Tb,StationName2,true,false,_,_,_,_,_,_,_,Ta),TimeEdgeLockStateUse(Tb,StationName2,0),Tb!=AgentName2}<Freq2,#sum{Wa,Wb:TimeEdgeLockState(_,_,Wb,StationName1,0,true,true,false,Finish1,Finish2),AgentSize(Wb,Wa),Wb!=AgentName1}=SumSpace3,BusySpace3=SumSpace3+Size1,BusySpace3<=SpaceFree1, #count{Qa,Qb: TimeEdgeLockState(_,_,Qb,StationName1,Qa,true,true,false,Finish1,Finish2),Qb!=AgentName2}<Freq1, not TimeEdgeLockStateUse(AgentName2,StationName2,0).
+
+
+%the current agent want to check if it can lock and one other correpondings agent has locked.
+TimeEdgeLockDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSpaceSizeDNoC(AgentName1,StationName1,AgentName2,StationName2,false,false,true,false,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2), #count{Za: TimeEdgeLockState(AgentName1,StationName1,Za,_,1,true,true,true,true,Finish2),Za!=AgentName2}=0,CurrentAgent(AgentName2, _).
+
+%################################################ End Lock ####################################################################
+
 %+++++++++++++++++ NoDirectedNoConnected: IsReady auf true setzen, wenn erfüllt +++++++++++++++++++++++++++++
 
 %Status	3=the both components are waiting without waiting time
@@ -334,7 +424,7 @@ TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSp
 %Gibt alle noConnected Komponenten zurück, deren correspondings Komponent <mindesten ein IsWaiting or IsReady auf true> ist.
 %Da wir nicht genau wissen, zwischen welchen corresponds component von Name bei the TimeEdgeLock Atom the timeedge an ihn angeschlossen wurden, werden alle vier möglichkeiten gechecket. 
 %Gibt alle noConnected Komponenten zurück, deren correspondings Komponent <mindesten ein IsWaiting or IsReady auf true> ist.
-%Da wir nicht genau wissen, zwischen welchen corresponds component von Name bei the TimeEdgeLock Atom the timeedge an ihn angeschlossen wurden, werden alle vier möglichkeiten gechecket. 
+
 TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,0,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,0,Status),TimeEdgeLockNoDNoC(AgName,Name,NameCorresponds,_),CurrentAgent(AgName,_).
 
 TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,0,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,0,Status),TimeEdgeLockNoDNoC(AgName,Name,_,NameCorresponds),CurrentAgent(AgName,_).
@@ -342,11 +432,6 @@ TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,0,Status):-#count{X:T
 TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,1,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,1,Status),TimeEdgeLockNoDNoC(AgName,_,NameCorresponds,_),CurrentAgent(AgName,_).
 
 TimeEdgeNoDirectedNoConnectedReady(Name,TypeName,WeightMin,1,Status):-#count{X:TimeEdgeStatusNoDirectedNoConnectedReady(X,TypeName1,Name,TypeName,WeightMin,Type,Status)}>0,TimeEdgeStatusNoDirectedNoConnectedReady(NameCorresponds,_,Name,TypeName,WeightMin,1,Status),TimeEdgeLockNoDNoC(AgName,_,_,NameCorresponds),CurrentAgent(AgName,_).
-
-
-
-
-
 
 
 
@@ -364,25 +449,39 @@ TimeEdgeStatusNoDirectedNoConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightM
 
 %+++++++++++++++++ Outgoing and DirectedNoConnected: IsReady auf true setzen, wenn erfüllt +++++++++++++++++++++++++++++
 
+%TimeEdgeDirectedNoConnectedReady(NameIn,TypeNameIn,WeightMin,Type,Status)
+% Rule with the Lock information
+%Da wir nicht genau wissen, zwischen welchen corresponds component von Name bei the TimeEdgeLock Atom the timeedge an ihn angeschlossen wurden, werden alle vier möglichkeiten gechecket. 
+%Gibt alle directedNoConnected Komponenten zurück, deren correspondings Komponent <mindesten ein IsWaiting or IsReady auf true> ist.
+
+%The current Agent has the TimeEdge on it.
+TimeEdgeDirectedNoConnectedReady(Name,TypeName,WeightMin,Type,Status):- TimeEdgeDirectedNoConnectedReadyNoLock(Name,TypeName,WeightMin,Type,Status),TimeEdgeLockDNoC(_,_,Name,_),CurrentAgent(Name,_).
+
+%%The visited station of the current Agent has the TimeEdge on it.
+TimeEdgeDirectedNoConnectedReady(Name,TypeName,WeightMin,Type,Status):- TimeEdgeDirectedNoConnectedReadyNoLock(Name,TypeName,WeightMin,Type,Status),TimeEdgeLockDNoC(_,_,AgName,Name),CurrentAgent(AgName,_).
+
 %Status	3=the both components are waiting without waiting time
-TimeEdgeDirectedNoConnectedReady(NameIn,TypeNameIn,0,Type,3):- TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,0,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,0,true,false,false).
+TimeEdgeDirectedNoConnectedReadyNoLock(NameIn,TypeNameIn,0,Type,3):- TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,0,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,0,true,false,false).
 %Status	1=one component is ready and the other can begin to count.
-TimeEdgeDirectedNoConnectedReady(NameIn,TypeNameIn,WeightMin,Type,1):- TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,Echtzeit,true,false,false),WeightMin>Echtzeit.
+TimeEdgeDirectedNoConnectedReadyNoLock(NameIn,TypeNameIn,WeightMin,Type,1):- TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,Echtzeit,true,false,false),WeightMin>Echtzeit.
 %Status	2=the both components are reading after the waiting time 
-TimeEdgeDirectedNoConnectedReady(NameIn,TypeNameIn,WeightMin,Type,2):- TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,Echtzeit,true,false,false),WeightMin<=Echtzeit,WeightMin!=0.
+TimeEdgeDirectedNoConnectedReadyNoLock(NameIn,TypeNameIn,WeightMin,Type,2):- TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameIn,TypeNameIn,_,_,_,Echtzeit,true,false,false),WeightMin<=Echtzeit,WeightMin!=0.
 
 %Gibt alle incoming Komponenten deren outgoing Komponenten ihrer Isconnected=false und mindesten ein ihrer IsReady=true zurück.
 %mindesten eine <out,IsConnected=false,IsReady=true> --> <In>
-TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type):- #count{X:TimeEdgeOutgoingReady(X,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type)}>0,TimeEdgeDirectedNoConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type).
+TimeEdgeDirectedNoConnectedReadyIn(NameIn,TypeNameIn,WeightMin,Type):- #count{X:TimeEdgeOutgoingWithNoConReady(X,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type)}>0,TimeEdgeDirectedNoConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type).
+
+
+%TimeEdgeOutgoingWithNoConReady(StationNameOut,StationTypeNameOut,StationNameIn,StationTypeNameIn,EchtzeitMin,Type). 
+TimeEdgeOutgoingWithNoConReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):-TimeEdgeDirectedNoConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type), TimeEdgeAll(NameOut,TypeNameOut,_),#count{X:TimeEdge(X,TypeNameOut,NameIn,TypeNameIn,_,true,false,_)}>0,TimeEdgeStatusDirectedNoConnectedReady(NameOut,TypeNameOut,_,_,_,_). %Hilfsvariable
 
 %Gibt alle Komponenten zurück, die ihr IsReady auf true ist.
 TimeEdgeStatusDirectedOnConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,true,_),TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,false,_).
-%+++++++++++++++++ NoDirectedBothConnected and NoDirectedBothConnected: IsReady auf true setzen, wenn erfüllt+++++++++++++++++++++++++++++
-
+%+++++++++++ NoDirectedBothConnected and NoDirectedBothConnected: IsReady auf true setzen, wenn erfüllt +++++++++++++++
 
 %Status	3=the both components are waiting without waiting time
 TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,0,Type,3):-TimeEdgeNoDirectedBothConnectedReadyIn(Name,TypeName,0,Type),TimeEdgeStatus(Name,TypeName,_,_,_,0,true,false,_).
-%Status	2=the both components are reading after the waiting time 
+%Status	2=the both components are reading after the waiting time
 TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,WeightMin,Type,2):-TimeEdgeNoDirectedBothConnectedReadyIn(Name,TypeName,WeightMin,Type),TimeEdgeStatus(Name,TypeName,_,_,_,Echtzeit,true,false,_),WeightMin<=Echtzeit,WeightMin!=0.
 %Status	1=one component is ready and the other can begin to count.
 TimeEdgeNoDirectedBothConnectedReady(Name,TypeName,WeightMin,Type,1):-TimeEdgeNoDirectedBothConnectedReadyIn(Name,TypeName,WeightMin,Type),TimeEdgeStatus(Name,TypeName,_,_,_,Echtzeit,true,false,_),WeightMin>Echtzeit.
@@ -418,6 +517,8 @@ TimeEdgeNoDirectedOneConnectedNoReady(Name1,TypeName1,Name2,TypeName2,WeightMin,
 %Gibt alle nodirected Komponenten zurück, die ihr ISready auf true ist.
 TimeEdgeStatusNoDirectedConnectedReady(Name1,TypeName1,Name2,TypeName2,WeightMin,Type,1):-TimeEdgeNoDirectedConnectedWeightMin(Name2,TypeName2,WeightMin,Type),TimeEdgeStatus(Name2,TypeName2,_,_,_,_,true,false,_),TimeEdge(Name1,TypeName1,Name2,TypeName2,_,false,true,_),TimeEdgeStatus(Name1,TypeName1,_,_,_,_,false,true,_).
 
+
+
 %+++++++++++++++++ Outgoing and incomingConnected: IsReady auf true setzen, wenn erfüllt +++++++++++++++++++++++++++++
 
 
@@ -440,12 +541,9 @@ TimeEdgeOutgoingReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):-Tim
 %TimeEdgeStatusDirectedConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type,Status): Gibt alle Komponenten zurück, die ihr IsReady auf true ist.
 TimeEdgeStatusDirectedConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,false,true),TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,true,_).
 
-
-
-
-
-
-
+%TimeEdgeStatusDirectedNoConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type,Status): Gibt alle Komponenten zurück, die ihr IsReady auf true ist.
+%TimeEdgeStatusDirectedNoConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedNoConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdgeStatus(NameOut,TypeNameOut,_,_,_,Echtzeit,false,false,true),TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,false,_). this in comment is the old version.
+TimeEdgeStatusDirectedNoConnectedReady(NameOut,TypeNameOut,NameIn,TypeNameIn,WeightMin,Type):- TimeEdgeDirectedNoConnectedWeightMin(NameIn,TypeNameIn,WeightMin,Type),TimeEdge(NameOut,TypeNameOut,NameIn,TypeNameIn,_,true,false,_),TimeEdgeLockStateVisit(NameOut,_,_,_,1,true,true,_,true,false).
 
 
 
@@ -544,13 +642,10 @@ TimeEdgeWaiting(Name,TypeName,Type):-TimeEdgeNoDirectedBothConnectedWaiting(Name
 TimeEdgeWaiting(Name,TypeName,Type):-TimeEdgeNoDirectedOneConnectedWaiting(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,true,true,_)}=0.
 
 %Nur DirectedNoConnected
-TimeEdgeWaiting(Name,TypeName,Type):-TimeEdgeDirectedNoConnectedWaiting(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,false,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
+TimeEdgeWaiting(Name,TypeName,Type):-TimeEdgeDirectedNoConnectedWaiting(Name,TypeName,_,Type),#count{X:TimeEdgeOutIn(_,X,Name,TypeName,_,false,_,_)}=0,#count{Y:TimeEdge(_,Y,Name,TypeName,_,true,true,_)}=0,#count{Z:TimeEdge(_,Z,Name,TypeName,_,false,true,_)}=0.
 
 % nur outgoing
 TimeEdgeWaiting(Name,TypeName,Type):-TimeEdgeOnlyOutgoing(Name,TypeName,_,Type).
-
-
-
 
 %+++++++++++++++++ Outgoing and incomingNoConnected: IsWaiting auf true setzen, wenn erfüllt +++++++++++++++++++++++++++++
 
