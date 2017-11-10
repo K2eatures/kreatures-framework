@@ -11,9 +11,9 @@ import com.github.kreatures.core.Perception;
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 
 /**
- * %TimeEdgeState(NameWithTimeEdge,TypeNameWithTimeEdge,NameVisited,TypeNameVisited,Type,
+ * %TimeEdgeState(NameWithTimeEdge,TypeNameWithTimeEdge,NameVisited,TypeNameVisited,EdgeType,EchTime,Type,
  * CountTick,IsWaiting,IsReady,IsFinish). 
- * @author donfack
+ * @author Cedric Perez Donfack
  *
  */
 public class PredicateTimeEdgeState extends SwarmPredicate {
@@ -21,6 +21,14 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 	private String typeName;
 	private String visitorName;
 	private String visitorTypeName;
+	/**
+	 * Indicate with type of timeedge: ie NoDNoC
+	 */
+	private int edgeType;
+	/**
+	 * Have to run parallel without waiting time?  
+	 */
+	private boolean echTime;	
 	private int compType;
 	private int tick;
 	private boolean isWaiting;
@@ -43,6 +51,8 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 		this.typeName=other.typeName;
 		this.visitorName=other.visitorName;
 		this.visitorTypeName=other.visitorTypeName;
+		this.edgeType=other.edgeType;
+		this.echTime=other.echTime;
 		this.compType=other.compType;
 		this.tick=other.tick;
 		this.isWaiting=other.isWaiting;
@@ -50,23 +60,23 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 		this.isFinish=other.isFinish;
 
 	}	
-	
+
 	/**
 	 * set the initial value of the object.
 	 * @return
 	 */
 	public PredicateTimeEdgeState init(){
-//		this.visitorName="nothing";
-//		this.visitorTypeName="nothing";
-//		this.compType=0;
+		//		this.visitorName="nothing";
+		//		this.visitorTypeName="nothing";
+		//		this.compType=0;
 		this.tick=0;
 		this.isWaiting=false;
 		this.isReady=false;
-//		this.isFinish=false;
+		//		this.isFinish=false;
 		return this;
 	}
 
-	
+
 	@Override
 	public PredicateTimeEdgeState clone() {
 		return new PredicateTimeEdgeState(this);
@@ -76,48 +86,64 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 		return name;
 	}
 
-//	public void setName(String name) {
-//		this.name = name;
-//	}
+	//	public void setName(String name) {
+	//		this.name = name;
+	//	}
 
 	public String getTypeName() {
 		return typeName;
 	}
 
-//	public void setTypeName(String typeName) {
-//		this.typeName = typeName;
-//	}
+	//	public void setTypeName(String typeName) {
+	//		this.typeName = typeName;
+	//	}
 
 	public String getVisitorName() {
 		return visitorName;
 	}
 
-//	public void setVisitorName(String visitorName) {
-//		this.visitorName = visitorName;
-//	}
+
+	//	public void setVisitorName(String visitorName) {
+	//		this.visitorName = visitorName;
+	//	}
+
+	/**
+	 * @return the edgeType
+	 */
+	public int getEdgeType() {
+		return edgeType;
+	}
+
+	/**
+	 * @return the echTime
+	 */
+	public boolean isEchTime() {
+		return echTime;
+	}
 
 	public String getVisitorTypeName() {
 		return visitorTypeName;
 	}
 
-//	public void setVisitorTypeName(String visitorTypeName) {
-//		this.visitorTypeName = visitorTypeName;
-//	}
+	//	public void setVisitorTypeName(String visitorTypeName) {
+	//		this.visitorTypeName = visitorTypeName;
+	//	}
 
 	public int getCompType() {
 		return compType;
 	}
 
-//	public void setCompType(int compType) {
-//		this.compType = compType;
-//	}
+	//	public void setCompType(int compType) {
+	//		this.compType = compType;
+	//	}
 
 	public int getTick() {
 		return tick;
 	}
 
 	public void incrTick() {
-		this.tick++;
+		if(!echTime)
+			this.tick++;
 	}
 
 	public boolean isWaiting() {
@@ -143,11 +169,11 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 	public void setFinish(boolean isFinish) {
 		this.isFinish = isFinish;
 	}
-
+	// %TimeEdgeState(NameWithTimeEdge,TypeNameWithTimeEdge,NameVisited,TypeNameVisited,EdgeType,EchTime,Type,CountTick,IsWaiting,IsReady,IsFinish). 
 	@Override
 	public void createInstance(FolFormula atom) {
 		//PredicateTimeEdgeState predicate=null;
-		Pattern pattern=Pattern.compile("TimeEdgeState[(](\\w+),(\\w+),(\\w+),(\\w+),(\\d+),(\\d+),(\\w+),(\\w+),(\\w+)[)]");
+		Pattern pattern=Pattern.compile("TimeEdgeState[(](\\w+),(\\w+),(\\w+),(\\w+),(\\d+),(\\w+),(\\d+),(\\d+),(\\w+),(\\w+),(\\w+)[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 			//predicate=new PredicateTimeEdgeState(atom);
@@ -155,11 +181,13 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 			this.typeName=matcher.group(2);
 			this.visitorName=matcher.group(3);
 			this.visitorTypeName=matcher.group(4);
-			this.compType=Integer.parseInt(matcher.group(5));
-			this.tick=Integer.parseInt(matcher.group(6));
-			this.isWaiting=Boolean.parseBoolean(matcher.group(7));
-			this.isReady=Boolean.parseBoolean(matcher.group(8));
-			this.isFinish=Boolean.parseBoolean(matcher.group(9));
+			this.edgeType=Integer.parseInt(matcher.group(5));
+			this.echTime=Boolean.parseBoolean(matcher.group(6));
+			this.compType=Integer.parseInt(matcher.group(7));
+			this.tick=Integer.parseInt(matcher.group(8));
+			this.isWaiting=Boolean.parseBoolean(matcher.group(9));
+			this.isReady=Boolean.parseBoolean(matcher.group(10));
+			this.isFinish=Boolean.parseBoolean(matcher.group(11));
 
 		}
 	}
@@ -187,7 +215,7 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 	 */
 	@Override
 	public String toString(){
-		return String.format("TimeEdgeState(%s,%s,%s,%s,%s,%d,%s,%s,%s)", name,typeName,visitorName,visitorTypeName,compType,tick,isWaiting,isReady,isFinish);
+		return String.format("TimeEdgeState(%s,%s,%s,%s,%d,%s,%s,%d,%s,%s,%s)", name,typeName,visitorName,visitorTypeName,edgeType,echTime,compType,tick,isWaiting,isReady,isFinish);
 	}
 	/**
 	 * This gives the understanding of toString result.

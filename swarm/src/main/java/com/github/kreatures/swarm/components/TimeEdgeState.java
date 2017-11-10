@@ -14,17 +14,26 @@ import com.github.kreatures.swarm.exceptions.SwarmExceptionType;
  */
 public class TimeEdgeState implements SwarmComponents {
 	private static byte _UNIQUE=0;
-	
+
 	private String name;
 	private String typeName;
 	private String visitorName;
 	private String visitorTypeName;
+	/**
+	 * Indicate with type of timeedge: ie NoDNoC
+	 */
+	private int edgeType;
+	/**
+	 * Have to run parallel without waiting time?  
+	 */
+	private boolean echTime=false;
+
 	private ComponentType componentType;
 	private int tick;
 	private boolean isWaiting;
 	private boolean isReady;
 	private boolean isFinish;
-	
+
 	/**
 	 * 
 	 */
@@ -33,26 +42,28 @@ public class TimeEdgeState implements SwarmComponents {
 		this.typeName=other.typeName;
 		this.visitorName=other.visitorName;
 		this.visitorTypeName=other.visitorTypeName;
+		this.edgeType=other.edgeType;
+		this.echTime=other.echTime;
 		this.componentType=other.componentType;
 		this.tick=other.tick;
 		this.isWaiting=other.isWaiting;
 		this.isReady=other.isReady;
 		this.isFinish=other.isFinish;
-				
+
 	}
-/**
- * TODO
- * this constructor must be call twice time in oder to create the both necessary objects.
- * @param timeEdge 
- */
+	/**
+	 * TODO
+	 * this constructor must be call twice time in oder to create the both necessary objects.
+	 * @param timeEdge 
+	 */
 	public TimeEdgeState(SwarmTimeEdge timeEdge) throws SwarmException{
 		if(timeEdge==null){
 			throw new SwarmException("Null pointer exception");
 		}
-		
+
 		if(timeEdge.getKindOfConnection()==null )
 			throw new SwarmException(String.format("The object connot be created, because there aren't time-type."),SwarmExceptionType.INFORM);
-			
+
 		_UNIQUE++;
 		if(_UNIQUE==1){
 			this.name=timeEdge.getFirstName();
@@ -62,7 +73,7 @@ public class TimeEdgeState implements SwarmComponents {
 			}else{
 				this.componentType=ComponentType.STATION;
 			}
-			
+
 		}else if(_UNIQUE==2){
 			this.name=timeEdge.getSecondName();
 			this.typeName=timeEdge.getSecondComponentTypeName();
@@ -81,9 +92,30 @@ public class TimeEdgeState implements SwarmComponents {
 		this.isWaiting=false;
 		this.isReady=false;
 		this.isFinish=false;
+		if(timeEdge.getWeight()==0)
+			this.echTime=true;
+		if(timeEdge.directed){
+			switch(timeEdge.getLogicalConnection()){
+			case NO:edgeType=1;
+			break;
+			case YES: edgeType=3;
+			break;
+			case BOTH: /* this cannot happen */
+			}
+		}else{
+			switch(timeEdge.getLogicalConnection()){
+			case NO:edgeType=0;
+			break;
+			case YES: edgeType=2;
+			break;
+			case BOTH: edgeType=4;
+			break;
+			}
+		}
+
 	}
-	
-	
+
+
 	/**
 	 * @see com.github.kreatures.core.serialize.Resource#getName()
 	 */
@@ -99,13 +131,13 @@ public class TimeEdgeState implements SwarmComponents {
 	public String getDescription() {
 		return String.format("Define the time state of component %s",name);
 	}
-	
+
 	@Override
 	public boolean equals(Object other){
 		if(!(other instanceof TimeEdgeState))return false;
 		TimeEdgeState obj=(TimeEdgeState)other;
 		return obj.name==null?this.name==null:obj.name.equals(this.name);
-		
+
 	}
 	/** 
 	 * @see com.github.kreatures.core.serialize.Resource#getResourceType()
@@ -131,8 +163,9 @@ public class TimeEdgeState implements SwarmComponents {
 	 * TimeEdgeState(NameWithTimeEdge,TypeNameWithTimeEdge,NameVisited,TypeNameVisited,
 	 * Type,CountTick,IsWaiting,IsReady,IsFinish). 
 	 */
+	@Override
 	public String toString(){
-		return String.format("TimeEdgeState(%s,%s,%s,%s,%s,%d,%s,%s,%s).", name,typeName,visitorName,visitorTypeName,componentType,tick,isWaiting,isReady,isFinish);
+		return String.format("TimeEdgeState(%s,%s,%s,%s,%d,%s,%s,%d,%s,%s,%s).", name,typeName,visitorName,visitorTypeName,edgeType,echTime,componentType,tick,isWaiting,isReady,isFinish);
 	}
 	/**
 	 * This gives the understanding of toString result.
@@ -140,7 +173,7 @@ public class TimeEdgeState implements SwarmComponents {
 	 */
 	public static String getDescriptions() {
 
-		return "%TimeEdgeStatus(NameWithTimeEdge,TypeNameWithTimeEdge,NameVisited,TypeNameVisited,Type,CountTick,IsWaiting,IsReady,IsFinish).";
+		return "%TimeEdgeStatus(NameWithTimeEdge,TypeNameWithTimeEdge,NameVisited,TypeNameVisited,EdgeType,EchTime,Type,CountTick,IsWaiting,IsReady,IsFinish).";
 	}
 	public int getIdentity(){
 		//TODO

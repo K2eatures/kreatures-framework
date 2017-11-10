@@ -23,6 +23,10 @@ public class PredicateTimeEdgeLockGet extends SwarmPredicate {
 	private String agName2;
 	private String stName2;
 	private int edgeType;
+	/**
+	 * Have to run parallel without waiting time?  
+	 */
+	private boolean echTime;
 //	private boolean isActiv;
 	private boolean isLock1;
 	private boolean isLock2;
@@ -46,6 +50,7 @@ public class PredicateTimeEdgeLockGet extends SwarmPredicate {
 		this.agName2=other.agName2;
 		this.stName2=other.stName2;
 		this.edgeType=other.edgeType;
+		this.echTime=other.echTime;
 //		this.isActiv=other.isActiv;
 		this.isLock1=other.isLock1;
 		this.isLock2=other.isLock2;
@@ -77,12 +82,12 @@ public class PredicateTimeEdgeLockGet extends SwarmPredicate {
 	
 	/**
 	 * {@link PredicateTimeEdgeLockGet}
-	 * TimeEdgeLockGet(AgentName1,StationName1,AgentName2,StationName2,EdgeType,Lock1,Lock2,Finish1,Finish2).
+	 * TimeEdgeLockGet(AgentName1,StationName1,AgentName2,StationName2,EdgeType,EchTime,Lock1,Lock2,Finish1,Finish2).
 	 */
 	@Override
 	public void createInstance(FolFormula atom) {
 		//PredicateTimeEdgeState predicate=null;
-		Pattern pattern=Pattern.compile("TimeEdgeLockGet[(](\\w+),(\\w+),(\\w+),(\\w+),(\\d+),(\\w+),(\\w+),(\\w+),(\\w+)[)]");
+		Pattern pattern=Pattern.compile("TimeEdgeLockGet[(](\\w+),(\\w+),(\\w+),(\\w+),(\\d+),(\\w+),(\\w+),(\\w+),(\\w+),(\\w+)[)]");
 		Matcher matcher=pattern.matcher(atom.toString());
 		if(matcher.find()) {
 			//predicate=new PredicateTimeEdgeState(atom);
@@ -92,10 +97,11 @@ public class PredicateTimeEdgeLockGet extends SwarmPredicate {
 			this.stName2=matcher.group(4);
 			this.edgeType=Integer.parseInt(matcher.group(5));
 //			this.isActiv=Boolean.parseBoolean(matcher.group(6));
-			this.isLock1=Boolean.parseBoolean(matcher.group(6));
-			this.isLock2=Boolean.parseBoolean(matcher.group(7));
-			this.isFinish1=Boolean.parseBoolean(matcher.group(8));
-			this.isFinish2=Boolean.parseBoolean(matcher.group(9));
+			this.echTime=Boolean.parseBoolean(matcher.group(6));
+			this.isLock1=Boolean.parseBoolean(matcher.group(7));
+			this.isLock2=Boolean.parseBoolean(matcher.group(8));
+			this.isFinish1=Boolean.parseBoolean(matcher.group(9));
+			this.isFinish2=Boolean.parseBoolean(matcher.group(10));
 
 		}
 	}
@@ -135,7 +141,7 @@ public class PredicateTimeEdgeLockGet extends SwarmPredicate {
 		boolean isStName2=obj.stName2==null?this.stName2==null:obj.stName2.equals(this.stName2);
 		
 
-		return isAgName1 & isAgName2 & isStName2 & isStName1;
+		return isAgName1 & isAgName2 & isStName2 & isStName1 & this.edgeType==obj.edgeType;
 	}
 
 	@Override
@@ -144,11 +150,11 @@ public class PredicateTimeEdgeLockGet extends SwarmPredicate {
 	}
 
 	/**
-	 * TimeEdgeLockGet(AgentName1,StationName1,AgentName2,StationName2,EdgeType,IsActiv,Lock1,Lock2,Finish1,Finish2).
+	 * TimeEdgeLockGet(AgentName1,StationName1,AgentName2,StationName2,EdgeType,EchTime,IsActiv,Lock1,Lock2,Finish1,Finish2).
 	 */
 	@Override
 	public String toString(){
-		return String.format("TimeEdgeLockGet(%s,%s,%s,%s,%d,%s,%s,%s,%s)", agName1,stName1,agName2,stName2,edgeType,isLock1,isLock2,isFinish1,isFinish2);
+		return String.format("TimeEdgeLockGet(%s,%s,%s,%s,%d,%s,%s,%s,%s,%s)", agName1,stName1,agName2,stName2,edgeType,echTime,isLock1,isLock2,isFinish1,isFinish2);
 	}
 	/**
 	 * This gives the understanding of toString result.
@@ -207,6 +213,13 @@ public class PredicateTimeEdgeLockGet extends SwarmPredicate {
 	 */
 	public boolean isLock2() {
 		return isLock2;
+	}
+
+	/**
+	 * @return the echTime
+	 */
+	public boolean isEchTime() {
+		return echTime;
 	}
 
 	/**
