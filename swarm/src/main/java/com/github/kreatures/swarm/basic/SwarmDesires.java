@@ -69,6 +69,14 @@ public class SwarmDesires extends Desires {
 	private SwarmDesire lastDesire=null;
 	
 	/**
+	 * Use by waiting for a simultaneously job
+	 * Lock =true, when the agent has to waiting.
+	 * The default value is false.
+	 */
+	
+	private boolean Lock=false;
+	
+	/**
 	 * store timeEdgestates components to controller the time-components
 	 */
 	private Set<PredicateTimeEdgeState> timeEdgeStateSet=new HashSet<>();
@@ -350,6 +358,26 @@ public class SwarmDesires extends Desires {
 		return Utility.computeHashCode(super.hashCode());
 	}
 
+	/**
+	 * Use by waiting for a simultaneously job
+	 * Lock =true, when the agent has to waiting.
+	 * The default value is false.
+	 * @return the lock
+	 */
+	public boolean isLock() {
+		return Lock;
+	}
+	
+	/**
+	 * Use by waiting for a simultaneously job
+	 * Lock =true, when the agent has to waiting.
+	 * The default value is false.
+	 * @param lock the lock to set
+	 */
+	
+	public void setLock(boolean lock) {
+		Lock = lock;
+	}
 	/**
 	 * @return the actual desire
 	 */

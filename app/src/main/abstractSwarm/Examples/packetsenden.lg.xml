@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<logisticsGraph>
+<perspective id = "1" name = "Verpackung" x = "30" y = "29" width = "13" height = "11">
+<stationType id = "2" name = "StA" x = "9" y = "1" count = "1" colorRed = "255" colorGreen = "128" colorBlue = "255" interface = "no">
+<necessity value = "1"/>
+<space value = "1"/>
+</stationType>
+<stationType id = "3" name = "StB" x = "9" y = "7" count = "1" colorRed = "0" colorGreen = "128" colorBlue = "255" interface = "no">
+<necessity value = "1"/>
+<space value = "2"/>
+</stationType>
+<agentType id = "15" name = "AgA" x = "1" y = "4" count = "3" colorRed = "255" colorGreen = "255" colorBlue = "255" interface = "no">
+<size value = "1"/>
+</agentType>
+</perspective>
+<perspective id = "4" name = "Sendung" x = "48" y = "29" width = "12" height = "11">
+<agentType id = "5" name = "AgB" x = "2" y = "7" count = "2" colorRed = "128" colorGreen = "128" colorBlue = "64" interface = "no">
+<size value = "1"/>
+</agentType>
+<stationType id = "6" name = "StC" x = "8" y = "3" count = "2" colorRed = "255" colorGreen = "0" colorBlue = "0" interface = "no">
+<frequency value = "3"/>
+<space value = "1"/>
+</stationType>
+<agentType id = "14" name = "AgC" x = "2" y = "1" count = "1" colorRed = "255" colorGreen = "128" colorBlue = "0" interface = "no">
+<size value = "1"/>
+</agentType>
+</perspective>
+<timeEdge id = "8" connectedIdRef1 = "2" connectedIdRef2 = "5" value = "1" directed = "yes" andConnected1 = "no" andConnected2 = "no"/>
+<timeEdge id = "9" connectedIdRef1 = "3" connectedIdRef2 = "5" value = "1" directed = "yes" andConnected1 = "no" andConnected2 = "no"/>
+<visitEdge id = "16" connectedIdRef1 = "15" connectedIdRef2 = "2" bold = "no"/>
+<visitEdge id = "17" connectedIdRef1 = "15" connectedIdRef2 = "3" bold = "no"/>
+<visitEdge id = "19" connectedIdRef1 = "14" connectedIdRef2 = "6" bold = "no"/>
+<visitEdge id = "20" connectedIdRef1 = "5" connectedIdRef2 = "6" bold = "no"/>
+<timeEdge id = "21" connectedIdRef1 = "2" connectedIdRef2 = "14" value = "1" directed = "yes" andConnected1 = "no" andConnected2 = "no"/>
+<placeEdge id = "22" connectedIdRef1 = "2" connectedIdRef2 = "3" value = "0" directed = "no"/>
+</logisticsGraph>

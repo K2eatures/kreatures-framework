@@ -196,8 +196,10 @@ public class PredicateTimeEdgeState extends SwarmPredicate {
 	public boolean equals(Object other) {
 		if(!(other instanceof PredicateTimeEdgeState))
 			return false;
-
 		PredicateTimeEdgeState obj=(PredicateTimeEdgeState)other;
+		
+		if(this.edgeType!=obj.edgeType) return false;
+		
 		boolean isName=obj.name==null?this.name==null:obj.name.equals(this.name);
 		boolean isStName=obj.visitorName==null?this.visitorName==null:obj.visitorName.equals(this.visitorName);
 

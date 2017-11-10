@@ -351,7 +351,7 @@ TimeEdgeSpaceSizeNoDNoC(Name1,VisitName1,VisitName2,Name2,Lock1,Lock2,Finish1,Fi
 TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- CurrentAgent(AgentName1,_),TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,false,false,false,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{Xa,Xb:TimeEdgeSpaceSizeNoDNoC(Xb,StationName1,_,_,true,false,_,_,Xa,_,_,_,_,_),Xb!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Za,Zb: TimeEdgeSpaceSizeNoDNoC(Zb,StationName1,_,_,true,false,_,_,_,_,_,_,Za,_),Zb!=AgentName1}=CFreq1,CFreq1<Freq1, #sum{Ya,Yb: TimeEdgeSpaceSizeNoDNoC(_,_,Yb,StationName2,true,false,_,_,_,Ya,_,_,_,_),TimeEdgeLockStateUse(Yb,StationName2,0),Yb!=AgentName2}=SumSpace1,BusySpace1=SumSpace1+Size2,BusySpace1<=SpaceFree2, #count{Ta,Tb: TimeEdgeSpaceSizeNoDNoC(_,_,Tb,StationName2,true,false,_,_,_,_,_,_,_,Ta),TimeEdgeLockStateUse(Tb,StationName2,0),Tb!=AgentName2}<Freq2,#sum{Wa,Wb:TimeEdgeLockState(_,_,Wb,StationName1,0,_,_,true,true,false,Finish1,Finish2),AgentSize(Wb,Wa),Wb!=AgentName1}=SumSpace3,BusySpace3=SumSpace3+Size1,BusySpace3<=SpaceFree1, #count{Qa,Qb: TimeEdgeLockState(_,_,Qb,StationName1,Qa,_,_,true,true,false,Finish1,Finish2),Qb!=AgentName2}<Freq1, not TimeEdgeLockStateUse(AgentName2,StationName2,0).
 
 %TimeEdgeLockState(AgentName2,StationName2,AgentName1,StationName1,0,IsActiv,Lock2,Lock1,Finish2,Finish1).
-
+P(AgentName1,StationName1,AgentName2,StationName2,Freq2,X):-#sum{Wa,Wb:TimeEdgeLockState(_,_,Wb,StationName1,0,_,_,true,true,false,Finish1,Finish2),AgentSize(Wb,Wa),Wb!=AgentName1}=X,TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,false,false,false,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2).
 
 %the current agent want to check if it can lock and one other correpondings agent has locked.
 TimeEdgeLockNoDNoC(AgentName1,StationName1,AgentName2,StationName2):- TimeEdgeSpaceSizeNoDNoC(AgentName1,StationName1,AgentName2,StationName2,false,true,false,_,Size1,Size2,SpaceFree1,SpaceFree2,Freq1,Freq2),#sum{Xa,Xb: TimeEdgeSpaceSizeNoDNoC(Xb,StationName1,_,_,true,true,_,_,Xa,_,_,_,_,_),Xb!=AgentName1}=SumSpace,BusySpace=SumSpace+Size1,BusySpace<=SpaceFree1, #count{Za,Zb: TimeEdgeSpaceSizeNoDNoC(Zb,StationName1,_,_,true,true,_,_,_,_,_,_,Za,_),Zb!=AgentName1}<Freq1,TimeEdgeLockState(AgentName2,StationName2,AgentName1,StationName1,0,_,_,true,true,false,Finish2,Finish1),CurrentAgent(AgentName1, _).
@@ -871,16 +871,18 @@ MaxPriorityGet(AgentName,StationName):- CurrentStation(AgentName,_,StationName,_
 TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,0,0):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_).
 
 %When agent and station haven timeEdge and are waiting
-TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,6,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,_,Status),TimeEdgeComp(StationName,StationTypeName,_,StatusTyp,Status),StatusTyp!=1.
+TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,6,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,StatusTyp1,Status1),TimeEdgeComp(StationName,StationTypeName,_,StatusTyp,Status),StatusTyp<=StatusTyp1,StatusTyp!=1.
 
-TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,6,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,StatusTyp,Status),TimeEdgeComp(StationName,StationTypeName,_,_,Status),StatusTyp!=1.
+TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,6,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,StatusTyp,Status),TimeEdgeComp(StationName,StationTypeName,_,StatusTyp1,Status1),StatusTyp<=StatusTyp1,StatusTyp!=1.
 %When agent hasn't timeEdge and station is waiting
 TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,5,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeComp(StationName,StationTypeName,_,0,Status).
 %When station hasn't timeEdge and agent is waiting
 TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,4,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,0,Status).
 
 %When agent and station haven timeEdge and are ready
-TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,3,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,1,0),TimeEdgeComp(StationName,StationTypeName,_,1,Status).
+TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,3,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,1,Status1),TimeEdgeComp(StationName,StationTypeName,_,1,Status),Status>=Status1.
+
+TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,3,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),TimeEdgeComp(AgentName,AgentTypeName,_,1,Status),TimeEdgeComp(StationName,StationTypeName,_,1,Status1),Status>Status1.
 
 %When agent hasn't timeEdge and station is ready
 TimeEdgeGet(AgentName,AgentTypeName,StationName,StationTypeName,2,Status):-VisitEdge(AgentName,AgentTypeName,StationName,StationTypeName,_),NoTimeEdge(AgentName,AgentTypeName,_),TimeEdgeComp(StationName,StationTypeName,_,1,Status).
