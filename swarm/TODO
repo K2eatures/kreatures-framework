@@ -3,4 +3,5 @@ lorsque plusieurs second agents vont vers la meme station, un seul doit etre aut
 in TimeEdgeState and PredicateTimeEdgeState, the equals and hashCode methods must correstly write and    
 in TimeEdgeState and PredicateTimeEdgeState, the equals method must also take EdgeType as parameter. 
 safety remove the method getIdentity in TimeEdgeState and PredicateTimeEdgeState
-mothod init() in PredicateTimeEdgeLockState must be re-adapted by new choice station    
+mothod init() in PredicateTimeEdgeLockState must be re-adapted by new choice station 
+debut and error information have to be also appear in log file.  

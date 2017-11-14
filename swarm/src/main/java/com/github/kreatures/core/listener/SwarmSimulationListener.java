@@ -97,7 +97,19 @@ public class SwarmSimulationListener implements  SimulationListener{
 
 	@Override
 	public void tickDone(KReaturesEnvironment simulationEnvironment) {
-		// TODO Auto-generated method stub
+		/*
+		 * Unused objects have to be clear each ~21 iterations.
+		 * But only the java runtime knows if this instruction will be run.
+		 */
+		int actuelTick=simulationEnvironment.getSimulationTick();		
+		if(actuelTick %21==20) {
+			long mg=1024*1024;
+			LOG.info("Use Memory before the gc run is MB: " + (double) (Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory() )/ mg);
+			LOG.info("Actual Free Memory before the gc run is MB: " + (double) Runtime.getRuntime().freeMemory() / mg);
+			System.gc();
+			LOG.info("Actual Free Memory after the gc run is MB: " + (double) Runtime.getRuntime().freeMemory() / mg);
+			LOG.info("Use Memory after the gc run is MB: " + (double) (Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory() )/ mg);
+		}
 		LOG.info("SwarmSimulationListener : tickDone");
 	}
 	
