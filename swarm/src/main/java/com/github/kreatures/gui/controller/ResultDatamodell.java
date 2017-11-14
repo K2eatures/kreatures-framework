@@ -35,7 +35,10 @@ public class ResultDatamodell extends AbstractTableModel {
 	 */
 	public ResultDatamodell(ResultData resultData) {
 		this.rows=resultData.getRowsData();
+//		this.rows=resultData.getRowsDataSwarm();
 		this.columnNames=resultData.getColNames();
+		
+		
 	}
 
 	/**

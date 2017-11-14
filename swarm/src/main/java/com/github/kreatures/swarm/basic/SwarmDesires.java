@@ -10,6 +10,7 @@ import java.util.Set;
 import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.logic.Desires;
 import com.github.kreatures.core.util.Pair;
+import com.github.kreatures.gui.simctrl.CurrentSimulation;
 import com.github.kreatures.swarm.SwarmConst;
 import com.github.kreatures.swarm.Utility;
 import com.github.kreatures.swarm.predicates.PredicateAgent;
@@ -224,6 +225,8 @@ public class SwarmDesires extends Desires {
 	 * @param waitTime the waitTime to set
 	 */
 	public void decrWaitTime() {
+		if(SwarmConst.WAIT_TIME.getValue()!=this.waitTime)
+			CurrentSimulation.incrTotalWaitTime();
 		this.waitTime--;
 	}
 
