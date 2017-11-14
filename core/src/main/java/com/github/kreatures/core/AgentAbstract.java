@@ -578,7 +578,7 @@ PropertyChangeListener, SubgoalListener{
 		act.onSubgoalFinished(null);
 		env.sendAction(act);
 		LOG.info("Action performed: " + act.toString());
-		reporter.report("Action: '" + act.toString() + "' performed.");
+		reporter.report(new String("Action: '" + act.toString() + "' performed."));
 		KReatures.getInstance().onActionPerformed(this, act);
 	}
 

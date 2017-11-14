@@ -42,7 +42,7 @@ public class SwarmBehavior extends DefaultBehavior{
 			NewAgent newAgent=(NewAgent)agent;
 			((SwarmSpeechAct)percept).getActions().stream().peek(System.out::println).forEach(newPercept->{
 				newAgent.getPerceptions().stream().peek(System.out::println).forEach(oldPercept->{
-					System.out.println("Hier #  "+((SwarmSpeechAct)oldPercept).getActions().removeIf(obj->obj.equals(newPercept)));						
+//					System.out.println("Hier #  "+((SwarmSpeechAct)oldPercept).getActions().removeIf(obj->obj.equals(newPercept)));						
 				});
 			});
 			newAgent.getPerceptions().add(percept);
