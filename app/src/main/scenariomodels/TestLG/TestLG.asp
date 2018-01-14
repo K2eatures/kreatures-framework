@@ -1,0 +1,15 @@
+ZeitEinheit(1).
+%AgentType(AgentTypeName,freq,nec,time,prio,cycle,cap,size,speed).
+AgentType(learn,1000,1000,1,1,0,1000,1,1).
+AgentType(class,1000,1000,1,1,0,1000,1,1).
+%StationType(StationTypeName,freq,nec,time,prio,cylce,item,space,count)
+StationType(math,1000,1,1,1,0,0,1,1).
+StationType(lang,1000,1,1,1,0,0,1,1).
+StationType(room,1000,1000,1,1,0,0,1,1).
+%PlacedEdge(StationNameIn,StationTypeNameIn,StationNameOut,StationTypeNameOut,Weight,directed).
+PlacedEdge(math1,math,lang1,lang,0,false).
+%TimeEdge(Name1,TypeName1,Name2,TypeName2,TimeType,IsDirected,ConnectionType,weight).
+TimeEdge(math1,math,learn2,learn,2,false,false,0).
+TimeEdge(lang1,lang,learn1,learn,2,false,false,0).
+TimeEdge(math1,math,learn1,learn,2,false,false,0).
+TimeEdge(lang1,lang,learn2,learn,2,false,false,0).

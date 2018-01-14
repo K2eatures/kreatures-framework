@@ -98,4 +98,18 @@ public class SwarmAspReasoner extends AspReasoner {
 		
 		return reval;
 	}
+	
+	public List<AnswerSet> processAnswerSets(AspBeliefbase bb) {
+		List<AnswerSet> reval = null;
+		
+		try {
+//			System.out.println(bb);
+			reval = runSolver(bb,"");
+//			LOG.info(reval.toString());
+		} catch(SolverException ex) {
+			LOG.error("Error occured: " + ex.getMessage());
+		}
+		
+		return reval;
+	}
 }

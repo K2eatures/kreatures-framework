@@ -1,0 +1,13 @@
+ZeitEinheit(1).
+%AgentType(AgentTypeName,freq,nec,time,prio,cycle,cap,size,speed).
+AgentType(de,1000,1000,1,1,0,1,0,1).
+AgentType(usa,1000,1000,1,1,0,1000,0,1).
+%StationType(StationTypeName,freq,nec,time,prio,cylce,item,space,count)
+StationType(werk,1000,1000,1,1,0,0,1000,1).
+StationType(lager,1000,1000,1,1,0,1,1000,1).
+StationType(other,1000,1000,1,1,0,0,1000,1).
+%PlacedEdge(StationNameIn,StationTypeNameIn,StationNameOut,StationTypeNameOut,Weight,directed).
+PlacedEdge(lager1,lager,werk1,werk,4,true).
+%TimeEdge(Name1,TypeName1,Name2,TypeName2,TimeType,IsDirected,ConnectionType,weight).
+TimeEdge(lager1,lager,other1,other,0,false,both,0).
+TimeEdge(other1,other,werk1,werk,0,true,true,0).

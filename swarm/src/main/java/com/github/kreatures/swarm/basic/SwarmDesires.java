@@ -10,7 +10,6 @@ import java.util.Set;
 import com.github.kreatures.core.PlanElement;
 import com.github.kreatures.core.logic.Desires;
 import com.github.kreatures.core.util.Pair;
-import com.github.kreatures.gui.simctrl.CurrentSimulation;
 import com.github.kreatures.swarm.SwarmConst;
 import com.github.kreatures.swarm.Utility;
 import com.github.kreatures.swarm.predicates.PredicateAgent;
@@ -68,14 +67,6 @@ public class SwarmDesires extends Desires {
 	 * for the currently choice.
 	 */
 	private SwarmDesire lastDesire=null;
-	
-	/**
-	 * Use by waiting for a simultaneously job
-	 * Lock =true, when the agent has to waiting.
-	 * The default value is false.
-	 */
-	
-	private boolean Lock=false;
 	
 	/**
 	 * store timeEdgestates components to controller the time-components
@@ -225,8 +216,6 @@ public class SwarmDesires extends Desires {
 	 * @param waitTime the waitTime to set
 	 */
 	public void decrWaitTime() {
-		if(SwarmConst.WAIT_TIME.getValue()!=this.waitTime)
-			CurrentSimulation.incrTotalWaitTime();
 		this.waitTime--;
 	}
 
@@ -361,26 +350,6 @@ public class SwarmDesires extends Desires {
 		return Utility.computeHashCode(super.hashCode());
 	}
 
-	/**
-	 * Use by waiting for a simultaneously job
-	 * Lock =true, when the agent has to waiting.
-	 * The default value is false.
-	 * @return the lock
-	 */
-	public boolean isLock() {
-		return Lock;
-	}
-	
-	/**
-	 * Use by waiting for a simultaneously job
-	 * Lock =true, when the agent has to waiting.
-	 * The default value is false.
-	 * @param lock the lock to set
-	 */
-	
-	public void setLock(boolean lock) {
-		Lock = lock;
-	}
 	/**
 	 * @return the actual desire
 	 */

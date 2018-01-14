@@ -135,16 +135,13 @@ public class PredicateTimeEdgeLockGet extends SwarmPredicate {
 			return false;
 
 		PredicateTimeEdgeLockGet obj=(PredicateTimeEdgeLockGet)other;
-		
-		if(this.edgeType!=obj.edgeType) return false;
-		
 		boolean isAgName1=obj.agName1==null?this.agName1==null:obj.agName1.equals(this.agName1);
 		boolean isAgName2=obj.agName2==null?this.agName2==null:obj.agName2.equals(this.agName2);
 		boolean isStName1=obj.stName1==null?this.stName1==null:obj.stName1.equals(this.stName1);
 		boolean isStName2=obj.stName2==null?this.stName2==null:obj.stName2.equals(this.stName2);
 		
 
-		return isAgName1 & isAgName2 & isStName2 & isStName1;
+		return isAgName1 & isAgName2 & isStName2 & isStName1 & this.edgeType==obj.edgeType;
 	}
 
 	@Override

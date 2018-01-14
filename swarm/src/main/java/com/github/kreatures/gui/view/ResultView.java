@@ -104,7 +104,7 @@ public class ResultView extends JFrame {
 		table.setFillsViewportHeight(true);
 		panelCenter.add(scrollPane);
 //		table.setCellEditor(new ResultCellEditor());
-		table.setRowHeight(35);
+		table.setRowHeight(50);
 		
 		//table.setPreferredWidth(36);
 		table.setDefaultRenderer(String.class, new ResultCellRenderer());//getColumnModel().getColumn(0).setCellRenderer(new ResultCellRenderer());

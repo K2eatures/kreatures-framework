@@ -60,7 +60,8 @@ public class SwarmBeliefsUpdateOperator extends BaseBeliefsUpdateOperator {
 //					}
 //				}
 					
-			}			
+			}
+			nAgent.report("Actual beliefs:", bb);
 		}
 
 //		if(params.getInformation()!=null && !((SwarmSpeechAct) params.getInformation()).getContent().isEmpty() ) {

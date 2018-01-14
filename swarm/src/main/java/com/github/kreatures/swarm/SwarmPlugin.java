@@ -20,12 +20,23 @@ import com.github.kreatures.core.EnvironmentBehavior;
 import com.github.kreatures.core.operators.BaseOperator;
 import com.github.kreatures.core.serialize.SerializeHelper;
 import com.github.kreatures.core.serialize.SwarmLoaderDefault;
+import com.github.kreatures.gui.UIPlugin;
+import com.github.kreatures.gui.base.ViewComponent;
+import com.github.kreatures.gui.view.ControllerBeliefbaseView;
+import com.github.kreatures.gui.view.EnvFeaturesBeliefbaseView;
+import com.github.kreatures.gui.view.FolBeliefbaseView;
+import com.github.kreatures.gui.view.ScenarioModelBeliefbaseView;
+import com.github.kreatures.gui.view.WorldBeliefbaseView;
 import com.github.kreatures.serialize.asp.RuleTransform;
 import com.github.kreatures.core.listener.SwarmSimulationListener;
 import com.github.kreatures.core.logic.BaseChangeBeliefs;
 import com.github.kreatures.core.logic.BaseReasoner;
 import com.github.kreatures.core.logic.BaseTranslator;
+import com.github.kreatures.core.logic.ControllerBeliefbaseForGUI;
+import com.github.kreatures.core.logic.EnvFeaturesBeliefbase;
 import com.github.kreatures.core.logic.FolBeliefbase;
+import com.github.kreatures.core.logic.ScenarioModelBeliefbase;
+import com.github.kreatures.core.logic.WorldBeliefbaseForGUI;
 import com.github.kreatures.swarm.basic.ActionState;
 import com.github.kreatures.swarm.basic.SwarmBehavior;
 import com.github.kreatures.swarm.basic.SwarmDesires;
@@ -34,8 +45,6 @@ import com.github.kreatures.swarm.beliefbase.SwarmAspChangeBeliefs;
 import com.github.kreatures.swarm.beliefbase.SwarmAspReasoner;
 import com.github.kreatures.swarm.beliefbase.SwarmBeliefsUpdateOperator;
 import com.github.kreatures.swarm.operators.SwarmEvaluationOptionsOperator;
-//import com.github.kreatures.swarm.components.StatusAgentComponents;
-//import com.github.kreatures.swarm.components.SwarmMappingGeneric;
 import com.github.kreatures.swarm.operators.SwarmExecuteOperator;
 import com.github.kreatures.swarm.operators.SwarmIntentionUpdateOperator;
 import com.github.kreatures.swarm.operators.SwarmGenerateOptionsOperator;
@@ -52,7 +61,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  */
 
 @PluginImplementation
-public class SwarmPlugin extends KReaturesPluginAdapter {
+public class SwarmPlugin extends KReaturesPluginAdapter implements UIPlugin {
 	private Map<Class<?>, Class<? extends Transform<?>>> matcherMap = new HashMap<>();
 	/*
 	 * Here we have to create all abstract swarm config file 
@@ -113,6 +122,10 @@ public class SwarmPlugin extends KReaturesPluginAdapter {
 	public List<Class<? extends BaseBeliefbase>> getBeliefbaseImpl() {
 		List<Class<? extends BaseBeliefbase>> reval = new LinkedList<>();
 		reval.add(FolBeliefbase.class);
+		reval.add(EnvFeaturesBeliefbase.class);
+		reval.add(ScenarioModelBeliefbase.class);
+		reval.add(WorldBeliefbaseForGUI.class);
+		reval.add(ControllerBeliefbaseForGUI.class);
 		return reval;
 	}
 	@Override
@@ -126,6 +139,17 @@ public class SwarmPlugin extends KReaturesPluginAdapter {
 	public List<Class<? extends BaseReasoner>> getReasonerImpl() {
 		List<Class<? extends BaseReasoner>> reval = new LinkedList<>();
 		reval.add(SwarmAspReasoner.class);
+		return reval;
+	}
+	
+	@Override
+	public Map<String, Class<? extends ViewComponent>> getUIComponents() {
+		Map<String, Class<? extends ViewComponent>> reval = new HashMap<>();
+		reval.put("Beliefbase", FolBeliefbaseView.class);
+		reval.put("WorldBeliefbase", WorldBeliefbaseView.class);
+		reval.put("ControllerBeliefbase", ControllerBeliefbaseView.class);
+		reval.put("BeliefEnvFeatures", EnvFeaturesBeliefbaseView.class);
+		reval.put("ScenarioModel", ScenarioModelBeliefbaseView.class);
 		return reval;
 	}
 	

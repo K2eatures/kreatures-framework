@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <logisticsGraph>
 <perspective id = "0" name = "Perspective1" x = "27" y = "27" width = "36" height = "18">
-<stationType id = "1" name = "saft" x = "10" y = "1" count = "2" colorRed = "255" colorGreen = "128" colorBlue = "64" interface = "no">
+<stationType id = "1" name = "saft" x = "10" y = "1" count = "2" colorRed = "128" colorGreen = "128" colorBlue = "64" interface = "no">
 <necessity value = "2"/>
 <time value = "1"/>
 <item value = "1"/>
@@ -11,7 +11,7 @@
 <time value = "1"/>
 <item value = "1"/>
 </stationType>
-<stationType id = "3" name = "verpackung" x = "19" y = "5" count = "2" colorRed = "255" colorGreen = "128" colorBlue = "128" interface = "no">
+<stationType id = "3" name = "verpackung" x = "19" y = "5" count = "2" colorRed = "0" colorGreen = "64" colorBlue = "0" interface = "no">
 <necessity value = "3"/>
 <time value = "2"/>
 <item value = "1"/>

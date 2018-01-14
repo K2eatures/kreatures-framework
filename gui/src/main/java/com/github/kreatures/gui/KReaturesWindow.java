@@ -52,12 +52,14 @@ import bibliothek.gui.dock.util.Priority;
 import com.github.kreatures.core.Action;
 import com.github.kreatures.core.AgentAbstract;
 import com.github.kreatures.core.KReatures;
+import com.github.kreatures.core.KReaturesConst;
 import com.github.kreatures.core.KReaturesEnvironment;
 import com.github.kreatures.core.InteractiveAgent;
 import com.github.kreatures.core.KReaturesPaths;
 import static com.github.kreatures.core.KReaturesConst._KReaturesSwarmGuiLoaderFile;
 import com.github.kreatures.gui.base.ViewComponent;
 import com.github.kreatures.gui.controller.SimulationTreeController;
+import com.github.kreatures.gui.controller.SimulationTreeControllerAS;
 import com.github.kreatures.gui.project.ProjectTreeMVPComponent;
 import com.github.kreatures.gui.report.ReportTreeMVP;
 import com.github.kreatures.gui.simctrl.SimulationControlBar;
@@ -434,7 +436,14 @@ public class KReaturesWindow extends WindowAdapter
 	
 	@Override
 	public void simulationStarted(KReaturesEnvironment simulationEnvironment) {
-		SimulationTreeController stc = new SimulationTreeController(new JTree());
+		//if(simulationEnvironment.getBehavior() instanceof)
+		SimulationTreeController stc=null;
+		if(KReaturesConst._IsSwarmSimulation) {
+			 stc= new SimulationTreeControllerAS(new JTree());
+		}else {
+			stc = new SimulationTreeController(new JTree());
+		}
+
 		stc.simulationStarted(simulationEnvironment);
 		
 		ResourcenView rv = new ResourcenView(stc);

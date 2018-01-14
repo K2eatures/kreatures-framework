@@ -69,5 +69,18 @@ public final class KReaturesConst {
 		AGENT_RANDOM_STRATEGIE_FILE,
 		AGENT_HEURISTIC_STRATEGIE_FILE;
 	}
+	/**
+	 * Use to inform if the current simulation is a AbstractSwarm project or not.
+	 * true if it'is and false otherwise.
+	 */
+	public static boolean _IsSwarmSimulation=false;
+	/**
+	 * Use to inform about the current environment features
+	 */
+	public static BaseBeliefbase _EnvFeatures=null;
+	/**
+	 * Use to inform about the current scenario modell
+	 */
+	public static BaseBeliefbase _ScenarioModel=null;
 
 }

@@ -192,7 +192,7 @@ public final class EnvironmentComponentDefault implements EnvironmentComponent {
 		folBB.setProgram(new Program());
 		folBB.getProgram().add(scenarioModelAndEnFeaturesBB);
 		folBB.getProgram().add(bb.getProgram());
-		LOG.info(folBB.toString());
+//		LOG.info(folBB.toString());
 		BaseReasonerParameter brParams=new BaseReasonerParameter(folBB,query);
 		SwarmAspReasoner reasonner;
 		try {

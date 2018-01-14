@@ -30,16 +30,16 @@ public class SimulationTreeController extends TreeControllerAdapter implements S
 	private static Logger LOG = LoggerFactory.getLogger(SimulationTreeController.class);
 
 	private DefaultTreeModel treeModel;
-	
+
 	private DefaultMutableTreeNode root;
-	
+
 	public SimulationTreeController(JTree tree) {
 		super(tree);
 		root = new DefaultMutableTreeNode("Root");
 		treeModel = new DefaultTreeModel(root);
 		tree.setModel(treeModel);
 	}
-	
+
 	/**
 	 * Handles the selection of a tree-node which encapsulates an Agent-Component.
 	 * @param component	The agent component saved in the clicked tree node.
@@ -72,7 +72,7 @@ public class SimulationTreeController extends TreeControllerAdapter implements S
 	 */
 	private void handlerBeliefbase(BaseBeliefbase bb) {
 		LOG.trace("Handle beliefbase: '{}'", bb.getFileEnding());
-		
+
 		Dockable dd = null;
 		if(bb.getFileEnding().toLowerCase().equals("asp")) {
 			ViewComponent view = ViewComponentFactory.get().createViewForEntityComponent(bb);
@@ -84,22 +84,22 @@ public class SimulationTreeController extends TreeControllerAdapter implements S
 					BeliefbaseView.class, bb);
 			dd = KReaturesWindow.get().openView(bc);
 		}
-	
+
 		if(dd != null) {
 			KReaturesWindow.get().registerDockableForCurrentSimulation(dd);
 		}
 	}
-	
+
 	@Override
 	public void simulationStarted(KReaturesEnvironment simulation) {
 		// TODO: Important the controller is not registered to the simulation listener because
 		// the controller is created during a simulationStarted event and the list of listeners
 		// must not be changed during this event.
-		
+
 		for(String agName : simulation.getAgentNames()) {
 			agentAddedInt(root, simulation.getAgentByName(agName));
 		}
-		
+
 		expandAll(tree, true);
 		tree.updateUI();
 	}
@@ -108,9 +108,9 @@ public class SimulationTreeController extends TreeControllerAdapter implements S
 	public void agentAdded(KReaturesEnvironment simulationEnvironment,
 			AgentAbstract added) {
 	}
-	
+
 	private void agentAddedInt(DefaultMutableTreeNode parent, AgentAbstract added) {
-		
+
 		// create user object wrapper for agent node:
 		UserObjectWrapper agent = new DefaultUserObjectWrapper(added) {
 			@Override
@@ -119,7 +119,7 @@ public class SimulationTreeController extends TreeControllerAdapter implements S
 			}
 		};
 		DefaultMutableTreeNode agNode = new DefaultMutableTreeNode(agent);
-		
+
 		// create user object wrapper for world belief base node
 		BaseBeliefbase worldBB = added.getBeliefs().getWorldKnowledge();
 		UserObjectWrapper worldWrapper = new DefaultUserObjectWrapper(worldBB, "World") {
@@ -129,15 +129,15 @@ public class SimulationTreeController extends TreeControllerAdapter implements S
 			}
 		};
 		agNode.add(new DefaultMutableTreeNode(worldWrapper));
-		
+
 		// create views container node if a view exists.
 		DefaultMutableTreeNode views = null;
 		if(added.getBeliefs().getViewKnowledge().size() > 0) {
 			views = new DefaultMutableTreeNode("Views");
 			agNode.add(views);
-			
+
 		}
-		
+
 		// create nodes for the views and their user wrapper objects
 		Set<String> names = added.getBeliefs().getViewKnowledge().keySet();
 		for(String name : names) {
@@ -150,7 +150,7 @@ public class SimulationTreeController extends TreeControllerAdapter implements S
 			};
 			views.add(new DefaultMutableTreeNode(w));
 		}
-		
+
 		// Create tree nodes for the agent components and their user object wrappers.
 		DefaultMutableTreeNode comps = new DefaultMutableTreeNode("Components");
 		for(AgentComponent ac  : added.getComponents()) {
@@ -162,11 +162,12 @@ public class SimulationTreeController extends TreeControllerAdapter implements S
 			};
 			comps.add(new DefaultMutableTreeNode(w));
 		}
-		
+
 		agNode.add(comps);
 		parent.add(agNode);
-		
+
 		expandAll(tree, true);
+
 	}
 
 	@Override
@@ -187,11 +188,11 @@ public class SimulationTreeController extends TreeControllerAdapter implements S
 			DefaultMutableTreeNode dmtn = (DefaultMutableTreeNode)tm.getChild(root, i);
 			if(! (dmtn.getUserObject() instanceof UserObjectWrapper)) 
 				continue;
-			
+
 			UserObjectWrapper tuo = (UserObjectWrapper)dmtn.getUserObject();
 			if(! (tuo.getUserObject() instanceof KReaturesEnvironment) )
 				continue;
-			
+
 			KReaturesEnvironment sim = (KReaturesEnvironment)tuo.getUserObject();
 			if(sim == simulationEnvironment) {
 				tm.removeNodeFromParent(dmtn);
@@ -209,5 +210,33 @@ public class SimulationTreeController extends TreeControllerAdapter implements S
 	@Override
 	public void tickStarting(KReaturesEnvironment simulationEnvironment) {
 		// does nothing
+	}
+
+	/**
+	 * @return the treeModel
+	 */
+	public DefaultTreeModel getTreeModel() {
+		return treeModel;
+	}
+
+	/**
+	 * @param treeModel the treeModel to set
+	 */
+	public void setTreeModel(DefaultTreeModel treeModel) {
+		this.treeModel = treeModel;
+	}
+
+	/**
+	 * @return the root
+	 */
+	public DefaultMutableTreeNode getRoot() {
+		return root;
+	}
+
+	/**
+	 * @param root the root to set
+	 */
+	public void setRoot(DefaultMutableTreeNode root) {
+		this.root = root;
 	}
 }

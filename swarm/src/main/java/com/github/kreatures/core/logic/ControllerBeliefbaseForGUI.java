@@ -12,19 +12,23 @@ import com.github.kreatures.core.util.Pair;
 
 import net.sf.tweety.logics.fol.syntax.FolFormula;
 
+/**
+ * This class is only use the show which information belong to controller beliefbase
+ * @author Cedric Perez Donfack
+ *
+ */
+public class ControllerBeliefbaseForGUI extends AspBeliefbase {
 
-public class FolBeliefbase extends AspBeliefbase {
-
-	public FolBeliefbase() {
+	public ControllerBeliefbaseForGUI() {
 	}
 
-	public FolBeliefbase(FolBeliefbase other) {
+	public ControllerBeliefbaseForGUI(ControllerBeliefbaseForGUI other) {
 		super(other);
 	}
 	@Override
-	public FolBeliefbase clone() {
+	public ControllerBeliefbaseForGUI clone() {
 		
-		return new FolBeliefbase(this);
+		return new ControllerBeliefbaseForGUI(this);
 	}
 
 	@Override

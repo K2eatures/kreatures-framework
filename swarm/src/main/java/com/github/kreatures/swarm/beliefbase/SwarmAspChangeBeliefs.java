@@ -55,8 +55,9 @@ public class SwarmAspChangeBeliefs extends BaseChangeBeliefs {
 			}
 			if(!newSetPredicate.isEmpty()) {
 				setPredicate.addAll(newSetPredicate);
+				callerBelief=translateFOL(callerBelief, TransformPredicates.getSetFolFormula(setPredicate));
 			}
-			return translateFOL(callerBelief, TransformPredicates.getSetFolFormula(setPredicate));
+			return callerBelief;
 		}catch(Exception e) {
 			LOG.error(e.getMessage());
 			e.printStackTrace();

@@ -86,12 +86,15 @@ public final class BDIParserUtils implements BDIParser {
 	public BDIParserUtils(Path path,AgStrategie strategie) throws Exception {
 		obj = new BeliefParseOfSwarm(path);
 		xmlPath = path;
-		Path tmpAspPathWorldBelief=createAgentBeliefs();
+		Path tmpAspPathWorldBelief=createAgentWorldBeliefs();
+		Path tmpAspPathControllerBelief=createAgentControllerBeliefs();
 		createScenarioModel();
 		createKReaturesConfigFile(strategie);
 		createExamplesDir(strategie);
-		createAgentAsp(tmpAspPathWorldBelief);
+		createAgentWorldAsp(tmpAspPathWorldBelief);
 		Files.deleteIfExists(tmpAspPathWorldBelief);
+		createAgentControllerAsp(tmpAspPathControllerBelief);
+		Files.deleteIfExists(tmpAspPathControllerBelief);
 		//Simulation Name
 		String simName=obj.getName();
 		//Log Data folder for all agents
@@ -117,7 +120,7 @@ public final class BDIParserUtils implements BDIParser {
 	 * @return the temporal file path
 	 * @throws Exception when the temporal file will not successfully created.
 	 */
-	protected Path createAgentBeliefs() throws Exception {
+	protected Path createAgentWorldBeliefs() throws Exception {
 		obj = getBeliefParseOfSwarmInstance();
 		
 		//Path strategiePath=Paths.get(KREATURES_SWARM_CONFIG_DIR.toString()).resolve(_KREaturesSwarmStrategieFile);
@@ -126,7 +129,7 @@ public final class BDIParserUtils implements BDIParser {
 		try (BufferedWriter buffer = Files.newBufferedWriter(tmpPathWorldBelief)) {
 
 //			buffer.write(String.format("%s%n", obj.getTimeUnit()));
-
+			
 			buffer.write(String.format("%s%n", SwarmAgent.getDescriptions()));
 			for (SwarmAgent elt : obj.getAllAgents()) {
 				buffer.write(String.format("%s%n", elt.toString()));
@@ -136,11 +139,30 @@ public final class BDIParserUtils implements BDIParser {
 			for (SwarmStation elt : obj.getAllStations()) {
 				buffer.write(String.format("%s%n", elt.toString()));
 			}
+			
+			buffer.flush();
 
-			buffer.write(String.format("%s%n", SwarmVisitEdge.getDescriptions()));
-			for (SwarmVisitEdge elt : obj.getAllVisitEdge()) {
-				buffer.write(String.format("%s%n", elt.toString()));
-			}
+		} catch (IOException ex) {
+			throw ex;
+		}		
+		return tmpPathWorldBelief;
+	}
+
+	
+	/**
+	 * create and Write a initial belief of all agents into a temporal file.   
+	 * @return the temporal file path
+	 * @throws Exception when the temporal file will not successfully created.
+	 */
+	protected Path createAgentControllerBeliefs() throws Exception {
+		obj = getBeliefParseOfSwarmInstance();
+		
+		//Path strategiePath=Paths.get(KREATURES_SWARM_CONFIG_DIR.toString()).resolve(_KREaturesSwarmStrategieFile);
+		Path tmpPathWorldBelief=Files.createTempFile("swarm",".asp");
+		System.out.println(tmpPathWorldBelief.toAbsolutePath());
+		try (BufferedWriter buffer = Files.newBufferedWriter(tmpPathWorldBelief)) {
+
+//			buffer.write(String.format("%s%n", obj.getTimeUnit()));
 			
 			buffer.write(String.format("%s%n", NecAgentStation.getDescriptions()));
 			for (NecAgentStation elt : obj.getAllNecAgentStation()) {
@@ -161,26 +183,15 @@ public final class BDIParserUtils implements BDIParser {
 			for (TimeEdgeState elt : obj.getAllTimeEdgeState()) {
 				buffer.write(String.format("%s%n", elt.toString()));
 			}
-
-//			try (BufferedReader strategieBuffer = Files.newBufferedReader(strategiePath)) {
-//				String line = strategieBuffer.readLine();
-//				;
-//				while (line != null) {
-//					buffer.write(String.format("%s%n", line));
-//					line = strategieBuffer.readLine();
-//				}
-//			} catch (IOException ioe) {
-//				throw ioe;
-//			}
-
+			
 			buffer.flush();
 
 		} catch (IOException ex) {
 			throw ex;
 		}		
 		return tmpPathWorldBelief;
-
 	}
+	
 	/**
 	 * create and Write a scenario-model into a scenario-model file.   
 	 * @return the temporal file path
@@ -216,6 +227,11 @@ public final class BDIParserUtils implements BDIParser {
 				buffer.write(String.format("%s%n", elt.toString()));
 			}
 
+			buffer.write(String.format("%s%n", SwarmVisitEdge.getDescriptions()));
+			for (SwarmVisitEdge elt : obj.getAllVisitEdge()) {
+				buffer.write(String.format("%s%n", elt.toString()));
+			}
+			
 			buffer.write(String.format("%s%n", SwarmPlaceEdge.getDescriptions()));
 			for (SwarmPlaceEdge elt : obj.getAllPlaceEdge()) {
 				buffer.write(String.format("%s%n", elt.toString()));
@@ -260,20 +276,40 @@ public final class BDIParserUtils implements BDIParser {
 	}
 	
 	/**
-	 * For each agent, this method creates a file with its initial belief.   
+	 * For each agent, this method creates a file with its initial World belief.   
 	 * @param aspPath the path to the created file.
 	 * @return true when all files will be successfully created, and false otherwise.
 	 * @throws Exception when unless one file doesn't exist.
 	 */	
-	protected boolean createAgentAsp(Path aspPath) throws Exception{
+	protected boolean createAgentWorldAsp(Path aspPath) throws Exception{
 		if(aspPath==null)
 			return false;
 		/**
 		 * Create agents beliefs.
 		 */
 		for(SwarmAgent agent:obj.getAllAgents()){
-			Path target=Files.copy(aspPath, Paths.get(KREATURES_EXAMPLES_DIR.toString()).resolve(obj.getName()).resolve(String.format("%s.asp",agent.getName())));
+			Path target=Files.copy(aspPath, Paths.get(KREATURES_EXAMPLES_DIR.toString()).resolve(obj.getName()).resolve(String.format("%s_world.asp",agent.getName())));
 			createPredicateForOneAgent(agent,target);
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * For each agent, this method creates a file with its initial Controller belief.   
+	 * @param aspPath the path to the created file.
+	 * @return true when all files will be successfully created, and false otherwise.
+	 * @throws Exception when unless one file doesn't exist.
+	 */	
+	protected boolean createAgentControllerAsp(Path aspPath) throws Exception{
+		if(aspPath==null)
+			return false;
+		/**
+		 * Create agents beliefs.
+		 */
+		for(SwarmAgent agent:obj.getAllAgents()){
+			Path target=Files.copy(aspPath, Paths.get(KREATURES_EXAMPLES_DIR.toString()).resolve(obj.getName()).resolve(String.format("%s_controller.asp",agent.getName())));
+//			createPredicateForOneAgent(agent,target);
 		}
 		
 		return true;

@@ -187,8 +187,6 @@ public class KReaturesEnvironment  {
 
 		// inform listener of start of simulation creation:
 		KReatures.getInstance().onCreateSimulation(this);
-
-		
 		
 		if(!createBehavior(config))
 			return false;

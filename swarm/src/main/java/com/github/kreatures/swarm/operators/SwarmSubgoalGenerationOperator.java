@@ -3,7 +3,23 @@ package com.github.kreatures.swarm.operators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFileAttributes;
+import java.nio.file.attribute.UserPrincipal;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -106,6 +122,9 @@ public class SwarmSubgoalGenerationOperator extends
 				plan.addPlan(subGoal);
 		}
 		
+		//les.getFileAttributeView(p,PosixFileAttributeView.class).
+		
+		
 		subGoal=doVisitPlan(bestDesire, newStation, params,stackIndex);
 		
 		plan.addPlan(subGoal);
@@ -124,6 +143,11 @@ public class SwarmSubgoalGenerationOperator extends
 				return false;
 			}
 		}else {
+			String s="";
+			StringWriter write=new StringWriter();
+			
+			
+			
 			actuellStation.setHasChoose(true);
 			actuellStation.setIsInStation(false);
 			actuellStation.setStationName(newStation.getName());
@@ -159,6 +183,7 @@ public class SwarmSubgoalGenerationOperator extends
 		allKnowHow.stream().forEach(action->{
 				desires.getAgent().report("New Strategie :"+action.toString());
 			});
+		
 		Random random=new Random();
 		int numbreOfKnowHow=allKnowHow.size();
 		optKnowHow=Optional.ofNullable((PredicateKnowHow)allKnowHow.get(random.nextInt(numbreOfKnowHow)));

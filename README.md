@@ -78,7 +78,6 @@ Thanks also go to Ella Albrecht, Manuel Barbi, Benedict Börger and Daniel Dilge
 
 
 ####Related Theses:
-+ Cedric Perez, D. (2017) "Integration zweier unterschiedlicher Agentenmodelle für Multi-Agenten-Szenarien mit Anwendung in der Logistik"
 + Albrecht, E. (2012). "Abhängigkeitsgraphen und Erklärungen für die Antwortmengen Programmierung" (Dependency Graphs and Explanations for Answerset Programming). Bachelor’s Thesis, Technische Universität Dortmund.
 + Barbi, M. (2014). "Implementierung einer Motivationskomponente fü̈r wissensbasierte Agenten" (Implementation of a Motivation Component for Knowledge-based Agents). Bachelor’s Thesis, Technische Universität Dortmund.
 + Böhmer, M. (2011). "Evaluation von Ansätzen zur Wissensänderung von ASP Wissensbasen" (Evaluation of approaches to belief change in ASP knowldege bases). Master’s thesis, Technische Universität Dortmund.

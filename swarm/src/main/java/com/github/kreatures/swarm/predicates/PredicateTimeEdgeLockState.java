@@ -128,7 +128,6 @@ public class PredicateTimeEdgeLockState extends SwarmPredicate {
 		this.isFinish1=false;
 		this.isFinish2=false;
 		this.tick=0;
-//		if()
 		return this;
 	}
 
@@ -183,9 +182,7 @@ public class PredicateTimeEdgeLockState extends SwarmPredicate {
 			return false;
 
 		PredicateTimeEdgeLockState obj=(PredicateTimeEdgeLockState)other;
-		
-		if(this.edgeType!=obj.edgeType) return false;
-		
+
 		if(this.edgeType==1){
 
 			boolean isNothings=this.agName2==null?false:this.agName2.equals("nothings");
@@ -222,31 +219,6 @@ public class PredicateTimeEdgeLockState extends SwarmPredicate {
 
 		return isAgName1 & isStName1;// & isAgName2 & isStName2;
 	}
-	
-	/**
-	 *	Check whether the currentstation appears on the first or on the second position
-	 * @param currentStation the information about the actual goal.
-	 * @return
-	 */
-	public boolean hasCurrentStation(PredicateCurrentStation currentStation){
-		/**
-		 * On the first position check.
-		 */
-
-		boolean isAgName1=currentStation.getAgentName()==null?this.agName1==null:currentStation.getAgentName().equals(this.agName1);
-		boolean isStName1=currentStation.getStationName()==null?this.stName1==null:currentStation.getStationName().equals(this.stName1);
-
-		if(isAgName1 & isStName1)return true;
-		
-		/**
-		 * On the second position check.
-		 */
-		boolean isAgName2=currentStation.getAgentName()==null?this.agName2==null:currentStation.getAgentName().equals(this.agName2);
-		boolean isStName2=currentStation.getStationName()==null?this.stName2==null:currentStation.getStationName().equals(this.stName2);
-
-		return isAgName2 & isStName2;
-	}
-	
 
 	@Override
 	public int hashCode() {
@@ -322,22 +294,6 @@ public class PredicateTimeEdgeLockState extends SwarmPredicate {
 	 */
 	public boolean isActiv() {
 		return isActiv;
-	}
-	
-	
-
-	/**
-	 * @return the echTime
-	 */
-	public boolean isEchTime() {
-		return echTime;
-	}
-
-	/**
-	 * @return the tick
-	 */
-	public int getTick() {
-		return tick;
 	}
 
 	/**

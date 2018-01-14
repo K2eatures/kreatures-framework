@@ -28,6 +28,10 @@ public class BeliefbaseView extends ListViewColored {
 	
 	private OperatorConfig opConfig;
 	
+	public void init2() {
+		super.init();
+	}
+	
 	@Override
 	public void init() {
 		super.init();
